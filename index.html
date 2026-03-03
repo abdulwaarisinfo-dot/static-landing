@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Careers — Wertec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F5F2;
+    --bg-card: #FFFFFF;
+    --text-primary: #1A1916;
+    --text-secondary: #4A4845;
+    --text-muted: #8A8784;
+    --accent: #1C3A2E;
+    --accent-light: #2E5C47;
+    --accent-gold: #B8965A;
+    --border: #E4E0DA;
+    --border-light: #EDE9E3;
+
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { background: var(--bg); }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text-primary);
+    max-width: 440px;
+    margin: 0 auto;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(247, 245, 242, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .nav-tag {
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 56px 28px 52px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-gold), var(--accent));
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    margin-bottom: 20px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--accent-gold);
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+
+  .hero-sub {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .hero p {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+
+  /* ─── CTA BUTTON ─── */
+  .btn-primary {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 16px 24px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    margin-top: 32px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.25s;
+  }
+
+  .btn-primary::after {
+    content: '→';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  .btn-primary:hover { background: var(--accent-light); }
+
+  .btn-secondary {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: transparent;
+    color: var(--accent);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 15px 24px;
+    border-radius: 3px;
+    border: 1.5px solid var(--accent);
+    cursor: pointer;
+    margin-top: 28px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn-secondary::after {
+    content: '→';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    opacity: 0.6;
+  }
+
+  .btn-secondary:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 48px 28px;
+    border-bottom: 1px solid var(--border-light);
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+
+  section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .section-num {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-gold);
+    letter-spacing: 0.1em;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  section h2 {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.15;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  section p {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  section p:last-child { margin-bottom: 0; }
+
+  /* ─── BULLET LIST ─── */
+  .bullet-list {
+    list-style: none;
+    margin: 20px 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .bullet-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  .bullet-list li::before {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    margin-top: 8px;
+  }
+
+  /* ─── QUOTE CALLOUT ─── */
+  .callout {
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 24px 22px;
+    margin: 28px 0 0;
+  }
+
+  .callout p {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.6;
+    margin: 0;
+    font-style: italic;
+  }
+
+  /* ─── DIVIDER ─── */
+  .gold-divider {
+    width: 40px;
+    height: 2px;
+    background: var(--accent-gold);
+    margin: 20px 0;
+  }
+
+  /* ─── JOB CARDS ─── */
+  .jobs-section {
+    padding: 48px 28px 56px;
+    background: var(--bg);
+  }
+
+  .jobs-section h2 {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+
+  .jobs-section .section-intro {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    line-height: 1.65;
+  }
+
+  .job-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px 22px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .job-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent-gold);
+  }
+
+  .job-card:hover {
+    box-shadow: 0 6px 24px rgba(28,58,46,0.08);
+    border-color: var(--accent);
+  }
+
+  .job-card-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    margin-bottom: 8px;
+  }
+
+  .job-card h3 {
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .job-card p {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  .btn-apply {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1.5px solid var(--accent-gold);
+    padding-bottom: 2px;
+    transition: color 0.2s;
+  }
+
+  .btn-apply::after { content: '→'; font-size: 13px; }
+  .btn-apply:hover { color: var(--accent-light); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 36px 28px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    background: var(--accent);
+  }
+
+  footer .footer-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  footer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero {
+    animation: fadeSlide 0.7s ease both;
+  }
+
+  .hero h1 { animation: fadeSlide 0.7s 0.1s ease both; }
+  .hero-sub { animation: fadeSlide 0.7s 0.2s ease both; }
+  .hero p { animation: fadeSlide 0.7s 0.3s ease both; }
+  .hero .btn-primary { animation: fadeSlide 0.7s 0.4s ease both; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Wertec</div>
+  <div class="nav-tag">Careers</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Open Positions</div>
+  <h1>Careers<br>at Wertec</h1>
+  <div class="hero-sub">Build the Kind of Career That Earns Trust.</div>
+  <p>At Wertec, we are not building a fast-moving agency culture built on hype. We are building professionals — people whose thinking deepens, whose judgement matures, and whose impact compounds over time.</p>
+  <p>If you're looking for quick titles or surface-level growth, there are many places for that. If you're looking to become genuinely excellent at what you do, you may find something meaningful here.</p>
+  <a href="#roles" class="btn-primary">See Where You Might Fit</a>
+</div>
+
+<!-- WHY WERTEC -->
+<section id="why">
+  <div class="section-label">
+    <span class="section-num">01</span>
+    <span class="section-line"></span>
+    <span class="section-tag">Purpose</span>
+  </div>
+  <h2>Why Wertec Exists</h2>
+  <p>In marketing, tools change constantly. Judgement is what lasts. Most environments teach platforms and tactics. Few teach structured thinking, decision quality, and revenue awareness.</p>
+  <div class="gold-divider"></div>
+  <p>At Wertec, you'll work inside a system designed to develop:</p>
+  <ul class="bullet-list">
+    <li>Strategic marketing clarity</li>
+    <li>Lifecycle and growth reasoning</li>
+    <li>Conversion psychology</li>
+    <li>Calm, professional communication</li>
+    <li>Ownership without supervision</li>
+  </ul>
+  <p>Even if you begin in execution, your exposure expands as your capability grows. We don't believe in keeping people narrow. We believe in developing depth.</p>
+</section>
+
+<!-- CULTURE -->
+<section id="culture">
+  <div class="section-label">
+    <span class="section-num">02</span>
+    <span class="section-line"></span>
+    <span class="section-tag">Culture</span>
+  </div>
+  <h2>Our Culture</h2>
+  <p>Wertec operates on judgement-based trust. That means:</p>
+  <ul class="bullet-list">
+    <li>We respect clear thinking</li>
+    <li>We value responsibility over hierarchy</li>
+    <li>We give feedback directly — without politics</li>
+    <li>We expect accountability — without fear</li>
+    <li>We prioritize sustainable excellence over burnout</li>
+  </ul>
+  <div class="callout">
+    <p>You will not be micromanaged here. You will be trusted — and that trust grows as your judgement does.</p>
+  </div>
+  <p style="margin-top:20px;">Many of our leaders began in execution roles and earned expanded scope through consistency and maturity.</p>
+</section>
+
+<!-- GROWTH -->
+<section id="growth">
+  <div class="section-label">
+    <span class="section-num">03</span>
+    <span class="section-line"></span>
+    <span class="section-tag">Progression</span>
+  </div>
+  <h2>Growth at Wertec</h2>
+  <p>Growth here is steady, visible, and earned. We do not believe in dramatic promotions or inflated titles. You grow when:</p>
+  <ul class="bullet-list">
+    <li>Your thinking anticipates problems</li>
+    <li>Your work requires fewer revisions</li>
+    <li>Your communication reduces friction</li>
+    <li>Your decisions reflect revenue awareness</li>
+    <li>Your ownership strengthens the system</li>
+  </ul>
+  <p>There is no automatic timeline. There is also no invisible ceiling. Capability creates expansion.</p>
+  <a href="#roles" class="btn-secondary">Explore Roles That Match Your Level</a>
+</section>
+
+<!-- WHO THRIVES -->
+<section id="fit">
+  <div class="section-label">
+    <span class="section-num">04</span>
+    <span class="section-line"></span>
+    <span class="section-tag">Fit</span>
+  </div>
+  <h2>Who Thrives Here</h2>
+  <p>You're likely to thrive at Wertec if you:</p>
+  <ul class="bullet-list">
+    <li>Care deeply about doing things well</li>
+    <li>Prefer clarity over chaos</li>
+    <li>Ask thoughtful questions</li>
+    <li>Accept feedback without defensiveness</li>
+    <li>Value long-term mastery over short-term recognition</li>
+  </ul>
+  <p>This environment rewards maturity, discipline, and calm consistency. It may feel challenging at first — but growth often does.</p>
+</section>
+
+<!-- WHAT YOU'LL DEVELOP -->
+<section id="develop">
+  <div class="section-label">
+    <span class="section-num">05</span>
+    <span class="section-line"></span>
+    <span class="section-tag">Development</span>
+  </div>
+  <h2>What You'll Develop</h2>
+  <p>Over time, you may build:</p>
+  <ul class="bullet-list">
+    <li>Structured strategic thinking</li>
+    <li>Revenue-aligned decision making</li>
+    <li>Advanced lifecycle understanding</li>
+    <li>Clear written and verbal communication</li>
+    <li>Independent problem-solving confidence</li>
+    <li>Professional judgement under pressure</li>
+  </ul>
+  <div class="gold-divider"></div>
+  <p>We care about how you think — not just what you produce.</p>
+</section>
+
+<!-- PROFESSIONAL STANDARDS -->
+<section id="standards">
+  <div class="section-label">
+    <span class="section-num">06</span>
+    <span class="section-line"></span>
+    <span class="section-tag">Standards</span>
+  </div>
+  <h2>Professional Standards</h2>
+  <p>We work with global eCommerce brands who trust us with critical data and strategic assets. Professional integrity, confidentiality, and accountability are foundational here.</p>
+  <div class="callout">
+    <p>We take that trust seriously — and expect you to as well.</p>
+  </div>
+</section>
+
+<!-- JOINING -->
+<section id="join">
+  <div class="section-label">
+    <span class="section-num">07</span>
+    <span class="section-line"></span>
+    <span class="section-tag">Apply</span>
+  </div>
+  <h2>Joining Wertec</h2>
+  <p>We hire intentionally and thoughtfully. Before applying, ask yourself:</p>
+  <div class="callout">
+    <p>Are you looking for comfort — or meaningful growth?</p>
+  </div>
+  <p style="margin-top:20px;">If you're ready to build a career defined by capability, clarity, and trust, we would be glad to hear from you.</p>
+</section>
+
+<!-- JOB LISTINGS -->
+<div class="jobs-section" id="roles">
+  <div class="section-label" style="margin-bottom:16px;">
+    <span class="section-num">Open Roles</span>
+    <span class="section-line"></span>
+  </div>
+  <h2>Current Openings</h2>
+  <p class="section-intro">Each role is an opportunity to build something lasting. Find where your current capability meets our current need.</p>
+
+  <div class="job-card">
+    <div class="job-card-tag">Growth · Full-Time</div>
+    <h3>Email Marketing Strategist</h3>
+    <p>Own lifecycle strategy for eCommerce brands. You'll build flows, campaigns, and segmentation systems that drive measurable revenue growth — not just opens and clicks.</p>
+    <a href="#" class="btn-apply">Apply Now</a>
+  </div>
+
+  <div class="job-card">
+    <div class="job-card-tag">Paid Acquisition · Full-Time</div>
+    <h3>Performance Media Buyer</h3>
+    <p>Manage and scale paid acquisition across Meta and Google for high-volume DTC brands. Strong analytical instincts and budget accountability required.</p>
+    <a href="#" class="btn-apply">Apply Now</a>
+  </div>
+
+  <div class="job-card">
+    <div class="job-card-tag">Creative · Full-Time</div>
+    <h3>Conversion Copywriter</h3>
+    <p>Write ads, emails, landing pages, and product copy that convert. You understand buyer psychology and can adapt your voice to match premium brand positioning.</p>
+    <a href="#" class="btn-apply">Apply Now</a>
+  </div>
+
+  <div class="job-card">
+    <div class="job-card-tag">Operations · Full-Time</div>
+    <h3>Account Manager</h3>
+    <p>Serve as the primary point of contact for a portfolio of clients. You'll coordinate deliverables, manage timelines, and maintain the professional standards our clients expect.</p>
+    <a href="#" class="btn-apply">Apply Now</a>
+  </div>
+
+  <div class="job-card">
+    <div class="job-card-tag">Analytics · Full-Time</div>
+    <h3>Marketing Data Analyst</h3>
+    <p>Build dashboards, interpret attribution data, and surface insights that guide strategic decisions. Proficiency in GA4, Klaviyo reporting, or similar platforms is valued.</p>
+    <a href="#" class="btn-apply">Apply Now</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Wertec</div>
+  <p>Building professionals.<br>Earning trust. Compounding impact.</p>
+</footer>
+
+<script>
+  // Intersection Observer for scroll-in animations
+  const sections = document.querySelectorAll('section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
