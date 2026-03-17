@@ -1,681 +1,788 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Careers — Wertec</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ithra — Super Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #0D9488;
+      --teal-light: #CCFBF1;
+      --teal-mid: #14B8A6;
+      --teal-dark: #0F766E;
+      --bg: #F8FAFC;
+      --sidebar-bg: #0F172A;
+      --sidebar-text: #94A3B8;
+      --sidebar-active: #14B8A6;
+      --white: #FFFFFF;
+      --border: #E2E8F0;
+      --text-primary: #0F172A;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --pending: #8B5CF6;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --r: 12px;
+    }
 
-  :root {
-    --bg: #F7F5F2;
-    --bg-card: #FFFFFF;
-    --text-primary: #1A1916;
-    --text-secondary: #4A4845;
-    --text-muted: #8A8784;
-    --accent: #1C3A2E;
-    --accent-light: #2E5C47;
-    --accent-gold: #B8965A;
-    --border: #E4E0DA;
-    --border-light: #EDE9E3;
+    html, body { height: 100%; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); overflow: hidden; }
 
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-body: 'DM Sans', system-ui, sans-serif;
-  }
+    .shell {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      grid-template-rows: 60px 1fr;
+      height: 100vh;
+      width: 100%;
+    }
 
-  html { background: var(--bg); }
+    /* ── SIDEBAR ── */
+    .sidebar {
+      grid-row: 1 / -1;
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    .sidebar::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(20,184,166,0.3) 40%, rgba(20,184,166,0.1) 80%, transparent);
+    }
+    .logo-wrap {
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, #14B8A6, #0D9488);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 18px; height: 18px; fill: white; }
+    .logo-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 18px;
+      color: white; letter-spacing: -0.3px;
+    }
+    .logo-sub { font-size: 10px; color: var(--sidebar-text); letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
 
-  body {
-    font-family: var(--font-body);
-    background: var(--bg);
-    color: var(--text-primary);
-    max-width: 440px;
-    margin: 0 auto;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
+    .nav-section-label {
+      font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+      color: rgba(148,163,184,0.5); padding: 20px 20px 8px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 20px; font-size: 13.5px; font-weight: 400;
+      color: var(--sidebar-text); cursor: pointer;
+      transition: all 0.15s; position: relative;
+      text-decoration: none; border-left: 2px solid transparent; margin: 1px 0;
+    }
+    .nav-link:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
+    .nav-link.active { color: white; background: rgba(20,184,166,0.12); border-left-color: var(--teal-mid); }
+    .nav-link.active .nav-icon { color: var(--teal-mid); opacity: 1; }
+    .nav-icon { width: 16px; height: 16px; opacity: 0.7; flex-shrink: 0; }
+    .nav-badge {
+      margin-left: auto; background: rgba(239,68,68,0.2);
+      color: #FCA5A5; font-size: 10px; font-weight: 600;
+      padding: 2px 6px; border-radius: 20px;
+    }
 
-  /* ─── NAV ─── */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(247, 245, 242, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-light);
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+    .sidebar-footer {
+      margin-top: auto; padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .sidebar-user {
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer; padding: 8px; border-radius: 8px;
+      transition: background 0.15s;
+    }
+    .sidebar-user:hover { background: rgba(255,255,255,0.05); }
+    .sidebar-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: linear-gradient(135deg, #14B8A6, #8B5CF6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; color: white; flex-shrink: 0;
+    }
+    .sidebar-user-name { font-size: 12.5px; font-weight: 500; color: rgba(255,255,255,0.85); }
+    .sidebar-user-role { font-size: 11px; color: var(--sidebar-text); }
 
-  .nav-logo {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 24px; gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .page-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; font-weight: 600; color: var(--text-primary); white-space: nowrap;
+    }
+    .topbar-divider { width: 1px; height: 20px; background: var(--border); }
+    .search-wrap { flex: 1; max-width: 380px; position: relative; }
+    .search-input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 12px 7px 34px;
+      font-size: 13px; color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s;
+    }
+    .search-input:focus { border-color: var(--teal); background: white; }
+    .search-input::placeholder { color: var(--text-muted); }
+    .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 
-  .nav-tag {
-    font-family: var(--font-body);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
+    .icon-btn {
+      width: 36px; height: 36px; border-radius: 8px;
+      border: 1px solid var(--border); background: white;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-secondary);
+      transition: all 0.15s; position: relative;
+    }
+    .icon-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .notif-dot {
+      position: absolute; top: 6px; right: 6px;
+      width: 7px; height: 7px; background: var(--danger);
+      border-radius: 50%; border: 1.5px solid white;
+    }
 
-  /* ─── HERO ─── */
-  .hero {
-    padding: 56px 28px 52px;
-    position: relative;
-    border-bottom: 1px solid var(--border);
-  }
+    .admin-chip {
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 10px 5px 6px; border-radius: 8px;
+      border: 1px solid var(--border); background: white;
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .admin-chip:hover { border-color: var(--teal); }
+    .admin-avatar {
+      width: 26px; height: 26px; border-radius: 6px;
+      background: linear-gradient(135deg, #14B8A6, #8B5CF6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: white;
+    }
+    .admin-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .admin-caret { color: var(--text-muted); }
 
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-gold), var(--accent));
-  }
+    /* ── MAIN ── */
+    .main {
+      overflow-y: auto; padding: 24px;
+      display: flex; flex-direction: column; gap: 20px;
+      background: var(--bg);
+    }
+    .main::-webkit-scrollbar { width: 4px; }
+    .main::-webkit-scrollbar-track { background: transparent; }
+    .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-  .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent-gold);
-    margin-bottom: 20px;
-  }
+    /* ── KPI CARDS ── */
+    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .kpi-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--r); padding: 18px 20px;
+      box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s;
+      cursor: default; position: relative; overflow: hidden;
+    }
+    .kpi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .kpi-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; border-radius: var(--r) var(--r) 0 0;
+    }
+    .kpi-card.revenue::before  { background: linear-gradient(90deg, #14B8A6, #0D9488); }
+    .kpi-card.bookings::before { background: linear-gradient(90deg, #8B5CF6, #6D28D9); }
+    .kpi-card.drivers::before  { background: linear-gradient(90deg, #F59E0B, #D97706); }
+    .kpi-card.suppliers::before{ background: linear-gradient(90deg, #3B82F6, #2563EB); }
 
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 20px;
-    height: 1px;
-    background: var(--accent-gold);
-  }
+    .kpi-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .kpi-icon-wrap {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .kpi-icon-wrap.teal   { background: #CCFBF1; color: #0F766E; }
+    .kpi-icon-wrap.purple { background: #EDE9FE; color: #6D28D9; }
+    .kpi-icon-wrap.amber  { background: #FEF3C7; color: #D97706; }
+    .kpi-icon-wrap.blue   { background: #DBEAFE; color: #2563EB; }
+    .kpi-badge {
+      display: flex; align-items: center; gap: 3px;
+      font-size: 11.5px; font-weight: 600;
+      padding: 3px 7px; border-radius: 20px;
+    }
+    .kpi-badge.up   { background: #DCFCE7; color: #15803D; }
+    .kpi-badge.down { background: #FEE2E2; color: #DC2626; }
+    .kpi-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px; font-weight: 700; color: var(--text-primary);
+      letter-spacing: -0.5px; line-height: 1; margin-bottom: 4px;
+    }
+    .kpi-label { font-size: 12.5px; color: var(--text-secondary); font-weight: 400; }
+    .kpi-sub   { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
 
-  .hero h1 {
-    font-family: var(--font-display);
-    font-size: 46px;
-    font-weight: 700;
-    line-height: 1.05;
-    color: var(--accent);
-    letter-spacing: -0.01em;
-    margin-bottom: 14px;
-  }
+    /* ── ANALYTICS ── */
+    .analytics-row { display: grid; grid-template-columns: 1.65fr 1fr; gap: 14px; }
+    .chart-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--r); padding: 20px 22px; box-shadow: var(--shadow-sm);
+    }
+    .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .chart-title { font-family: 'Space Grotesk', sans-serif; font-size: 14.5px; font-weight: 600; color: var(--text-primary); }
+    .chart-sub   { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .chart-tab-group { display: flex; gap: 4px; }
+    .chart-tab {
+      padding: 4px 10px; font-size: 12px; font-weight: 500;
+      border-radius: 6px; cursor: pointer; border: 1px solid var(--border);
+      color: var(--text-secondary); background: white; transition: all 0.15s;
+    }
+    .chart-tab.active { background: var(--teal); color: white; border-color: var(--teal); }
+    .chart-wrap { position: relative; width: 100%; height: 180px; }
 
-  .hero-sub {
-    font-family: var(--font-display);
-    font-size: 19px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    line-height: 1.45;
-    margin-bottom: 24px;
-    font-style: italic;
-  }
+    /* ── BOTTOM ROW ── */
+    .bottom-row { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; }
+    .table-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--r); box-shadow: var(--shadow-sm); overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .card-action {
+      font-size: 12px; font-weight: 500; color: var(--teal);
+      cursor: pointer; padding: 4px 10px; border-radius: 6px;
+      border: 1px solid var(--teal-light); background: var(--teal-light);
+      transition: all 0.15s;
+    }
+    .card-action:hover { background: var(--teal); color: white; border-color: var(--teal); }
 
-  .hero p {
-    font-size: 14.5px;
-    line-height: 1.75;
-    color: var(--text-secondary);
-    margin-bottom: 12px;
-  }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    thead th {
+      padding: 10px 16px; text-align: left;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; color: var(--text-muted);
+      background: #FAFAFA; border-bottom: 1px solid var(--border);
+    }
+    tbody tr { border-bottom: 1px solid #F1F5F9; transition: background 0.1s; cursor: default; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #F8FAFF; }
+    td { padding: 11px 16px; color: var(--text-primary); }
+    .td-id       { font-family: monospace; font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
+    .td-customer { font-weight: 500; }
+    .td-supplier { color: var(--text-secondary); }
+    .td-amount   { font-weight: 600; font-family: 'Space Grotesk', sans-serif; }
 
-  /* ─── CTA BUTTON ─── */
-  .btn-primary {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background: var(--accent);
-    color: #fff;
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    padding: 16px 24px;
-    border-radius: 3px;
-    border: none;
-    cursor: pointer;
-    margin-top: 32px;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.25s;
-  }
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px; border-radius: 20px;
+      font-size: 11px; font-weight: 600; line-height: 1.4;
+    }
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+    .badge.completed { background: #DCFCE7; color: #15803D; }
+    .badge.completed .badge-dot { background: #22C55E; }
+    .badge.pending   { background: #FEF9C3; color: #A16207; }
+    .badge.pending   .badge-dot { background: #F59E0B; }
+    .badge.cancelled { background: #FEE2E2; color: #DC2626; }
+    .badge.cancelled .badge-dot { background: #EF4444; }
 
-  .btn-primary::after {
-    content: '→';
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    opacity: 0.7;
-  }
-
-  .btn-primary:hover { background: var(--accent-light); }
-
-  .btn-secondary {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background: transparent;
-    color: var(--accent);
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    padding: 15px 24px;
-    border-radius: 3px;
-    border: 1.5px solid var(--accent);
-    cursor: pointer;
-    margin-top: 28px;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  .btn-secondary::after {
-    content: '→';
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    opacity: 0.6;
-  }
-
-  .btn-secondary:hover {
-    background: var(--accent);
-    color: #fff;
-  }
-
-  /* ─── SECTIONS ─── */
-  section {
-    padding: 48px 28px;
-    border-bottom: 1px solid var(--border-light);
-    opacity: 0;
-    transform: translateY(22px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
-  }
-
-  section.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .section-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .section-num {
-    font-family: var(--font-display);
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--accent-gold);
-    letter-spacing: 0.1em;
-  }
-
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .section-tag {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  section h2 {
-    font-family: var(--font-display);
-    font-size: 30px;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1.15;
-    margin-bottom: 20px;
-    letter-spacing: -0.01em;
-  }
-
-  section p {
-    font-size: 14.5px;
-    line-height: 1.8;
-    color: var(--text-secondary);
-    margin-bottom: 16px;
-  }
-
-  section p:last-child { margin-bottom: 0; }
-
-  /* ─── BULLET LIST ─── */
-  .bullet-list {
-    list-style: none;
-    margin: 20px 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-  }
-
-  .bullet-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: 14px;
-    line-height: 1.65;
-    color: var(--text-secondary);
-  }
-
-  .bullet-list li::before {
-    content: '';
-    display: block;
-    flex-shrink: 0;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--accent-gold);
-    margin-top: 8px;
-  }
-
-  /* ─── QUOTE CALLOUT ─── */
-  .callout {
-    background: var(--accent);
-    border-radius: 4px;
-    padding: 24px 22px;
-    margin: 28px 0 0;
-  }
-
-  .callout p {
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 500;
-    color: #fff;
-    line-height: 1.6;
-    margin: 0;
-    font-style: italic;
-  }
-
-  /* ─── DIVIDER ─── */
-  .gold-divider {
-    width: 40px;
-    height: 2px;
-    background: var(--accent-gold);
-    margin: 20px 0;
-  }
-
-  /* ─── JOB CARDS ─── */
-  .jobs-section {
-    padding: 48px 28px 56px;
-    background: var(--bg);
-  }
-
-  .jobs-section h2 {
-    font-family: var(--font-display);
-    font-size: 30px;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1.15;
-    margin-bottom: 8px;
-  }
-
-  .jobs-section .section-intro {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 28px;
-    line-height: 1.65;
-  }
-
-  .job-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 24px 22px;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-    transition: box-shadow 0.2s, border-color 0.2s;
-  }
-
-  .job-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--accent-gold);
-  }
-
-  .job-card:hover {
-    box-shadow: 0 6px 24px rgba(28,58,46,0.08);
-    border-color: var(--accent);
-  }
-
-  .job-card-tag {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent-gold);
-    margin-bottom: 8px;
-  }
-
-  .job-card h3 {
-    font-family: var(--font-display);
-    font-size: 21px;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 10px;
-    line-height: 1.2;
-  }
-
-  .job-card p {
-    font-size: 13.5px;
-    line-height: 1.7;
-    color: var(--text-secondary);
-    margin-bottom: 20px;
-  }
-
-  .btn-apply {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1.5px solid var(--accent-gold);
-    padding-bottom: 2px;
-    transition: color 0.2s;
-  }
-
-  .btn-apply::after { content: '→'; font-size: 13px; }
-  .btn-apply:hover { color: var(--accent-light); }
-
-  /* ─── FOOTER ─── */
-  footer {
-    padding: 36px 28px;
-    text-align: center;
-    border-top: 1px solid var(--border);
-    background: var(--accent);
-  }
-
-  footer .footer-logo {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  footer p {
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-    line-height: 1.7;
-  }
-
-  /* ─── ANIMATIONS ─── */
-  @keyframes fadeSlide {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero {
-    animation: fadeSlide 0.7s ease both;
-  }
-
-  .hero h1 { animation: fadeSlide 0.7s 0.1s ease both; }
-  .hero-sub { animation: fadeSlide 0.7s 0.2s ease both; }
-  .hero p { animation: fadeSlide 0.7s 0.3s ease both; }
-  .hero .btn-primary { animation: fadeSlide 0.7s 0.4s ease both; }
-</style>
+    /* ── ALERTS ── */
+    .alerts-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--r); box-shadow: var(--shadow-sm); overflow: hidden;
+    }
+    .alert-section-label {
+      padding: 10px 16px 6px;
+      font-size: 10.5px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+    .alert-item {
+      padding: 12px 16px; border-bottom: 1px solid #F1F5F9;
+      display: flex; align-items: flex-start; gap: 10px;
+      transition: background 0.1s; cursor: default;
+    }
+    .alert-item:hover { background: #FAFBFF; }
+    .alert-item:last-child { border-bottom: none; }
+    .alert-dot-wrap {
+      margin-top: 3px; width: 28px; height: 28px;
+      border-radius: 7px; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+    }
+    .alert-dot-wrap.orange { background: #FEF3C7; }
+    .alert-dot-wrap.purple { background: #EDE9FE; }
+    .alert-dot-wrap.red    { background: #FEE2E2; }
+    .alert-dot-wrap.teal   { background: #CCFBF1; }
+    .alert-content { flex: 1; min-width: 0; }
+    .alert-title {
+      font-size: 12.5px; font-weight: 500; color: var(--text-primary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .alert-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .alert-actions { display: flex; gap: 5px; margin-top: 6px; }
+    .btn-approve {
+      padding: 3px 9px; font-size: 11px; font-weight: 600;
+      border-radius: 5px; border: none; cursor: pointer;
+      background: var(--teal); color: white; transition: all 0.15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-approve:hover { background: var(--teal-dark); }
+    .btn-review {
+      padding: 3px 9px; font-size: 11px; font-weight: 600;
+      border-radius: 5px; border: 1px solid var(--border);
+      cursor: pointer; background: white; color: var(--text-secondary);
+      transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+    }
+    .btn-review:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+  </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">Wertec</div>
-  <div class="nav-tag">Careers</div>
-</nav>
+<div class="shell">
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-eyebrow">Open Positions</div>
-  <h1>Careers<br>at Wertec</h1>
-  <div class="hero-sub">Build the Kind of Career That Earns Trust.</div>
-  <p>At Wertec, we are not building a fast-moving agency culture built on hype. We are building professionals — people whose thinking deepens, whose judgement matures, and whose impact compounds over time.</p>
-  <p>If you're looking for quick titles or surface-level growth, there are many places for that. If you're looking to become genuinely excellent at what you do, you may find something meaningful here.</p>
-  <a href="#roles" class="btn-primary">See Where You Might Fit</a>
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="logo-wrap">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L4 6v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6l-8-4zm0 2.2l6 3V11c0 3.5-2.7 6.8-6 7.8-3.3-1-6-4.3-6-7.8V7.2l6-3z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">Ithra</div>
+        <div class="logo-sub">Super Admin</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">Main</div>
+    <a class="nav-link active">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      Bookings
+      <span class="nav-badge">12</span>
+    </a>
+    <a class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Suppliers
+    </a>
+    <a class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Drivers
+    </a>
+
+    <div class="nav-section-label">Financial</div>
+    <a class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Finance
+    </a>
+    <a class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Reports
+    </a>
+
+    <div class="nav-section-label">System</div>
+    <a class="nav-link">
+      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 20v2"/></svg>
+      Settings
+    </a>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">SA</div>
+        <div>
+          <div class="sidebar-user-name">Sarah Al-Hamdan</div>
+          <div class="sidebar-user-role">Super Admin</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ TOPBAR ═══ -->
+  <header class="topbar">
+    <span class="page-title">Dashboard</span>
+    <div class="topbar-divider"></div>
+    <div class="search-wrap">
+      <svg class="search-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input class="search-input" placeholder="Search bookings, suppliers, drivers…" />
+    </div>
+    <div class="topbar-actions">
+      <div class="icon-btn">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="icon-btn">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 20v2"/></svg>
+      </div>
+      <div class="admin-chip">
+        <div class="admin-avatar">SA</div>
+        <span class="admin-name">Sarah A.</span>
+        <svg class="admin-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main">
+
+    <!-- KPI ROW -->
+    <div class="kpi-row">
+      <div class="kpi-card revenue">
+        <div class="kpi-top">
+          <div class="kpi-icon-wrap teal">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="kpi-badge up">↑ 12.4%</div>
+        </div>
+        <div class="kpi-value">$128,450</div>
+        <div class="kpi-label">Total Revenue</div>
+        <div class="kpi-sub">+$14,200 vs last month</div>
+      </div>
+      <div class="kpi-card bookings">
+        <div class="kpi-top">
+          <div class="kpi-icon-wrap purple">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+          </div>
+          <div class="kpi-badge up">↑ 8.7%</div>
+        </div>
+        <div class="kpi-value">2,340</div>
+        <div class="kpi-label">Total Bookings</div>
+        <div class="kpi-sub">187 new today</div>
+      </div>
+      <div class="kpi-card drivers">
+        <div class="kpi-top">
+          <div class="kpi-icon-wrap amber">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="kpi-badge up">↑ 4.2%</div>
+        </div>
+        <div class="kpi-value">120</div>
+        <div class="kpi-label">Active Drivers</div>
+        <div class="kpi-sub">8 pending verification</div>
+      </div>
+      <div class="kpi-card suppliers">
+        <div class="kpi-top">
+          <div class="kpi-icon-wrap blue">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          </div>
+          <div class="kpi-badge down">↓ 2.1%</div>
+        </div>
+        <div class="kpi-value">45</div>
+        <div class="kpi-label">Active Suppliers</div>
+        <div class="kpi-sub">3 awaiting approval</div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS ROW -->
+    <div class="analytics-row">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Revenue Overview</div>
+            <div class="chart-sub">Daily revenue across all regions</div>
+          </div>
+          <div class="chart-tab-group">
+            <div class="chart-tab active">7D</div>
+            <div class="chart-tab">30D</div>
+            <div class="chart-tab">90D</div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Booking Volume</div>
+            <div class="chart-sub">Bookings per day</div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="bookingsChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM ROW -->
+    <div class="bottom-row">
+
+      <!-- TRANSACTIONS TABLE -->
+      <div class="table-card">
+        <div class="card-header">
+          <div class="card-title">Recent Transactions</div>
+          <span class="card-action">View all</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Customer</th>
+              <th>Supplier</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-id">#BK-7834</td>
+              <td class="td-customer">Mohammed Al-Rashid</td>
+              <td class="td-supplier">Gulf Logistics</td>
+              <td class="td-amount">$420</td>
+              <td><span class="badge completed"><span class="badge-dot"></span>Completed</span></td>
+            </tr>
+            <tr>
+              <td class="td-id">#BK-7833</td>
+              <td class="td-customer">Aisha Karimi</td>
+              <td class="td-supplier">Desert Transit</td>
+              <td class="td-amount">$185</td>
+              <td><span class="badge pending"><span class="badge-dot"></span>Pending</span></td>
+            </tr>
+            <tr>
+              <td class="td-id">#BK-7832</td>
+              <td class="td-customer">James Whitfield</td>
+              <td class="td-supplier">Skyline Moves</td>
+              <td class="td-amount">$750</td>
+              <td><span class="badge completed"><span class="badge-dot"></span>Completed</span></td>
+            </tr>
+            <tr>
+              <td class="td-id">#BK-7831</td>
+              <td class="td-customer">Fatima Nour</td>
+              <td class="td-supplier">Al-Zahrani Group</td>
+              <td class="td-amount">$310</td>
+              <td><span class="badge cancelled"><span class="badge-dot"></span>Cancelled</span></td>
+            </tr>
+            <tr>
+              <td class="td-id">#BK-7830</td>
+              <td class="td-customer">Chen Wei</td>
+              <td class="td-supplier">Express Freight</td>
+              <td class="td-amount">$565</td>
+              <td><span class="badge completed"><span class="badge-dot"></span>Completed</span></td>
+            </tr>
+            <tr>
+              <td class="td-id">#BK-7829</td>
+              <td class="td-customer">Rania Hassan</td>
+              <td class="td-supplier">Gulf Logistics</td>
+              <td class="td-amount">$230</td>
+              <td><span class="badge pending"><span class="badge-dot"></span>Pending</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ALERTS PANEL -->
+      <div class="alerts-card">
+        <div class="card-header">
+          <div class="card-title">Actions Required</div>
+          <span class="card-action">7 pending</span>
+        </div>
+
+        <div class="alert-section-label">Supplier Approvals</div>
+
+        <div class="alert-item">
+          <div class="alert-dot-wrap orange">
+            <svg width="14" height="14" fill="none" stroke="#D97706" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          </div>
+          <div class="alert-content">
+            <div class="alert-title">Al-Masrah Transport Co.</div>
+            <div class="alert-meta">Submitted 2 hours ago · Riyadh, SA</div>
+            <div class="alert-actions">
+              <button class="btn-approve">Approve</button>
+              <button class="btn-review">Review</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-item">
+          <div class="alert-dot-wrap orange">
+            <svg width="14" height="14" fill="none" stroke="#D97706" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          </div>
+          <div class="alert-content">
+            <div class="alert-title">Nile Delta Freight LLC</div>
+            <div class="alert-meta">Submitted 5 hours ago · Cairo, EG</div>
+            <div class="alert-actions">
+              <button class="btn-approve">Approve</button>
+              <button class="btn-review">Review</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-section-label">Driver Verification</div>
+
+        <div class="alert-item">
+          <div class="alert-dot-wrap purple">
+            <svg width="14" height="14" fill="none" stroke="#7C3AED" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="alert-content">
+            <div class="alert-title">Khalid Mansouri · Lic. #DL-44921</div>
+            <div class="alert-meta">ID docs uploaded · 1 hour ago</div>
+            <div class="alert-actions">
+              <button class="btn-approve">Verify</button>
+              <button class="btn-review">Review</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-item">
+          <div class="alert-dot-wrap purple">
+            <svg width="14" height="14" fill="none" stroke="#7C3AED" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="alert-content">
+            <div class="alert-title">Yusuf Al-Khatib · Lic. #DL-51277</div>
+            <div class="alert-meta">Background check pending</div>
+            <div class="alert-actions">
+              <button class="btn-review">Review</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-section-label">Payment Issues</div>
+
+        <div class="alert-item">
+          <div class="alert-dot-wrap red">
+            <svg width="14" height="14" fill="none" stroke="#DC2626" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="alert-content">
+            <div class="alert-title">Transaction #BK-7821 Failed</div>
+            <div class="alert-meta">$890 · Card declined · 30 min ago</div>
+            <div class="alert-actions">
+              <button class="btn-approve">Retry</button>
+              <button class="btn-review">Investigate</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-item">
+          <div class="alert-dot-wrap teal">
+            <svg width="14" height="14" fill="none" stroke="#0F766E" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="alert-content">
+            <div class="alert-title">Payout delay · Desert Transit</div>
+            <div class="alert-meta">$4,200 payout overdue by 2 days</div>
+            <div class="alert-actions">
+              <button class="btn-approve">Release</button>
+              <button class="btn-review">Review</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
 </div>
-
-<!-- WHY WERTEC -->
-<section id="why">
-  <div class="section-label">
-    <span class="section-num">01</span>
-    <span class="section-line"></span>
-    <span class="section-tag">Purpose</span>
-  </div>
-  <h2>Why Wertec Exists</h2>
-  <p>In marketing, tools change constantly. Judgement is what lasts. Most environments teach platforms and tactics. Few teach structured thinking, decision quality, and revenue awareness.</p>
-  <div class="gold-divider"></div>
-  <p>At Wertec, you'll work inside a system designed to develop:</p>
-  <ul class="bullet-list">
-    <li>Strategic marketing clarity</li>
-    <li>Lifecycle and growth reasoning</li>
-    <li>Conversion psychology</li>
-    <li>Calm, professional communication</li>
-    <li>Ownership without supervision</li>
-  </ul>
-  <p>Even if you begin in execution, your exposure expands as your capability grows. We don't believe in keeping people narrow. We believe in developing depth.</p>
-</section>
-
-<!-- CULTURE -->
-<section id="culture">
-  <div class="section-label">
-    <span class="section-num">02</span>
-    <span class="section-line"></span>
-    <span class="section-tag">Culture</span>
-  </div>
-  <h2>Our Culture</h2>
-  <p>Wertec operates on judgement-based trust. That means:</p>
-  <ul class="bullet-list">
-    <li>We respect clear thinking</li>
-    <li>We value responsibility over hierarchy</li>
-    <li>We give feedback directly — without politics</li>
-    <li>We expect accountability — without fear</li>
-    <li>We prioritize sustainable excellence over burnout</li>
-  </ul>
-  <div class="callout">
-    <p>You will not be micromanaged here. You will be trusted — and that trust grows as your judgement does.</p>
-  </div>
-  <p style="margin-top:20px;">Many of our leaders began in execution roles and earned expanded scope through consistency and maturity.</p>
-</section>
-
-<!-- GROWTH -->
-<section id="growth">
-  <div class="section-label">
-    <span class="section-num">03</span>
-    <span class="section-line"></span>
-    <span class="section-tag">Progression</span>
-  </div>
-  <h2>Growth at Wertec</h2>
-  <p>Growth here is steady, visible, and earned. We do not believe in dramatic promotions or inflated titles. You grow when:</p>
-  <ul class="bullet-list">
-    <li>Your thinking anticipates problems</li>
-    <li>Your work requires fewer revisions</li>
-    <li>Your communication reduces friction</li>
-    <li>Your decisions reflect revenue awareness</li>
-    <li>Your ownership strengthens the system</li>
-  </ul>
-  <p>There is no automatic timeline. There is also no invisible ceiling. Capability creates expansion.</p>
-  <a href="#roles" class="btn-secondary">Explore Roles That Match Your Level</a>
-</section>
-
-<!-- WHO THRIVES -->
-<section id="fit">
-  <div class="section-label">
-    <span class="section-num">04</span>
-    <span class="section-line"></span>
-    <span class="section-tag">Fit</span>
-  </div>
-  <h2>Who Thrives Here</h2>
-  <p>You're likely to thrive at Wertec if you:</p>
-  <ul class="bullet-list">
-    <li>Care deeply about doing things well</li>
-    <li>Prefer clarity over chaos</li>
-    <li>Ask thoughtful questions</li>
-    <li>Accept feedback without defensiveness</li>
-    <li>Value long-term mastery over short-term recognition</li>
-  </ul>
-  <p>This environment rewards maturity, discipline, and calm consistency. It may feel challenging at first — but growth often does.</p>
-</section>
-
-<!-- WHAT YOU'LL DEVELOP -->
-<section id="develop">
-  <div class="section-label">
-    <span class="section-num">05</span>
-    <span class="section-line"></span>
-    <span class="section-tag">Development</span>
-  </div>
-  <h2>What You'll Develop</h2>
-  <p>Over time, you may build:</p>
-  <ul class="bullet-list">
-    <li>Structured strategic thinking</li>
-    <li>Revenue-aligned decision making</li>
-    <li>Advanced lifecycle understanding</li>
-    <li>Clear written and verbal communication</li>
-    <li>Independent problem-solving confidence</li>
-    <li>Professional judgement under pressure</li>
-  </ul>
-  <div class="gold-divider"></div>
-  <p>We care about how you think — not just what you produce.</p>
-</section>
-
-<!-- PROFESSIONAL STANDARDS -->
-<section id="standards">
-  <div class="section-label">
-    <span class="section-num">06</span>
-    <span class="section-line"></span>
-    <span class="section-tag">Standards</span>
-  </div>
-  <h2>Professional Standards</h2>
-  <p>We work with global eCommerce brands who trust us with critical data and strategic assets. Professional integrity, confidentiality, and accountability are foundational here.</p>
-  <div class="callout">
-    <p>We take that trust seriously — and expect you to as well.</p>
-  </div>
-</section>
-
-<!-- JOINING -->
-<section id="join">
-  <div class="section-label">
-    <span class="section-num">07</span>
-    <span class="section-line"></span>
-    <span class="section-tag">Apply</span>
-  </div>
-  <h2>Joining Wertec</h2>
-  <p>We hire intentionally and thoughtfully. Before applying, ask yourself:</p>
-  <div class="callout">
-    <p>Are you looking for comfort — or meaningful growth?</p>
-  </div>
-  <p style="margin-top:20px;">If you're ready to build a career defined by capability, clarity, and trust, we would be glad to hear from you.</p>
-</section>
-
-<!-- JOB LISTINGS -->
-<div class="jobs-section" id="roles">
-  <div class="section-label" style="margin-bottom:16px;">
-    <span class="section-num">Open Roles</span>
-    <span class="section-line"></span>
-  </div>
-  <h2>Current Openings</h2>
-  <p class="section-intro">Each role is an opportunity to build something lasting. Find where your current capability meets our current need.</p>
-
-  <div class="job-card">
-    <div class="job-card-tag">Growth · Full-Time</div>
-    <h3>Email Marketing Strategist</h3>
-    <p>Own lifecycle strategy for eCommerce brands. You'll build flows, campaigns, and segmentation systems that drive measurable revenue growth — not just opens and clicks.</p>
-    <a href="#" class="btn-apply">Apply Now</a>
-  </div>
-
-  <div class="job-card">
-    <div class="job-card-tag">Paid Acquisition · Full-Time</div>
-    <h3>Performance Media Buyer</h3>
-    <p>Manage and scale paid acquisition across Meta and Google for high-volume DTC brands. Strong analytical instincts and budget accountability required.</p>
-    <a href="#" class="btn-apply">Apply Now</a>
-  </div>
-
-  <div class="job-card">
-    <div class="job-card-tag">Creative · Full-Time</div>
-    <h3>Conversion Copywriter</h3>
-    <p>Write ads, emails, landing pages, and product copy that convert. You understand buyer psychology and can adapt your voice to match premium brand positioning.</p>
-    <a href="#" class="btn-apply">Apply Now</a>
-  </div>
-
-  <div class="job-card">
-    <div class="job-card-tag">Operations · Full-Time</div>
-    <h3>Account Manager</h3>
-    <p>Serve as the primary point of contact for a portfolio of clients. You'll coordinate deliverables, manage timelines, and maintain the professional standards our clients expect.</p>
-    <a href="#" class="btn-apply">Apply Now</a>
-  </div>
-
-  <div class="job-card">
-    <div class="job-card-tag">Analytics · Full-Time</div>
-    <h3>Marketing Data Analyst</h3>
-    <p>Build dashboards, interpret attribution data, and surface insights that guide strategic decisions. Proficiency in GA4, Klaviyo reporting, or similar platforms is valued.</p>
-    <a href="#" class="btn-apply">Apply Now</a>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Wertec</div>
-  <p>Building professionals.<br>Earning trust. Compounding impact.</p>
-</footer>
 
 <script>
-  // Intersection Observer for scroll-in animations
-  const sections = document.querySelectorAll('section');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const revenueData  = [14200, 18500, 16800, 21300, 19400, 24100, 14150];
+  const bookingData  = [280, 340, 310, 420, 370, 460, 160];
+  const isDark       = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const gridColor    = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
+  const tickColor    = isDark ? '#64748B' : '#94A3B8';
+  const tooltipBg    = isDark ? '#1E293B' : '#0F172A';
+
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [{
+        data: revenueData,
+        borderColor: '#14B8A6',
+        backgroundColor: 'rgba(20,184,166,0.08)',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: '#14B8A6',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        fill: true,
+        tension: 0.45
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: tooltipBg,
+          titleColor: '#94A3B8', bodyColor: '#fff', padding: 10,
+          callbacks: { label: ctx => ' $' + ctx.raw.toLocaleString() }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: gridColor, drawBorder: false },
+          ticks: { color: tickColor, font: { size: 11, family: 'DM Sans' } },
+          border: { display: false }
+        },
+        y: {
+          grid: { color: gridColor, drawBorder: false },
+          ticks: { color: tickColor, font: { size: 11 }, callback: v => '$' + (v/1000).toFixed(0) + 'k' },
+          border: { display: false }
+        }
       }
+    }
+  });
+
+  new Chart(document.getElementById('bookingsChart'), {
+    type: 'bar',
+    data: {
+      labels: days,
+      datasets: [{
+        data: bookingData,
+        backgroundColor: 'rgba(139,92,246,0.15)',
+        borderColor: '#8B5CF6',
+        borderWidth: 1.5,
+        borderRadius: 5,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: tooltipBg,
+          titleColor: '#94A3B8', bodyColor: '#fff', padding: 10,
+          callbacks: { label: ctx => ' ' + ctx.raw + ' bookings' }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: tickColor, font: { size: 11, family: 'DM Sans' } },
+          border: { display: false }
+        },
+        y: {
+          grid: { color: gridColor, drawBorder: false },
+          ticks: { color: tickColor, font: { size: 11 } },
+          border: { display: false }
+        }
+      }
+    }
+  });
+
+  // Tab switching
+  document.querySelectorAll('.chart-tab').forEach(tab => {
+    tab.addEventListener('click', function () {
+      this.closest('.chart-tab-group').querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
     });
-  }, { threshold: 0.1 });
+  });
 
-  sections.forEach(s => observer.observe(s));
-
-  // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+  // Alert dismiss on action
+  document.querySelectorAll('.btn-approve, .btn-review').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const item = this.closest('.alert-item');
+      item.style.transition = 'opacity 0.3s';
+      item.style.opacity = '0.35';
+      item.style.pointerEvents = 'none';
     });
   });
 </script>
