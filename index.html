@@ -4,787 +4,790 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ithra — Super Admin Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <title>Ithra — Bookings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --teal: #0D9488;
-      --teal-light: #CCFBF1;
-      --teal-mid: #14B8A6;
-      --teal-dark: #0F766E;
-      --bg: #F8FAFC;
-      --sidebar-bg: #0F172A;
-      --sidebar-text: #94A3B8;
-      --sidebar-active: #14B8A6;
-      --white: #FFFFFF;
-      --border: #E2E8F0;
-      --text-primary: #0F172A;
-      --text-secondary: #64748B;
-      --text-muted: #94A3B8;
-      --success: #10B981;
-      --warning: #F59E0B;
-      --danger: #EF4444;
-      --pending: #8B5CF6;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --r: 12px;
+      --navy:        #06588d;
+      --navy-dark:   #044570;
+      --navy-light:  #e8f3fa;
+      --teal:        #4fc0ab;
+      --teal-dark:   #38a892;
+      --teal-light:  #e6f7f4;
+      --amber:       #FFD166;
+      --lavender:    #CBA0FF;
+      --cream:       #F4E9D8;
+      --bg:          #f4f6f9;
+      --white:       #ffffff;
+      --border:      #e5e9ef;
+      --border-light:#f0f3f7;
+      --text:        #000000;
+      --text-2:      #333333;
+      --text-3:      #666666;
+      --text-4:      #999999;
+      --sidebar-bg:  #06588d;
+      --r:           10px;
+      --shadow:      0 1px 4px rgba(6,88,141,0.08);
+      --shadow-md:   0 4px 16px rgba(6,88,141,0.10);
     }
 
-    html, body { height: 100%; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); overflow: hidden; }
+    html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
 
+    /* ════════════════════════════════
+       SHELL LAYOUT
+    ════════════════════════════════ */
     .shell {
       display: grid;
-      grid-template-columns: 220px 1fr;
-      grid-template-rows: 60px 1fr;
+      grid-template-columns: 210px 1fr;
+      grid-template-rows: 56px 1fr;
       height: 100vh;
-      width: 100%;
     }
 
-    /* ── SIDEBAR ── */
+    /* ════════════════════════════════
+       SIDEBAR
+    ════════════════════════════════ */
     .sidebar {
       grid-row: 1 / -1;
-      background: var(--sidebar-bg);
-      display: flex;
-      flex-direction: column;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
       overflow: hidden;
-      position: relative;
     }
-    .sidebar::after {
-      content: '';
-      position: absolute;
-      top: 0; right: 0; bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(20,184,166,0.3) 40%, rgba(20,184,166,0.1) 80%, transparent);
+    .sidebar-logo {
+      height: 56px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 9px;
+      padding: 0 18px; flex-shrink: 0;
     }
-    .logo-wrap {
-      padding: 18px 20px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      display: flex; align-items: center; gap: 10px;
-    }
-    .logo-icon {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg, #14B8A6, #0D9488);
-      border-radius: 8px;
+    .logo-mark {
+      width: 30px; height: 30px; border-radius: 7px;
+      background: var(--teal);
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .logo-icon svg { width: 18px; height: 18px; fill: white; }
-    .logo-name {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700; font-size: 18px;
-      color: white; letter-spacing: -0.3px;
-    }
-    .logo-sub { font-size: 10px; color: var(--sidebar-text); letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
+    .logo-mark svg { width: 16px; height: 16px; fill: white; }
+    .logo-text { font-size: 14px; font-weight: 700; color: #000; letter-spacing: -0.2px; }
+    .logo-sub  { font-size: 9.5px; color: var(--text-3); margin-top: 1px; }
 
-    .nav-section-label {
-      font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
-      color: rgba(148,163,184,0.5); padding: 20px 20px 8px;
+    .nav-group-label {
+      font-size: 9.5px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--text-4);
+      padding: 18px 18px 6px;
     }
-    .nav-link {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 20px; font-size: 13.5px; font-weight: 400;
-      color: var(--sidebar-text); cursor: pointer;
-      transition: all 0.15s; position: relative;
-      text-decoration: none; border-left: 2px solid transparent; margin: 1px 0;
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 9px 18px; font-size: 13px; font-weight: 400;
+      color: var(--text-2); cursor: pointer;
+      transition: all 0.14s; border-radius: 0;
+      text-decoration: none; margin: 1px 0;
+      border-left: 2px solid transparent;
     }
-    .nav-link:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.04); }
-    .nav-link.active { color: white; background: rgba(20,184,166,0.12); border-left-color: var(--teal-mid); }
-    .nav-link.active .nav-icon { color: var(--teal-mid); opacity: 1; }
-    .nav-icon { width: 16px; height: 16px; opacity: 0.7; flex-shrink: 0; }
-    .nav-badge {
-      margin-left: auto; background: rgba(239,68,68,0.2);
-      color: #FCA5A5; font-size: 10px; font-weight: 600;
-      padding: 2px 6px; border-radius: 20px;
+    .nav-item:hover { background: var(--bg); color: #000; }
+    .nav-item.active {
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      font-weight: 600;
+      border-left-color: var(--teal);
     }
+    .nav-item.active .ni { color: var(--teal); opacity: 1; }
+    .ni { width: 15px; height: 15px; flex-shrink: 0; opacity: 0.55; transition: opacity 0.14s; }
+    .nav-item:hover .ni { opacity: 0.85; }
 
     .sidebar-footer {
-      margin-top: auto; padding: 16px 20px;
-      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: auto; padding: 14px 18px;
+      border-top: 1px solid var(--border);
     }
-    .sidebar-user {
-      display: flex; align-items: center; gap: 10px;
-      cursor: pointer; padding: 8px; border-radius: 8px;
-      transition: background 0.15s;
-    }
-    .sidebar-user:hover { background: rgba(255,255,255,0.05); }
-    .sidebar-avatar {
-      width: 30px; height: 30px; border-radius: 50%;
-      background: linear-gradient(135deg, #14B8A6, #8B5CF6);
+    .sf-user { display: flex; align-items: center; gap: 8px; padding: 7px 6px; border-radius: 8px; cursor: pointer; transition: background 0.14s; }
+    .sf-user:hover { background: var(--bg); }
+    .sf-av {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--navy));
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 600; color: white; flex-shrink: 0;
+      font-size: 10px; font-weight: 700; color: white; flex-shrink: 0;
     }
-    .sidebar-user-name { font-size: 12.5px; font-weight: 500; color: rgba(255,255,255,0.85); }
-    .sidebar-user-role { font-size: 11px; color: var(--sidebar-text); }
+    .sf-name { font-size: 12px; font-weight: 600; color: #000; }
+    .sf-role { font-size: 10.5px; color: var(--text-3); }
 
-    /* ── TOPBAR ── */
+    /* ════════════════════════════════
+       TOP HEADER
+    ════════════════════════════════ */
     .topbar {
-      background: var(--white); border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; padding: 0 24px; gap: 16px;
-      box-shadow: var(--shadow-sm);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 22px; gap: 14px;
+      box-shadow: var(--shadow);
     }
-    .page-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 16px; font-weight: 600; color: var(--text-primary); white-space: nowrap;
+    .topbar-search {
+      flex: 1; max-width: 320px;
+      position: relative;
     }
-    .topbar-divider { width: 1px; height: 20px; background: var(--border); }
-    .search-wrap { flex: 1; max-width: 380px; position: relative; }
-    .search-input {
-      width: 100%; background: var(--bg); border: 1px solid var(--border);
-      border-radius: 8px; padding: 7px 12px 7px 34px;
-      font-size: 13px; color: var(--text-primary);
-      font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.15s;
+    .topbar-search input {
+      width: 100%; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 7px 14px 7px 34px;
+      font-size: 12.5px; font-family: 'Inter', sans-serif;
+      color: #000; outline: none; transition: border-color 0.14s;
     }
-    .search-input:focus { border-color: var(--teal); background: white; }
-    .search-input::placeholder { color: var(--text-muted); }
-    .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-    .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .topbar-search input:focus { border-color: var(--teal); background: white; }
+    .topbar-search input::placeholder { color: var(--text-4); }
+    .topbar-search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-4); }
 
-    .icon-btn {
-      width: 36px; height: 36px; border-radius: 8px;
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+    .tb-icon-btn {
+      width: 34px; height: 34px; border-radius: 8px;
       border: 1px solid var(--border); background: white;
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer; color: var(--text-secondary);
-      transition: all 0.15s; position: relative;
+      cursor: pointer; color: var(--text-2); transition: all 0.14s;
+      position: relative; font-size: 12px; font-weight: 600;
     }
-    .icon-btn:hover { border-color: var(--teal); color: var(--teal); }
-    .notif-dot {
-      position: absolute; top: 6px; right: 6px;
-      width: 7px; height: 7px; background: var(--danger);
-      border-radius: 50%; border: 1.5px solid white;
-    }
-
-    .admin-chip {
-      display: flex; align-items: center; gap: 8px;
-      padding: 5px 10px 5px 6px; border-radius: 8px;
-      border: 1px solid var(--border); background: white;
-      cursor: pointer; transition: border-color 0.15s;
-    }
-    .admin-chip:hover { border-color: var(--teal); }
-    .admin-avatar {
-      width: 26px; height: 26px; border-radius: 6px;
-      background: linear-gradient(135deg, #14B8A6, #8B5CF6);
+    .tb-icon-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .tb-notif-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #f26b6b; color: white;
+      font-size: 9px; font-weight: 700;
+      min-width: 16px; height: 16px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 700; color: white;
+      padding: 0 3px; border: 1.5px solid white;
     }
-    .admin-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
-    .admin-caret { color: var(--text-muted); }
+    .tb-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--navy));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: white; cursor: pointer;
+      border: 2px solid var(--border); transition: border-color 0.14s;
+    }
+    .tb-avatar:hover { border-color: var(--teal); }
 
-    /* ── MAIN ── */
+    /* ════════════════════════════════
+       MAIN CONTENT
+    ════════════════════════════════ */
     .main {
-      overflow-y: auto; padding: 24px;
-      display: flex; flex-direction: column; gap: 20px;
-      background: var(--bg);
+      overflow-y: auto;
+      padding: 20px 22px;
+      display: flex; flex-direction: column; gap: 16px;
     }
     .main::-webkit-scrollbar { width: 4px; }
     .main::-webkit-scrollbar-track { background: transparent; }
     .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-    /* ── KPI CARDS ── */
+    /* ── Profile Banner ── */
+    .profile-banner {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--r); padding: 14px 20px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: var(--shadow);
+    }
+    .pb-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--navy));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; color: white; flex-shrink: 0;
+      border: 2px solid var(--teal-light);
+    }
+    .pb-name { font-size: 15px; font-weight: 700; color: #000; }
+    .pb-role { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+    .pb-actions { margin-left: auto; display: flex; gap: 8px; }
+    .btn-export {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px; font-size: 12.5px; font-weight: 600;
+      border-radius: 8px; border: 1px solid var(--border);
+      cursor: pointer; background: white; color: #000;
+      transition: all 0.14s; font-family: 'Inter', sans-serif;
+    }
+    .btn-export:hover { border-color: var(--teal); color: var(--teal); }
+
+    /* ── KPI Cards ── */
     .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .kpi-card {
       background: white; border: 1px solid var(--border);
-      border-radius: var(--r); padding: 18px 20px;
-      box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s;
-      cursor: default; position: relative; overflow: hidden;
+      border-radius: var(--r); padding: 16px 18px;
+      box-shadow: var(--shadow); display: flex;
+      flex-direction: column; gap: 0;
+      position: relative; overflow: hidden;
     }
-    .kpi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
-    .kpi-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0;
-      height: 3px; border-radius: var(--r) var(--r) 0 0;
+    .kpi-label { font-size: 12px; color: var(--text-3); font-weight: 400; margin-bottom: 6px; }
+    .kpi-bottom { display: flex; align-items: flex-end; justify-content: space-between; }
+    .kpi-left {}
+    .kpi-val { font-size: 28px; font-weight: 700; color: #000; letter-spacing: -0.8px; line-height: 1; }
+    .kpi-growth {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 11.5px; font-weight: 600; margin-top: 6px;
     }
-    .kpi-card.revenue::before  { background: linear-gradient(90deg, #14B8A6, #0D9488); }
-    .kpi-card.bookings::before { background: linear-gradient(90deg, #8B5CF6, #6D28D9); }
-    .kpi-card.drivers::before  { background: linear-gradient(90deg, #F59E0B, #D97706); }
-    .kpi-card.suppliers::before{ background: linear-gradient(90deg, #3B82F6, #2563EB); }
+    .kpi-growth.up   { color: #1a7a63; }
+    .kpi-growth.down { color: #c23b3b; }
+    .kpi-growth-arrow { font-size: 11px; }
+    .kpi-compare { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+    .kpi-chart-wrap { width: 90px; height: 52px; position: relative; flex-shrink: 0; }
 
-    .kpi-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-    .kpi-icon-wrap {
-      width: 36px; height: 36px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
+    /* ── Tab Bar ── */
+    .tab-bar { display: flex; align-items: center; gap: 6px; }
+    .tab-pill {
+      padding: 7px 18px; font-size: 13px; font-weight: 500;
+      border-radius: 20px; cursor: pointer;
+      border: 1px solid transparent; color: var(--text-2);
+      background: transparent; transition: all 0.14s;
+      font-family: 'Inter', sans-serif;
     }
-    .kpi-icon-wrap.teal   { background: #CCFBF1; color: #0F766E; }
-    .kpi-icon-wrap.purple { background: #EDE9FE; color: #6D28D9; }
-    .kpi-icon-wrap.amber  { background: #FEF3C7; color: #D97706; }
-    .kpi-icon-wrap.blue   { background: #DBEAFE; color: #2563EB; }
-    .kpi-badge {
-      display: flex; align-items: center; gap: 3px;
-      font-size: 11.5px; font-weight: 600;
-      padding: 3px 7px; border-radius: 20px;
-    }
-    .kpi-badge.up   { background: #DCFCE7; color: #15803D; }
-    .kpi-badge.down { background: #FEE2E2; color: #DC2626; }
-    .kpi-value {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 26px; font-weight: 700; color: var(--text-primary);
-      letter-spacing: -0.5px; line-height: 1; margin-bottom: 4px;
-    }
-    .kpi-label { font-size: 12.5px; color: var(--text-secondary); font-weight: 400; }
-    .kpi-sub   { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+    .tab-pill:hover { background: var(--bg); color: #000; }
+    .tab-pill.active { background: var(--teal); color: white; border-color: var(--teal); font-weight: 600; }
 
-    /* ── ANALYTICS ── */
-    .analytics-row { display: grid; grid-template-columns: 1.65fr 1fr; gap: 14px; }
-    .chart-card {
+    /* ── Content Card (table area) ── */
+    .content-card {
       background: white; border: 1px solid var(--border);
-      border-radius: var(--r); padding: 20px 22px; box-shadow: var(--shadow-sm);
+      border-radius: var(--r); box-shadow: var(--shadow);
+      display: flex; flex-direction: column; overflow: hidden;
     }
-    .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .chart-title { font-family: 'Space Grotesk', sans-serif; font-size: 14.5px; font-weight: 600; color: var(--text-primary); }
-    .chart-sub   { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-    .chart-tab-group { display: flex; gap: 4px; }
-    .chart-tab {
-      padding: 4px 10px; font-size: 12px; font-weight: 500;
-      border-radius: 6px; cursor: pointer; border: 1px solid var(--border);
-      color: var(--text-secondary); background: white; transition: all 0.15s;
-    }
-    .chart-tab.active { background: var(--teal); color: white; border-color: var(--teal); }
-    .chart-wrap { position: relative; width: 100%; height: 180px; }
 
-    /* ── BOTTOM ROW ── */
-    .bottom-row { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; }
-    .table-card {
-      background: white; border: 1px solid var(--border);
-      border-radius: var(--r); box-shadow: var(--shadow-sm); overflow: hidden;
+    /* ── Filter Row ── */
+    .filter-row {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;
     }
-    .card-header {
-      padding: 16px 20px; border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
+    .f-search {
+      position: relative; flex: 1; min-width: 200px; max-width: 280px;
     }
-    .card-title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: var(--text-primary); }
-    .card-action {
-      font-size: 12px; font-weight: 500; color: var(--teal);
-      cursor: pointer; padding: 4px 10px; border-radius: 6px;
-      border: 1px solid var(--teal-light); background: var(--teal-light);
-      transition: all 0.15s;
+    .f-search input {
+      width: 100%; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 7px 12px 7px 32px;
+      font-size: 12.5px; font-family: 'Inter', sans-serif;
+      color: #000; outline: none; transition: border-color 0.14s;
     }
-    .card-action:hover { background: var(--teal); color: white; border-color: var(--teal); }
+    .f-search input:focus { border-color: var(--teal); background: white; }
+    .f-search input::placeholder { color: var(--text-4); }
+    .f-search svg { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--text-4); pointer-events: none; }
 
-    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-    thead th {
-      padding: 10px 16px; text-align: left;
-      font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
-      text-transform: uppercase; color: var(--text-muted);
-      background: #FAFAFA; border-bottom: 1px solid var(--border);
+    .f-select {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 28px 7px 11px;
+      font-size: 12.5px; font-family: 'Inter', sans-serif;
+      color: #000; outline: none; cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' stroke='%23666' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 9px center;
+      transition: border-color 0.14s; white-space: nowrap;
     }
-    tbody tr { border-bottom: 1px solid #F1F5F9; transition: background 0.1s; cursor: default; }
+    .f-select:focus { border-color: var(--teal); }
+
+    .f-date-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px; font-size: 12.5px; font-weight: 400;
+      border-radius: 8px; border: 1px solid var(--border);
+      cursor: pointer; background: var(--bg); color: #000;
+      transition: border-color 0.14s; font-family: 'Inter', sans-serif;
+      white-space: nowrap; margin-left: auto;
+    }
+    .f-date-btn:hover { border-color: var(--teal); }
+
+    /* ── Table ── */
+    .table-wrap { overflow: auto; }
+    .table-wrap::-webkit-scrollbar { height: 4px; }
+    .table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
+
+    thead { position: sticky; top: 0; z-index: 5; background: var(--bg); }
+    thead tr { border-bottom: 1px solid var(--border); }
+    th {
+      padding: 10px 14px; text-align: left;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
+      text-transform: uppercase; color: var(--text-3);
+      white-space: nowrap; user-select: none;
+    }
+    th:first-child { width: 44px; padding-left: 18px; }
+    th:last-child  { width: 60px; text-align: center; }
+
+    tbody tr { border-bottom: 1px solid var(--border-light); transition: background 0.1s; }
     tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: #F8FAFF; }
-    td { padding: 11px 16px; color: var(--text-primary); }
-    .td-id       { font-family: monospace; font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
-    .td-customer { font-weight: 500; }
-    .td-supplier { color: var(--text-secondary); }
-    .td-amount   { font-weight: 600; font-family: 'Space Grotesk', sans-serif; }
+    tbody tr:hover { background: #f7fbff; }
+    tbody tr.row-selected { background: #eef6fb; }
 
-    .badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 3px 9px; border-radius: 20px;
-      font-size: 11px; font-weight: 600; line-height: 1.4;
-    }
-    .badge-dot { width: 5px; height: 5px; border-radius: 50%; }
-    .badge.completed { background: #DCFCE7; color: #15803D; }
-    .badge.completed .badge-dot { background: #22C55E; }
-    .badge.pending   { background: #FEF9C3; color: #A16207; }
-    .badge.pending   .badge-dot { background: #F59E0B; }
-    .badge.cancelled { background: #FEE2E2; color: #DC2626; }
-    .badge.cancelled .badge-dot { background: #EF4444; }
+    td { padding: 12px 14px; vertical-align: middle; color: #000; }
+    td:first-child { padding-left: 18px; }
+    td:last-child  { text-align: center; }
 
-    /* ── ALERTS ── */
-    .alerts-card {
-      background: white; border: 1px solid var(--border);
-      border-radius: var(--r); box-shadow: var(--shadow-sm); overflow: hidden;
+    input[type="checkbox"] {
+      width: 14px; height: 14px; cursor: pointer;
+      accent-color: var(--teal); border-radius: 3px;
     }
-    .alert-section-label {
-      padding: 10px 16px 6px;
-      font-size: 10.5px; font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; color: var(--text-muted);
+
+    /* Booking ID pill */
+    .bk-id {
+      display: inline-flex; align-items: center;
+      padding: 5px 10px; border-radius: 6px;
+      background: #111827; color: white;
+      font-size: 11.5px; font-weight: 600;
+      letter-spacing: 0.3px; white-space: nowrap;
     }
-    .alert-item {
-      padding: 12px 16px; border-bottom: 1px solid #F1F5F9;
-      display: flex; align-items: flex-start; gap: 10px;
-      transition: background 0.1s; cursor: default;
+
+    /* Passenger cell */
+    .td-passenger { font-weight: 500; color: #000; white-space: nowrap; }
+
+    /* Date / Time */
+    .td-date { color: #000; white-space: nowrap; }
+    .td-time { color: var(--text-3); font-size: 12px; }
+
+    /* Route link */
+    .td-route { color: var(--navy); font-size: 12.5px; white-space: nowrap; }
+    .td-route:hover { text-decoration: underline; cursor: pointer; }
+    .route-arrow { color: var(--teal); font-size: 11px; margin: 0 3px; }
+
+    /* Financial Status */
+    .td-fin { font-size: 12.5px; color: #000; white-space: nowrap; }
+
+    /* Ops Status */
+    .ops-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12.5px; font-weight: 500; white-space: nowrap;
     }
-    .alert-item:hover { background: #FAFBFF; }
-    .alert-item:last-child { border-bottom: none; }
-    .alert-dot-wrap {
-      margin-top: 3px; width: 28px; height: 28px;
-      border-radius: 7px; display: flex; align-items: center;
-      justify-content: center; flex-shrink: 0;
+    .ops-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .ops-dot.completed  { background: #22c55e; }
+    .ops-dot.inprogress { background: #FFD166; }
+    .ops-dot.assigned   { background: var(--navy); }
+    .ops-dot.unassigned { background: var(--text-4); }
+    .ops-dot.cancelled  { background: #f26b6b; }
+
+    .ops-label.completed  { color: #15803d; }
+    .ops-label.inprogress { color: #a37200; }
+    .ops-label.assigned   { color: var(--navy); }
+    .ops-label.unassigned { color: var(--text-3); }
+    .ops-label.cancelled  { color: #c23b3b; }
+
+    /* Three-dot action */
+    .action-menu-btn {
+      width: 28px; height: 28px; border-radius: 6px;
+      border: 1px solid var(--border); background: white;
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-3); transition: all 0.14s;
     }
-    .alert-dot-wrap.orange { background: #FEF3C7; }
-    .alert-dot-wrap.purple { background: #EDE9FE; }
-    .alert-dot-wrap.red    { background: #FEE2E2; }
-    .alert-dot-wrap.teal   { background: #CCFBF1; }
-    .alert-content { flex: 1; min-width: 0; }
-    .alert-title {
-      font-size: 12.5px; font-weight: 500; color: var(--text-primary);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    .action-menu-btn:hover { border-color: #333; color: #000; }
+
+    /* ── Pagination ── */
+    .pagination-row {
+      padding: 12px 18px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
     }
-    .alert-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-    .alert-actions { display: flex; gap: 5px; margin-top: 6px; }
-    .btn-approve {
-      padding: 3px 9px; font-size: 11px; font-weight: 600;
-      border-radius: 5px; border: none; cursor: pointer;
-      background: var(--teal); color: white; transition: all 0.15s;
-      font-family: 'DM Sans', sans-serif;
+    .pp-show { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-2); }
+    .pp-show select {
+      padding: 4px 22px 4px 8px; font-size: 12.5px;
+      border: 1px solid var(--border); border-radius: 6px;
+      background: var(--bg); color: #000; cursor: pointer;
+      font-family: 'Inter', sans-serif; outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' stroke='%23666' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 6px center;
     }
-    .btn-approve:hover { background: var(--teal-dark); }
-    .btn-review {
-      padding: 3px 9px; font-size: 11px; font-weight: 600;
-      border-radius: 5px; border: 1px solid var(--border);
-      cursor: pointer; background: white; color: var(--text-secondary);
-      transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+    .pp-controls { display: flex; align-items: center; gap: 4px; }
+    .pp-btn {
+      width: 32px; height: 32px; border-radius: 6px;
+      border: 1px solid var(--border); background: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 500; color: #333;
+      cursor: pointer; transition: all 0.14s; font-family: 'Inter', sans-serif;
     }
-    .btn-review:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+    .pp-btn:hover { border-color: #333; color: #000; }
+    .pp-btn.active { background: var(--teal); color: white; border-color: var(--teal); font-weight: 600; }
+    .pp-btn.disabled { opacity: 0.3; pointer-events: none; }
+    .pp-ellipsis { width: 32px; text-align: center; color: var(--text-3); font-size: 13px; }
+
+    /* ── Responsive micro spacing ── */
+    .gap-row { display: flex; gap: 14px; align-items: center; }
   </style>
 </head>
 <body>
-
 <div class="shell">
 
-  <!-- ═══ SIDEBAR ═══ -->
+  <!-- ══════════ SIDEBAR ══════════ -->
   <aside class="sidebar">
-    <div class="logo-wrap">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L4 6v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6l-8-4zm0 2.2l6 3V11c0 3.5-2.7 6.8-6 7.8-3.3-1-6-4.3-6-7.8V7.2l6-3z"/>
-          <circle cx="12" cy="12" r="3"/>
-        </svg>
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2L4 6v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6l-8-4zm0 2.2l6 3V11c0 3.5-2.7 6.8-6 7.8-3.3-1-6-4.3-6-7.8V7.2l6-3z"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
       <div>
-        <div class="logo-name">Ithra</div>
-        <div class="logo-sub">Super Admin</div>
+        <div class="logo-text">Ithra Transportation</div>
       </div>
     </div>
 
-    <div class="nav-section-label">Main</div>
-    <a class="nav-link active">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <div class="nav-group-label">Main</div>
+    <a class="nav-item">
+      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       Dashboard
     </a>
-    <a class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+    <a class="nav-item active">
+      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
       Bookings
-      <span class="nav-badge">12</span>
     </a>
-    <a class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      Suppliers
-    </a>
-    <a class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+    <a class="nav-item">
+      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
       Drivers
     </a>
-
-    <div class="nav-section-label">Financial</div>
-    <a class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-      Finance
+    <a class="nav-item">
+      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8zM5.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
+      Vehicles
     </a>
-    <a class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+    <a class="nav-item">
+      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      Payments
+    </a>
+    <a class="nav-item">
+      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
       Reports
     </a>
-
-    <div class="nav-section-label">System</div>
-    <a class="nav-link">
-      <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 20v2"/></svg>
+    <a class="nav-item">
+      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Work Area
+    </a>
+    <a class="nav-item">
+      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 20v2"/></svg>
       Settings
+    </a>
+    <a class="nav-item">
+      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+      Help
     </a>
 
     <div class="sidebar-footer">
-      <div class="sidebar-user">
-        <div class="sidebar-avatar">SA</div>
+      <div class="sf-user">
+        <div class="sf-av">SA</div>
         <div>
-          <div class="sidebar-user-name">Sarah Al-Hamdan</div>
-          <div class="sidebar-user-role">Super Admin</div>
+          <div class="sf-name">Sarah Al-Hamdan</div>
+          <div class="sf-role">Super Admin</div>
         </div>
       </div>
     </div>
   </aside>
 
-  <!-- ═══ TOPBAR ═══ -->
+  <!-- ══════════ TOP HEADER ══════════ -->
   <header class="topbar">
-    <span class="page-title">Dashboard</span>
-    <div class="topbar-divider"></div>
-    <div class="search-wrap">
-      <svg class="search-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input class="search-input" placeholder="Search bookings, suppliers, drivers…" />
+    <div class="topbar-search">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input placeholder="Search by Booking ID, Passenger, Phone …" />
     </div>
-    <div class="topbar-actions">
-      <div class="icon-btn">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-        <div class="notif-dot"></div>
+    <div class="topbar-right">
+      <div class="tb-icon-btn" style="font-size:11px;font-weight:700;letter-spacing:.5px;">EN</div>
+      <div class="tb-icon-btn">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
       </div>
-      <div class="icon-btn">
+      <div class="tb-icon-btn">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="tb-notif-badge">3</span>
+      </div>
+      <div class="tb-icon-btn">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 20v2"/></svg>
       </div>
-      <div class="admin-chip">
-        <div class="admin-avatar">SA</div>
-        <span class="admin-name">Sarah A.</span>
-        <svg class="admin-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
+      <div class="tb-avatar">HA</div>
     </div>
   </header>
 
-  <!-- ═══ MAIN CONTENT ═══ -->
+  <!-- ══════════ MAIN ══════════ -->
   <main class="main">
 
-    <!-- KPI ROW -->
+    <!-- Profile Banner -->
+    <div class="profile-banner">
+      <div class="pb-avatar">HA</div>
+      <div>
+        <div class="pb-name">Hamza Ali</div>
+        <div class="pb-role">Manage Dashboard, Operations, Bookings, Payment and much more …</div>
+      </div>
+      <div class="pb-actions">
+        <button class="btn-export">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Export Payments
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
     <div class="kpi-row">
-      <div class="kpi-card revenue">
-        <div class="kpi-top">
-          <div class="kpi-icon-wrap teal">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-          </div>
-          <div class="kpi-badge up">↑ 12.4%</div>
-        </div>
-        <div class="kpi-value">$128,450</div>
-        <div class="kpi-label">Total Revenue</div>
-        <div class="kpi-sub">+$14,200 vs last month</div>
-      </div>
-      <div class="kpi-card bookings">
-        <div class="kpi-top">
-          <div class="kpi-icon-wrap purple">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
-          </div>
-          <div class="kpi-badge up">↑ 8.7%</div>
-        </div>
-        <div class="kpi-value">2,340</div>
+      <div class="kpi-card">
         <div class="kpi-label">Total Bookings</div>
-        <div class="kpi-sub">187 new today</div>
-      </div>
-      <div class="kpi-card drivers">
-        <div class="kpi-top">
-          <div class="kpi-icon-wrap amber">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        <div class="kpi-bottom">
+          <div class="kpi-left">
+            <div class="kpi-val">2,131</div>
+            <div class="kpi-growth up">
+              <span class="kpi-growth-arrow">↑</span> 15%
+            </div>
+            <div class="kpi-compare">Compared to last week</div>
           </div>
-          <div class="kpi-badge up">↑ 4.2%</div>
-        </div>
-        <div class="kpi-value">120</div>
-        <div class="kpi-label">Active Drivers</div>
-        <div class="kpi-sub">8 pending verification</div>
-      </div>
-      <div class="kpi-card suppliers">
-        <div class="kpi-top">
-          <div class="kpi-icon-wrap blue">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-          </div>
-          <div class="kpi-badge down">↓ 2.1%</div>
-        </div>
-        <div class="kpi-value">45</div>
-        <div class="kpi-label">Active Suppliers</div>
-        <div class="kpi-sub">3 awaiting approval</div>
-      </div>
-    </div>
-
-    <!-- ANALYTICS ROW -->
-    <div class="analytics-row">
-      <div class="chart-card">
-        <div class="chart-header">
-          <div>
-            <div class="chart-title">Revenue Overview</div>
-            <div class="chart-sub">Daily revenue across all regions</div>
-          </div>
-          <div class="chart-tab-group">
-            <div class="chart-tab active">7D</div>
-            <div class="chart-tab">30D</div>
-            <div class="chart-tab">90D</div>
-          </div>
-        </div>
-        <div class="chart-wrap">
-          <canvas id="revenueChart"></canvas>
+          <div class="kpi-chart-wrap"><canvas id="chart0"></canvas></div>
         </div>
       </div>
-      <div class="chart-card">
-        <div class="chart-header">
-          <div>
-            <div class="chart-title">Booking Volume</div>
-            <div class="chart-sub">Bookings per day</div>
+      <div class="kpi-card">
+        <div class="kpi-label">Completed Trips</div>
+        <div class="kpi-bottom">
+          <div class="kpi-left">
+            <div class="kpi-val">1,131</div>
+            <div class="kpi-growth up">
+              <span class="kpi-growth-arrow">↑</span> 12%
+            </div>
+            <div class="kpi-compare">Compared to last week</div>
           </div>
+          <div class="kpi-chart-wrap"><canvas id="chart1"></canvas></div>
         </div>
-        <div class="chart-wrap">
-          <canvas id="bookingsChart"></canvas>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Pending Trips</div>
+        <div class="kpi-bottom">
+          <div class="kpi-left">
+            <div class="kpi-val">225</div>
+            <div class="kpi-growth down">
+              <span class="kpi-growth-arrow">↓</span> 18%
+            </div>
+            <div class="kpi-compare">Compared to last week</div>
+          </div>
+          <div class="kpi-chart-wrap"><canvas id="chart2"></canvas></div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Refunded Trips</div>
+        <div class="kpi-bottom">
+          <div class="kpi-left">
+            <div class="kpi-val">43</div>
+            <div class="kpi-growth up">
+              <span class="kpi-growth-arrow">↑</span> 5%
+            </div>
+            <div class="kpi-compare">Compared to last week</div>
+          </div>
+          <div class="kpi-chart-wrap"><canvas id="chart3"></canvas></div>
         </div>
       </div>
     </div>
 
-    <!-- BOTTOM ROW -->
-    <div class="bottom-row">
+    <!-- Tab Bar -->
+    <div class="tab-bar" id="tabBar">
+      <button class="tab-pill active" data-tab="all">All</button>
+      <button class="tab-pill" data-tab="upcoming">Upcoming</button>
+      <button class="tab-pill" data-tab="today">Today</button>
+      <button class="tab-pill" data-tab="completed">Completed</button>
+      <button class="tab-pill" data-tab="cancelled">Cancelled</button>
+    </div>
 
-      <!-- TRANSACTIONS TABLE -->
-      <div class="table-card">
-        <div class="card-header">
-          <div class="card-title">Recent Transactions</div>
-          <span class="card-action">View all</span>
+    <!-- Content Card -->
+    <div class="content-card">
+
+      <!-- Filter Row -->
+      <div class="filter-row">
+        <div class="f-search">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input placeholder="Search by Booking ID, Passenger, Phone …" />
         </div>
+        <select class="f-select">
+          <option>Payment Status ↓</option>
+          <option>Paid</option>
+          <option>Pending</option>
+          <option>Refunded</option>
+        </select>
+        <select class="f-select">
+          <option>All Routes</option>
+          <option>Madinah → Makkah</option>
+          <option>Riyadh → Jeddah</option>
+          <option>Dubai → Abu Dhabi</option>
+          <option>Cairo → Alexandria</option>
+        </select>
+        <select class="f-select">
+          <option>All Status</option>
+          <option>Completed</option>
+          <option>In Progress</option>
+          <option>Assigned</option>
+          <option>Unassigned</option>
+          <option>Cancelled</option>
+        </select>
+        <button class="f-date-btn">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Sat, 03 Jan, 2026 — Mon, 06 Jan 2026
+          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
         <table>
           <thead>
             <tr>
+              <th><input type="checkbox" id="selAll" /></th>
               <th>Booking ID</th>
-              <th>Customer</th>
-              <th>Supplier</th>
-              <th>Amount</th>
-              <th>Status</th>
+              <th>Passenger</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Route</th>
+              <th>Financial Status</th>
+              <th>Ops Status</th>
+              <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td class="td-id">#BK-7834</td>
-              <td class="td-customer">Mohammed Al-Rashid</td>
-              <td class="td-supplier">Gulf Logistics</td>
-              <td class="td-amount">$420</td>
-              <td><span class="badge completed"><span class="badge-dot"></span>Completed</span></td>
-            </tr>
-            <tr>
-              <td class="td-id">#BK-7833</td>
-              <td class="td-customer">Aisha Karimi</td>
-              <td class="td-supplier">Desert Transit</td>
-              <td class="td-amount">$185</td>
-              <td><span class="badge pending"><span class="badge-dot"></span>Pending</span></td>
-            </tr>
-            <tr>
-              <td class="td-id">#BK-7832</td>
-              <td class="td-customer">James Whitfield</td>
-              <td class="td-supplier">Skyline Moves</td>
-              <td class="td-amount">$750</td>
-              <td><span class="badge completed"><span class="badge-dot"></span>Completed</span></td>
-            </tr>
-            <tr>
-              <td class="td-id">#BK-7831</td>
-              <td class="td-customer">Fatima Nour</td>
-              <td class="td-supplier">Al-Zahrani Group</td>
-              <td class="td-amount">$310</td>
-              <td><span class="badge cancelled"><span class="badge-dot"></span>Cancelled</span></td>
-            </tr>
-            <tr>
-              <td class="td-id">#BK-7830</td>
-              <td class="td-customer">Chen Wei</td>
-              <td class="td-supplier">Express Freight</td>
-              <td class="td-amount">$565</td>
-              <td><span class="badge completed"><span class="badge-dot"></span>Completed</span></td>
-            </tr>
-            <tr>
-              <td class="td-id">#BK-7829</td>
-              <td class="td-customer">Rania Hassan</td>
-              <td class="td-supplier">Gulf Logistics</td>
-              <td class="td-amount">$230</td>
-              <td><span class="badge pending"><span class="badge-dot"></span>Pending</span></td>
-            </tr>
-          </tbody>
+          <tbody id="tBody"></tbody>
         </table>
       </div>
 
-      <!-- ALERTS PANEL -->
-      <div class="alerts-card">
-        <div class="card-header">
-          <div class="card-title">Actions Required</div>
-          <span class="card-action">7 pending</span>
+      <!-- Pagination -->
+      <div class="pagination-row">
+        <div class="pp-show">
+          Show
+          <select>
+            <option>15</option>
+            <option>25</option>
+            <option>50</option>
+            <option>100</option>
+          </select>
+          per page
         </div>
-
-        <div class="alert-section-label">Supplier Approvals</div>
-
-        <div class="alert-item">
-          <div class="alert-dot-wrap orange">
-            <svg width="14" height="14" fill="none" stroke="#D97706" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-          </div>
-          <div class="alert-content">
-            <div class="alert-title">Al-Masrah Transport Co.</div>
-            <div class="alert-meta">Submitted 2 hours ago · Riyadh, SA</div>
-            <div class="alert-actions">
-              <button class="btn-approve">Approve</button>
-              <button class="btn-review">Review</button>
-            </div>
-          </div>
+        <div class="pp-controls">
+          <button class="pp-btn disabled" id="ppPrev">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="pp-btn active">1</button>
+          <button class="pp-btn">2</button>
+          <span class="pp-ellipsis">…</span>
+          <button class="pp-btn">9</button>
+          <button class="pp-btn" id="ppNext">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
         </div>
-
-        <div class="alert-item">
-          <div class="alert-dot-wrap orange">
-            <svg width="14" height="14" fill="none" stroke="#D97706" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-          </div>
-          <div class="alert-content">
-            <div class="alert-title">Nile Delta Freight LLC</div>
-            <div class="alert-meta">Submitted 5 hours ago · Cairo, EG</div>
-            <div class="alert-actions">
-              <button class="btn-approve">Approve</button>
-              <button class="btn-review">Review</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="alert-section-label">Driver Verification</div>
-
-        <div class="alert-item">
-          <div class="alert-dot-wrap purple">
-            <svg width="14" height="14" fill="none" stroke="#7C3AED" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-          </div>
-          <div class="alert-content">
-            <div class="alert-title">Khalid Mansouri · Lic. #DL-44921</div>
-            <div class="alert-meta">ID docs uploaded · 1 hour ago</div>
-            <div class="alert-actions">
-              <button class="btn-approve">Verify</button>
-              <button class="btn-review">Review</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="alert-item">
-          <div class="alert-dot-wrap purple">
-            <svg width="14" height="14" fill="none" stroke="#7C3AED" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-          </div>
-          <div class="alert-content">
-            <div class="alert-title">Yusuf Al-Khatib · Lic. #DL-51277</div>
-            <div class="alert-meta">Background check pending</div>
-            <div class="alert-actions">
-              <button class="btn-review">Review</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="alert-section-label">Payment Issues</div>
-
-        <div class="alert-item">
-          <div class="alert-dot-wrap red">
-            <svg width="14" height="14" fill="none" stroke="#DC2626" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          </div>
-          <div class="alert-content">
-            <div class="alert-title">Transaction #BK-7821 Failed</div>
-            <div class="alert-meta">$890 · Card declined · 30 min ago</div>
-            <div class="alert-actions">
-              <button class="btn-approve">Retry</button>
-              <button class="btn-review">Investigate</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="alert-item">
-          <div class="alert-dot-wrap teal">
-            <svg width="14" height="14" fill="none" stroke="#0F766E" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-          </div>
-          <div class="alert-content">
-            <div class="alert-title">Payout delay · Desert Transit</div>
-            <div class="alert-meta">$4,200 payout overdue by 2 days</div>
-            <div class="alert-actions">
-              <button class="btn-approve">Release</button>
-              <button class="btn-review">Review</button>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </div>
+
+    </div><!-- /content-card -->
 
   </main>
 </div>
 
 <script>
-  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const revenueData  = [14200, 18500, 16800, 21300, 19400, 24100, 14150];
-  const bookingData  = [280, 340, 310, 420, 370, 460, 160];
-  const isDark       = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const gridColor    = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
-  const tickColor    = isDark ? '#64748B' : '#94A3B8';
-  const tooltipBg    = isDark ? '#1E293B' : '#0F172A';
+  /* ──────── TABLE DATA ──────── */
+  const rows = [
+    { id:'BK-10234', passenger:'Hamza Ali',       date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$300 Waiting Paym…', ops:'completed'  },
+    { id:'BK-10235', passenger:'Cooper, Kristin',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'unassigned' },
+    { id:'BK-10236', passenger:'Miles, Esther',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'inprogress' },
+    { id:'BK-10237', passenger:'Cooper, Kristin',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$300 Approved',       ops:'assigned'   },
+    { id:'BK-10238', passenger:'Henry, Arthur',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'cancelled'  },
+    { id:'BK-10239', passenger:'Flores, Juanita',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'inprogress' },
+    { id:'BK-10240', passenger:'Cooper, Kristin',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'inprogress' },
+    { id:'BK-10241', passenger:'Nguyen, Shane',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'assigned'   },
+    { id:'BK-10242', passenger:'Flores, Juanita',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'assigned'   },
+    { id:'BK-10243', passenger:'Henry, Arthur',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'unassigned' },
+    { id:'BK-10244', passenger:'Nguyen, Shane',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'assigned'   },
+    { id:'BK-10245', passenger:'Black, Marvin',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'assigned'   },
+    { id:'BK-10246', passenger:'Black, Marvin',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'completed'  },
+  ];
 
-  new Chart(document.getElementById('revenueChart'), {
+  const opsLabel = {
+    completed:  'Completed',
+    inprogress: 'In Progress',
+    assigned:   'Assigned',
+    unassigned: 'Unassigned',
+    cancelled:  'Cancelled',
+  };
+
+  function renderRows(data) {
+    document.getElementById('tBody').innerHTML = data.map(r => `
+      <tr>
+        <td><input type="checkbox" class="rcb" /></td>
+        <td><span class="bk-id">${r.id}</span></td>
+        <td class="td-passenger">${r.passenger}</td>
+        <td class="td-date">${r.date}</td>
+        <td class="td-time">${r.time}</td>
+        <td><span class="td-route">${r.from} <span class="route-arrow">→</span> ${r.to}</span></td>
+        <td class="td-fin">${r.fin}</td>
+        <td>
+          <span class="ops-status">
+            <span class="ops-dot ${r.ops}"></span>
+            <span class="ops-label ${r.ops}">${opsLabel[r.ops]}</span>
+          </span>
+        </td>
+        <td>
+          <div class="action-menu-btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="5" r="1" fill="currentColor"/>
+              <circle cx="12" cy="12" r="1" fill="currentColor"/>
+              <circle cx="12" cy="19" r="1" fill="currentColor"/>
+            </svg>
+          </div>
+        </td>
+      </tr>`).join('');
+    attachCbs();
+  }
+
+  function attachCbs() {
+    document.querySelectorAll('.rcb').forEach(cb => {
+      cb.addEventListener('change', function() {
+        this.closest('tr').classList.toggle('row-selected', this.checked);
+        syncSelAll();
+      });
+    });
+  }
+
+  function syncSelAll() {
+    const all = document.querySelectorAll('.rcb');
+    const checked = document.querySelectorAll('.rcb:checked');
+    const sa = document.getElementById('selAll');
+    sa.checked = checked.length === all.length;
+    sa.indeterminate = checked.length > 0 && checked.length < all.length;
+  }
+
+  document.getElementById('selAll').addEventListener('change', function() {
+    document.querySelectorAll('.rcb').forEach(cb => {
+      cb.checked = this.checked;
+      cb.closest('tr').classList.toggle('row-selected', this.checked);
+    });
+  });
+
+  /* Tab switching */
+  document.getElementById('tabBar').addEventListener('click', e => {
+    const t = e.target.closest('.tab-pill');
+    if (!t) return;
+    document.querySelectorAll('.tab-pill').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    const tab = t.dataset.tab;
+    const filtered = tab === 'all' ? rows
+      : tab === 'completed' ? rows.filter(r => r.ops === 'completed')
+      : tab === 'cancelled' ? rows.filter(r => r.ops === 'cancelled')
+      : tab === 'today'     ? rows.slice(0, 8)
+      : rows.slice(0, 5);
+    renderRows(filtered);
+  });
+
+  /* Page buttons */
+  document.querySelectorAll('.pp-btn:not(.disabled)').forEach(btn => {
+    btn.addEventListener('click', function() {
+      if (this.tagName === 'BUTTON' && !isNaN(this.textContent.trim())) {
+        document.querySelectorAll('.pp-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      }
+    });
+  });
+
+  renderRows(rows);
+
+  /* ──────── SPARKLINE CHARTS ──────── */
+  const sparkCfg = (data, color, fill) => ({
     type: 'line',
     data: {
-      labels: days,
-      datasets: [{
-        data: revenueData,
-        borderColor: '#14B8A6',
-        backgroundColor: 'rgba(20,184,166,0.08)',
-        borderWidth: 2,
-        pointRadius: 3,
-        pointBackgroundColor: '#14B8A6',
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-        fill: true,
-        tension: 0.45
-      }]
+      labels: data.map((_, i) => i),
+      datasets: [{ data, borderColor: color, backgroundColor: fill, borderWidth: 2,
+        pointRadius: 0, fill: true, tension: 0.45 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: tooltipBg,
-          titleColor: '#94A3B8', bodyColor: '#fff', padding: 10,
-          callbacks: { label: ctx => ' $' + ctx.raw.toLocaleString() }
-        }
-      },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
       scales: {
-        x: {
-          grid: { color: gridColor, drawBorder: false },
-          ticks: { color: tickColor, font: { size: 11, family: 'DM Sans' } },
-          border: { display: false }
-        },
-        y: {
-          grid: { color: gridColor, drawBorder: false },
-          ticks: { color: tickColor, font: { size: 11 }, callback: v => '$' + (v/1000).toFixed(0) + 'k' },
-          border: { display: false }
-        }
-      }
+        x: { display: false },
+        y: { display: false }
+      },
+      animation: { duration: 600 }
     }
   });
 
-  new Chart(document.getElementById('bookingsChart'), {
-    type: 'bar',
-    data: {
-      labels: days,
-      datasets: [{
-        data: bookingData,
-        backgroundColor: 'rgba(139,92,246,0.15)',
-        borderColor: '#8B5CF6',
-        borderWidth: 1.5,
-        borderRadius: 5,
-        borderSkipped: false
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: tooltipBg,
-          titleColor: '#94A3B8', bodyColor: '#fff', padding: 10,
-          callbacks: { label: ctx => ' ' + ctx.raw + ' bookings' }
-        }
-      },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: { color: tickColor, font: { size: 11, family: 'DM Sans' } },
-          border: { display: false }
-        },
-        y: {
-          grid: { color: gridColor, drawBorder: false },
-          ticks: { color: tickColor, font: { size: 11 } },
-          border: { display: false }
-        }
-      }
-    }
-  });
-
-  // Tab switching
-  document.querySelectorAll('.chart-tab').forEach(tab => {
-    tab.addEventListener('click', function () {
-      this.closest('.chart-tab-group').querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
-
-  // Alert dismiss on action
-  document.querySelectorAll('.btn-approve, .btn-review').forEach(btn => {
-    btn.addEventListener('click', function () {
-      const item = this.closest('.alert-item');
-      item.style.transition = 'opacity 0.3s';
-      item.style.opacity = '0.35';
-      item.style.pointerEvents = 'none';
-    });
-  });
+  new Chart(document.getElementById('chart0'), sparkCfg(
+    [40,55,45,60,52,70,65,80,72,90], '#CBA0FF', 'rgba(203,160,255,0.15)'));
+  new Chart(document.getElementById('chart1'), sparkCfg(
+    [30,40,38,55,50,65,60,70,68,80], '#FFD166', 'rgba(255,209,102,0.15)'));
+  new Chart(document.getElementById('chart2'), sparkCfg(
+    [80,70,75,60,65,50,55,42,45,35], '#f26b6b', 'rgba(242,107,107,0.12)'));
+  new Chart(document.getElementById('chart3'), sparkCfg(
+    [20,25,22,30,28,35,33,38,36,42], '#4fc0ab', 'rgba(79,192,171,0.15)'));
 </script>
 </body>
 </html>
