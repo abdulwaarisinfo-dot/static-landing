@@ -2,792 +2,655 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ithra — Bookings</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Ithra — Reports & Analytics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --teal:#4fc0ab;--teal-d:#38a892;--teal-2:rgba(79,192,171,.10);--teal-3:rgba(79,192,171,.06);
+      --navy:#06588d;--amber:#FFD166;--lav:#CBA0FF;
+      --bg:#f0f2f5;--white:#fff;
+      --b1:rgba(0,0,0,.07);--b2:rgba(0,0,0,.11);
+      --t1:#0a0a0a;--t2:#2d2d2d;--t3:#6b6b6b;--t4:#a3a3a3;
+      --green:#15803d;--green-bg:rgba(22,163,74,.09);--green-dot:#22c55e;
+      --blue:#1d4ed8;--blue-bg:rgba(29,78,216,.08);--blue-dot:#3b82f6;
+      --red:#b91c1c;--red-bg:rgba(239,68,68,.09);--red-dot:#ef4444;
+      --amber-c:#92400e;--amber-bg:rgba(245,158,11,.10);--amber-dot:#f59e0b;
+      --purple:#6d28d9;--purple-bg:rgba(109,40,217,.08);--purple-dot:#8b5cf6;
+      --gap:24px;--r:10px;
+    }
+    html,body{height:100%;overflow:hidden;-webkit-font-smoothing:antialiased}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1)}
 
-    :root {
-      --navy:        #06588d;
-      --navy-dark:   #044570;
-      --navy-light:  #e8f3fa;
-      --teal:        #4fc0ab;
-      --teal-dark:   #38a892;
-      --teal-light:  #e6f7f4;
-      --amber:       #FFD166;
-      --lavender:    #CBA0FF;
-      --cream:       #F4E9D8;
-      --bg:          #f4f6f9;
-      --white:       #ffffff;
-      --border:      #e5e9ef;
-      --border-light:#f0f3f7;
-      --text:        #000000;
-      --text-2:      #333333;
-      --text-3:      #666666;
-      --text-4:      #999999;
-      --sidebar-bg:  #06588d;
-      --r:           10px;
-      --shadow:      0 1px 4px rgba(6,88,141,0.08);
-      --shadow-md:   0 4px 16px rgba(6,88,141,0.10);
-    }
+    /* ══ SHELL ══ */
+    .shell{display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr;height:100vh;overflow:hidden}
 
-    html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+    /* ══ SIDEBAR ══ */
+    .sidebar{grid-row:1/-1;background:var(--white);border-right:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden}
+    .sb-logo{height:56px;display:flex;align-items:center;gap:11px;padding:0 18px;border-bottom:1px solid var(--b1);flex-shrink:0}
+    .sb-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--teal-d));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(79,192,171,.35)}
+    .sb-mark svg{width:16px;height:16px;fill:#fff}
+    .sb-brand{font-size:14px;font-weight:700;color:var(--t1);letter-spacing:-.3px}
+    .sb-sub{font-size:9.5px;color:var(--t4);margin-top:1px}
+    .sb-sec{padding:18px 16px 5px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t4);flex-shrink:0}
+    .sb-nav{display:flex;flex-direction:column;padding:0 8px}
+    .sb-link{display:flex;align-items:center;gap:9px;padding:9px 10px;font-size:13px;font-weight:400;color:var(--t3);cursor:pointer;border-radius:9px;transition:all .13s;text-decoration:none;flex-shrink:0;margin:1px 0}
+    .sb-link:hover{background:var(--bg);color:var(--t1)}
+    .sb-link.on{background:var(--teal);color:#fff;font-weight:500;box-shadow:0 2px 10px rgba(79,192,171,.3)}
+    .sb-link.on .si{opacity:1;color:#fff}
+    .si{width:15px;height:15px;flex-shrink:0;opacity:.36;transition:all .13s}
+    .sb-link:hover .si{opacity:.7}
+    .sb-badge{margin-left:auto;min-width:19px;height:19px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 5px;font-size:9.5px;font-weight:700}
+    .sb-badge.r{background:#fee2e2;color:#991b1b}
+    .sb-badge.a{background:#fef3c7;color:#92400e}
+    .sb-foot{margin-top:auto;padding:14px 18px 16px;border-top:1px solid var(--b1);flex-shrink:0}
+    .sb-user{display:flex;align-items:center;gap:10px;padding:8px;border-radius:9px;cursor:pointer;transition:background .13s}
+    .sb-user:hover{background:var(--bg)}
+    .sb-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--navy));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+    .sb-uname{font-size:12.5px;font-weight:600;color:var(--t1)}
+    .sb-urole{font-size:10.5px;color:var(--t4);margin-top:1px}
 
-    /* ════════════════════════════════
-       SHELL LAYOUT
-    ════════════════════════════════ */
-    .shell {
-      display: grid;
-      grid-template-columns: 210px 1fr;
-      grid-template-rows: 56px 1fr;
-      height: 100vh;
-    }
+    /* ══ TOPBAR ══ */
+    .topbar{background:var(--white);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 var(--gap);gap:14px}
+    .tb-title{font-size:15px;font-weight:600;color:var(--t1)}
+    .tb-div{width:1px;height:20px;background:var(--b1)}
+    .tb-srch{flex:1;max-width:360px;position:relative}
+    .tb-srch input{width:100%;background:var(--bg);border:1.5px solid transparent;border-radius:10px;padding:8px 14px 8px 34px;font-size:13px;font-family:'Inter',sans-serif;color:var(--t1);outline:none;transition:all .15s}
+    .tb-srch input:focus{background:#fff;border-color:var(--teal);box-shadow:0 0 0 3px rgba(79,192,171,.1)}
+    .tb-srch input::placeholder{color:var(--t4)}
+    .tb-si{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--t4);pointer-events:none}
+    .tb-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+    .tb-btn{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);transition:all .13s;position:relative}
+    .tb-btn:hover{background:var(--bg)}
+    .tb-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red-dot);border-radius:50%;border:2px solid #fff}
+    .tb-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--navy));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;cursor:pointer;border:2px solid var(--b1);transition:all .13s}
+    .tb-av:hover{border-color:var(--teal)}
 
-    /* ════════════════════════════════
-       SIDEBAR
-    ════════════════════════════════ */
-    .sidebar {
-      grid-row: 1 / -1;
-      background: var(--white);
-      border-right: 1px solid var(--border);
-      display: flex; flex-direction: column;
-      overflow: hidden;
-    }
-    .sidebar-logo {
-      height: 56px;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 9px;
-      padding: 0 18px; flex-shrink: 0;
-    }
-    .logo-mark {
-      width: 30px; height: 30px; border-radius: 7px;
-      background: var(--teal);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .logo-mark svg { width: 16px; height: 16px; fill: white; }
-    .logo-text { font-size: 14px; font-weight: 700; color: #000; letter-spacing: -0.2px; }
-    .logo-sub  { font-size: 9.5px; color: var(--text-3); margin-top: 1px; }
+    /* ══ MAIN ══ */
+    .main{overflow-y:auto;display:flex;flex-direction:column;background:var(--bg)}
+    .main::-webkit-scrollbar{display:none}
 
-    .nav-group-label {
-      font-size: 9.5px; font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; color: var(--text-4);
-      padding: 18px 18px 6px;
-    }
-    .nav-item {
-      display: flex; align-items: center; gap: 9px;
-      padding: 9px 18px; font-size: 13px; font-weight: 400;
-      color: var(--text-2); cursor: pointer;
-      transition: all 0.14s; border-radius: 0;
-      text-decoration: none; margin: 1px 0;
-      border-left: 2px solid transparent;
-    }
-    .nav-item:hover { background: var(--bg); color: #000; }
-    .nav-item.active {
-      background: var(--teal-light);
-      color: var(--teal-dark);
-      font-weight: 600;
-      border-left-color: var(--teal);
-    }
-    .nav-item.active .ni { color: var(--teal); opacity: 1; }
-    .ni { width: 15px; height: 15px; flex-shrink: 0; opacity: 0.55; transition: opacity 0.14s; }
-    .nav-item:hover .ni { opacity: 0.85; }
+    /* ── Page header ── */
+    .pg-hdr{background:var(--white);padding:20px var(--gap) 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--b1);flex-shrink:0}
+    .pg-hdr-l h1{font-size:24px;font-weight:700;letter-spacing:-.5px;color:var(--t1)}
+    .pg-hdr-l p{font-size:13px;color:var(--t3);margin-top:4px}
+    .pg-hdr-r{display:flex;gap:10px}
+    .btn-ghost{display:flex;align-items:center;gap:6px;padding:8px 16px;font-size:13px;font-weight:500;border-radius:9px;border:1px solid var(--b2);background:var(--white);color:var(--t1);cursor:pointer;font-family:'Inter',sans-serif;transition:all .13s}
+    .btn-ghost:hover{background:var(--bg)}
+    .btn-fill{display:flex;align-items:center;gap:6px;padding:8px 16px;font-size:13px;font-weight:500;border-radius:9px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .13s}
+    .btn-fill:hover{opacity:.85}
 
-    .sidebar-footer {
-      margin-top: auto; padding: 14px 18px;
-      border-top: 1px solid var(--border);
-    }
-    .sf-user { display: flex; align-items: center; gap: 8px; padding: 7px 6px; border-radius: 8px; cursor: pointer; transition: background 0.14s; }
-    .sf-user:hover { background: var(--bg); }
-    .sf-av {
-      width: 28px; height: 28px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--teal), var(--navy));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 700; color: white; flex-shrink: 0;
-    }
-    .sf-name { font-size: 12px; font-weight: 600; color: #000; }
-    .sf-role { font-size: 10.5px; color: var(--text-3); }
+    /* ── Content ── */
+    .content{padding:20px var(--gap) var(--gap);display:flex;flex-direction:column;gap:18px}
 
-    /* ════════════════════════════════
-       TOP HEADER
-    ════════════════════════════════ */
-    .topbar {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center;
-      padding: 0 22px; gap: 14px;
-      box-shadow: var(--shadow);
-    }
-    .topbar-search {
-      flex: 1; max-width: 320px;
-      position: relative;
-    }
-    .topbar-search input {
-      width: 100%; background: var(--bg);
-      border: 1px solid var(--border); border-radius: 20px;
-      padding: 7px 14px 7px 34px;
-      font-size: 12.5px; font-family: 'Inter', sans-serif;
-      color: #000; outline: none; transition: border-color 0.14s;
-    }
-    .topbar-search input:focus { border-color: var(--teal); background: white; }
-    .topbar-search input::placeholder { color: var(--text-4); }
-    .topbar-search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-4); }
+    /* ── Filter bar ── */
+    .filter-bar{background:var(--white);border:1px solid var(--b1);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:10px;flex-wrap:nowrap}
+    .fb-label{font-size:12px;font-weight:600;color:var(--t3);white-space:nowrap}
+    .fb-div{width:1px;height:22px;background:var(--b1);flex-shrink:0}
 
-    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
-    .tb-icon-btn {
-      width: 34px; height: 34px; border-radius: 8px;
-      border: 1px solid var(--border); background: white;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; color: var(--text-2); transition: all 0.14s;
-      position: relative; font-size: 12px; font-weight: 600;
-    }
-    .tb-icon-btn:hover { border-color: var(--teal); color: var(--teal); }
-    .tb-notif-badge {
-      position: absolute; top: -4px; right: -4px;
-      background: #f26b6b; color: white;
-      font-size: 9px; font-weight: 700;
-      min-width: 16px; height: 16px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      padding: 0 3px; border: 1.5px solid white;
-    }
-    .tb-avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--teal), var(--navy));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 700; color: white; cursor: pointer;
-      border: 2px solid var(--border); transition: border-color 0.14s;
-    }
-    .tb-avatar:hover { border-color: var(--teal); }
+    /* Date range tabs */
+    .date-tabs{display:flex;gap:3px}
+    .dtab{padding:6px 14px;font-size:12.5px;font-weight:500;border-radius:8px;cursor:pointer;border:1px solid var(--b1);color:var(--t3);background:var(--bg);transition:all .13s;font-family:'Inter',sans-serif}
+    .dtab:hover{background:var(--white);color:var(--t1)}
+    .dtab.on{background:var(--t1);color:#fff;border-color:var(--t1)}
 
-    /* ════════════════════════════════
-       MAIN CONTENT
-    ════════════════════════════════ */
-    .main {
-      overflow-y: auto;
-      padding: 20px 22px;
-      display: flex; flex-direction: column; gap: 16px;
-    }
-    .main::-webkit-scrollbar { width: 4px; }
-    .main::-webkit-scrollbar-track { background: transparent; }
-    .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .f-sel{background:var(--bg);border:1px solid var(--b1);border-radius:9px;padding:7px 26px 7px 11px;font-size:12.5px;font-family:'Inter',sans-serif;color:var(--t1);outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' stroke='%23aaa' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;transition:all .13s}
+    .f-sel:focus{border-color:var(--teal)}
 
-    /* ── Profile Banner ── */
-    .profile-banner {
-      background: white; border: 1px solid var(--border);
-      border-radius: var(--r); padding: 14px 20px;
-      display: flex; align-items: center; gap: 14px;
-      box-shadow: var(--shadow);
-    }
-    .pb-avatar {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--teal), var(--navy));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; font-weight: 700; color: white; flex-shrink: 0;
-      border: 2px solid var(--teal-light);
-    }
-    .pb-name { font-size: 15px; font-weight: 700; color: #000; }
-    .pb-role { font-size: 12px; color: var(--text-3); margin-top: 2px; }
-    .pb-actions { margin-left: auto; display: flex; gap: 8px; }
-    .btn-export {
-      display: flex; align-items: center; gap: 6px;
-      padding: 8px 16px; font-size: 12.5px; font-weight: 600;
-      border-radius: 8px; border: 1px solid var(--border);
-      cursor: pointer; background: white; color: #000;
-      transition: all 0.14s; font-family: 'Inter', sans-serif;
-    }
-    .btn-export:hover { border-color: var(--teal); color: var(--teal); }
+    /* ── KPI strip ── */
+    .kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .kpi-card{background:var(--white);border:1px solid var(--b1);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;transition:all .2s;cursor:default;position:relative;overflow:hidden}
+    .kpi-card:hover{box-shadow:0 8px 30px rgba(0,0,0,.08);transform:translateY(-1px)}
+    .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0}
+    .kpi-card.c0::before{background:linear-gradient(90deg,var(--teal),var(--teal-d))}
+    .kpi-card.c1::before{background:linear-gradient(90deg,#8b5cf6,#6d28d9)}
+    .kpi-card.c2::before{background:linear-gradient(90deg,#f59e0b,#d97706)}
+    .kpi-card.c3::before{background:linear-gradient(90deg,#22c55e,#16a34a)}
+    .kpi-top{display:flex;align-items:flex-start;justify-content:space-between}
+    .kpi-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .kpi-icon.tl{background:var(--teal-2);color:var(--teal-d)}
+    .kpi-icon.pu{background:var(--purple-bg);color:var(--purple)}
+    .kpi-icon.am{background:var(--amber-bg);color:var(--amber-c)}
+    .kpi-icon.gn{background:var(--green-bg);color:var(--green)}
+    .kpi-trend{font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:20px;display:flex;align-items:center;gap:3px}
+    .kpi-trend.up{background:#f0fdf4;color:var(--green)}
+    .kpi-trend.dn{background:#fef2f2;color:var(--red)}
+    .kpi-num{font-size:30px;font-weight:800;color:var(--t1);letter-spacing:-1px;line-height:1}
+    .kpi-lbl{font-size:12.5px;color:var(--t3);margin-top:3px}
+    .kpi-sub{font-size:11.5px;color:var(--t4);margin-top:5px}
 
-    /* ── KPI Cards ── */
-    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .kpi-card {
-      background: white; border: 1px solid var(--border);
-      border-radius: var(--r); padding: 16px 18px;
-      box-shadow: var(--shadow); display: flex;
-      flex-direction: column; gap: 0;
-      position: relative; overflow: hidden;
-    }
-    .kpi-label { font-size: 12px; color: var(--text-3); font-weight: 400; margin-bottom: 6px; }
-    .kpi-bottom { display: flex; align-items: flex-end; justify-content: space-between; }
-    .kpi-left {}
-    .kpi-val { font-size: 28px; font-weight: 700; color: #000; letter-spacing: -0.8px; line-height: 1; }
-    .kpi-growth {
-      display: inline-flex; align-items: center; gap: 3px;
-      font-size: 11.5px; font-weight: 600; margin-top: 6px;
-    }
-    .kpi-growth.up   { color: #1a7a63; }
-    .kpi-growth.down { color: #c23b3b; }
-    .kpi-growth-arrow { font-size: 11px; }
-    .kpi-compare { font-size: 11px; color: var(--text-3); margin-top: 3px; }
-    .kpi-chart-wrap { width: 90px; height: 52px; position: relative; flex-shrink: 0; }
+    /* ── Charts row ── */
+    .charts-row{display:grid;grid-template-columns:1.6fr 1fr;gap:14px}
+    .chart-card{background:var(--white);border:1px solid var(--b1);border-radius:16px;padding:20px;display:flex;flex-direction:column}
+    .ch-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+    .ch-title{font-size:14.5px;font-weight:600;color:var(--t1)}
+    .ch-sub{font-size:12px;color:var(--t4);margin-top:3px}
+    .ch-tabs{display:flex;gap:4px}
+    .ch-tab{padding:5px 12px;font-size:12px;font-weight:500;border-radius:8px;border:1px solid var(--b1);background:transparent;color:var(--t3);cursor:pointer;font-family:'Inter',sans-serif;transition:all .13s}
+    .ch-tab:hover{background:var(--bg);color:var(--t1)}
+    .ch-tab.on{background:var(--t1);color:#fff;border-color:var(--t1)}
+    .ch-wrap{position:relative;height:200px}
+    .ch-legend{display:flex;gap:16px;margin-top:12px}
+    .cl-i{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3)}
+    .cl-sq{width:8px;height:8px;border-radius:2px}
 
-    /* ── Tab Bar ── */
-    .tab-bar { display: flex; align-items: center; gap: 6px; }
-    .tab-pill {
-      padding: 7px 18px; font-size: 13px; font-weight: 500;
-      border-radius: 20px; cursor: pointer;
-      border: 1px solid transparent; color: var(--text-2);
-      background: transparent; transition: all 0.14s;
-      font-family: 'Inter', sans-serif;
-    }
-    .tab-pill:hover { background: var(--bg); color: #000; }
-    .tab-pill.active { background: var(--teal); color: white; border-color: var(--teal); font-weight: 600; }
+    /* ── Insights grid ── */
+    .insights-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    .ins-card{background:var(--white);border:1px solid var(--b1);border-radius:16px;overflow:hidden}
+    .ins-head{padding:14px 18px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between}
+    .ins-title{font-size:13.5px;font-weight:600;color:var(--t1)}
+    .ins-link{font-size:12px;color:var(--teal);cursor:pointer;font-weight:500}
+    .ins-link:hover{text-decoration:underline}
+    .ins-item{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #f3f4f6;transition:background .1s;cursor:default}
+    .ins-item:last-child{border-bottom:none}
+    .ins-item:hover{background:#f8fafc}
+    .ins-rank{font-size:12px;font-weight:700;color:var(--t4);width:18px;flex-shrink:0}
+    .ins-av{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+    .ins-av.round{border-radius:50%}
+    .ins-av.city{border-radius:8px;font-size:13px}
+    .ins-name{font-size:13px;font-weight:500;color:var(--t1);flex:1}
+    .ins-sub{font-size:11px;color:var(--t3);margin-top:1px}
+    .ins-val{text-align:right;flex-shrink:0}
+    .ins-num{font-size:13.5px;font-weight:700;color:var(--t1)}
+    .ins-pct{font-size:11px;color:var(--green);margin-top:2px;font-weight:500}
+    .ins-bar-wrap{height:3px;background:var(--bg);border-radius:2px;margin-top:5px;overflow:hidden}
+    .ins-bar-fill{height:100%;border-radius:2px;background:var(--teal)}
 
-    /* ── Content Card (table area) ── */
-    .content-card {
-      background: white; border: 1px solid var(--border);
-      border-radius: var(--r); box-shadow: var(--shadow);
-      display: flex; flex-direction: column; overflow: hidden;
-    }
+    /* ── Booking insights ── */
+    .booking-row{display:grid;grid-template-columns:1fr 1.4fr;gap:14px}
+    .bk-card{background:var(--white);border:1px solid var(--b1);border-radius:16px;padding:20px;display:flex;flex-direction:column}
+    .bk-head{margin-bottom:16px}
+    .bk-title{font-size:14.5px;font-weight:600;color:var(--t1)}
+    .bk-sub{font-size:12px;color:var(--t4);margin-top:3px}
+    .donut-wrap{display:flex;align-items:center;gap:24px;flex:1}
+    .donut-canvas{position:relative;width:160px;height:160px;flex-shrink:0}
+    .donut-legend{display:flex;flex-direction:column;gap:10px;flex:1}
+    .dl-item{display:flex;align-items:center;gap:10px}
+    .dl-color{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+    .dl-label{font-size:12.5px;color:var(--t2);flex:1}
+    .dl-val{font-size:13px;font-weight:600;color:var(--t1)}
+    .dl-pct{font-size:11px;color:var(--t4);margin-top:1px}
 
-    /* ── Filter Row ── */
-    .filter-row {
-      padding: 14px 18px; border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;
-    }
-    .f-search {
-      position: relative; flex: 1; min-width: 200px; max-width: 280px;
-    }
-    .f-search input {
-      width: 100%; background: var(--bg);
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 7px 12px 7px 32px;
-      font-size: 12.5px; font-family: 'Inter', sans-serif;
-      color: #000; outline: none; transition: border-color 0.14s;
-    }
-    .f-search input:focus { border-color: var(--teal); background: white; }
-    .f-search input::placeholder { color: var(--text-4); }
-    .f-search svg { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--text-4); pointer-events: none; }
+    /* Peak hours */
+    .peak-canvas-wrap{position:relative;flex:1;min-height:0}
+    .peak-bars{display:flex;align-items:flex-end;gap:5px;height:130px;padding:0 2px}
+    .peak-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+    .peak-bar{width:100%;border-radius:4px 4px 0 0;transition:opacity .2s;cursor:pointer;min-height:4px}
+    .peak-bar:hover{opacity:.75}
+    .peak-label{font-size:10px;color:var(--t4);white-space:nowrap;margin-top:4px}
+    .peak-val{font-size:9.5px;font-weight:600;color:var(--t3)}
 
-    .f-select {
-      background: var(--bg); border: 1px solid var(--border);
-      border-radius: 8px; padding: 7px 28px 7px 11px;
-      font-size: 12.5px; font-family: 'Inter', sans-serif;
-      color: #000; outline: none; cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' stroke='%23666' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 9px center;
-      transition: border-color 0.14s; white-space: nowrap;
-    }
-    .f-select:focus { border-color: var(--teal); }
+    /* ── Report table ── */
+    .tbl-card{background:var(--white);border:1px solid var(--b1);border-radius:16px;display:flex;flex-direction:column;overflow:hidden}
+    .tbl-toolbar{padding:14px 20px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between}
+    .tbl-info{font-size:13px;color:var(--t3)}.tbl-info strong{color:var(--t1);font-weight:600}
+    .tbl-acts{display:flex;gap:6px}
+    .tbl-btn{display:flex;align-items:center;gap:5px;padding:6px 11px;font-size:12px;border-radius:8px;border:1px solid var(--b2);background:none;color:var(--t2);cursor:pointer;font-family:'Inter',sans-serif;transition:all .13s}
+    .tbl-btn:hover{border-color:rgba(0,0,0,.2);color:var(--t1)}
+    .tbl-wrap{overflow:auto}
+    .tbl-wrap::-webkit-scrollbar{height:4px;width:4px}
+    .tbl-wrap::-webkit-scrollbar-thumb{background:var(--b1);border-radius:4px}
 
-    .f-date-btn {
-      display: flex; align-items: center; gap: 6px;
-      padding: 7px 12px; font-size: 12.5px; font-weight: 400;
-      border-radius: 8px; border: 1px solid var(--border);
-      cursor: pointer; background: var(--bg); color: #000;
-      transition: border-color 0.14s; font-family: 'Inter', sans-serif;
-      white-space: nowrap; margin-left: auto;
-    }
-    .f-date-btn:hover { border-color: var(--teal); }
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    thead{background:#fafafa;position:sticky;top:0;z-index:5}
+    thead tr{border-bottom:1.5px solid var(--b1)}
+    th{padding:11px 14px;text-align:left;font-size:10.5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--t4);white-space:nowrap;user-select:none;cursor:pointer}
+    th:first-child{padding-left:22px}
+    th:last-child{padding-right:22px;text-align:right}
+    th:hover{color:var(--t1)}
+    th.sorted{color:var(--t1)}
+    .sort-ico{margin-left:4px;opacity:.4;font-size:10px}
+    th.sorted .sort-ico{opacity:1}
 
-    /* ── Table ── */
-    .table-wrap { overflow: auto; }
-    .table-wrap::-webkit-scrollbar { height: 4px; }
-    .table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    tbody tr{border-bottom:1px solid #f3f4f6;transition:background .1s;cursor:default}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:#f8fafc}
+    td{padding:13px 14px;vertical-align:middle;color:var(--t1)}
+    td:first-child{padding-left:22px}
+    td:last-child{padding-right:22px;text-align:right}
 
-    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; }
+    .td-date{font-weight:500;color:var(--t1)}
+    .td-num{font-weight:600;font-size:13.5px;color:var(--t1)}
+    .td-rev{font-weight:700;font-size:13.5px;color:var(--t1)}
+    .td-comm{font-weight:500;color:var(--purple);font-size:13px}
+    .td-avg{color:var(--t2)}
 
-    thead { position: sticky; top: 0; z-index: 5; background: var(--bg); }
-    thead tr { border-bottom: 1px solid var(--border); }
-    th {
-      padding: 10px 14px; text-align: left;
-      font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
-      text-transform: uppercase; color: var(--text-3);
-      white-space: nowrap; user-select: none;
-    }
-    th:first-child { width: 44px; padding-left: 18px; }
-    th:last-child  { width: 60px; text-align: center; }
+    .rate-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}
+    .rate-hi{background:var(--green-bg);color:var(--green)}
+    .rate-md{background:var(--amber-bg);color:var(--amber-c)}
+    .rate-lo{background:var(--red-bg);color:var(--red)}
 
-    tbody tr { border-bottom: 1px solid var(--border-light); transition: background 0.1s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: #f7fbff; }
-    tbody tr.row-selected { background: #eef6fb; }
-
-    td { padding: 12px 14px; vertical-align: middle; color: #000; }
-    td:first-child { padding-left: 18px; }
-    td:last-child  { text-align: center; }
-
-    input[type="checkbox"] {
-      width: 14px; height: 14px; cursor: pointer;
-      accent-color: var(--teal); border-radius: 3px;
-    }
-
-    /* Booking ID pill */
-    .bk-id {
-      display: inline-flex; align-items: center;
-      padding: 5px 10px; border-radius: 6px;
-      background: #111827; color: white;
-      font-size: 11.5px; font-weight: 600;
-      letter-spacing: 0.3px; white-space: nowrap;
-    }
-
-    /* Passenger cell */
-    .td-passenger { font-weight: 500; color: #000; white-space: nowrap; }
-
-    /* Date / Time */
-    .td-date { color: #000; white-space: nowrap; }
-    .td-time { color: var(--text-3); font-size: 12px; }
-
-    /* Route link */
-    .td-route { color: var(--navy); font-size: 12.5px; white-space: nowrap; }
-    .td-route:hover { text-decoration: underline; cursor: pointer; }
-    .route-arrow { color: var(--teal); font-size: 11px; margin: 0 3px; }
-
-    /* Financial Status */
-    .td-fin { font-size: 12.5px; color: #000; white-space: nowrap; }
-
-    /* Ops Status */
-    .ops-status {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 12.5px; font-weight: 500; white-space: nowrap;
-    }
-    .ops-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .ops-dot.completed  { background: #22c55e; }
-    .ops-dot.inprogress { background: #FFD166; }
-    .ops-dot.assigned   { background: var(--navy); }
-    .ops-dot.unassigned { background: var(--text-4); }
-    .ops-dot.cancelled  { background: #f26b6b; }
-
-    .ops-label.completed  { color: #15803d; }
-    .ops-label.inprogress { color: #a37200; }
-    .ops-label.assigned   { color: var(--navy); }
-    .ops-label.unassigned { color: var(--text-3); }
-    .ops-label.cancelled  { color: #c23b3b; }
-
-    /* Three-dot action */
-    .action-menu-btn {
-      width: 28px; height: 28px; border-radius: 6px;
-      border: 1px solid var(--border); background: white;
-      display: inline-flex; align-items: center; justify-content: center;
-      cursor: pointer; color: var(--text-3); transition: all 0.14s;
-    }
-    .action-menu-btn:hover { border-color: #333; color: #000; }
-
-    /* ── Pagination ── */
-    .pagination-row {
-      padding: 12px 18px; border-top: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      flex-shrink: 0;
-    }
-    .pp-show { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-2); }
-    .pp-show select {
-      padding: 4px 22px 4px 8px; font-size: 12.5px;
-      border: 1px solid var(--border); border-radius: 6px;
-      background: var(--bg); color: #000; cursor: pointer;
-      font-family: 'Inter', sans-serif; outline: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' stroke='%23666' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 6px center;
-    }
-    .pp-controls { display: flex; align-items: center; gap: 4px; }
-    .pp-btn {
-      width: 32px; height: 32px; border-radius: 6px;
-      border: 1px solid var(--border); background: white;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 500; color: #333;
-      cursor: pointer; transition: all 0.14s; font-family: 'Inter', sans-serif;
-    }
-    .pp-btn:hover { border-color: #333; color: #000; }
-    .pp-btn.active { background: var(--teal); color: white; border-color: var(--teal); font-weight: 600; }
-    .pp-btn.disabled { opacity: 0.3; pointer-events: none; }
-    .pp-ellipsis { width: 32px; text-align: center; color: var(--text-3); font-size: 13px; }
-
-    /* ── Responsive micro spacing ── */
-    .gap-row { display: flex; gap: 14px; align-items: center; }
+    /* Pagination */
+    .pag{padding:12px 20px;border-top:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between}
+    .pag-l{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--t3)}
+    .pag-l select{background:var(--bg);border:1px solid var(--b1);border-radius:8px;padding:5px 22px 5px 9px;font-size:12.5px;font-family:'Inter',sans-serif;color:var(--t1);outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' stroke='%23aaa' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
+    .pag-info{font-size:12.5px;color:var(--t4)}.pag-info strong{color:var(--t1);font-weight:500}
+    .pag-r{display:flex;gap:4px}
+    .pg{min-width:32px;height:32px;border-radius:8px;border:1px solid var(--b1);background:#fff;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 10px;font-family:'Inter',sans-serif;transition:all .13s}
+    .pg:hover{border-color:var(--teal);color:var(--teal-d)}
+    .pg.on{background:var(--t1);border-color:var(--t1);color:#fff;font-weight:600}
+    .pg.off{opacity:.25;pointer-events:none;background:var(--bg)}
+    .pg-dot{width:30px;text-align:center;color:var(--t4);font-size:12px}
   </style>
 </head>
 <body>
 <div class="shell">
 
-  <!-- ══════════ SIDEBAR ══════════ -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-mark">
-        <svg viewBox="0 0 24 24"><path d="M12 2L4 6v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6l-8-4zm0 2.2l6 3V11c0 3.5-2.7 6.8-6 7.8-3.3-1-6-4.3-6-7.8V7.2l6-3z"/><circle cx="12" cy="12" r="3"/></svg>
-      </div>
-      <div>
-        <div class="logo-text">Ithra Transportation</div>
-      </div>
+    <div class="sb-logo">
+      <div class="sb-mark"><svg viewBox="0 0 24 24"><path d="M12 2L4 6v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V6l-8-4zm0 2.2l6 3V11c0 3.5-2.7 6.8-6 7.8-3.3-1-6-4.3-6-7.8V7.2l6-3z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div><div class="sb-brand">Ithra</div><div class="sb-sub">Transportation</div></div>
     </div>
-
-    <div class="nav-group-label">Main</div>
-    <a class="nav-item">
-      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
-    </a>
-    <a class="nav-item active">
-      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
-      Bookings
-    </a>
-    <a class="nav-item">
-      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-      Drivers
-    </a>
-    <a class="nav-item">
-      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8zM5.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18.5 21a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
-      Vehicles
-    </a>
-    <a class="nav-item">
-      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-      Payments
-    </a>
-    <a class="nav-item">
-      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-      Reports
-    </a>
-    <a class="nav-item">
-      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      Work Area
-    </a>
-    <a class="nav-item">
-      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 20v2"/></svg>
-      Settings
-    </a>
-    <a class="nav-item">
-      <svg class="ni" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
-      Help
-    </a>
-
-    <div class="sidebar-footer">
-      <div class="sf-user">
-        <div class="sf-av">SA</div>
-        <div>
-          <div class="sf-name">Sarah Al-Hamdan</div>
-          <div class="sf-role">Super Admin</div>
-        </div>
+    <div class="sb-sec">Main</div>
+    <div class="sb-nav">
+      <a class="sb-link"><svg class="si" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Dashboard</a>
+      <a class="sb-link"><svg class="si" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>Bookings<span class="sb-badge r">12</span></a>
+      <a class="sb-link"><svg class="si" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Suppliers<span class="sb-badge a">3</span></a>
+      <a class="sb-link"><svg class="si" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Drivers</a>
+      <a class="sb-link"><svg class="si" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Customers</a>
+    </div>
+    <div class="sb-sec">Financial</div>
+    <div class="sb-nav">
+      <a class="sb-link"><svg class="si" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Finance</a>
+      <a class="sb-link on"><svg class="si" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Reports</a>
+    </div>
+    <div class="sb-sec">System</div>
+    <div class="sb-nav">
+      <a class="sb-link"><svg class="si" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Support</a>
+      <a class="sb-link"><svg class="si" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 20v2"/></svg>Settings</a>
+    </div>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-av">SA</div>
+        <div><div class="sb-uname">Sarah Al-Hamdan</div><div class="sb-urole">Super Admin</div></div>
       </div>
     </div>
   </aside>
 
-  <!-- ══════════ TOP HEADER ══════════ -->
+  <!-- TOPBAR -->
   <header class="topbar">
-    <div class="topbar-search">
-      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input placeholder="Search by Booking ID, Passenger, Phone …" />
+    <span class="tb-title">Reports & Analytics</span>
+    <div class="tb-div"></div>
+    <div class="tb-srch">
+      <svg class="tb-si" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input placeholder="Search reports, metrics…"/>
     </div>
-    <div class="topbar-right">
-      <div class="tb-icon-btn" style="font-size:11px;font-weight:700;letter-spacing:.5px;">EN</div>
-      <div class="tb-icon-btn">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-      </div>
-      <div class="tb-icon-btn">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-        <span class="tb-notif-badge">3</span>
-      </div>
-      <div class="tb-icon-btn">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 20v2"/></svg>
-      </div>
-      <div class="tb-avatar">HA</div>
+    <div class="tb-right">
+      <div class="tb-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg><span class="tb-dot"></span></div>
+      <div class="tb-btn"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 20v2"/></svg></div>
+      <div class="tb-av">SA</div>
     </div>
   </header>
 
-  <!-- ══════════ MAIN ══════════ -->
+  <!-- MAIN -->
   <main class="main">
-
-    <!-- Profile Banner -->
-    <div class="profile-banner">
-      <div class="pb-avatar">HA</div>
-      <div>
-        <div class="pb-name">Hamza Ali</div>
-        <div class="pb-role">Manage Dashboard, Operations, Bookings, Payment and much more …</div>
+    <div class="pg-hdr">
+      <div class="pg-hdr-l">
+        <h1>Reports & Analytics</h1>
+        <p>Monitor performance, trends, and business insights across the platform</p>
       </div>
-      <div class="pb-actions">
-        <button class="btn-export">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          Export Payments
-        </button>
+      <div class="pg-hdr-r">
+        <button class="btn-ghost"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Schedule Report</button>
+        <button class="btn-fill"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export Report</button>
       </div>
     </div>
 
-    <!-- KPI Cards -->
-    <div class="kpi-row">
-      <div class="kpi-card">
-        <div class="kpi-label">Total Bookings</div>
-        <div class="kpi-bottom">
-          <div class="kpi-left">
-            <div class="kpi-val">2,131</div>
-            <div class="kpi-growth up">
-              <span class="kpi-growth-arrow">↑</span> 15%
-            </div>
-            <div class="kpi-compare">Compared to last week</div>
-          </div>
-          <div class="kpi-chart-wrap"><canvas id="chart0"></canvas></div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Completed Trips</div>
-        <div class="kpi-bottom">
-          <div class="kpi-left">
-            <div class="kpi-val">1,131</div>
-            <div class="kpi-growth up">
-              <span class="kpi-growth-arrow">↑</span> 12%
-            </div>
-            <div class="kpi-compare">Compared to last week</div>
-          </div>
-          <div class="kpi-chart-wrap"><canvas id="chart1"></canvas></div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Pending Trips</div>
-        <div class="kpi-bottom">
-          <div class="kpi-left">
-            <div class="kpi-val">225</div>
-            <div class="kpi-growth down">
-              <span class="kpi-growth-arrow">↓</span> 18%
-            </div>
-            <div class="kpi-compare">Compared to last week</div>
-          </div>
-          <div class="kpi-chart-wrap"><canvas id="chart2"></canvas></div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Refunded Trips</div>
-        <div class="kpi-bottom">
-          <div class="kpi-left">
-            <div class="kpi-val">43</div>
-            <div class="kpi-growth up">
-              <span class="kpi-growth-arrow">↑</span> 5%
-            </div>
-            <div class="kpi-compare">Compared to last week</div>
-          </div>
-          <div class="kpi-chart-wrap"><canvas id="chart3"></canvas></div>
-        </div>
-      </div>
-    </div>
+    <div class="content">
 
-    <!-- Tab Bar -->
-    <div class="tab-bar" id="tabBar">
-      <button class="tab-pill active" data-tab="all">All</button>
-      <button class="tab-pill" data-tab="upcoming">Upcoming</button>
-      <button class="tab-pill" data-tab="today">Today</button>
-      <button class="tab-pill" data-tab="completed">Completed</button>
-      <button class="tab-pill" data-tab="cancelled">Cancelled</button>
-    </div>
-
-    <!-- Content Card -->
-    <div class="content-card">
-
-      <!-- Filter Row -->
-      <div class="filter-row">
-        <div class="f-search">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input placeholder="Search by Booking ID, Passenger, Phone …" />
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <span class="fb-label">Period</span>
+        <div class="date-tabs" id="dateTabs">
+          <button class="dtab" data-p="7d">7 Days</button>
+          <button class="dtab on" data-p="30d">30 Days</button>
+          <button class="dtab" data-p="90d">90 Days</button>
+          <button class="dtab" data-p="custom">Custom</button>
         </div>
-        <select class="f-select">
-          <option>Payment Status ↓</option>
-          <option>Paid</option>
-          <option>Pending</option>
-          <option>Refunded</option>
+        <div class="fb-div"></div>
+        <select class="f-sel">
+          <option>All Cities</option>
+          <option>Riyadh</option><option>Jeddah</option>
+          <option>Dubai</option><option>Cairo</option>
+          <option>Karachi</option><option>Istanbul</option>
         </select>
-        <select class="f-select">
-          <option>All Routes</option>
-          <option>Madinah → Makkah</option>
-          <option>Riyadh → Jeddah</option>
-          <option>Dubai → Abu Dhabi</option>
-          <option>Cairo → Alexandria</option>
+        <select class="f-sel">
+          <option>All Suppliers</option>
+          <option>Gulf Logistics</option><option>Desert Transit</option>
+          <option>Skyline Moves</option><option>Al-Zahrani Group</option>
         </select>
-        <select class="f-select">
-          <option>All Status</option>
-          <option>Completed</option>
-          <option>In Progress</option>
-          <option>Assigned</option>
-          <option>Unassigned</option>
-          <option>Cancelled</option>
+        <select class="f-sel">
+          <option>All Booking Types</option>
+          <option>B2C</option>
+          <option>Corporate</option>
+          <option>Agent</option>
         </select>
-        <button class="f-date-btn">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Sat, 03 Jan, 2026 — Mon, 06 Jan 2026
-          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
+        <div class="fb-div"></div>
+        <button class="btn-fill" style="padding:7px 14px;font-size:12.5px;margin-left:auto;flex-shrink:0"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export</button>
       </div>
 
-      <!-- Table -->
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th><input type="checkbox" id="selAll" /></th>
-              <th>Booking ID</th>
-              <th>Passenger</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Route</th>
-              <th>Financial Status</th>
-              <th>Ops Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="tBody"></tbody>
-        </table>
-      </div>
-
-      <!-- Pagination -->
-      <div class="pagination-row">
-        <div class="pp-show">
-          Show
-          <select>
-            <option>15</option>
-            <option>25</option>
-            <option>50</option>
-            <option>100</option>
-          </select>
-          per page
+      <!-- KPI strip -->
+      <div class="kpi-strip">
+        <div class="kpi-card c0">
+          <div class="kpi-top">
+            <div class="kpi-icon tl"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+            <span class="kpi-trend up">↑ 12.4%</span>
+          </div>
+          <div><div class="kpi-num">$128,450</div><div class="kpi-lbl">Total Revenue</div><div class="kpi-sub">+$14,170 vs prior period</div></div>
         </div>
-        <div class="pp-controls">
-          <button class="pp-btn disabled" id="ppPrev">
-            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-          </button>
-          <button class="pp-btn active">1</button>
-          <button class="pp-btn">2</button>
-          <span class="pp-ellipsis">…</span>
-          <button class="pp-btn">9</button>
-          <button class="pp-btn" id="ppNext">
-            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
+        <div class="kpi-card c1">
+          <div class="kpi-top">
+            <div class="kpi-icon pu"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></div>
+            <span class="kpi-trend up">↑ 8.7%</span>
+          </div>
+          <div><div class="kpi-num">2,340</div><div class="kpi-lbl">Total Bookings</div><div class="kpi-sub">+188 vs prior period</div></div>
+        </div>
+        <div class="kpi-card c2">
+          <div class="kpi-top">
+            <div class="kpi-icon am"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <span class="kpi-trend up">↑ 3.4%</span>
+          </div>
+          <div><div class="kpi-num">$54.90</div><div class="kpi-lbl">Avg Trip Value</div><div class="kpi-sub">+$1.80 vs prior period</div></div>
+        </div>
+        <div class="kpi-card c3">
+          <div class="kpi-top">
+            <div class="kpi-icon gn"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+            <span class="kpi-trend up">↑ 1.2%</span>
+          </div>
+          <div><div class="kpi-num">91.4%</div><div class="kpi-lbl">Completion Rate</div><div class="kpi-sub">2,139 of 2,340 trips</div></div>
         </div>
       </div>
 
-    </div><!-- /content-card -->
+      <!-- Charts row -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="ch-head">
+            <div><div class="ch-title">Revenue Over Time</div><div class="ch-sub">Daily revenue for selected period</div></div>
+            <div class="ch-tabs">
+              <button class="ch-tab" onclick="switchRev(this,'7d')">7D</button>
+              <button class="ch-tab on" onclick="switchRev(this,'30d')">30D</button>
+              <button class="ch-tab" onclick="switchRev(this,'90d')">90D</button>
+            </div>
+          </div>
+          <div class="ch-wrap"><canvas id="revChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-head">
+            <div><div class="ch-title">Booking Volume</div><div class="ch-sub">Weekly bookings breakdown</div></div>
+          </div>
+          <div class="ch-wrap"><canvas id="volChart"></canvas></div>
+          <div class="ch-legend">
+            <div class="cl-i"><div class="cl-sq" style="background:#4fc0ab"></div>Completed</div>
+            <div class="cl-i"><div class="cl-sq" style="background:#8b5cf6"></div>Cancelled</div>
+          </div>
+        </div>
+      </div>
 
+      <!-- Performance insights -->
+      <div class="insights-row">
+
+        <!-- Top suppliers -->
+        <div class="ins-card">
+          <div class="ins-head"><span class="ins-title">Top Performing Suppliers</span><span class="ins-link">View all →</span></div>
+          <div id="suppList"></div>
+        </div>
+
+        <!-- Top cities -->
+        <div class="ins-card">
+          <div class="ins-head"><span class="ins-title">Top Cities & Locations</span><span class="ins-link">View all →</span></div>
+          <div id="cityList"></div>
+        </div>
+
+        <!-- Top drivers -->
+        <div class="ins-card">
+          <div class="ins-head"><span class="ins-title">Top Drivers</span><span class="ins-link">View all →</span></div>
+          <div id="drvList"></div>
+        </div>
+
+      </div>
+
+      <!-- Booking insights -->
+      <div class="booking-row">
+
+        <!-- Donut -->
+        <div class="bk-card">
+          <div class="bk-head"><div class="bk-title">Booking Breakdown</div><div class="bk-sub">Completed vs Cancelled vs Pending</div></div>
+          <div class="donut-wrap">
+            <div class="donut-canvas"><canvas id="donutChart"></canvas></div>
+            <div class="donut-legend">
+              <div class="dl-item"><div class="dl-color" style="background:#22c55e"></div><div><div class="dl-label">Completed</div><div class="dl-val">2,139</div><div class="dl-pct">91.4%</div></div></div>
+              <div class="dl-item"><div class="dl-color" style="background:#f59e0b"></div><div><div class="dl-label">Pending</div><div class="dl-val">94</div><div class="dl-pct">4.0%</div></div></div>
+              <div class="dl-item"><div class="dl-color" style="background:#ef4444"></div><div><div class="dl-label">Cancelled</div><div class="dl-val">107</div><div class="dl-pct">4.6%</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Peak hours -->
+        <div class="bk-card">
+          <div class="bk-head"><div class="bk-title">Peak Activity Hours</div><div class="bk-sub">Average bookings per hour of day</div></div>
+          <div id="peakWrap" class="peak-bars"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:12px">
+            <div style="width:8px;height:8px;border-radius:2px;background:var(--teal)"></div>
+            <span style="font-size:12px;color:var(--t3)">Bookings per hour · Peak at <strong style="color:var(--t1)">8 AM–10 AM</strong> and <strong style="color:var(--t1)">5 PM–7 PM</strong></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Report table -->
+      <div class="tbl-card">
+        <div class="tbl-toolbar">
+          <div class="tbl-info">Daily report · <strong>30 days</strong></div>
+          <div class="tbl-acts">
+            <button class="tbl-btn"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>Sort</button>
+            <button class="tbl-btn"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export CSV</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="sorted">Date <span class="sort-ico">↕</span></th>
+                <th>Total Bookings <span class="sort-ico">↕</span></th>
+                <th>Revenue <span class="sort-ico">↕</span></th>
+                <th>Commission <span class="sort-ico">↕</span></th>
+                <th>Avg Trip Value <span class="sort-ico">↕</span></th>
+                <th>Completion Rate <span class="sort-ico">↕</span></th>
+              </tr>
+            </thead>
+            <tbody id="reportTbody"></tbody>
+          </table>
+        </div>
+        <div class="pag">
+          <div class="pag-l">Show <select><option>15</option><option>30</option></select> per day</div>
+          <div class="pag-info">Showing <strong>1–15</strong> of <strong>30</strong> days</div>
+          <div class="pag-r">
+            <button class="pg off"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Prev</button>
+            <button class="pg on">1</button>
+            <button class="pg">2</button>
+            <button class="pg">Next<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
   </main>
 </div>
 
 <script>
-  /* ──────── TABLE DATA ──────── */
-  const rows = [
-    { id:'BK-10234', passenger:'Hamza Ali',       date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$300 Waiting Paym…', ops:'completed'  },
-    { id:'BK-10235', passenger:'Cooper, Kristin',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'unassigned' },
-    { id:'BK-10236', passenger:'Miles, Esther',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'inprogress' },
-    { id:'BK-10237', passenger:'Cooper, Kristin',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$300 Approved',       ops:'assigned'   },
-    { id:'BK-10238', passenger:'Henry, Arthur',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'cancelled'  },
-    { id:'BK-10239', passenger:'Flores, Juanita',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'inprogress' },
-    { id:'BK-10240', passenger:'Cooper, Kristin',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'inprogress' },
-    { id:'BK-10241', passenger:'Nguyen, Shane',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'assigned'   },
-    { id:'BK-10242', passenger:'Flores, Juanita',  date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'assigned'   },
-    { id:'BK-10243', passenger:'Henry, Arthur',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'unassigned' },
-    { id:'BK-10244', passenger:'Nguyen, Shane',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'assigned'   },
-    { id:'BK-10245', passenger:'Black, Marvin',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'Makkah',           fin:'$400 To Be Paid',     ops:'assigned'   },
-    { id:'BK-10246', passenger:'Black, Marvin',    date:'1/28/2026', time:'6:29 PM', from:'Madinah', to:'King Abdulazi…',   fin:'$400 To Be Paid',     ops:'completed'  },
-  ];
+/* ── Color helpers ── */
+const AVC=['#4fc0ab','#06588d','#8b5cf6','#f59e0b','#ef4444','#10b981','#3b82f6','#ec4899'];
+const avc=n=>{let h=0;for(let i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);return AVC[Math.abs(h)%AVC.length]};
+const ini=n=>n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
 
-  const opsLabel = {
-    completed:  'Completed',
-    inprogress: 'In Progress',
-    assigned:   'Assigned',
-    unassigned: 'Unassigned',
-    cancelled:  'Cancelled',
-  };
+/* ── Date period tabs ── */
+document.getElementById('dateTabs').addEventListener('click',e=>{
+  const t=e.target.closest('.dtab');if(!t)return;
+  document.querySelectorAll('.dtab').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on');
+});
 
-  function renderRows(data) {
-    document.getElementById('tBody').innerHTML = data.map(r => `
-      <tr>
-        <td><input type="checkbox" class="rcb" /></td>
-        <td><span class="bk-id">${r.id}</span></td>
-        <td class="td-passenger">${r.passenger}</td>
-        <td class="td-date">${r.date}</td>
-        <td class="td-time">${r.time}</td>
-        <td><span class="td-route">${r.from} <span class="route-arrow">→</span> ${r.to}</span></td>
-        <td class="td-fin">${r.fin}</td>
-        <td>
-          <span class="ops-status">
-            <span class="ops-dot ${r.ops}"></span>
-            <span class="ops-label ${r.ops}">${opsLabel[r.ops]}</span>
-          </span>
-        </td>
-        <td>
-          <div class="action-menu-btn">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="12" cy="5" r="1" fill="currentColor"/>
-              <circle cx="12" cy="12" r="1" fill="currentColor"/>
-              <circle cx="12" cy="19" r="1" fill="currentColor"/>
-            </svg>
-          </div>
-        </td>
-      </tr>`).join('');
-    attachCbs();
-  }
+/* ── Revenue line chart ── */
+const days7=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const rev7=[14200,18500,16800,21300,19400,24100,14150];
+const rev30=Array.from({length:30},(_,i)=>Math.round(3000+Math.sin(i*.3)*2000+Math.random()*4000+i*120));
+const lbls30=Array.from({length:30},(_,i)=>`Mar ${i+1}`);
+const rev90=Array.from({length:90},(_,i)=>Math.round(2500+Math.sin(i*.15)*3000+Math.random()*5000+i*60));
+const lbls90=Array.from({length:90},(_,i)=>`D${i+1}`);
 
-  function attachCbs() {
-    document.querySelectorAll('.rcb').forEach(cb => {
-      cb.addEventListener('change', function() {
-        this.closest('tr').classList.toggle('row-selected', this.checked);
-        syncSelAll();
-      });
-    });
-  }
-
-  function syncSelAll() {
-    const all = document.querySelectorAll('.rcb');
-    const checked = document.querySelectorAll('.rcb:checked');
-    const sa = document.getElementById('selAll');
-    sa.checked = checked.length === all.length;
-    sa.indeterminate = checked.length > 0 && checked.length < all.length;
-  }
-
-  document.getElementById('selAll').addEventListener('change', function() {
-    document.querySelectorAll('.rcb').forEach(cb => {
-      cb.checked = this.checked;
-      cb.closest('tr').classList.toggle('row-selected', this.checked);
-    });
+let revChart=null;
+function buildRev(labels,data){
+  if(revChart)revChart.destroy();
+  revChart=new Chart(document.getElementById('revChart'),{
+    type:'line',
+    data:{labels,datasets:[{data,borderColor:'#4fc0ab',backgroundColor:'rgba(79,192,171,.07)',borderWidth:2.5,pointRadius:labels.length<=10?4:0,pointBackgroundColor:'#4fc0ab',pointBorderColor:'#fff',pointBorderWidth:2,fill:true,tension:.42}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#0f172a',titleColor:'rgba(255,255,255,.6)',bodyColor:'#fff',padding:10,cornerRadius:8,callbacks:{label:ctx=>' $'+ctx.raw.toLocaleString()}}},scales:{x:{grid:{color:'rgba(0,0,0,.04)',drawBorder:false},ticks:{color:'#a3a3a3',font:{size:11,family:'Inter'},maxTicksLimit:8},border:{display:false}},y:{grid:{color:'rgba(0,0,0,.04)',drawBorder:false},ticks:{color:'#a3a3a3',font:{size:11,family:'Inter'},callback:v=>'$'+(v/1000).toFixed(0)+'k'},border:{display:false}}}}
   });
+}
+buildRev(lbls30,rev30);
+function switchRev(btn,p){
+  document.querySelectorAll('.ch-tab').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
+  if(p==='7d')buildRev(days7,rev7);
+  else if(p==='30d')buildRev(lbls30,rev30);
+  else buildRev(lbls90,rev90);
+}
 
-  /* Tab switching */
-  document.getElementById('tabBar').addEventListener('click', e => {
-    const t = e.target.closest('.tab-pill');
-    if (!t) return;
-    document.querySelectorAll('.tab-pill').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    const tab = t.dataset.tab;
-    const filtered = tab === 'all' ? rows
-      : tab === 'completed' ? rows.filter(r => r.ops === 'completed')
-      : tab === 'cancelled' ? rows.filter(r => r.ops === 'cancelled')
-      : tab === 'today'     ? rows.slice(0, 8)
-      : rows.slice(0, 5);
-    renderRows(filtered);
+/* ── Booking volume bar chart ── */
+new Chart(document.getElementById('volChart'),{
+  type:'bar',
+  data:{
+    labels:['W1','W2','W3','W4','W5'],
+    datasets:[
+      {label:'Completed',data:[420,510,480,560,520],backgroundColor:'rgba(79,192,171,.75)',borderRadius:5,borderSkipped:false},
+      {label:'Cancelled',data:[28,35,30,42,38],backgroundColor:'rgba(139,92,246,.6)',borderRadius:5,borderSkipped:false},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#0f172a',titleColor:'rgba(255,255,255,.6)',bodyColor:'#fff',padding:10,cornerRadius:8}},scales:{x:{grid:{display:false},ticks:{color:'#a3a3a3',font:{size:11,family:'Inter'}},border:{display:false}},y:{grid:{color:'rgba(0,0,0,.04)',drawBorder:false},ticks:{color:'#a3a3a3',font:{size:11,family:'Inter'}},border:{display:false}}}}
+});
+
+/* ── Insights ── */
+const SUPPS=[
+  {name:'Gulf Logistics',   sub:'Riyadh, SA',   rev:'$42,100',pct:33,trips:842},
+  {name:'Desert Transit',   sub:'Dubai, UAE',   rev:'$28,400',pct:22,trips:631},
+  {name:'Skyline Moves',    sub:'Jeddah, SA',   rev:'$21,600',pct:17,trips:481},
+  {name:'Al-Zahrani Group', sub:'Dammam, SA',   rev:'$18,900',pct:15,trips:420},
+  {name:'Express Freight',  sub:'Multi-city',   rev:'$17,450',pct:13,trips:389},
+];
+const CITIES=[
+  {name:'Riyadh',    sub:'Saudi Arabia',  rev:'$54,200',pct:42,flag:'🇸🇦'},
+  {name:'Dubai',     sub:'UAE',           rev:'$28,800',pct:22,flag:'🇦🇪'},
+  {name:'Jeddah',   sub:'Saudi Arabia',  rev:'$18,400',pct:14,flag:'🇸🇦'},
+  {name:'Cairo',    sub:'Egypt',          rev:'$12,100',pct:9, flag:'🇪🇬'},
+  {name:'Karachi',  sub:'Pakistan',       rev:'$8,600',pct:7, flag:'🇵🇰'},
+];
+const DRVS=[
+  {name:'Ahmed Karimi',     sub:'Gulf Logistics',   val:'842 trips', rating:'4.9 ★'},
+  {name:'Omar Siddiqui',    sub:'Skyline Moves',    val:'631 trips', rating:'4.7 ★'},
+  {name:'Khalid Mansouri',  sub:'Express Freight',  val:'556 trips', rating:'4.8 ★'},
+  {name:'Faisal Al-Otaibi', sub:'Desert Transit',   val:'498 trips', rating:'4.6 ★'},
+  {name:'Bilal Khan',       sub:'Skyline Moves',    val:'374 trips', rating:'4.5 ★'},
+];
+
+function buildInsights(containerId,items,renderFn){
+  document.getElementById(containerId).innerHTML=items.map((it,i)=>renderFn(it,i+1)).join('');
+}
+buildInsights('suppList',SUPPS,(s,r)=>`
+  <div class="ins-item">
+    <span class="ins-rank">${r}</span>
+    <div class="ins-av" style="background:${avc(s.name)}">${ini(s.name)}</div>
+    <div style="flex:1;min-width:0">
+      <div class="ins-name">${s.name}</div>
+      <div class="ins-sub">${s.sub}</div>
+      <div class="ins-bar-wrap"><div class="ins-bar-fill" style="width:${s.pct}%"></div></div>
+    </div>
+    <div class="ins-val"><div class="ins-num">${s.rev}</div><div class="ins-pct">${s.trips} trips</div></div>
+  </div>`);
+
+buildInsights('cityList',CITIES,(c,r)=>`
+  <div class="ins-item">
+    <span class="ins-rank">${r}</span>
+    <div class="ins-av city" style="background:var(--bg);font-size:18px;border:1px solid var(--b1)">${c.flag}</div>
+    <div style="flex:1;min-width:0">
+      <div class="ins-name">${c.name}</div>
+      <div class="ins-sub">${c.sub}</div>
+      <div class="ins-bar-wrap"><div class="ins-bar-fill" style="width:${c.pct}%;background:var(--navy)"></div></div>
+    </div>
+    <div class="ins-val"><div class="ins-num">${c.rev}</div><div class="ins-pct">${c.pct}% of total</div></div>
+  </div>`);
+
+buildInsights('drvList',DRVS,(d,r)=>`
+  <div class="ins-item">
+    <span class="ins-rank">${r}</span>
+    <div class="ins-av round" style="background:${avc(d.name)}">${ini(d.name)}</div>
+    <div style="flex:1;min-width:0">
+      <div class="ins-name">${d.name}</div>
+      <div class="ins-sub">${d.sub}</div>
+    </div>
+    <div class="ins-val"><div class="ins-num">${d.val}</div><div class="ins-pct" style="color:var(--amber-c)">${d.rating}</div></div>
+  </div>`);
+
+/* ── Donut chart ── */
+new Chart(document.getElementById('donutChart'),{
+  type:'doughnut',
+  data:{labels:['Completed','Pending','Cancelled'],datasets:[{data:[2139,94,107],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderWidth:0,hoverOffset:4}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{backgroundColor:'#0f172a',bodyColor:'#fff',padding:10,cornerRadius:8}}}
+});
+
+/* ── Peak hours ── */
+const PEAK=[
+  {h:'12a',v:8},{h:'2a',v:4},{h:'4a',v:3},{h:'6a',v:18},
+  {h:'8a',v:92},{h:'10a',v:78},{h:'12p',v:55},{h:'2p',v:48},
+  {h:'4p',v:60},{h:'6p',v:88},{h:'8p',v:64},{h:'10p',v:32},
+];
+const maxV=Math.max(...PEAK.map(p=>p.v));
+document.getElementById('peakWrap').innerHTML=PEAK.map(p=>{
+  const h=Math.round((p.v/maxV)*100);
+  const isHigh=p.v>=80;const isMid=p.v>=50&&p.v<80;
+  const bg=isHigh?'var(--teal)':isMid?'rgba(79,192,171,.5)':'rgba(79,192,171,.2)';
+  return`<div class="peak-col">
+    <div class="peak-val">${p.v}</div>
+    <div class="peak-bar" style="height:${h}%;background:${bg}"></div>
+    <div class="peak-label">${p.h}</div>
+  </div>`;
+}).join('');
+
+/* ── Report table ── */
+const BASE_DATE=new Date('2026-03-17');
+const REPORT=Array.from({length:15},(_,i)=>{
+  const d=new Date(BASE_DATE);d.setDate(d.getDate()-i);
+  const bk=Math.round(60+Math.random()*120);
+  const rev=Math.round(bk*50+Math.random()*2000);
+  const comm=Math.round(rev*0.25);
+  const avg=(rev/bk).toFixed(2);
+  const rate=(88+Math.random()*10).toFixed(1);
+  return{date:d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),bk,rev,comm,avg,rate:parseFloat(rate)};
+});
+document.getElementById('reportTbody').innerHTML=REPORT.map(r=>`<tr>
+  <td class="td-date">${r.date}</td>
+  <td class="td-num">${r.bk}</td>
+  <td class="td-rev">$${r.rev.toLocaleString()}</td>
+  <td class="td-comm">$${r.comm.toLocaleString()}</td>
+  <td class="td-avg">$${r.avg}</td>
+  <td><span class="rate-pill ${r.rate>=95?'rate-hi':r.rate>=90?'rate-md':'rate-lo'}">${r.rate}%</span></td>
+</tr>`).join('');
+
+/* ── Sortable headers ── */
+document.querySelectorAll('thead th').forEach(th=>{
+  th.addEventListener('click',function(){
+    document.querySelectorAll('thead th').forEach(t=>t.classList.remove('sorted'));this.classList.add('sorted');
   });
+});
 
-  /* Page buttons */
-  document.querySelectorAll('.pp-btn:not(.disabled)').forEach(btn => {
-    btn.addEventListener('click', function() {
-      if (this.tagName === 'BUTTON' && !isNaN(this.textContent.trim())) {
-        document.querySelectorAll('.pp-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-      }
-    });
+/* ── Page number buttons ── */
+document.querySelectorAll('.pg:not(.off)').forEach(b=>{
+  b.addEventListener('click',function(){
+    if(this.querySelector('svg'))return;
+    document.querySelectorAll('.pg').forEach(x=>x.classList.remove('on'));this.classList.add('on');
   });
-
-  renderRows(rows);
-
-  /* ──────── SPARKLINE CHARTS ──────── */
-  const sparkCfg = (data, color, fill) => ({
-    type: 'line',
-    data: {
-      labels: data.map((_, i) => i),
-      datasets: [{ data, borderColor: color, backgroundColor: fill, borderWidth: 2,
-        pointRadius: 0, fill: true, tension: 0.45 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { enabled: false } },
-      scales: {
-        x: { display: false },
-        y: { display: false }
-      },
-      animation: { duration: 600 }
-    }
-  });
-
-  new Chart(document.getElementById('chart0'), sparkCfg(
-    [40,55,45,60,52,70,65,80,72,90], '#CBA0FF', 'rgba(203,160,255,0.15)'));
-  new Chart(document.getElementById('chart1'), sparkCfg(
-    [30,40,38,55,50,65,60,70,68,80], '#FFD166', 'rgba(255,209,102,0.15)'));
-  new Chart(document.getElementById('chart2'), sparkCfg(
-    [80,70,75,60,65,50,55,42,45,35], '#f26b6b', 'rgba(242,107,107,0.12)'));
-  new Chart(document.getElementById('chart3'), sparkCfg(
-    [20,25,22,30,28,35,33,38,36,42], '#4fc0ab', 'rgba(79,192,171,0.15)'));
+});
 </script>
 </body>
 </html>
