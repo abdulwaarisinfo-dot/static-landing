@@ -51,7 +51,7 @@ input,textarea,select{font-family:var(--font);outline:none}
 }
 .login-card{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:44px 40px;width:380px;
+  border-radius:16px;padding:44px 40px;width:380px;max-width:calc(100vw - 32px);
   box-shadow:var(--shadow-lg);
 }
 .login-logo{
@@ -84,6 +84,7 @@ input,textarea,select{font-family:var(--font);outline:none}
 
 /* ===================== APP SHELL ===================== */
 #app{display:none;height:100vh;overflow:hidden}
+@media(max-width:768px){#app{height:auto;overflow:visible}}
 
 /* ===================== SIDEBAR ===================== */
 .sidebar{
@@ -383,11 +384,122 @@ tr.clickable-row:hover td{background:var(--bg)}
 .lang-bar-track{background:var(--bg);border-radius:4px;height:5px;overflow:hidden;border:1px solid var(--border-light)}
 .lang-bar-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .6s ease}
 
-/* ===================== RESPONSIVE ===================== */
-@media(max-width:900px){
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .main{margin-left:0;padding:16px}
-  .sidebar{transform:translateX(-100%)}
+/* ===================== MOBILE TOP BAR ===================== */
+.mobile-topbar{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:200;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  height:54px;padding:0 16px;
+  align-items:center;justify-content:space-between;
+  box-shadow:var(--shadow);
+}
+.mobile-topbar-logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700}
+.mobile-topbar-logo-icon{width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.hamburger{
+  width:36px;height:36px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;
+  transition:all .15s;flex-shrink:0;
+}
+.hamburger span{display:block;width:16px;height:2px;background:var(--text);border-radius:2px;transition:all .25s}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+/* ===================== SIDEBAR OVERLAY ===================== */
+.sidebar-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99;
+  backdrop-filter:blur(2px);
+}
+.sidebar-overlay.open{display:block}
+
+/* ===================== BOTTOM NAV (mobile) ===================== */
+.bottom-nav{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:6px 0 max(6px, env(safe-area-inset-bottom));
+  box-shadow:0 -4px 16px rgba(0,0,0,.06);
+}
+.bottom-nav-inner{display:flex;align-items:stretch}
+.bottom-nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:6px 2px;cursor:pointer;border-radius:var(--radius-sm);
+  transition:all .12s;color:var(--muted);position:relative;
+}
+.bottom-nav-item.active{color:var(--accent)}
+.bottom-nav-item svg{width:20px;height:20px;opacity:.7;transition:opacity .12s}
+.bottom-nav-item.active svg{opacity:1}
+.bottom-nav-item span{font-size:10px;font-weight:600;letter-spacing:.01em}
+.bottom-nav-dot{
+  position:absolute;top:4px;right:calc(50% - 14px);
+  width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--surface);
+  display:none;
+}
+.bottom-nav-dot.visible{display:block}
+
+/* ===================== RESPONSIVE BREAKPOINTS ===================== */
+
+/* Tablet (<=1024px) */
+@media(max-width:1024px){
+  .sidebar{width:200px}
+  .main{margin-left:200px;padding:22px 20px}
+  .stats-grid{gap:10px}
+  .stat-val{font-size:24px}
+}
+
+/* Mobile/Tablet (<=768px) */
+@media(max-width:768px){
+  .mobile-topbar{display:flex}
+  .bottom-nav{display:block}
+  .sidebar{
+    transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+    width:260px;z-index:200;top:0;
+    box-shadow:var(--shadow-lg);
+  }
+  .sidebar.open{transform:translateX(0)}
+  #app{height:auto;overflow:visible}
+  .main{
+    margin-left:0;
+    padding:70px 16px 84px;
+    min-height:100vh;height:auto;overflow-y:visible;
+  }
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stat-card{padding:14px}
+  .stat-icon{width:28px;height:28px;font-size:13px;margin-bottom:10px}
+  .stat-val{font-size:22px}
+  .stat-label{font-size:10px}
+  .stat-sub{font-size:10px}
+  .topbar{flex-direction:column;align-items:flex-start;gap:10px;margin-bottom:16px}
+  .topbar-right{width:100%;flex-wrap:wrap;gap:6px}
+  .topbar-right .search-bar{flex:1;min-width:120px;width:auto}
+  .topbar-right .btn,.topbar-right .refresh-btn{flex:1;justify-content:center;text-align:center}
+  .card{padding:16px;margin-bottom:14px}
+  .card-head{flex-wrap:wrap;gap:8px}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:520px}
+  th,td{padding:8px 10px;font-size:12px}
+  .page-title{font-size:17px}
+  .form-grid{grid-template-columns:1fr!important}
+  .form-group.full{grid-column:1}
+  .modal{padding:18px}
+  .modal-title{font-size:15px}
+  .products-grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
+  .analytics-halves{display:block!important}
+  .analytics-halves > .card{margin-bottom:14px}
+  .analytics-halves > .card:last-child{margin-bottom:0}
+  .sug-layout{display:block!important}
+  .sug-preview-col{position:relative!important;top:auto!important}
+  #toast{bottom:90px;right:12px;left:12px;max-width:none}
+  .login-card{width:calc(100vw - 40px);max-width:380px;padding:28px 22px}
+  .lang-tabs{flex-wrap:wrap}
+  .topbar-subtitle{display:none}
+}
+
+/* Small phones (<=380px) */
+@media(max-width:380px){
+  .stat-val{font-size:19px}
+  .products-grid{grid-template-columns:1fr 1fr}
+  .main{padding:66px 12px 80px}
+  .btn{padding:7px 10px;font-size:12px}
+  .card{padding:12px}
 }
 
 /* ===================== ANIMATIONS ===================== */
@@ -432,6 +544,25 @@ tr.clickable-row:hover td{background:var(--bg)}
   </div>
   <div class="login-footer">Secure admin access · RestaurantBot CRM</div>
 </div>
+
+<!-- ====== MOBILE TOPBAR ====== -->
+<div class="mobile-topbar" id="mobile-topbar">
+  <div class="mobile-topbar-logo">
+    <div class="mobile-topbar-logo-icon">&#127869;&#65039;</div>
+    <span>Restaurant<span style="color:var(--muted);font-weight:400">Bot</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-weight:600">
+      <span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block"></span>Online
+    </div>
+    <div class="hamburger" id="hamburger-btn" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SIDEBAR OVERLAY ====== -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <!-- ====== APP ====== -->
 <div id="app">
@@ -486,7 +617,7 @@ tr.clickable-row:hover td{background:var(--bg)}
       <div class="topbar">
         <div>
           <div class="page-title">Dashboard <span>Overview</span></div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Welcome back — here's what's happening today.</div>
+          <div class="topbar-subtitle" style="font-size:12px;color:var(--muted);margin-top:2px">Welcome back — here's what's happening today.</div>
         </div>
         <div class="topbar-right">
           <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
@@ -539,7 +670,7 @@ tr.clickable-row:hover td{background:var(--bg)}
       <div class="topbar">
         <div>
           <div class="page-title">Orders <span>Management</span></div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Click any row to see order details</div>
+          <div class="topbar-subtitle" style="font-size:12px;color:var(--muted);margin-top:2px">Click any row to see order details</div>
         </div>
         <div class="topbar-right">
           <select class="search-bar" id="order-filter-status" onchange="filterOrders()">
@@ -568,7 +699,7 @@ tr.clickable-row:hover td{background:var(--bg)}
       <div class="topbar">
         <div>
           <div class="page-title">Products <span>Menu</span></div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Manage your restaurant's menu items</div>
+          <div class="topbar-subtitle" style="font-size:12px;color:var(--muted);margin-top:2px">Manage your restaurant's menu items</div>
         </div>
         <div class="topbar-right">
           <input class="search-bar" placeholder="Search dishes…" oninput="filterProducts(this.value)"/>
@@ -623,7 +754,7 @@ tr.clickable-row:hover td{background:var(--bg)}
           </button>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start">
+      <div class="sug-layout" style="display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start">
         <div class="card">
           <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;gap:10px">
             <span style="font-size:16px">💬</span>
@@ -642,7 +773,7 @@ tr.clickable-row:hover td{background:var(--bg)}
           </div>
         </div>
         <!-- LIVE PREVIEW PANEL -->
-        <div style="position:sticky;top:28px">
+        <div class="sug-preview-col" style="position:sticky;top:28px">
           <div class="card" style="padding:18px">
             <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:6px">
               <span style="font-size:15px">📱</span> WhatsApp Preview
@@ -705,8 +836,8 @@ tr.clickable-row:hover td{background:var(--bg)}
           <div class="stat-val" id="a-langs">—</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="card">
+      <div class="analytics-halves" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card" style="margin-bottom:0">
           <div class="card-title" style="margin-bottom:16px">Top Searches</div>
           <div id="a-top-searches"></div>
         </div>
@@ -906,8 +1037,14 @@ document.addEventListener('keydown', e => {
 function showPage(id){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   event.currentTarget.classList.add('active');
+  // Sync bottom nav
+  const bnavEl = document.getElementById('bnav-'+id);
+  if(bnavEl) bnavEl.classList.add('active');
+  // Close sidebar on mobile after nav
+  closeSidebar();
   if(id==='orders') loadOrders();
   if(id==='products') renderProducts();
   if(id==='faqs') loadFaqs();
@@ -1962,11 +2099,97 @@ function toast(msg, type='success'){
 }
 
 // ============================
+// MOBILE SIDEBAR
+// ============================
+function toggleSidebar(){
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const btn = document.getElementById('hamburger-btn');
+  const isOpen = sidebar.classList.contains('open');
+  if(isOpen){ closeSidebar(); } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('open');
+    btn.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  const btn = document.getElementById('hamburger-btn');
+  if(btn) btn.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ============================
+// MOBILE BOTTOM NAV
+// ============================
+function showPageMobile(id, el){
+  // Reuse existing showPage but without event dependency
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  // Sync sidebar nav
+  const sidebarItems = document.querySelectorAll('.nav-item');
+  sidebarItems.forEach(n => { if(n.getAttribute('onclick') && n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active'); });
+  if(id==='orders') loadOrders();
+  if(id==='products') renderProducts();
+  if(id==='faqs') loadFaqs();
+  if(id==='suggestions'){ loadSuggestions().then(()=>{ updateSugPreview(); initQuickAddChips(); }); }
+  if(id==='analytics') loadAnalytics();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Sync bottom nav dot with pending orders
+function syncPendingDot(count){
+  const dot = document.getElementById('bnav-dot-orders');
+  if(dot){ dot.classList.toggle('visible', count > 0); }
+}
+
+// Patch loadAll to also sync dot
+const _origLoadAll = loadAll;
+loadAll = async function(){
+  await _origLoadAll.apply(this, arguments);
+  const p = parseInt(document.getElementById('stat-pending').textContent)||0;
+  syncPendingDot(p);
+};
+
+// ============================
 // CLOSE MODAL ON OVERLAY CLICK
 // ============================
 document.getElementById('product-modal').addEventListener('click', function(e){
   if(e.target === this) closeProductModal();
 });
 </script>
+
+<!-- ====== BOTTOM NAV (mobile only) ====== -->
+<nav class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav-inner">
+    <div class="bottom-nav-item active" id="bnav-dashboard" onclick="showPageMobile('dashboard', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Dashboard</span>
+    </div>
+    <div class="bottom-nav-item" id="bnav-orders" onclick="showPageMobile('orders', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+      <span>Orders</span>
+      <div class="bottom-nav-dot" id="bnav-dot-orders"></div>
+    </div>
+    <div class="bottom-nav-item" id="bnav-products" onclick="showPageMobile('products', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <span>Menu</span>
+    </div>
+    <div class="bottom-nav-item" id="bnav-analytics" onclick="showPageMobile('analytics', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Analytics</span>
+    </div>
+    <div class="bottom-nav-item" id="bnav-faqs" onclick="showPageMobile('faqs', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+      <span>FAQs</span>
+    </div>
+  </div>
+</nav>
+
 </body>
 </html>
