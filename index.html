@@ -486,9 +486,8 @@ tr.clickable-row:hover td{background:var(--bg)}
   .card{padding:16px;margin-bottom:14px}
   .card-head{flex-wrap:wrap;gap:8px}
   .card-head .btn{min-width:0;flex:1}
-  /* Recent orders table (dashboard) — still scrolls, fewer columns */
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  #recent-orders-tbl{min-width:460px}
+  table{min-width:520px}
   th,td{padding:9px 10px;font-size:12px}
   .page-title{font-size:17px}
   .form-grid{grid-template-columns:1fr!important}
@@ -508,46 +507,8 @@ tr.clickable-row:hover td{background:var(--bg)}
   .lang-tabs{flex-wrap:wrap}
   .topbar-subtitle{display:none}
   .btn-sm{padding:9px 13px;min-height:38px}
+  /* Wider touch target for product action buttons */
   .product-actions .btn{flex:1}
-
-  /* ---- ORDERS TABLE → CARD LAYOUT ON MOBILE ---- */
-  #orders-tbl thead{display:none}
-  #orders-tbl tbody{display:flex;flex-direction:column;gap:10px}
-  #orders-tbl tbody tr.order-main-row{
-    display:flex;flex-direction:column;
-    background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius);padding:14px;
-    box-shadow:var(--shadow);cursor:pointer;
-    border-bottom:none;
-  }
-  #orders-tbl tbody tr.order-main-row td{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:4px 0;border:none;font-size:13px;
-    border-bottom:none;background:none!important;
-  }
-  #orders-tbl tbody tr.order-main-row td::before{
-    content:attr(data-label);
-    font-size:10px;font-weight:700;color:var(--muted2);
-    text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;margin-right:8px;
-  }
-  #orders-tbl tbody tr.order-main-row td.td-chevron{
-    display:flex;justify-content:flex-start;margin-bottom:6px;padding-bottom:8px;
-    border-bottom:1px solid var(--border-light)!important;
-  }
-  #orders-tbl tbody tr.order-main-row td.td-chevron::before{content:''}
-  #orders-tbl tbody tr.order-expand-row{
-    display:none;background:var(--bg);
-    border:1px solid var(--border);border-top:none;
-    border-radius:0 0 var(--radius) var(--radius);
-    margin-top:-10px;padding:0;
-  }
-  #orders-tbl tbody tr.order-expand-row.open{display:block}
-  #orders-tbl tbody tr.order-expand-row td{
-    display:block;padding:0;border:none;background:none!important;
-  }
-  #orders-tbl tbody tr.order-expand-row td::before{content:''}
-  .order-status-cell{justify-content:space-between!important;gap:8px;flex-wrap:wrap}
-  .order-status-cell .status-select{flex:1;min-width:120px}
 }
 
 /* Small phones (<=480px) */
@@ -755,7 +716,7 @@ tr.clickable-row:hover td{background:var(--bg)}
       <div class="card">
         <div class="tbl-wrap">
           <table id="orders-tbl">
-            <thead><tr><th>ID / Status</th><th>Dish</th><th>Qty</th><th>Total</th><th>Address</th><th>Time</th><th>Update Status</th></tr></thead>
+            <thead><tr><th></th><th>ID</th><th>Dish</th><th>Qty</th><th>Total</th><th>Address</th><th>Status</th><th>Time</th><th>Action</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -1321,27 +1282,23 @@ function renderOrders(orders){
       `<div class="order-chip"><strong>${k.charAt(0).toUpperCase()+k.slice(1)}:</strong> ${v}</div>`
     ).join('');
     tbody.innerHTML += `
-      <tr class="clickable-row order-main-row" onclick="toggleOrderExpand('${expandId}', this)">
-        <td class="td-chevron" data-label="" id="chevron-${expandId}" style="text-align:left;color:var(--muted2);font-size:11px">
-          <span style="display:inline-flex;align-items:center;gap:6px">
-            <span class="chevron-icon">▶</span>
-            <span class="mono" style="font-size:11px">#${(o._id||'').slice(-8)}</span>
-          </span>
-          <span class="pill ${o.status}" style="margin-left:auto">${o.status}</span>
-        </td>
-        <td data-label="Dish" style="font-weight:600">${o.dish}</td>
-        <td data-label="Qty">${o.quantity}</td>
-        <td data-label="Total">PKR ${o.total_price}</td>
-        <td data-label="Address" style="color:var(--muted);font-size:12px;word-break:break-word;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.address||'—'}</td>
-        <td data-label="Time" style="color:var(--muted);font-size:12px">${(o.timestamp||'').slice(0,16)||'—'}</td>
-        <td class="order-status-cell" data-label="Update Status" onclick="event.stopPropagation()">
+      <tr class="clickable-row" onclick="toggleOrderExpand('${expandId}', this)">
+        <td style="width:28px;text-align:center;color:var(--muted2);font-size:11px" id="chevron-${expandId}">▶</td>
+        <td class="mono">${(o._id||'').slice(-8)}</td>
+        <td style="font-weight:600">${o.dish}</td>
+        <td>${o.quantity}</td>
+        <td>PKR ${o.total_price}</td>
+        <td style="max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted);font-size:12px">${o.address||'—'}</td>
+        <td><span class="pill ${o.status}">${o.status}</span></td>
+        <td style="color:var(--muted);font-size:12px">${(o.timestamp||'').slice(0,16)||'—'}</td>
+        <td onclick="event.stopPropagation()">
           <select class="status-select" onchange="updateOrderStatus('${o._id}', this.value)">
             ${['Pending','Accepted','Processing','Delivered','Rejected'].map(s=>`<option${s===o.status?' selected':''}>${s}</option>`).join('')}
           </select>
         </td>
       </tr>
       <tr class="order-expand-row" id="${expandId}">
-        <td colspan="7" style="padding:0">
+        <td colspan="9" style="padding:0">
           <div class="order-expand-content">
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px">Order Customization</div>
             <div class="order-detail-chips">
@@ -1352,21 +1309,20 @@ function renderOrders(orders){
       </tr>`;
   });
   if(!orders.length){
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted)">No orders found</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No orders found</td></tr>';
   }
 }
 
 function toggleOrderExpand(expandId, row){
   const expandRow = document.getElementById(expandId);
-  const chevronCell = document.getElementById('chevron-'+expandId);
-  const chevronIcon = chevronCell ? chevronCell.querySelector('.chevron-icon') : null;
+  const chevron = document.getElementById('chevron-'+expandId);
   const isOpen = expandRow.classList.contains('open');
   // Close all
   document.querySelectorAll('.order-expand-row').forEach(r=>r.classList.remove('open'));
-  document.querySelectorAll('.chevron-icon').forEach(c=>c.textContent='▶');
+  document.querySelectorAll('[id^="chevron-expand"]').forEach(c=>c.textContent='▶');
   if(!isOpen){
     expandRow.classList.add('open');
-    if(chevronIcon) chevronIcon.textContent='▼';
+    if(chevron) chevron.textContent='▼';
   }
 }
 
