@@ -881,21 +881,110 @@ tr.clickable-row:hover td{background:var(--bg)}
 </div>
 
 <!-- PRODUCT MODAL -->
+<style>
+/* ===== MODAL RESPONSIVE OVERRIDES ===== */
+.product-modal-inner{
+  width:620px;max-width:calc(100vw - 24px);
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;max-height:90vh;overflow-y:auto;padding:28px;
+  box-shadow:var(--shadow-lg);
+}
+.modal-tab-bar{
+  display:flex;gap:0;margin-bottom:22px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;
+}
+.modal-tab{
+  flex:1;padding:11px 6px;text-align:center;font-size:12px;font-weight:600;
+  cursor:pointer;background:var(--surface);color:var(--muted);
+  transition:all .12s;border-left:1px solid var(--border);
+  min-height:42px;display:flex;align-items:center;justify-content:center;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  user-select:none;line-height:1.3;
+}
+.modal-tab:first-child{border-left:none}
+.modal-tab.active{background:var(--accent);color:#fff}
+.modal-header-row{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;
+}
+.modal-close-btn{
+  flex-shrink:0;width:36px;height:36px;border-radius:var(--radius-sm);
+  background:var(--bg);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;cursor:pointer;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  transition:all .12s;color:var(--muted);font-family:var(--font);
+}
+.modal-close-btn:hover{background:var(--surface);color:var(--text);border-color:var(--accent)}
+.modal-close-btn:active{transform:scale(.95)}
+.add-row-btn{
+  background:var(--bg);border:1.5px dashed var(--border);
+  border-radius:var(--radius-sm);padding:11px 16px;font-size:12px;
+  color:var(--muted);font-weight:600;width:100%;
+  transition:all .12s;cursor:pointer;min-height:42px;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  font-family:var(--font);
+}
+.add-row-btn:hover{border-color:var(--accent);color:var(--text)}
+.add-row-btn:active{transform:scale(.99)}
+.variant-row-wrap{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 12px;
+  flex-wrap:wrap;
+}
+.variant-row-name{
+  flex:2;min-width:100px;background:transparent;border:none;
+  font-size:13px;font-weight:500;color:var(--text);font-family:var(--font);
+}
+.variant-row-price-wrap{
+  display:flex;align-items:center;gap:4px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:6px 10px;
+  min-width:0;flex:1;
+}
+.variant-row-price{
+  flex:1;background:transparent;border:none;
+  font-size:13px;font-weight:600;color:var(--text);
+  font-family:var(--font);min-width:0;width:100%;
+}
+.variant-row-remove{
+  background:none;border:none;color:var(--muted2);
+  font-size:20px;cursor:pointer;padding:4px 6px;line-height:1;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  flex-shrink:0;min-width:32px;min-height:32px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:var(--radius-sm);transition:color .12s,background .12s;
+}
+.variant-row-remove:hover{color:var(--red);background:#FEF2F2}
+.modal-footer-inner{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);justify-content:space-between;flex-wrap:wrap;}
+.modal-footer-right{display:flex;gap:8px;flex-wrap:wrap;}
+@media(max-width:520px){
+  .product-modal-inner{padding:16px;border-radius:10px}
+  .modal-tab{font-size:10px;padding:10px 3px}
+  .modal-footer-inner{flex-direction:column}
+  .modal-footer-inner .btn{width:100%;justify-content:center}
+  .modal-footer-right{width:100%}
+  .modal-footer-right .btn{flex:1;justify-content:center}
+  .variant-row-wrap{flex-direction:column;align-items:stretch;gap:6px}
+  .variant-row-name{min-width:0;width:100%}
+  .variant-row-price-wrap{width:100%}
+}
+</style>
 <div class="modal-overlay" id="product-modal">
-  <div class="modal" style="width:620px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-      <div>
+  <div class="product-modal-inner">
+    <div class="modal-header-row">
+      <div style="min-width:0">
         <div class="modal-title" id="product-modal-title" style="margin-bottom:2px">Add New Dish</div>
         <div style="font-size:12px;color:var(--muted)" id="modal-category-hint">Fill in the dish details below</div>
       </div>
-      <button class="btn btn-outline btn-sm" onclick="closeProductModal()" style="padding:4px 10px;font-size:16px;line-height:1">×</button>
+      <button class="modal-close-btn" onclick="closeProductModal()">×</button>
     </div>
 
     <!-- STEP TABS -->
-    <div style="display:flex;gap:0;margin-bottom:22px;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden">
-      <div class="modal-tab active" id="tab-basic" onclick="switchModalTab('basic')" style="flex:1;padding:9px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff;transition:all .12s">1 · Basic Info</div>
-      <div class="modal-tab" id="tab-variants" onclick="switchModalTab('variants')" style="flex:1;padding:9px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--muted);transition:all .12s;border-left:1px solid var(--border)">2 · Sizes & Variants</div>
-      <div class="modal-tab" id="tab-extras" onclick="switchModalTab('extras')" style="flex:1;padding:9px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--muted);transition:all .12s;border-left:1px solid var(--border)">3 · Extras & Notes</div>
+    <div class="modal-tab-bar">
+      <div class="modal-tab active" id="tab-basic" onclick="switchModalTab('basic')">1 · Basic Info</div>
+      <div class="modal-tab" id="tab-variants" onclick="switchModalTab('variants')">2 · Sizes & Variants</div>
+      <div class="modal-tab" id="tab-extras" onclick="switchModalTab('extras')">3 · Extras & Notes</div>
     </div>
 
     <!-- TAB: BASIC INFO -->
@@ -923,7 +1012,6 @@ tr.clickable-row:hover td{background:var(--bg)}
         <div class="form-group full">
           <label class="form-label">Description</label>
           <textarea class="form-input" id="pm-desc" rows="2" placeholder="Describe the dish…"></textarea>
-          <!-- Smart description suggestions -->
           <div id="desc-suggestions" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px"></div>
         </div>
         <div class="form-group">
@@ -966,14 +1054,12 @@ tr.clickable-row:hover td{background:var(--bg)}
         <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">💡 Smart Suggestions for this category</div>
         <div id="variant-suggestions" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
       </div>
-
       <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px">Size / Variant Options
         <span style="font-weight:400;color:var(--muted);font-size:11px"> — click a size to set its price</span>
       </div>
       <div id="variant-rows" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px"></div>
-      <button onclick="addVariantRow()" style="background:var(--bg);border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:8px 16px;font-size:12px;color:var(--muted);font-weight:600;width:100%;transition:all .12s;cursor:pointer" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">+ Add Variant</button>
+      <button class="add-row-btn" onclick="addVariantRow()">+ Add Variant</button>
       <input type="hidden" id="pm-variants"/>
-
       <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--border)">
         <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px">Spice Level Options
           <span style="font-weight:400;color:var(--muted);font-size:11px"> — toggle what applies</span>
@@ -990,18 +1076,17 @@ tr.clickable-row:hover td{background:var(--bg)}
       </div>
       <div id="extras-suggestions" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
       <div id="extra-rows" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px"></div>
-      <button onclick="addExtraRow()" style="background:var(--bg);border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:8px 16px;font-size:12px;color:var(--muted);font-weight:600;width:100%;transition:all .12s;cursor:pointer" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">+ Add Custom Extra</button>
+      <button class="add-row-btn" onclick="addExtraRow()">+ Add Custom Extra</button>
       <input type="hidden" id="pm-extras"/>
-
       <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--border)">
         <label class="form-label">Kitchen / Bot Notes</label>
         <textarea class="form-input" id="pm-custom-notes" rows="3" placeholder="Any special preparation notes, allergy info, or bot instructions…"></textarea>
       </div>
     </div>
 
-    <div class="modal-footer" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+    <div class="modal-footer-inner">
       <button class="btn btn-outline" onclick="closeProductModal()">Cancel</button>
-      <div style="display:flex;gap:8px">
+      <div class="modal-footer-right">
         <button class="btn btn-outline" id="btn-prev-tab" onclick="prevModalTab()" style="display:none">← Back</button>
         <button class="btn btn-primary" id="btn-next-tab" onclick="nextModalTab()">Next →</button>
         <button class="btn btn-primary" id="btn-save-dish" onclick="submitProduct()" style="display:none">Save Dish ✓</button>
@@ -1337,8 +1422,7 @@ function switchModalTab(tab){
     const tabEl = document.getElementById('tab-'+t);
     if(panel) panel.style.display = t===tab ? 'block' : 'none';
     if(tabEl){
-      tabEl.style.background = t===tab ? 'var(--accent)' : 'var(--surface)';
-      tabEl.style.color = t===tab ? '#fff' : 'var(--muted)';
+      tabEl.classList.toggle('active', t===tab);
     }
   });
   document.getElementById('btn-prev-tab').style.display = tab==='basic' ? 'none' : 'inline-flex';
@@ -1452,16 +1536,16 @@ function addVariantRow(){
 function renderVariantRows(){
   const el = document.getElementById('variant-rows');
   el.innerHTML = variantRows.map((v,i)=>`
-    <div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px">
-      <span style="font-size:14px">📦</span>
+    <div class="variant-row-wrap">
+      <span style="font-size:14px;flex-shrink:0">📦</span>
       <input value="${v.name}" placeholder="Variant name (e.g. Half Plate)" oninput="updateVariant(${i},'name',this.value)"
-        style="flex:2;background:transparent;border:none;font-size:13px;font-weight:500;color:var(--text);font-family:var(--font)"/>
-      <div style="display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;min-width:140px">
-        <span style="font-size:11px;color:var(--muted);font-weight:600">PKR</span>
+        class="variant-row-name"/>
+      <div class="variant-row-price-wrap">
+        <span style="font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap">PKR</span>
         <input type="number" value="${v.price||''}" placeholder="0" oninput="updateVariant(${i},'price',this.value)" onfocus="this.select()"
-          style="flex:1;background:transparent;border:none;font-size:13px;font-weight:600;color:var(--text);font-family:var(--font);width:70px"/>
+          class="variant-row-price"/>
       </div>
-      <button onclick="removeVariant(${i})" style="background:none;border:none;color:var(--muted2);font-size:16px;cursor:pointer;padding:2px 4px;line-height:1" title="Remove">×</button>
+      <button onclick="removeVariant(${i})" class="variant-row-remove" title="Remove">×</button>
     </div>`).join('');
 }
 
@@ -1528,15 +1612,15 @@ function addExtraRow(){
 function renderExtraRows(){
   const el = document.getElementById('extra-rows');
   el.innerHTML = extraCustomRows.map((e,i)=>`
-    <div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px">
+    <div class="variant-row-wrap">
       <input value="${e.name}" placeholder="Extra item name (e.g. Extra Raita)" oninput="updateExtra(${i},'name',this.value)"
-        style="flex:2;background:transparent;border:none;font-size:13px;font-weight:500;color:var(--text);font-family:var(--font)"/>
-      <div style="display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;min-width:130px">
-        <span style="font-size:11px;color:var(--muted);font-weight:600">+PKR</span>
+        class="variant-row-name"/>
+      <div class="variant-row-price-wrap">
+        <span style="font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap">+PKR</span>
         <input type="number" value="${e.price||''}" placeholder="0" oninput="updateExtra(${i},'price',this.value)"
-          style="flex:1;background:transparent;border:none;font-size:13px;font-weight:600;color:var(--text);font-family:var(--font);width:60px"/>
+          class="variant-row-price"/>
       </div>
-      <button onclick="removeExtra(${i})" style="background:none;border:none;color:var(--muted2);font-size:16px;cursor:pointer;padding:2px 4px;line-height:1">×</button>
+      <button onclick="removeExtra(${i})" class="variant-row-remove">×</button>
     </div>`).join('');
 }
 
