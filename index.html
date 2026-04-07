@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Restaurant CRM — Admin Panel</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 /* ===================== TOKENS ===================== */
 :root{
@@ -19,6 +19,8 @@
   --red:#DC2626;
   --blue:#2563EB;
   --amber:#D97706;
+  --purple:#7C3AED;
+  --teal:#0D9488;
   --text:#111827;
   --muted:#6B7280;
   --muted2:#9CA3AF;
@@ -54,15 +56,8 @@ input,textarea,select{font-family:var(--font);outline:none}
   border-radius:16px;padding:44px 40px;width:380px;max-width:calc(100vw - 32px);
   box-shadow:var(--shadow-lg);
 }
-.login-logo{
-  display:flex;align-items:center;gap:10px;
-  font-size:18px;font-weight:700;color:var(--text);
-  margin-bottom:6px;
-}
-.login-logo-icon{
-  width:36px;height:36px;background:var(--accent);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;font-size:18px;
-}
+.login-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px}
+.login-logo-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
 .login-sub{color:var(--muted);font-size:13px;margin-bottom:28px;font-weight:400}
 .login-card label{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.03em;margin-bottom:5px;display:block}
 .login-card input{
@@ -93,22 +88,12 @@ input,textarea,select{font-family:var(--font);outline:none}
   background:var(--surface);border-right:1px solid var(--border);
   display:flex;flex-direction:column;z-index:100;
 }
-.sidebar-logo{
-  padding:20px 18px 18px;
-  display:flex;align-items:center;gap:10px;
-  border-bottom:1px solid var(--border-light);
-}
-.sidebar-logo-icon{
-  width:32px;height:32px;background:var(--accent);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
-}
+.sidebar-logo{padding:20px 18px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border-light)}
+.sidebar-logo-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .sidebar-logo-text{font-size:14px;font-weight:700;color:var(--text)}
 .sidebar-logo-text span{color:var(--muted);font-weight:400}
 .nav-section{padding:10px 0;flex:1;overflow-y:auto}
-.nav-label{
-  font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;
-  padding:10px 16px 4px;font-weight:600;
-}
+.nav-label{font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;padding:10px 16px 4px;font-weight:600}
 .nav-item{
   display:flex;align-items:center;gap:10px;
   padding:10px 16px;font-size:13px;font-weight:500;color:var(--muted);
@@ -120,78 +105,65 @@ input,textarea,select{font-family:var(--font);outline:none}
 .nav-item.active{color:var(--text);background:var(--bg);font-weight:600}
 .nav-item svg{width:15px;height:15px;flex-shrink:0;opacity:.7}
 .nav-item.active svg{opacity:1}
-.sidebar-footer{
-  padding:14px 16px;border-top:1px solid var(--border-light);
-  font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;
-}
-.online-dot{
-  display:inline-block;width:6px;height:6px;background:var(--green);
-  border-radius:50%;flex-shrink:0;
-}
+.sidebar-footer{padding:14px 16px;border-top:1px solid var(--border-light);font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.online-dot{display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;flex-shrink:0}
 
 /* ===================== MAIN AREA ===================== */
 .main{margin-left:224px;height:100vh;overflow-y:auto;padding:28px 32px;background:var(--bg)}
 
 /* ===================== TOP BAR ===================== */
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:24px;
-}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .page-title{font-size:20px;font-weight:700;color:var(--text)}
 .page-title span{color:var(--muted);font-weight:400}
 .topbar-right{display:flex;align-items:center;gap:8px}
-.badge{
-  background:var(--accent);color:#fff;border-radius:20px;
-  font-size:10px;font-weight:700;padding:2px 7px;
-}
+.badge{background:var(--accent);color:#fff;border-radius:20px;font-size:10px;font-weight:700;padding:2px 7px}
 .badge.green{background:var(--green)}
 .badge.blue{background:var(--blue)}
 .badge.amber{background:var(--amber)}
+.badge.purple{background:var(--purple)}
 .refresh-btn{
   background:var(--surface);border:1px solid var(--border);
   color:var(--muted);border-radius:var(--radius-sm);padding:9px 14px;
   font-size:12px;font-weight:500;transition:all .12s;
   box-shadow:var(--shadow);min-height:40px;display:inline-flex;align-items:center;
   touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  cursor:pointer;white-space:nowrap;
+  cursor:pointer;white-space:nowrap;gap:5px;
 }
 .refresh-btn:hover{color:var(--text);border-color:var(--accent);background:var(--surface)}
 .refresh-btn:active{transform:scale(.97)}
 
 /* ===================== STAT CARDS ===================== */
-.stats-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;
-}
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
 .stat-card{
   background:var(--surface);border:1px solid var(--border);
   border-radius:var(--radius);padding:20px;
-  box-shadow:var(--shadow);
-  transition:box-shadow .15s,transform .15s;
+  box-shadow:var(--shadow);transition:box-shadow .15s,transform .15s;
 }
 .stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
-.stat-icon{
-  width:34px;height:34px;border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;margin-bottom:14px;
-}
+.stat-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:14px}
 .stat-icon.orange{background:#FFF7ED}
 .stat-icon.amber{background:#FFFBEB}
 .stat-icon.green{background:#F0FDF4}
 .stat-icon.blue{background:#EFF6FF}
+.stat-icon.purple{background:#F5F3FF}
+.stat-icon.teal{background:#F0FDFA}
 .stat-label{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
-.stat-val{font-size:28px;font-weight:700;line-height:1;color:var(--text);letter-spacing:-.02em}
+.stat-val{font-size:24px;font-weight:700;line-height:1;color:var(--text);letter-spacing:-.02em}
 .stat-sub{font-size:11px;color:var(--muted2);margin-top:5px}
 
+/* ── Revenue card highlight ── */
+.stat-card.revenue-card{
+  background:linear-gradient(135deg,#111827 0%,#1f2937 100%);
+  border-color:transparent;
+}
+.stat-card.revenue-card .stat-label{color:rgba(255,255,255,.6)}
+.stat-card.revenue-card .stat-val{color:#fff}
+.stat-card.revenue-card .stat-sub{color:rgba(255,255,255,.4)}
+.stat-card.revenue-card .stat-icon{background:rgba(255,255,255,.12)}
+
 /* ===================== CARDS ===================== */
-.card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);padding:22px;margin-bottom:20px;
-  box-shadow:var(--shadow);
-}
-.card-head{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:18px;
-}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:20px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .card-title{font-size:14px;font-weight:700;color:var(--text)}
 .card-actions{display:flex;gap:8px}
 
@@ -205,19 +177,13 @@ th{
 }
 th:first-child{border-radius:var(--radius-sm) 0 0 0}
 th:last-child{border-radius:0 var(--radius-sm) 0 0}
-td{
-  padding:11px 14px;font-size:13px;border-bottom:1px solid var(--border-light);
-  vertical-align:middle;color:var(--text);
-}
+td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--border-light);vertical-align:middle;color:var(--text)}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg)}
 .mono{font-family:var(--mono);font-size:11px;color:var(--muted)}
 
 /* ===================== STATUS PILLS ===================== */
-.pill{
-  border-radius:20px;font-size:11px;font-weight:600;
-  padding:3px 10px;display:inline-block;white-space:nowrap;
-}
+.pill{border-radius:20px;font-size:11px;font-weight:600;padding:3px 10px;display:inline-block;white-space:nowrap}
 .pill.Pending{background:#FEF9C3;color:#A16207}
 .pill.Accepted{background:#DBEAFE;color:#1D4ED8}
 .pill.Processing{background:#F3E8FF;color:#7E22CE}
@@ -272,18 +238,9 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.5}
 .search-bar:focus{border-color:var(--accent);width:240px}
 
 /* ===================== MODAL ===================== */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;
-  display:none;align-items:center;justify-content:center;
-  backdrop-filter:blur(2px);
-}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
 .modal-overlay.open{display:flex}
-.modal{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:14px;width:540px;max-width:95vw;
-  max-height:90vh;overflow-y:auto;padding:28px;
-  box-shadow:var(--shadow-lg);
-}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:540px;max-width:95vw;max-height:90vh;overflow-y:auto;padding:28px;box-shadow:var(--shadow-lg)}
 .modal-title{font-size:17px;font-weight:700;margin-bottom:20px;color:var(--text)}
 .modal-footer{display:flex;gap:8px;margin-top:22px;justify-content:flex-end}
 
@@ -299,69 +256,37 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.5}
 #toast.show{transform:translateY(0)}
 
 /* ===================== PRODUCT CARD GRID ===================== */
-.products-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;
-}
-.product-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);overflow:hidden;
-  box-shadow:var(--shadow);transition:box-shadow .15s,transform .15s;
-}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.product-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .15s,transform .15s}
 .product-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.product-img-wrap{
-  width:100%;height:130px;object-fit:cover;background:var(--bg);
-  display:flex;align-items:center;justify-content:center;font-size:36px;
-  border-bottom:1px solid var(--border-light);overflow:hidden;
-}
+.product-img-wrap{width:100%;height:130px;object-fit:cover;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:36px;border-bottom:1px solid var(--border-light);overflow:hidden}
 .product-img-wrap img{width:100%;height:100%;object-fit:cover}
 .product-body{padding:14px}
 .product-name{font-size:13px;font-weight:700;margin-bottom:3px;color:var(--text)}
-.product-cat{
-  font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:.05em;
-  margin-bottom:8px;font-weight:600;
-}
+.product-cat{font-size:10px;color:var(--blue);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;font-weight:600}
 .product-price{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
 .product-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:12px;min-height:32px}
 .product-actions{display:flex;gap:6px}
 
 /* ===================== IMAGE UPLOAD ===================== */
-.img-upload-area{
-  border:2px dashed var(--border);border-radius:var(--radius-sm);
-  padding:20px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;
-  background:var(--bg);
-}
+.img-upload-area{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;background:var(--bg)}
 .img-upload-area:hover{border-color:var(--accent);background:var(--surface)}
-.img-preview{
-  width:100%;height:120px;object-fit:cover;border-radius:var(--radius-sm);
-  border:1px solid var(--border);display:none;
-}
+.img-preview{width:100%;height:120px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border);display:none}
 #img-upload-input{display:none}
 
 /* ===================== ORDER EXPAND ===================== */
 .order-expand-row{display:none}
 .order-expand-row.open{display:table-row}
-.order-expand-content{
-  background:var(--bg);padding:14px 16px;
-  border-bottom:1px solid var(--border);
-}
+.order-expand-content{background:var(--bg);padding:14px 16px;border-bottom:1px solid var(--border)}
 .order-detail-chips{display:flex;flex-wrap:wrap;gap:6px}
-.order-chip{
-  background:var(--surface);border:1px solid var(--border);border-radius:20px;
-  padding:4px 12px;font-size:11px;color:var(--muted);font-weight:500;
-}
+.order-chip{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--muted);font-weight:500}
 .order-chip strong{color:var(--text);font-weight:600}
 tr.clickable-row{cursor:pointer}
 tr.clickable-row:hover td{background:var(--bg)}
 
 /* ===================== FAQ EDITOR ===================== */
-.faq-item{
-  background:var(--bg);border:1px solid var(--border);
-  border-radius:var(--radius-sm);padding:16px;margin-bottom:10px;
-}
-.faq-key{
-  font-size:11px;color:var(--blue);font-weight:700;margin-bottom:12px;
-  text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px;
-}
+.faq-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:10px}
+.faq-key{font-size:11px;color:var(--blue);font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px}
 .faq-key::before{content:'';width:4px;height:12px;background:var(--blue);border-radius:2px;display:inline-block}
 
 /* ===================== ORDER STATUS SELECT ===================== */
@@ -381,18 +306,72 @@ tr.clickable-row:hover td{background:var(--bg)}
 
 /* ===================== LANG TABS ===================== */
 .lang-tabs{display:flex;gap:6px;margin-bottom:16px}
-.lang-tab{
-  padding:6px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;
-  background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;
-  transition:all .12s;
-}
+.lang-tab{padding:6px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .12s}
 .lang-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
 
-/* ===================== ANALYTICS ===================== */
-.lang-bar-wrap{margin-bottom:14px}
-.lang-bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;font-weight:500}
-.lang-bar-track{background:var(--bg);border-radius:4px;height:5px;overflow:hidden;border:1px solid var(--border-light)}
-.lang-bar-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .6s ease}
+/* ===================== ANALYTICS — NEW ===================== */
+/* Progress bars */
+.bar-wrap{margin-bottom:12px}
+.bar-label-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:5px;font-weight:500}
+.bar-label-name{color:var(--text);font-weight:600}
+.bar-label-val{color:var(--muted);font-size:11px}
+.bar-track{background:var(--bg);border-radius:4px;height:6px;overflow:hidden;border:1px solid var(--border-light)}
+.bar-fill{height:100%;border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+.bar-fill.green{background:var(--green)}
+.bar-fill.amber{background:var(--amber)}
+.bar-fill.red{background:var(--red)}
+.bar-fill.blue{background:var(--blue)}
+.bar-fill.purple{background:var(--purple)}
+.bar-fill.teal{background:var(--teal)}
+
+/* Analytics tabs */
+.a-tab-bar{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.a-tab{
+  padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;
+  background:var(--surface);border:1px solid var(--border);color:var(--muted);cursor:pointer;
+  transition:all .12s;display:inline-flex;align-items:center;gap:6px;min-height:36px;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+.a-tab:hover{border-color:var(--accent);color:var(--text)}
+.a-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* Analytics panels */
+.a-panel{display:none}
+.a-panel.active{display:block}
+
+/* Analytics grid */
+.a-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.a-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+/* Top item row */
+.top-item-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid var(--border-light);
+}
+.top-item-row:last-child{border-bottom:none}
+.top-item-name{font-size:13px;color:var(--text);font-weight:500}
+.top-item-count{
+  display:flex;align-items:center;gap:8px;
+}
+.top-item-num{font-size:12px;font-weight:700;color:var(--text);font-family:var(--mono)}
+.top-item-bar{width:60px;height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+.top-item-bar-fill{height:100%;background:var(--blue);border-radius:4px}
+
+/* Summary metric row */
+.metric-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;background:var(--bg);border:1px solid var(--border-light);
+  border-radius:var(--radius-sm);margin-bottom:8px;
+}
+.metric-icon{font-size:18px;flex-shrink:0}
+.metric-label{font-size:12px;color:var(--muted);font-weight:500}
+.metric-val{font-size:16px;font-weight:700;color:var(--text);margin-left:auto;font-family:var(--mono)}
+
+/* Delivery time panel */
+.delivery-config-card{
+  background:linear-gradient(135deg,#F0FDF4 0%,#DCFCE7 100%);
+  border:1px solid #BBF7D0;border-radius:var(--radius);padding:18px;margin-bottom:16px;
+}
 
 /* ===================== MOBILE TOP BAR ===================== */
 .mobile-topbar{
@@ -415,19 +394,11 @@ tr.clickable-row:hover td{background:var(--bg)}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
 /* ===================== SIDEBAR OVERLAY ===================== */
-.sidebar-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99;
-  backdrop-filter:blur(2px);
-}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99;backdrop-filter:blur(2px)}
 .sidebar-overlay.open{display:block}
 
-/* ===================== BOTTOM NAV (mobile) ===================== */
-.bottom-nav{
-  display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;
-  background:var(--surface);border-top:1px solid var(--border);
-  padding:6px 0 max(6px, env(safe-area-inset-bottom));
-  box-shadow:0 -4px 16px rgba(0,0,0,.06);
-}
+/* ===================== BOTTOM NAV ===================== */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:150;background:var(--surface);border-top:1px solid var(--border);padding:6px 0 max(6px,env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.06)}
 .bottom-nav-inner{display:flex;align-items:stretch}
 .bottom-nav-item{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -440,52 +411,52 @@ tr.clickable-row:hover td{background:var(--bg)}
 .bottom-nav-item svg{width:20px;height:20px;opacity:.7;transition:opacity .12s}
 .bottom-nav-item.active svg{opacity:1}
 .bottom-nav-item span{font-size:10px;font-weight:600;letter-spacing:.01em}
-.bottom-nav-dot{
-  position:absolute;top:4px;right:calc(50% - 14px);
-  width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--surface);
-  display:none;
-}
+.bottom-nav-dot{position:absolute;top:4px;right:calc(50% - 14px);width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--surface);display:none}
 .bottom-nav-dot.visible{display:block}
 
-/* ===================== RESPONSIVE BREAKPOINTS ===================== */
+/* ===================== EMPTY STATE ===================== */
+.empty-state{text-align:center;padding:48px 24px;color:var(--muted);font-size:13px}
+.empty-state-icon{font-size:36px;margin-bottom:12px;opacity:.4}
+.empty-state-title{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:4px}
 
-/* Tablet (<=1024px) */
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.page.active{animation:fadeUp .2s ease}
+.stat-card{animation:fadeUp .3s ease both}
+.stat-card:nth-child(2){animation-delay:.04s}
+.stat-card:nth-child(3){animation-delay:.08s}
+.stat-card:nth-child(4){animation-delay:.12s}
+.stat-card:nth-child(5){animation-delay:.16s}
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:1200px){
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+}
 @media(max-width:1024px){
   .sidebar{width:200px}
   .main{margin-left:200px;padding:22px 20px}
   .stats-grid{gap:10px}
-  .stat-val{font-size:24px}
+  .stat-val{font-size:20px}
+  .a-grid-3{grid-template-columns:1fr 1fr}
 }
-
-/* Mobile/Tablet (<=768px) */
 @media(max-width:768px){
   .mobile-topbar{display:flex}
   .bottom-nav{display:block}
-  .sidebar{
-    transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
-    width:280px;z-index:200;top:0;
-    box-shadow:var(--shadow-lg);
-  }
+  .sidebar{transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);width:280px;z-index:200;top:0;box-shadow:var(--shadow-lg)}
   .sidebar.open{transform:translateX(0)}
   #app{height:auto;overflow:visible}
-  .main{
-    margin-left:0;
-    padding:70px 14px 90px;
-    min-height:100vh;height:auto;overflow-y:visible;
-  }
+  .main{margin-left:0;padding:70px 14px 90px;min-height:100vh;height:auto;overflow-y:visible}
   .stats-grid{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
   .stat-card{padding:14px}
   .stat-icon{width:28px;height:28px;font-size:13px;margin-bottom:10px}
-  .stat-val{font-size:22px}
+  .stat-val{font-size:20px}
   .stat-label{font-size:10px}
-  .stat-sub{font-size:10px}
   .topbar{flex-direction:column;align-items:flex-start;gap:10px;margin-bottom:16px}
   .topbar-right{width:100%;flex-wrap:wrap;gap:8px}
   .topbar-right .search-bar{flex:1;min-width:120px;width:auto}
-  .topbar-right .btn,.topbar-right .refresh-btn{flex:1;justify-content:center;text-align:center;min-width:0}
+  .topbar-right .btn,.topbar-right .refresh-btn{flex:1;justify-content:center;min-width:0}
   .card{padding:16px;margin-bottom:14px}
   .card-head{flex-wrap:wrap;gap:8px}
-  .card-head .btn{min-width:0;flex:1}
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
   table{min-width:520px}
   th,td{padding:9px 10px;font-size:12px}
@@ -497,60 +468,37 @@ tr.clickable-row:hover td{background:var(--bg)}
   .modal-footer{flex-wrap:wrap;gap:8px}
   .modal-footer .btn{flex:1;min-width:0;justify-content:center}
   .products-grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
-  .analytics-halves{display:block!important}
-  .analytics-halves > .card{margin-bottom:14px}
-  .analytics-halves > .card:last-child{margin-bottom:0}
+  .a-grid{display:block}
+  .a-grid > .card{margin-bottom:14px}
+  .a-grid-3{grid-template-columns:1fr}
   .sug-layout{display:block!important}
   .sug-preview-col{position:relative!important;top:auto!important}
   #toast{bottom:90px;right:12px;left:12px;max-width:none}
   .login-card{width:calc(100vw - 40px);max-width:380px;padding:28px 22px}
   .lang-tabs{flex-wrap:wrap}
   .topbar-subtitle{display:none}
-  .btn-sm{padding:9px 13px;min-height:38px}
-  /* Wider touch target for product action buttons */
   .product-actions .btn{flex:1}
+  .a-tab-bar{gap:5px}
+  .a-tab{padding:7px 11px;font-size:11px}
 }
-
-/* Small phones (<=480px) */
 @media(max-width:480px){
   .stats-grid{grid-template-columns:1fr 1fr;gap:8px}
-  .stat-val{font-size:20px}
+  .stat-val{font-size:18px}
   .products-grid{grid-template-columns:1fr 1fr}
   .main{padding:66px 12px 88px}
   .btn{padding:10px 12px;font-size:12px}
   .card{padding:12px}
-  .topbar-right{gap:6px}
-  .modal-footer{flex-direction:column}
-  .modal-footer .btn{width:100%}
 }
-
-/* Very small phones (<=360px) */
 @media(max-width:360px){
-  .stat-val{font-size:18px}
+  .stat-val{font-size:16px}
   .main{padding:62px 10px 86px}
   .products-grid{grid-template-columns:1fr}
 }
-
-/* ===================== ANIMATIONS ===================== */
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.page.active{animation:fadeUp .2s ease}
-.stat-card{animation:fadeUp .3s ease both}
-.stat-card:nth-child(2){animation-delay:.05s}
-.stat-card:nth-child(3){animation-delay:.10s}
-.stat-card:nth-child(4){animation-delay:.15s}
-
-/* ===================== EMPTY STATE ===================== */
-.empty-state{
-  text-align:center;padding:48px 24px;
-  color:var(--muted);font-size:13px;
-}
-.empty-state-icon{font-size:36px;margin-bottom:12px;opacity:.4}
-.empty-state-title{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:4px}
 </style>
 </head>
 <body>
 
-<!-- ====== LOGIN SCREEN ====== -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">
@@ -574,10 +522,10 @@ tr.clickable-row:hover td{background:var(--bg)}
   <div class="login-footer">Secure admin access · RestaurantBot CRM</div>
 </div>
 
-<!-- ====== MOBILE TOPBAR ====== -->
+<!-- MOBILE TOPBAR -->
 <div class="mobile-topbar" id="mobile-topbar">
   <div class="mobile-topbar-logo">
-    <div class="mobile-topbar-logo-icon">&#127869;&#65039;</div>
+    <div class="mobile-topbar-logo-icon">🍽️</div>
     <span>Restaurant<span style="color:var(--muted);font-weight:400">Bot</span></span>
   </div>
   <div style="display:flex;align-items:center;gap:8px">
@@ -590,10 +538,10 @@ tr.clickable-row:hover td{background:var(--bg)}
   </div>
 </div>
 
-<!-- ====== SIDEBAR OVERLAY ====== -->
+<!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-<!-- ====== APP ====== -->
+<!-- APP -->
 <div id="app">
 
   <!-- SIDEBAR -->
@@ -641,7 +589,7 @@ tr.clickable-row:hover td{background:var(--bg)}
   <!-- MAIN -->
   <main class="main">
 
-    <!-- ===== DASHBOARD PAGE ===== -->
+    <!-- ===== DASHBOARD ===== -->
     <div class="page active" id="page-dashboard">
       <div class="topbar">
         <div>
@@ -653,6 +601,7 @@ tr.clickable-row:hover td{background:var(--bg)}
         </div>
       </div>
 
+      <!-- 5-column stats including Revenue -->
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon orange">📦</div>
@@ -677,6 +626,13 @@ tr.clickable-row:hover td{background:var(--bg)}
           <div class="stat-label">Products</div>
           <div class="stat-val" id="stat-products">—</div>
           <div class="stat-sub">On menu</div>
+        </div>
+        <!-- REVENUE CARD -->
+        <div class="stat-card revenue-card">
+          <div class="stat-icon" style="background:rgba(255,255,255,.12)">💰</div>
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-val" id="stat-revenue">—</div>
+          <div class="stat-sub" id="stat-revenue-sub">All delivered orders</div>
         </div>
       </div>
 
@@ -801,13 +757,11 @@ tr.clickable-row:hover td{background:var(--bg)}
             <textarea class="form-input" id="sug-de" rows="12" style="display:none" placeholder="Speisekarte anzeigen&#10;Bestellen" oninput="updateSugPreview()"></textarea>
           </div>
         </div>
-        <!-- LIVE PREVIEW PANEL -->
         <div class="sug-preview-col" style="position:sticky;top:28px">
           <div class="card" style="padding:18px">
             <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:6px">
               <span style="font-size:15px">📱</span> WhatsApp Preview
             </div>
-            <!-- Phone mockup -->
             <div style="background:#ECE5DD;border-radius:12px;padding:14px;min-height:200px">
               <div style="background:#128C7E;border-radius:8px 8px 0 0;padding:10px 14px;display:flex;align-items:center;gap:8px;margin:-14px -14px 12px">
                 <div style="width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">🍽️</div>
@@ -832,132 +786,281 @@ tr.clickable-row:hover td{background:var(--bg)}
       </div>
     </div>
 
-    <!-- ===== ANALYTICS PAGE ===== -->
+    <!-- ===== ANALYTICS PAGE (ENHANCED) ===== -->
     <div class="page" id="page-analytics">
       <div class="topbar">
         <div>
           <div class="page-title">Analytics <span>Insights</span></div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Search and engagement data from your bot</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Full breakdown of search, order, preference & revenue data</div>
         </div>
         <div class="topbar-right">
           <button class="refresh-btn" onclick="loadAnalytics()">↻ Refresh</button>
         </div>
       </div>
-      <div class="stats-grid">
+
+      <!-- Analytics KPI row -->
+      <div class="stats-grid" style="grid-template-columns:repeat(5,1fr)">
         <div class="stat-card">
           <div class="stat-icon orange">🔍</div>
           <div class="stat-label">Total Searches</div>
           <div class="stat-val" id="a-searches">—</div>
+          <div class="stat-sub">All time</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon blue">👆</div>
           <div class="stat-label">Total Clicks</div>
           <div class="stat-val" id="a-clicks">—</div>
+          <div class="stat-sub">Menu views</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon green">📋</div>
           <div class="stat-label">Total Orders</div>
           <div class="stat-val" id="a-orders-count">—</div>
+          <div class="stat-sub">Confirmed</div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon amber">🌐</div>
+          <div class="stat-icon purple">🌐</div>
           <div class="stat-label">Languages</div>
           <div class="stat-val" id="a-langs">—</div>
+          <div class="stat-sub">Active</div>
+        </div>
+        <div class="stat-card revenue-card">
+          <div class="stat-icon" style="background:rgba(255,255,255,.12)">💰</div>
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-val" id="a-revenue">—</div>
+          <div class="stat-sub">PKR</div>
         </div>
       </div>
-      <div class="analytics-halves" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="card" style="margin-bottom:0">
-          <div class="card-title" style="margin-bottom:16px">Top Searches</div>
-          <div id="a-top-searches"></div>
-        </div>
-        <div class="card">
-          <div class="card-title" style="margin-bottom:16px">Language Usage</div>
-          <div id="a-lang-breakdown"></div>
-        </div>
-      </div>
-    </div>
 
+      <!-- Analytics Section Tabs -->
+      <div class="a-tab-bar">
+        <button class="a-tab active" onclick="switchATab('overview',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Overview
+        </button>
+        <button class="a-tab" onclick="switchATab('languages',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Languages
+        </button>
+        <button class="a-tab" onclick="switchATab('sizes',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          Size Preferences
+        </button>
+        <button class="a-tab" onclick="switchATab('spice',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-5.5 5-7 10-4 14 3 4 9 4 12 0 1-4-1-9-3-11"/><path d="M12 2c0 6-4 8-4 12"/></svg>
+          Spice Prefs
+        </button>
+        <button class="a-tab" onclick="switchATab('extras',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Extras
+        </button>
+        <button class="a-tab" onclick="switchATab('products',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          Top Products
+        </button>
+        <button class="a-tab" onclick="switchATab('revenue',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Revenue
+        </button>
+        <button class="a-tab" onclick="switchATab('delivery',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Delivery Config
+        </button>
+      </div>
+
+      <!-- PANEL: OVERVIEW -->
+      <div class="a-panel active" id="apanel-overview">
+        <div class="a-grid">
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title" style="margin-bottom:16px">🔍 Top Product Searches</div>
+            <div id="a-top-searches"></div>
+          </div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title" style="margin-bottom:16px">📊 Bot Activity Summary</div>
+            <div id="a-activity-summary"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: LANGUAGES -->
+      <div class="a-panel" id="apanel-languages">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">🌐 Language Usage Breakdown</div>
+            <span id="a-lang-total-badge" class="badge blue">0 messages</span>
+          </div>
+          <div id="a-lang-breakdown"></div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-light)">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:12px">Message Distribution Table</div>
+            <div class="tbl-wrap">
+              <table id="a-lang-table">
+                <thead><tr><th>Language</th><th>Flag</th><th>Messages</th><th>Share</th><th>Trend</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: SIZE PREFERENCES -->
+      <div class="a-panel" id="apanel-sizes">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">📦 Size Preferences</div>
+            <span id="a-size-total-badge" class="badge amber">0 orders</span>
+          </div>
+          <div id="a-size-bars"></div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-light)">
+            <div class="tbl-wrap">
+              <table id="a-size-table">
+                <thead><tr><th>Size / Variant</th><th>Orders</th><th>Share %</th><th>Popularity</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: SPICE PREFERENCES -->
+      <div class="a-panel" id="apanel-spice">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">🌶️ Spice Level Preferences</div>
+            <span id="a-spice-total-badge" class="badge" style="background:#DC2626">0 orders</span>
+          </div>
+          <div id="a-spice-bars"></div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-light)">
+            <div class="tbl-wrap">
+              <table id="a-spice-table">
+                <thead><tr><th>Spice Level</th><th>Orders</th><th>Share %</th><th>Popularity</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: EXTRAS -->
+      <div class="a-panel" id="apanel-extras">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">➕ Extras / Add-ons Breakdown</div>
+            <span id="a-extras-total-badge" class="badge green">0 selections</span>
+          </div>
+          <div id="a-extras-bars"></div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-light)">
+            <div class="tbl-wrap">
+              <table id="a-extras-table">
+                <thead><tr><th>Extra Item</th><th>Times Ordered</th><th>Share %</th><th>Popularity</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: TOP PRODUCTS -->
+      <div class="a-panel" id="apanel-products">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">🏆 Top Searched Products</div>
+            <span id="a-prod-total-badge" class="badge blue">0 searches</span>
+          </div>
+          <div id="a-prod-bars"></div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-light)">
+            <div class="tbl-wrap">
+              <table id="a-prod-table">
+                <thead><tr><th>Rank</th><th>Product</th><th>Searches</th><th>Share %</th><th>Bar</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: REVENUE -->
+      <div class="a-panel" id="apanel-revenue">
+        <div class="a-grid">
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title" style="margin-bottom:16px">💰 Revenue Breakdown by Status</div>
+            <div id="a-revenue-status"></div>
+          </div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title" style="margin-bottom:16px">📈 Order Value Distribution</div>
+            <div id="a-revenue-distribution"></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div class="card-title" style="margin-bottom:16px">💳 Revenue Orders Table</div>
+          <div class="tbl-wrap">
+            <table id="a-revenue-table">
+              <thead><tr><th>Order ID</th><th>Dish</th><th>Status</th><th>Amount (PKR)</th><th>Time</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: DELIVERY CONFIG -->
+      <div class="a-panel" id="apanel-delivery">
+        <div class="delivery-config-card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <span style="font-size:20px">⏱️</span>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#15803D">MongoDB-Driven Delivery Time</div>
+              <div style="font-size:11px;color:#16A34A;margin-top:2px">Changes here are saved to DB and reflected in bot order confirmations instantly — no code change needed.</div>
+            </div>
+          </div>
+        </div>
+        <div class="a-grid">
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title" style="margin-bottom:16px">🕐 Global Delivery Time</div>
+            <div class="form-group" style="margin-bottom:14px">
+              <label class="form-label">Default Delivery Time String</label>
+              <input class="form-input" id="dt-global" value="35-45 mins" placeholder="e.g. 35-45 mins"/>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">Shown in all order confirmations unless a category exception applies.</div>
+            </div>
+            <button class="btn btn-primary" onclick="saveDeliveryTime()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/></svg>
+              Save to MongoDB
+            </button>
+          </div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-head" style="margin-bottom:14px">
+              <div class="card-title">🍽️ Category Exceptions</div>
+              <button class="btn btn-outline btn-sm" onclick="addDeliveryException()">+ Add</button>
+            </div>
+            <div id="delivery-exceptions-list" style="display:flex;flex-direction:column;gap:8px"></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:12px">Set different times per category (e.g. Karahi: 45-60 mins).</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-analytics -->
   </main>
-</div>
+</div><!-- /app -->
 
 <!-- PRODUCT MODAL -->
 <style>
-/* ===== MODAL RESPONSIVE OVERRIDES ===== */
-.product-modal-inner{
-  width:620px;max-width:calc(100vw - 24px);
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:14px;max-height:90vh;overflow-y:auto;padding:28px;
-  box-shadow:var(--shadow-lg);
-}
-.modal-tab-bar{
-  display:flex;gap:0;margin-bottom:22px;
-  border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;
-}
-.modal-tab{
-  flex:1;padding:11px 6px;text-align:center;font-size:12px;font-weight:600;
-  cursor:pointer;background:var(--surface);color:var(--muted);
-  transition:all .12s;border-left:1px solid var(--border);
-  min-height:42px;display:flex;align-items:center;justify-content:center;
-  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  user-select:none;line-height:1.3;
-}
+.product-modal-inner{width:620px;max-width:calc(100vw - 24px);background:var(--surface);border:1px solid var(--border);border-radius:14px;max-height:90vh;overflow-y:auto;padding:28px;box-shadow:var(--shadow-lg)}
+.modal-tab-bar{display:flex;gap:0;margin-bottom:22px;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.modal-tab{flex:1;padding:11px 6px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--muted);transition:all .12s;border-left:1px solid var(--border);min-height:42px;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;line-height:1.3}
 .modal-tab:first-child{border-left:none}
 .modal-tab.active{background:var(--accent);color:#fff}
-.modal-header-row{
-  display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;
-}
-.modal-close-btn{
-  flex-shrink:0;width:36px;height:36px;border-radius:var(--radius-sm);
-  background:var(--bg);border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;line-height:1;cursor:pointer;
-  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  transition:all .12s;color:var(--muted);font-family:var(--font);
-}
+.modal-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
+.modal-close-btn{flex-shrink:0;width:36px;height:36px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:all .12s;color:var(--muted);font-family:var(--font)}
 .modal-close-btn:hover{background:var(--surface);color:var(--text);border-color:var(--accent)}
 .modal-close-btn:active{transform:scale(.95)}
-.add-row-btn{
-  background:var(--bg);border:1.5px dashed var(--border);
-  border-radius:var(--radius-sm);padding:11px 16px;font-size:12px;
-  color:var(--muted);font-weight:600;width:100%;
-  transition:all .12s;cursor:pointer;min-height:42px;
-  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  font-family:var(--font);
-}
+.add-row-btn{background:var(--bg);border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:11px 16px;font-size:12px;color:var(--muted);font-weight:600;width:100%;transition:all .12s;cursor:pointer;min-height:42px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;font-family:var(--font)}
 .add-row-btn:hover{border-color:var(--accent);color:var(--text)}
-.add-row-btn:active{transform:scale(.99)}
-.variant-row-wrap{
-  display:flex;align-items:center;gap:8px;
-  background:var(--bg);border:1px solid var(--border);
-  border-radius:var(--radius-sm);padding:10px 12px;
-  flex-wrap:wrap;
-}
-.variant-row-name{
-  flex:2;min-width:100px;background:transparent;border:none;
-  font-size:13px;font-weight:500;color:var(--text);font-family:var(--font);
-}
-.variant-row-price-wrap{
-  display:flex;align-items:center;gap:4px;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius-sm);padding:6px 10px;
-  min-width:0;flex:1;
-}
-.variant-row-price{
-  flex:1;background:transparent;border:none;
-  font-size:13px;font-weight:600;color:var(--text);
-  font-family:var(--font);min-width:0;width:100%;
-}
-.variant-row-remove{
-  background:none;border:none;color:var(--muted2);
-  font-size:20px;cursor:pointer;padding:4px 6px;line-height:1;
-  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
-  flex-shrink:0;min-width:32px;min-height:32px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:var(--radius-sm);transition:color .12s,background .12s;
-}
+.variant-row-wrap{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;flex-wrap:wrap}
+.variant-row-name{flex:2;min-width:100px;background:transparent;border:none;font-size:13px;font-weight:500;color:var(--text);font-family:var(--font)}
+.variant-row-price-wrap{display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px;min-width:0;flex:1}
+.variant-row-price{flex:1;background:transparent;border:none;font-size:13px;font-weight:600;color:var(--text);font-family:var(--font);min-width:0;width:100%}
+.variant-row-remove{background:none;border:none;color:var(--muted2);font-size:20px;cursor:pointer;padding:4px 6px;line-height:1;touch-action:manipulation;-webkit-tap-highlight-color:transparent;flex-shrink:0;min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);transition:color .12s,background .12s}
 .variant-row-remove:hover{color:var(--red);background:#FEF2F2}
-.modal-footer-inner{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);justify-content:space-between;flex-wrap:wrap;}
-.modal-footer-right{display:flex;gap:8px;flex-wrap:wrap;}
+.modal-footer-inner{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);justify-content:space-between;flex-wrap:wrap}
+.modal-footer-right{display:flex;gap:8px;flex-wrap:wrap}
 @media(max-width:520px){
   .product-modal-inner{padding:16px;border-radius:10px}
   .modal-tab{font-size:10px;padding:10px 3px}
@@ -970,6 +1073,7 @@ tr.clickable-row:hover td{background:var(--bg)}
   .variant-row-price-wrap{width:100%}
 }
 </style>
+
 <div class="modal-overlay" id="product-modal">
   <div class="product-modal-inner">
     <div class="modal-header-row">
@@ -979,14 +1083,11 @@ tr.clickable-row:hover td{background:var(--bg)}
       </div>
       <button class="modal-close-btn" onclick="closeProductModal()">×</button>
     </div>
-
-    <!-- STEP TABS -->
     <div class="modal-tab-bar">
       <div class="modal-tab active" id="tab-basic" onclick="switchModalTab('basic')">1 · Basic Info</div>
       <div class="modal-tab" id="tab-variants" onclick="switchModalTab('variants')">2 · Sizes & Variants</div>
       <div class="modal-tab" id="tab-extras" onclick="switchModalTab('extras')">3 · Extras & Notes</div>
     </div>
-
     <!-- TAB: BASIC INFO -->
     <div id="modal-panel-basic">
       <div class="form-grid">
@@ -1047,33 +1148,25 @@ tr.clickable-row:hover td{background:var(--bg)}
         </div>
       </div>
     </div>
-
     <!-- TAB: SIZES & VARIANTS -->
     <div id="modal-panel-variants" style="display:none">
       <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px">
         <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">💡 Smart Suggestions for this category</div>
         <div id="variant-suggestions" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
       </div>
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px">Size / Variant Options
-        <span style="font-weight:400;color:var(--muted);font-size:11px"> — click a size to set its price</span>
-      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px">Size / Variant Options <span style="font-weight:400;color:var(--muted);font-size:11px">— click a size to set its price</span></div>
       <div id="variant-rows" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px"></div>
       <button class="add-row-btn" onclick="addVariantRow()">+ Add Variant</button>
       <input type="hidden" id="pm-variants"/>
       <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--border)">
-        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px">Spice Level Options
-          <span style="font-weight:400;color:var(--muted);font-size:11px"> — toggle what applies</span>
-        </div>
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px">Spice Level Options <span style="font-weight:400;color:var(--muted);font-size:11px">— toggle what applies</span></div>
         <div id="spice-options" style="display:flex;flex-wrap:wrap;gap:6px"></div>
         <input type="hidden" id="pm-spice"/>
       </div>
     </div>
-
     <!-- TAB: EXTRAS & NOTES -->
     <div id="modal-panel-extras" style="display:none">
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px">Add-on / Extra Items
-        <span style="font-weight:400;color:var(--muted);font-size:11px"> — toggle what applies, or add custom</span>
-      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px">Add-on / Extra Items <span style="font-weight:400;color:var(--muted);font-size:11px">— toggle what applies, or add custom</span></div>
       <div id="extras-suggestions" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
       <div id="extra-rows" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px"></div>
       <button class="add-row-btn" onclick="addExtraRow()">+ Add Custom Extra</button>
@@ -1083,7 +1176,6 @@ tr.clickable-row:hover td{background:var(--bg)}
         <textarea class="form-input" id="pm-custom-notes" rows="3" placeholder="Any special preparation notes, allergy info, or bot instructions…"></textarea>
       </div>
     </div>
-
     <div class="modal-footer-inner">
       <button class="btn btn-outline" onclick="closeProductModal()">Cancel</button>
       <div class="modal-footer-right">
@@ -1105,7 +1197,6 @@ tr.clickable-row:hover td{background:var(--bg)}
 let allOrders = [];
 let allProducts = [];
 let editingProductId = null;
-const CREDS = { user: 'admin', pass: 'admin' }; // Override per env
 
 // ============================
 // LOGIN
@@ -1114,56 +1205,62 @@ async function doLogin(){
   const u = document.getElementById('login-user').value;
   const p = document.getElementById('login-pass').value;
   const err = document.getElementById('login-err');
-
-  // Try server-side auth
   try{
     const fd = new FormData();
     fd.append('user_name', u); fd.append('password', p);
     const r = await fetch('/password', {method:'POST', body:fd});
-    const html = await r.text();
-    if(html.includes('success') || r.ok){
-      err.style.display = 'none';
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      loadAll();
-      return;
+    if(r.ok){
+      err.style.display='none';
+      showApp(); return;
     }
-  } catch(_){}
-
-  // Fallback client-side (development)
+  }catch(_){}
   if(u && p){
-    err.style.display = 'none';
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    loadAll();
+    err.style.display='none';
+    showApp();
   } else {
-    err.style.display = 'block';
+    err.style.display='block';
   }
 }
 
-document.addEventListener('keydown', e => {
-  if(e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+function showApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  loadAll();
+}
+
+document.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && document.getElementById('login-screen').style.display!=='none') doLogin();
 });
 
 // ============================
 // NAVIGATION
 // ============================
 function showPage(id){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.querySelectorAll('.bottom-nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   event.currentTarget.classList.add('active');
-  // Sync bottom nav
   const bnavEl = document.getElementById('bnav-'+id);
   if(bnavEl) bnavEl.classList.add('active');
-  // Close sidebar on mobile after nav
   closeSidebar();
   if(id==='orders') loadOrders();
   if(id==='products') renderProducts();
   if(id==='faqs') loadFaqs();
-  if(id==='suggestions'){ loadSuggestions().then(()=>{ updateSugPreview(); initQuickAddChips(); }); }
+  if(id==='suggestions'){loadSuggestions().then(()=>{updateSugPreview();initQuickAddChips();})}
   if(id==='analytics') loadAnalytics();
+}
+
+// ============================
+// REVENUE HELPER
+// ============================
+function calcRevenue(orders){
+  return orders.filter(o=>o.status==='Delivered').reduce((s,o)=>s+(parseFloat(o.total_price)||0),0);
+}
+function fmtPKR(n){
+  if(n>=1000000) return 'PKR '+(n/1000000).toFixed(1)+'M';
+  if(n>=1000) return 'PKR '+(n/1000).toFixed(1)+'K';
+  return 'PKR '+Math.round(n);
 }
 
 // ============================
@@ -1173,72 +1270,46 @@ async function loadAll(){
   try{
     const res = await fetch('/api/data');
     const d = await res.json();
-    allProducts = d.products || [];
-    allOrders   = d.orders   || [];
-
-    // Stats
-    document.getElementById('stat-orders').textContent = allOrders.length;
-    const pending = allOrders.filter(o=>o.status==='Pending').length;
-    const delivered = allOrders.filter(o=>o.status==='Delivered').length;
-    document.getElementById('stat-pending').textContent = pending;
-    document.getElementById('stat-delivered').textContent = delivered;
-    document.getElementById('stat-products').textContent = allProducts.length;
-    document.getElementById('pending-badge').textContent = pending;
-
-    // Recent orders table
-    const tbody = document.querySelector('#recent-orders-tbl tbody');
-    tbody.innerHTML = '';
-    const recentOrders = allOrders.length ? allOrders : getDemoOrders();
-    recentOrders.slice(0,8).forEach(o=>{
-      tbody.innerHTML += `<tr>
-        <td class="mono">${(o._id||'demo').slice(-6)}</td>
-        <td style="font-weight:600">${o.dish}</td>
-        <td style="color:var(--muted)">${(o.user_id||'').slice(-8)||'—'}</td>
-        <td>PKR ${o.total_price}</td>
-        <td><span class="pill ${o.status}">${o.status}</span></td>
-        <td style="color:var(--muted);font-size:12px">${(o.timestamp||'').slice(0,16)||'—'}</td>
-      </tr>`;
-    });
-    if(!allOrders.length) {
-      document.getElementById('stat-orders').textContent = '128';
-      document.getElementById('stat-pending').textContent = '12';
-      document.getElementById('stat-delivered').textContent = '96';
-      document.getElementById('stat-products').textContent = '24';
-      document.getElementById('pending-badge').textContent = '12';
-    }
-
-    // Analytics stats
-    const a = d.analytics || {};
-    document.getElementById('a-searches').textContent = a.total_searches || 540;
-    document.getElementById('a-clicks').textContent = a.total_clicks || 320;
-    document.getElementById('a-orders-count').textContent = a.total_orders || 128;
-    const langs = Object.keys(a.supported_languages||{}).length;
-    document.getElementById('a-langs').textContent = langs || 3;
-
+    allProducts = d.products||[];
+    allOrders   = d.orders||[];
+    populateDashboard(allOrders, allProducts);
   }catch(e){
-    // Demo data fallback
-    document.getElementById('stat-orders').textContent = '128';
-    document.getElementById('stat-pending').textContent = '12';
-    document.getElementById('stat-delivered').textContent = '96';
-    document.getElementById('stat-products').textContent = '24';
-    document.getElementById('pending-badge').textContent = '12';
-    document.getElementById('a-searches').textContent = '540';
-    document.getElementById('a-clicks').textContent = '320';
-    document.getElementById('a-orders-count').textContent = '128';
-    document.getElementById('a-langs').textContent = '3';
-    const tbody = document.querySelector('#recent-orders-tbl tbody');
-    tbody.innerHTML = '';
-    getDemoOrders().forEach(o=>{
-      tbody.innerHTML += `<tr>
-        <td class="mono">${o._id.slice(-6)}</td>
-        <td style="font-weight:600">${o.dish}</td>
-        <td style="color:var(--muted)">${o.user_id.slice(-8)}</td>
-        <td>PKR ${o.total_price}</td>
-        <td><span class="pill ${o.status}">${o.status}</span></td>
-        <td style="color:var(--muted);font-size:12px">${o.timestamp.slice(0,16)}</td>
-      </tr>`;
-    });
+    populateDashboard(getDemoOrders(), getDemoProducts());
   }
+}
+
+function populateDashboard(orders, products){
+  const pending   = orders.filter(o=>o.status==='Pending').length;
+  const delivered = orders.filter(o=>o.status==='Delivered').length;
+  const revenue   = calcRevenue(orders);
+
+  document.getElementById('stat-orders').textContent    = orders.length||'128';
+  document.getElementById('stat-pending').textContent   = pending||'12';
+  document.getElementById('stat-delivered').textContent = delivered||'96';
+  document.getElementById('stat-products').textContent  = products.length||'24';
+  document.getElementById('stat-revenue').textContent   = fmtPKR(revenue||384000);
+  document.getElementById('pending-badge').textContent  = pending||'12';
+
+  // Recent orders
+  const tbody = document.querySelector('#recent-orders-tbl tbody');
+  tbody.innerHTML='';
+  (orders.length?orders:getDemoOrders()).slice(0,8).forEach(o=>{
+    tbody.innerHTML+=`<tr>
+      <td class="mono">${(o._id||'demo').slice(-6)}</td>
+      <td style="font-weight:600">${o.dish}</td>
+      <td style="color:var(--muted)">${(o.user_id||'').slice(-8)||'—'}</td>
+      <td>PKR ${o.total_price}</td>
+      <td><span class="pill ${o.status}">${o.status}</span></td>
+      <td style="color:var(--muted);font-size:12px">${(o.timestamp||'').slice(0,16)||'—'}</td>
+    </tr>`;
+  });
+
+  // Analytics KPIs
+  document.getElementById('a-searches').textContent     = '—';
+  document.getElementById('a-clicks').textContent       = '—';
+  document.getElementById('a-orders-count').textContent = orders.length||'128';
+  document.getElementById('a-revenue').textContent      = fmtPKR(revenue||384000);
+  syncPendingDot(pending);
 }
 
 function getDemoOrders(){
@@ -1248,8 +1319,12 @@ function getDemoOrders(){
     {_id:'ord003abc',dish:'Chicken Karahi',user_id:'usr003',total_price:900,status:'Processing',timestamp:'2025-01-15 15:45',quantity:1,address:'Clifton Block 8',customization:{spice:'Spicy',extras:'Naan x2'}},
     {_id:'ord004abc',dish:'Beef Biryani',user_id:'usr004',total_price:700,status:'Accepted',timestamp:'2025-01-15 16:02',quantity:2,address:'North Nazimabad',customization:{portion:'Full Plate',spice:'Normal'}},
     {_id:'ord005abc',dish:'Pizza',user_id:'usr005',total_price:1199,status:'Delivered',timestamp:'2025-01-15 16:30',quantity:1,address:'Saddar Town',customization:{size:'Medium',flavor:'Chicken Tikka',spice:'Mild'}},
+    {_id:'ord006abc',dish:'Chicken Karahi',user_id:'usr006',total_price:900,status:'Delivered',timestamp:'2025-01-15 17:00',quantity:1,address:'PECHS Block 2',customization:{spice:'Normal'}},
+    {_id:'ord007abc',dish:'Biryani Family Pack',user_id:'usr007',total_price:950,status:'Delivered',timestamp:'2025-01-15 17:30',quantity:1,address:'Gulberg',customization:{portion:'Family Pack',spice:'Less Spicy'}},
+    {_id:'ord008abc',dish:'Zinger Burger',user_id:'usr008',total_price:450,status:'Rejected',timestamp:'2025-01-15 18:00',quantity:1,address:'Malir',customization:{size:'Large'}},
   ];
 }
+function getDemoProducts(){ return [{_id:'p1',title:'Chicken Biryani',category:'biryani',price:320},{_id:'p2',title:'Zinger Burger',category:'burger',price:450}]; }
 
 // ============================
 // ORDERS
@@ -1258,31 +1333,26 @@ async function loadOrders(){
   try{
     const r = await fetch('/api/orders');
     const d = await r.json();
-    allOrders = d.orders || [];
-    renderOrders(allOrders.length ? allOrders : getDemoOrders());
-  }catch(e){
-    renderOrders(getDemoOrders());
-  }
+    allOrders = d.orders||[];
+    renderOrders(allOrders.length?allOrders:getDemoOrders());
+  }catch(e){ renderOrders(getDemoOrders()); }
 }
 
 function filterOrders(){
   const s = document.getElementById('order-filter-status').value;
-  const source = allOrders.length ? allOrders : getDemoOrders();
-  const filtered = s ? source.filter(o=>o.status===s) : source;
-  renderOrders(filtered);
+  const src = allOrders.length?allOrders:getDemoOrders();
+  renderOrders(s?src.filter(o=>o.status===s):src);
 }
 
 function renderOrders(orders){
   const tbody = document.querySelector('#orders-tbl tbody');
-  tbody.innerHTML = '';
+  tbody.innerHTML='';
   orders.forEach((o,i)=>{
-    const expandId = 'expand-'+i;
-    const customInfo = o.customization || {};
-    const chips = Object.entries(customInfo).map(([k,v])=>
-      `<div class="order-chip"><strong>${k.charAt(0).toUpperCase()+k.slice(1)}:</strong> ${v}</div>`
-    ).join('');
-    tbody.innerHTML += `
-      <tr class="clickable-row" onclick="toggleOrderExpand('${expandId}', this)">
+    const expandId='expand-'+i;
+    const customInfo=o.customization||{};
+    const chips=Object.entries(customInfo).map(([k,v])=>`<div class="order-chip"><strong>${k.charAt(0).toUpperCase()+k.slice(1)}:</strong> ${v}</div>`).join('');
+    tbody.innerHTML+=`
+      <tr class="clickable-row" onclick="toggleOrderExpand('${expandId}',this)">
         <td style="width:28px;text-align:center;color:var(--muted2);font-size:11px" id="chevron-${expandId}">▶</td>
         <td class="mono">${(o._id||'').slice(-8)}</td>
         <td style="font-weight:600">${o.dish}</td>
@@ -1292,7 +1362,7 @@ function renderOrders(orders){
         <td><span class="pill ${o.status}">${o.status}</span></td>
         <td style="color:var(--muted);font-size:12px">${(o.timestamp||'').slice(0,16)||'—'}</td>
         <td onclick="event.stopPropagation()">
-          <select class="status-select" onchange="updateOrderStatus('${o._id}', this.value)">
+          <select class="status-select" onchange="updateOrderStatus('${o._id}',this.value)">
             ${['Pending','Accepted','Processing','Delivered','Rejected'].map(s=>`<option${s===o.status?' selected':''}>${s}</option>`).join('')}
           </select>
         </td>
@@ -1301,424 +1371,205 @@ function renderOrders(orders){
         <td colspan="9" style="padding:0">
           <div class="order-expand-content">
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px">Order Customization</div>
-            <div class="order-detail-chips">
-              ${chips || '<div class="order-chip">No customization details</div>'}
-            </div>
+            <div class="order-detail-chips">${chips||'<div class="order-chip">No customization details</div>'}</div>
           </div>
         </td>
       </tr>`;
   });
-  if(!orders.length){
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No orders found</td></tr>';
-  }
+  if(!orders.length) tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No orders found</td></tr>';
 }
 
 function toggleOrderExpand(expandId, row){
-  const expandRow = document.getElementById(expandId);
-  const chevron = document.getElementById('chevron-'+expandId);
-  const isOpen = expandRow.classList.contains('open');
-  // Close all
+  const expandRow=document.getElementById(expandId);
+  const chevron=document.getElementById('chevron-'+expandId);
+  const isOpen=expandRow.classList.contains('open');
   document.querySelectorAll('.order-expand-row').forEach(r=>r.classList.remove('open'));
   document.querySelectorAll('[id^="chevron-expand"]').forEach(c=>c.textContent='▶');
-  if(!isOpen){
-    expandRow.classList.add('open');
-    if(chevron) chevron.textContent='▼';
-  }
+  if(!isOpen){ expandRow.classList.add('open'); if(chevron) chevron.textContent='▼'; }
 }
 
 async function updateOrderStatus(id, status){
   try{
-    const r = await fetch(`/api/orders/${id}/status`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({status})
-    });
+    const r = await fetch(`/api/orders/${id}/status`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
     const d = await r.json();
     toast(d.message);
-    loadOrders();
-    loadAll();
+    loadOrders(); loadAll();
   }catch(e){ toast('Update failed','error'); }
 }
 
 // ============================
-// CATEGORY SMART DATA
+// CATEGORY CONFIG
 // ============================
 const CATEGORY_CONFIG = {
-  biryani:{
-    hint:'For biryani, suggest plate sizes and spice options',
-    descSuggestions:['Aromatic basmati rice slow-cooked with tender meat and whole spices.','Rich and fragrant biryani prepared with saffron and kewra water.','Traditional dum biryani cooked on low flame for deep flavor.'],
-    variantSuggestions:[{name:'Half Plate',price:180},{name:'Full Plate',price:320},{name:'Family Pack',price:950}],
-    spiceOptions:['Normal','Spicy','Less Spicy','Extra Spicy'],
-    extrasOptions:[{name:'Extra Raita',price:50},{name:'Salad',price:40},{name:'Cold Drink',price:120},{name:'Extra Meat',price:150}],
-  },
-  burger:{
-    hint:'For burgers, suggest sizes and add-on extras',
-    descSuggestions:['Crispy fried chicken fillet with fresh lettuce, tomato, and mayo.','Juicy beef patty with cheese, pickles, and special burger sauce.','Double stacked burger with jalapeños and garlic aioli.'],
-    variantSuggestions:[{name:'Regular',price:350},{name:'Large',price:450},{name:'Double',price:600}],
-    spiceOptions:['Mild','Medium','Spicy','Extra Hot'],
-    extrasOptions:[{name:'Extra Cheese',price:60},{name:'Double Patty',price:150},{name:'Jalapeños',price:40},{name:'Coleslaw',price:50},{name:'Extra Sauce',price:30}],
-  },
-  pizza:{
-    hint:'For pizza, suggest sizes with prices — buyers pick size first',
-    descSuggestions:['Hand-tossed pizza with your choice of toppings and mozzarella.','Stone-baked pizza with rich tomato base and fresh ingredients.','Loaded pizza with extra cheese, vegetables, and signature sauce.'],
-    variantSuggestions:[{name:'Small (6")',price:799},{name:'Medium (9")',price:1199},{name:'Large (12")',price:1599},{name:'XL (14")',price:1999}],
-    spiceOptions:['Mild','Medium','Spicy'],
-    extrasOptions:[{name:'Extra Cheese',price:100},{name:'Double Toppings',price:150},{name:'Garlic Bread',price:120},{name:'Dip Sauce',price:50}],
-  },
-  karahi:{
-    hint:'For karahi, suggest weight/portion sizes',
-    descSuggestions:['Slow-cooked in a wok with tomatoes, ginger, green chilies, and spices.','Rich and aromatic karahi prepared fresh to order in pure oil.'],
-    variantSuggestions:[{name:'Half Kg',price:450},{name:'1 Kg',price:900},{name:'1.5 Kg',price:1350}],
-    spiceOptions:['Mild','Medium','Spicy','Less Oil'],
-    extrasOptions:[{name:'Naan x2',price:60},{name:'Roti x4',price:40},{name:'Raita',price:50},{name:'Salad',price:40}],
-  },
-  rolls:{
-    hint:'For rolls, suggest filling or size variants',
-    descSuggestions:['Crispy paratha roll filled with spiced chicken tikka and chutney.','Soft roll stuffed with fresh vegetables and special sauce.'],
-    variantSuggestions:[{name:'Single Roll',price:150},{name:'Double Roll',price:280},{name:'Family Pack (6)',price:750}],
-    spiceOptions:['Mild','Medium','Spicy'],
-    extrasOptions:[{name:'Extra Chutney',price:20},{name:'Extra Filling',price:80},{name:'Fries',price:120}],
-  },
-  rice:{
-    hint:'For rice dishes, suggest portion sizes',
-    descSuggestions:['Steamed basmati rice served with curry or dal.','Flavored rice with whole spices and herbs.'],
-    variantSuggestions:[{name:'Half Plate',price:120},{name:'Full Plate',price:220},{name:'Jumbo',price:350}],
-    spiceOptions:['Normal','Less Spicy'],
-    extrasOptions:[{name:'Dal',price:80},{name:'Curry',price:150},{name:'Raita',price:50}],
-  },
-  drinks:{
-    hint:'For drinks, suggest size variants',
-    descSuggestions:['Chilled refreshing drink served ice cold.','Fresh blended drink made to order.'],
-    variantSuggestions:[{name:'Small (250ml)',price:80},{name:'Regular (500ml)',price:120},{name:'Large (1L)',price:200}],
-    spiceOptions:[],
-    extrasOptions:[{name:'Extra Ice',price:0},{name:'Sugar Free',price:0}],
-  },
-  dessert:{
-    hint:'For desserts, suggest portion or flavors',
-    descSuggestions:['Rich and creamy dessert made with traditional recipe.','Sweet indulgence with your choice of topping.'],
-    variantSuggestions:[{name:'Regular',price:180},{name:'Large',price:280},{name:'Party Size',price:600}],
-    spiceOptions:[],
-    extrasOptions:[{name:'Extra Cream',price:50},{name:'Ice Cream Scoop',price:80},{name:'Nuts Topping',price:60}],
-  },
-  other:{
-    hint:'Add size variants and extras as needed',
-    descSuggestions:['Fresh and delicious dish prepared to order.'],
-    variantSuggestions:[{name:'Small',price:0},{name:'Medium',price:0},{name:'Large',price:0}],
-    spiceOptions:['Mild','Medium','Spicy'],
-    extrasOptions:[],
-  }
+  biryani:{hint:'For biryani, suggest plate sizes and spice options',descSuggestions:['Aromatic basmati rice slow-cooked with tender meat and whole spices.','Rich and fragrant biryani prepared with saffron and kewra water.','Traditional dum biryani cooked on low flame for deep flavor.'],variantSuggestions:[{name:'Half Plate',price:180},{name:'Full Plate',price:320},{name:'Family Pack',price:950}],spiceOptions:['Normal','Spicy','Less Spicy','Extra Spicy'],extrasOptions:[{name:'Extra Raita',price:50},{name:'Salad',price:40},{name:'Cold Drink',price:120},{name:'Extra Meat',price:150}]},
+  burger:{hint:'For burgers, suggest sizes and add-on extras',descSuggestions:['Crispy fried chicken fillet with fresh lettuce, tomato, and mayo.','Juicy beef patty with cheese, pickles, and special burger sauce.','Double stacked burger with jalapeños and garlic aioli.'],variantSuggestions:[{name:'Regular',price:350},{name:'Large',price:450},{name:'Double',price:600}],spiceOptions:['Mild','Medium','Spicy','Extra Hot'],extrasOptions:[{name:'Extra Cheese',price:60},{name:'Double Patty',price:150},{name:'Jalapeños',price:40},{name:'Coleslaw',price:50},{name:'Extra Sauce',price:30}]},
+  pizza:{hint:'For pizza, suggest sizes — buyers pick size first',descSuggestions:['Hand-tossed pizza with your choice of toppings and mozzarella.','Stone-baked pizza with rich tomato base and fresh ingredients.','Loaded pizza with extra cheese, vegetables, and signature sauce.'],variantSuggestions:[{name:'Small (6")',price:799},{name:'Medium (9")',price:1199},{name:'Large (12")',price:1599},{name:'XL (14")',price:1999}],spiceOptions:['Mild','Medium','Spicy'],extrasOptions:[{name:'Extra Cheese',price:100},{name:'Double Toppings',price:150},{name:'Garlic Bread',price:120},{name:'Dip Sauce',price:50}]},
+  karahi:{hint:'For karahi, suggest weight/portion sizes',descSuggestions:['Slow-cooked in a wok with tomatoes, ginger, green chilies, and spices.','Rich and aromatic karahi prepared fresh to order in pure oil.'],variantSuggestions:[{name:'Half Kg',price:450},{name:'1 Kg',price:900},{name:'1.5 Kg',price:1350}],spiceOptions:['Mild','Medium','Spicy','Less Oil'],extrasOptions:[{name:'Naan x2',price:60},{name:'Roti x4',price:40},{name:'Raita',price:50},{name:'Salad',price:40}]},
+  rolls:{hint:'For rolls, suggest filling or size variants',descSuggestions:['Crispy paratha roll filled with spiced chicken tikka and chutney.','Soft roll stuffed with fresh vegetables and special sauce.'],variantSuggestions:[{name:'Single Roll',price:150},{name:'Double Roll',price:280},{name:'Family Pack (6)',price:750}],spiceOptions:['Mild','Medium','Spicy'],extrasOptions:[{name:'Extra Chutney',price:20},{name:'Extra Filling',price:80},{name:'Fries',price:120}]},
+  rice:{hint:'For rice dishes, suggest portion sizes',descSuggestions:['Steamed basmati rice served with curry or dal.','Flavored rice with whole spices and herbs.'],variantSuggestions:[{name:'Half Plate',price:120},{name:'Full Plate',price:220},{name:'Jumbo',price:350}],spiceOptions:['Normal','Less Spicy'],extrasOptions:[{name:'Dal',price:80},{name:'Curry',price:150},{name:'Raita',price:50}]},
+  drinks:{hint:'For drinks, suggest size variants',descSuggestions:['Chilled refreshing drink served ice cold.','Fresh blended drink made to order.'],variantSuggestions:[{name:'Small (250ml)',price:80},{name:'Regular (500ml)',price:120},{name:'Large (1L)',price:200}],spiceOptions:[],extrasOptions:[{name:'Extra Ice',price:0},{name:'Sugar Free',price:0}]},
+  dessert:{hint:'For desserts, suggest portion or flavors',descSuggestions:['Rich and creamy dessert made with traditional recipe.','Sweet indulgence with your choice of topping.'],variantSuggestions:[{name:'Regular',price:180},{name:'Large',price:280},{name:'Party Size',price:600}],spiceOptions:[],extrasOptions:[{name:'Extra Cream',price:50},{name:'Ice Cream Scoop',price:80},{name:'Nuts Topping',price:60}]},
+  other:{hint:'Add size variants and extras as needed',descSuggestions:['Fresh and delicious dish prepared to order.'],variantSuggestions:[{name:'Small',price:0},{name:'Medium',price:0},{name:'Large',price:0}],spiceOptions:['Mild','Medium','Spicy'],extrasOptions:[]}
 };
 
 // ============================
 // MODAL TABS
 // ============================
-let currentModalTab = 'basic';
-const TABS = ['basic','variants','extras'];
+let currentModalTab='basic';
+const TABS=['basic','variants','extras'];
 
 function switchModalTab(tab){
-  currentModalTab = tab;
+  currentModalTab=tab;
   TABS.forEach(t=>{
-    const panel = document.getElementById('modal-panel-'+t);
-    const tabEl = document.getElementById('tab-'+t);
-    if(panel) panel.style.display = t===tab ? 'block' : 'none';
-    if(tabEl){
-      tabEl.classList.toggle('active', t===tab);
-    }
+    const panel=document.getElementById('modal-panel-'+t);
+    const tabEl=document.getElementById('tab-'+t);
+    if(panel) panel.style.display=t===tab?'block':'none';
+    if(tabEl) tabEl.classList.toggle('active',t===tab);
   });
-  document.getElementById('btn-prev-tab').style.display = tab==='basic' ? 'none' : 'inline-flex';
-  document.getElementById('btn-next-tab').style.display = tab==='extras' ? 'none' : 'inline-flex';
-  document.getElementById('btn-save-dish').style.display = tab==='extras' ? 'inline-flex' : 'none';
+  document.getElementById('btn-prev-tab').style.display=tab==='basic'?'none':'inline-flex';
+  document.getElementById('btn-next-tab').style.display=tab==='extras'?'none':'inline-flex';
+  document.getElementById('btn-save-dish').style.display=tab==='extras'?'inline-flex':'none';
   if(tab==='variants') rebuildVariantPanel();
   if(tab==='extras') rebuildExtrasPanel();
 }
+function nextModalTab(){ const idx=TABS.indexOf(currentModalTab); if(idx<TABS.length-1) switchModalTab(TABS[idx+1]); }
+function prevModalTab(){ const idx=TABS.indexOf(currentModalTab); if(idx>0) switchModalTab(TABS[idx-1]); }
 
-function nextModalTab(){
-  const idx = TABS.indexOf(currentModalTab);
-  if(idx < TABS.length-1) switchModalTab(TABS[idx+1]);
-}
-function prevModalTab(){
-  const idx = TABS.indexOf(currentModalTab);
-  if(idx > 0) switchModalTab(TABS[idx-1]);
-}
-
-// ============================
-// SMART SUGGESTIONS
-// ============================
 function onCategoryChange(cat){
-  const cfg = CATEGORY_CONFIG[cat] || CATEGORY_CONFIG.other;
-  document.getElementById('modal-category-hint').textContent = cfg.hint;
+  const cfg=CATEGORY_CONFIG[cat]||CATEGORY_CONFIG.other;
+  document.getElementById('modal-category-hint').textContent=cfg.hint;
   buildDescSuggestions(cat);
   if(currentModalTab==='variants') rebuildVariantPanel();
   if(currentModalTab==='extras') rebuildExtrasPanel();
 }
-
 function onTitleInput(val){
-  // auto-detect category from title keywords
-  const v = val.toLowerCase();
-  const sel = document.getElementById('pm-category');
+  const v=val.toLowerCase();
+  const sel=document.getElementById('pm-category');
   if(/biryani/.test(v)) sel.value='biryani';
   else if(/burger|zinger|broast/.test(v)) sel.value='burger';
   else if(/pizza/.test(v)) sel.value='pizza';
   else if(/karahi|curry/.test(v)) sel.value='karahi';
   else if(/roll|wrap/.test(v)) sel.value='rolls';
   else if(/drink|cola|juice|lassi|shake/.test(v)) sel.value='drinks';
-  else if(/rice|pulao|qorma/.test(v)) sel.value='rice';
+  else if(/rice|pulao/.test(v)) sel.value='rice';
   else if(/cake|kheer|halwa|mithai|sweet/.test(v)) sel.value='dessert';
   onCategoryChange(sel.value);
 }
-
 function buildDescSuggestions(cat){
-  const cfg = CATEGORY_CONFIG[cat] || CATEGORY_CONFIG.other;
-  const el = document.getElementById('desc-suggestions');
-  el.innerHTML = cfg.descSuggestions.map(s=>`
-    <span onclick="useDescSuggestion(this)" style="font-size:11px;padding:4px 10px;background:var(--bg);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--muted);transition:all .12s;display:inline-block;line-height:1.4"
-    onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text)'"
-    onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'"
-    title="${s}">${s.slice(0,40)}…</span>`).join('');
+  const cfg=CATEGORY_CONFIG[cat]||CATEGORY_CONFIG.other;
+  const el=document.getElementById('desc-suggestions');
+  el.innerHTML=cfg.descSuggestions.map(s=>`<span onclick="useDescSuggestion(this)" style="font-size:11px;padding:4px 10px;background:var(--bg);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--muted);transition:all .12s;display:inline-block;line-height:1.4" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'" title="${s}">${s.slice(0,40)}…</span>`).join('');
 }
-
-function useDescSuggestion(el){
-  document.getElementById('pm-desc').value = el.getAttribute('title');
-}
+function useDescSuggestion(el){ document.getElementById('pm-desc').value=el.getAttribute('title'); }
 
 // ============================
 // VARIANT BUILDER
 // ============================
-let variantRows = []; // [{name,price}]
-let selectedSpice = [];
+let variantRows=[]; let selectedSpice=[];
 
 function rebuildVariantPanel(){
-  const cat = document.getElementById('pm-category').value;
-  const cfg = CATEGORY_CONFIG[cat] || CATEGORY_CONFIG.other;
-
-  // Smart suggestion chips
-  const sugEl = document.getElementById('variant-suggestions');
-  sugEl.innerHTML = cfg.variantSuggestions.map(v=>`
-    <span onclick="addSuggestedVariant('${v.name}',${v.price})"
-      style="font-size:12px;padding:6px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text);font-weight:500;transition:all .12s;display:inline-flex;align-items:center;gap:6px"
-      onmouseover="this.style.borderColor='var(--accent)';this.style.background='var(--bg)'"
-      onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
-      + ${v.name} <span style="color:var(--muted);font-weight:400">${v.price>0?'PKR '+v.price:''}</span>
-    </span>`).join('');
-
+  const cat=document.getElementById('pm-category').value;
+  const cfg=CATEGORY_CONFIG[cat]||CATEGORY_CONFIG.other;
+  const sugEl=document.getElementById('variant-suggestions');
+  sugEl.innerHTML=cfg.variantSuggestions.map(v=>`<span onclick="addSuggestedVariant('${v.name}',${v.price})" style="font-size:12px;padding:6px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:20px;cursor:pointer;color:var(--text);font-weight:500;transition:all .12s;display:inline-flex;align-items:center;gap:6px" onmouseover="this.style.borderColor='var(--accent)';this.style.background='var(--bg)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">+ ${v.name} <span style="color:var(--muted);font-weight:400">${v.price>0?'PKR '+v.price:''}</span></span>`).join('');
   renderVariantRows();
-
-  // Spice options
-  const spiceEl = document.getElementById('spice-options');
-  spiceEl.innerHTML = cfg.spiceOptions.map(s=>`
-    <span class="spice-chip${selectedSpice.includes(s)?' active':''}" onclick="toggleSpice('${s}',this)"
-      style="font-size:12px;padding:6px 14px;border:1.5px solid ${selectedSpice.includes(s)?'var(--accent)':'var(--border)'};border-radius:20px;cursor:pointer;font-weight:500;transition:all .12s;display:inline-block;background:${selectedSpice.includes(s)?'var(--accent)':'var(--surface)'};color:${selectedSpice.includes(s)?'#fff':'var(--muted)'}">
-      🌶 ${s}
-    </span>`).join('');
+  const spiceEl=document.getElementById('spice-options');
+  spiceEl.innerHTML=cfg.spiceOptions.map(s=>`<span class="spice-chip${selectedSpice.includes(s)?' active':''}" onclick="toggleSpice('${s}',this)" style="font-size:12px;padding:6px 14px;border:1.5px solid ${selectedSpice.includes(s)?'var(--accent)':'var(--border)'};border-radius:20px;cursor:pointer;font-weight:500;transition:all .12s;display:inline-block;background:${selectedSpice.includes(s)?'var(--accent)':'var(--surface)'};color:${selectedSpice.includes(s)?'#fff':'var(--muted)'}">🌶 ${s}</span>`).join('');
 }
-
-function toggleSpice(name, el){
-  if(selectedSpice.includes(name)) selectedSpice = selectedSpice.filter(s=>s!==name);
+function toggleSpice(name,el){
+  if(selectedSpice.includes(name)) selectedSpice=selectedSpice.filter(s=>s!==name);
   else selectedSpice.push(name);
-  el.style.background = selectedSpice.includes(name) ? 'var(--accent)' : 'var(--surface)';
-  el.style.borderColor = selectedSpice.includes(name) ? 'var(--accent)' : 'var(--border)';
-  el.style.color = selectedSpice.includes(name) ? '#fff' : 'var(--muted)';
+  el.style.background=selectedSpice.includes(name)?'var(--accent)':'var(--surface)';
+  el.style.borderColor=selectedSpice.includes(name)?'var(--accent)':'var(--border)';
+  el.style.color=selectedSpice.includes(name)?'#fff':'var(--muted)';
   syncVariantHidden();
 }
-
-function addSuggestedVariant(name, price){
-  if(variantRows.find(r=>r.name===name)) return;
-  variantRows.push({name, price});
-  renderVariantRows();
-  syncVariantHidden();
-}
-
-function addVariantRow(){
-  variantRows.push({name:'', price:0});
-  renderVariantRows();
-}
-
+function addSuggestedVariant(name,price){ if(variantRows.find(r=>r.name===name)) return; variantRows.push({name,price}); renderVariantRows(); syncVariantHidden(); }
+function addVariantRow(){ variantRows.push({name:'',price:0}); renderVariantRows(); }
 function renderVariantRows(){
-  const el = document.getElementById('variant-rows');
-  el.innerHTML = variantRows.map((v,i)=>`
-    <div class="variant-row-wrap">
-      <span style="font-size:14px;flex-shrink:0">📦</span>
-      <input value="${v.name}" placeholder="Variant name (e.g. Half Plate)" oninput="updateVariant(${i},'name',this.value)"
-        class="variant-row-name"/>
-      <div class="variant-row-price-wrap">
-        <span style="font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap">PKR</span>
-        <input type="number" value="${v.price||''}" placeholder="0" oninput="updateVariant(${i},'price',this.value)" onfocus="this.select()"
-          class="variant-row-price"/>
-      </div>
-      <button onclick="removeVariant(${i})" class="variant-row-remove" title="Remove">×</button>
-    </div>`).join('');
+  const el=document.getElementById('variant-rows');
+  el.innerHTML=variantRows.map((v,i)=>`<div class="variant-row-wrap"><span style="font-size:14px;flex-shrink:0">📦</span><input value="${v.name}" placeholder="Variant name" oninput="updateVariant(${i},'name',this.value)" class="variant-row-name"/><div class="variant-row-price-wrap"><span style="font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap">PKR</span><input type="number" value="${v.price||''}" placeholder="0" oninput="updateVariant(${i},'price',this.value)" onfocus="this.select()" class="variant-row-price"/></div><button onclick="removeVariant(${i})" class="variant-row-remove">×</button></div>`).join('');
 }
-
-function updateVariant(i, field, val){
-  variantRows[i][field] = field==='price' ? Number(val) : val;
-  syncVariantHidden();
-}
-
-function removeVariant(i){
-  variantRows.splice(i,1);
-  renderVariantRows();
-  syncVariantHidden();
-}
-
+function updateVariant(i,field,val){ variantRows[i][field]=field==='price'?Number(val):val; syncVariantHidden(); }
+function removeVariant(i){ variantRows.splice(i,1); renderVariantRows(); syncVariantHidden(); }
 function syncVariantHidden(){
-  const varParts = variantRows.filter(r=>r.name).map(r=>r.name+(r.price>0?' — PKR '+r.price:'')).join(' · ');
-  const spicePart = selectedSpice.length ? ' | Spice: '+selectedSpice.join(' / ') : '';
-  document.getElementById('pm-variants').value = varParts + spicePart;
+  const varParts=variantRows.filter(r=>r.name).map(r=>r.name+(r.price>0?' — PKR '+r.price:'')).join(' · ');
+  const spicePart=selectedSpice.length?' | Spice: '+selectedSpice.join(' / '):'';
+  document.getElementById('pm-variants').value=varParts+spicePart;
 }
 
 // ============================
 // EXTRAS BUILDER
 // ============================
-let selectedExtras = []; // [{name,price}]
-let extraCustomRows = []; // [{name,price}]
+let selectedExtras=[]; let extraCustomRows=[];
 
 function rebuildExtrasPanel(){
-  const cat = document.getElementById('pm-category').value;
-  const cfg = CATEGORY_CONFIG[cat] || CATEGORY_CONFIG.other;
-
-  // Suggested extras chips
-  const el = document.getElementById('extras-suggestions');
-  el.innerHTML = cfg.extrasOptions.map(e=>`
-    <span onclick="toggleExtra('${e.name}',${e.price},this)"
-      class="extra-chip"
-      style="font-size:12px;padding:6px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:20px;cursor:pointer;font-weight:500;transition:all .12s;display:inline-flex;align-items:center;gap:6px;color:var(--muted)"
-      onmouseover="if(!this.classList.contains('on')){this.style.borderColor='var(--accent)';this.style.color='var(--text)'}"
-      onmouseout="if(!this.classList.contains('on')){this.style.borderColor='var(--border)';this.style.color='var(--muted)'}">
-      + ${e.name}${e.price>0?' <span style="color:var(--muted2);font-weight:400">+PKR '+e.price+'</span>':''}
-    </span>`).join('');
-
+  const cat=document.getElementById('pm-category').value;
+  const cfg=CATEGORY_CONFIG[cat]||CATEGORY_CONFIG.other;
+  const el=document.getElementById('extras-suggestions');
+  el.innerHTML=cfg.extrasOptions.map(e=>`<span onclick="toggleExtra('${e.name}',${e.price},this)" class="extra-chip" style="font-size:12px;padding:6px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:20px;cursor:pointer;font-weight:500;transition:all .12s;display:inline-flex;align-items:center;gap:6px;color:var(--muted)" onmouseover="if(!this.classList.contains('on')){this.style.borderColor='var(--accent)';this.style.color='var(--text)'}" onmouseout="if(!this.classList.contains('on')){this.style.borderColor='var(--border)';this.style.color='var(--muted)'}">+ ${e.name}${e.price>0?' <span style="color:var(--muted2);font-weight:400">+PKR '+e.price+'</span>':''}</span>`).join('');
   renderExtraRows();
 }
-
-function toggleExtra(name, price, el){
-  const idx = selectedExtras.findIndex(e=>e.name===name);
-  if(idx>=0){
-    selectedExtras.splice(idx,1);
-    el.classList.remove('on');
-    el.style.background='var(--surface)'; el.style.borderColor='var(--border)'; el.style.color='var(--muted)';
-  } else {
-    selectedExtras.push({name,price});
-    el.classList.add('on');
-    el.style.background='var(--accent)'; el.style.borderColor='var(--accent)'; el.style.color='#fff';
-  }
+function toggleExtra(name,price,el){
+  const idx=selectedExtras.findIndex(e=>e.name===name);
+  if(idx>=0){ selectedExtras.splice(idx,1); el.classList.remove('on'); el.style.background='var(--surface)'; el.style.borderColor='var(--border)'; el.style.color='var(--muted)'; }
+  else { selectedExtras.push({name,price}); el.classList.add('on'); el.style.background='var(--accent)'; el.style.borderColor='var(--accent)'; el.style.color='#fff'; }
   syncExtrasHidden();
 }
-
-function addExtraRow(){
-  extraCustomRows.push({name:'',price:0});
-  renderExtraRows();
-}
-
+function addExtraRow(){ extraCustomRows.push({name:'',price:0}); renderExtraRows(); }
 function renderExtraRows(){
-  const el = document.getElementById('extra-rows');
-  el.innerHTML = extraCustomRows.map((e,i)=>`
-    <div class="variant-row-wrap">
-      <input value="${e.name}" placeholder="Extra item name (e.g. Extra Raita)" oninput="updateExtra(${i},'name',this.value)"
-        class="variant-row-name"/>
-      <div class="variant-row-price-wrap">
-        <span style="font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap">+PKR</span>
-        <input type="number" value="${e.price||''}" placeholder="0" oninput="updateExtra(${i},'price',this.value)"
-          class="variant-row-price"/>
-      </div>
-      <button onclick="removeExtra(${i})" class="variant-row-remove">×</button>
-    </div>`).join('');
+  const el=document.getElementById('extra-rows');
+  el.innerHTML=extraCustomRows.map((e,i)=>`<div class="variant-row-wrap"><input value="${e.name}" placeholder="Extra item name" oninput="updateExtra(${i},'name',this.value)" class="variant-row-name"/><div class="variant-row-price-wrap"><span style="font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap">+PKR</span><input type="number" value="${e.price||''}" placeholder="0" oninput="updateExtra(${i},'price',this.value)" class="variant-row-price"/></div><button onclick="removeExtra(${i})" class="variant-row-remove">×</button></div>`).join('');
 }
-
-function updateExtra(i, field, val){
-  extraCustomRows[i][field] = field==='price' ? Number(val) : val;
-  syncExtrasHidden();
-}
-function removeExtra(i){
-  extraCustomRows.splice(i,1);
-  renderExtraRows();
-  syncExtrasHidden();
-}
-
+function updateExtra(i,field,val){ extraCustomRows[i][field]=field==='price'?Number(val):val; syncExtrasHidden(); }
+function removeExtra(i){ extraCustomRows.splice(i,1); renderExtraRows(); syncExtrasHidden(); }
 function syncExtrasHidden(){
-  const all = [
-    ...selectedExtras.map(e=>e.name+(e.price>0?'+PKR'+e.price:'')),
-    ...extraCustomRows.filter(e=>e.name).map(e=>e.name+(e.price>0?'+PKR'+e.price:''))
-  ];
-  document.getElementById('pm-extras').value = all.join(' · ');
+  const all=[...selectedExtras.map(e=>e.name+(e.price>0?'+PKR'+e.price:'')), ...extraCustomRows.filter(e=>e.name).map(e=>e.name+(e.price>0?'+PKR'+e.price:''))];
+  document.getElementById('pm-extras').value=all.join(' · ');
 }
 
 // ============================
 // PRODUCTS
 // ============================
-const DEMO_PRODUCTS = [
-  {_id:'p1',title:'Chicken Biryani',category:'biryani',price:320,description:'Aromatic basmati rice slow-cooked with tender chicken and whole spices.',image_link:'',rating:4.5,trending_score:0.9,availability:'available',variants:'Half Plate — PKR 180 · Full Plate — PKR 320 · Family Pack — PKR 950 | Spice: Normal / Spicy / Less Spicy',extras:'Extra Raita+PKR50 · Salad+PKR40'},
-  {_id:'p2',title:'Beef Biryani',category:'biryani',price:350,description:'Rich beef biryani with saffron, kewra water and whole aromatic spices.',image_link:'',rating:4.7,trending_score:0.8,availability:'available',variants:'Half Plate — PKR 200 · Full Plate — PKR 350 · Family Pack — PKR 1050 | Spice: Normal / Spicy',extras:'Extra Raita+PKR50'},
-  {_id:'p3',title:'Zinger Burger',category:'burger',price:450,description:'Crispy fried chicken fillet with fresh lettuce, tomato, and mayo sauce.',image_link:'',rating:4.3,trending_score:0.85,availability:'available',variants:'Regular — PKR 350 · Large — PKR 450 · Double — PKR 600 | Spice: Mild / Spicy',extras:'Extra Cheese+PKR60 · Double Patty+PKR150'},
-  {_id:'p4',title:'Pizza',category:'pizza',price:1199,description:'Hand-tossed pizza loaded with toppings and fresh mozzarella cheese.',image_link:'',rating:4.6,trending_score:0.92,availability:'available',variants:'Small (6") — PKR 799 · Medium (9") — PKR 1199 · Large (12") — PKR 1599 | Spice: Mild / Medium',extras:'Extra Cheese+PKR100 · Garlic Bread+PKR120'},
-  {_id:'p5',title:'Chicken Karahi',category:'karahi',price:900,description:'Slow-cooked in a wok with tomatoes, ginger and green chilies.',image_link:'',rating:4.8,trending_score:0.87,availability:'available',variants:'Half Kg — PKR 450 · 1 Kg — PKR 900 | Spice: Mild / Medium / Spicy',extras:'Naan x2+PKR60 · Raita+PKR50'},
+const DEMO_PRODUCTS=[
+  {_id:'p1',title:'Chicken Biryani',category:'biryani',price:320,description:'Aromatic basmati rice slow-cooked with tender chicken.',image_link:'',rating:4.5,trending_score:0.9,availability:'available',variants:'Half Plate — PKR 180 · Full Plate — PKR 320 · Family Pack — PKR 950 | Spice: Normal / Spicy / Less Spicy',extras:'Extra Raita+PKR50 · Salad+PKR40'},
+  {_id:'p2',title:'Beef Biryani',category:'biryani',price:350,description:'Rich beef biryani with saffron and aromatic spices.',image_link:'',rating:4.7,trending_score:0.8,availability:'available',variants:'Half Plate — PKR 200 · Full Plate — PKR 350 · Family Pack — PKR 1050 | Spice: Normal / Spicy',extras:'Extra Raita+PKR50'},
+  {_id:'p3',title:'Zinger Burger',category:'burger',price:450,description:'Crispy fried chicken fillet with fresh lettuce and mayo.',image_link:'',rating:4.3,trending_score:0.85,availability:'available',variants:'Regular — PKR 350 · Large — PKR 450 · Double — PKR 600 | Spice: Mild / Spicy',extras:'Extra Cheese+PKR60 · Double Patty+PKR150'},
+  {_id:'p4',title:'Pizza',category:'pizza',price:1199,description:'Hand-tossed pizza loaded with toppings and mozzarella.',image_link:'',rating:4.6,trending_score:0.92,availability:'available',variants:'Small (6") — PKR 799 · Medium (9") — PKR 1199 · Large (12") — PKR 1599 | Spice: Mild / Medium',extras:'Extra Cheese+PKR100 · Garlic Bread+PKR120'},
+  {_id:'p5',title:'Chicken Karahi',category:'karahi',price:900,description:'Slow-cooked in a wok with tomatoes, ginger and chilies.',image_link:'',rating:4.8,trending_score:0.87,availability:'available',variants:'Half Kg — PKR 450 · 1 Kg — PKR 900 | Spice: Mild / Medium / Spicy',extras:'Naan x2+PKR60 · Raita+PKR50'},
   {_id:'p6',title:'Cold Drink',category:'drinks',price:120,description:'Chilled refreshing soft drink served ice cold.',image_link:'',rating:4.0,trending_score:0.5,availability:'available',variants:'Small (250ml) — PKR 80 · Regular (500ml) — PKR 120 · Large (1L) — PKR 200',extras:''},
 ];
 
 function renderProducts(query=''){
-  const grid = document.getElementById('products-grid');
-  const source = allProducts.length ? allProducts : DEMO_PRODUCTS;
-  const list = query ? source.filter(p=>p.title?.toLowerCase().includes(query.toLowerCase()) || p.category?.toLowerCase().includes(query.toLowerCase())) : source;
-  grid.innerHTML = '';
-  const emojiMap = {biryani:'🍛',burger:'🍔',pizza:'🍕',karahi:'🥘',rice:'🍚',rolls:'🌯',drinks:'🥤',dessert:'🍰',other:'🍽️'};
+  const grid=document.getElementById('products-grid');
+  const source=allProducts.length?allProducts:DEMO_PRODUCTS;
+  const list=query?source.filter(p=>p.title?.toLowerCase().includes(query.toLowerCase())||p.category?.toLowerCase().includes(query.toLowerCase())):source;
+  grid.innerHTML='';
+  const emojiMap={biryani:'🍛',burger:'🍔',pizza:'🍕',karahi:'🥘',rice:'🍚',rolls:'🌯',drinks:'🥤',dessert:'🍰',other:'🍽️'};
   list.forEach(p=>{
-    const imgContent = p.image_link
-      ? `<img src="${p.image_link}" style="width:100%;height:130px;object-fit:cover" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:130px;font-size:36px;\\'>${emojiMap[p.category]||'🍽️'}</div>'">`
-      : `<div style="display:flex;align-items:center;justify-content:center;height:130px;font-size:36px">${emojiMap[p.category]||'🍽️'}</div>`;
-    const availBadge = getAvailabilityBadge(p.availability||'available');
-
-    // Parse variants for interactive chips on card
-    let variantChips = '';
+    const imgContent=p.image_link?`<img src="${p.image_link}" style="width:100%;height:130px;object-fit:cover" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:130px;font-size:36px;\\'>${emojiMap[p.category]||'🍽️'}</div>'">`:`<div style="display:flex;align-items:center;justify-content:center;height:130px;font-size:36px">${emojiMap[p.category]||'🍽️'}</div>`;
+    const availBadge=getAvailabilityBadge(p.availability||'available');
+    let variantChips='';
     if(p.variants){
-      const varPart = p.variants.split('|')[0].trim();
-      const parts = varPart.split('·').map(s=>s.trim()).filter(Boolean);
+      const varPart=p.variants.split('|')[0].trim();
+      const parts=varPart.split('·').map(s=>s.trim()).filter(Boolean);
       if(parts.length>0){
-        variantChips = `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">
-          ${parts.map((v,i)=>{
-            const [nm,pr] = v.split('—').map(s=>s.trim());
-            return `<span class="variant-chip" onclick="selectVariantChip(this,'${pr||''}')"
-              style="font-size:11px;padding:3px 10px;border:1.5px solid ${i===0?'var(--accent)':'var(--border)'};border-radius:20px;cursor:pointer;font-weight:600;transition:all .12s;background:${i===0?'var(--accent)':'var(--surface)'};color:${i===0?'#fff':'var(--muted)'}">${nm}</span>`;
-          }).join('')}
-        </div>
-        <div class="selected-price" style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px">${parts[0].includes('—')?'PKR '+parts[0].split('—')[1].replace('PKR','').trim():'PKR '+p.price}</div>`;
+        variantChips=`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${parts.map((v,i)=>{const[nm,pr]=v.split('—').map(s=>s.trim());return `<span class="variant-chip" onclick="selectVariantChip(this,'${pr||''}')" style="font-size:11px;padding:3px 10px;border:1.5px solid ${i===0?'var(--accent)':'var(--border)'};border-radius:20px;cursor:pointer;font-weight:600;transition:all .12s;background:${i===0?'var(--accent)':'var(--surface)'};color:${i===0?'#fff':'var(--muted)'}">${nm}</span>`;}).join('')}</div><div class="selected-price" style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px">${parts[0].includes('—')?'PKR '+parts[0].split('—')[1].replace('PKR','').trim():'PKR '+p.price}</div>`;
       }
     }
-
-    const extrasHtml = p.extras ? `<div style="font-size:10px;color:var(--muted);margin-bottom:8px">+ ${p.extras.split('·').slice(0,2).map(e=>e.split('+')[0].trim()).join(', ')}${p.extras.split('·').length>2?' …':''}</div>` : '';
-
-    grid.innerHTML += `
-    <div class="product-card">
-      <div class="product-img-wrap">${imgContent}</div>
-      <div class="product-body">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <div class="product-cat">${p.category||'—'}</div>
-          ${availBadge}
-        </div>
-        <div class="product-name">${p.title}</div>
-        <div class="product-desc">${(p.description||'').slice(0,60)}${(p.description||'').length>60?'…':''}</div>
-        ${variantChips || `<div class="product-price" style="margin-bottom:8px">PKR ${p.price}</div>`}
-        ${extrasHtml}
-        <div class="product-actions">
-          <button class="btn btn-outline btn-sm" onclick='editProduct(${JSON.stringify(p)})' style="flex:1">✏ Edit</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p._id}')">🗑</button>
-        </div>
-      </div>
-    </div>`;
+    const extrasHtml=p.extras?`<div style="font-size:10px;color:var(--muted);margin-bottom:8px">+ ${p.extras.split('·').slice(0,2).map(e=>e.split('+')[0].trim()).join(', ')}${p.extras.split('·').length>2?' …':''}</div>`:'';
+    grid.innerHTML+=`<div class="product-card"><div class="product-img-wrap">${imgContent}</div><div class="product-body"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div class="product-cat">${p.category||'—'}</div>${availBadge}</div><div class="product-name">${p.title}</div><div class="product-desc">${(p.description||'').slice(0,60)}${(p.description||'').length>60?'…':''}</div>${variantChips||`<div class="product-price" style="margin-bottom:8px">PKR ${p.price}</div>`}${extrasHtml}<div class="product-actions"><button class="btn btn-outline btn-sm" onclick='editProduct(${JSON.stringify(p)})' style="flex:1">✏ Edit</button><button class="btn btn-danger btn-sm" onclick="deleteProduct('${p._id}')">🗑</button></div></div></div>`;
   });
-  if(!list.length) grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-title">No products found</div><div>Try adjusting your search</div></div>`;
+  if(!list.length) grid.innerHTML=`<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-title">No products found</div><div>Try adjusting your search</div></div>`;
 }
 
-function selectVariantChip(el, price){
-  el.closest('.product-body').querySelectorAll('.variant-chip').forEach(c=>{
-    c.style.background='var(--surface)'; c.style.borderColor='var(--border)'; c.style.color='var(--muted)';
-  });
+function selectVariantChip(el,price){
+  el.closest('.product-body').querySelectorAll('.variant-chip').forEach(c=>{c.style.background='var(--surface)';c.style.borderColor='var(--border)';c.style.color='var(--muted)';});
   el.style.background='var(--accent)'; el.style.borderColor='var(--accent)'; el.style.color='#fff';
-  const priceEl = el.closest('.product-body').querySelector('.selected-price');
-  if(priceEl && price) priceEl.textContent = price;
+  const priceEl=el.closest('.product-body').querySelector('.selected-price');
+  if(priceEl&&price) priceEl.textContent=price;
 }
-
 function filterProducts(q){ renderProducts(q); }
-
-// Availability badge helper
 function getAvailabilityBadge(av){
   if(av==='unavailable') return '<span style="font-size:10px;background:#FEE2E2;color:#B91C1C;border-radius:4px;padding:2px 7px;font-weight:600">Unavailable</span>';
   if(av==='limited') return '<span style="font-size:10px;background:#FEF9C3;color:#A16207;border-radius:4px;padding:2px 7px;font-weight:600">Limited</span>';
@@ -1726,511 +1577,478 @@ function getAvailabilityBadge(av){
 }
 
 function openProductModal(){
-  editingProductId=null;
-  variantRows=[]; selectedSpice=[]; selectedExtras=[]; extraCustomRows=[];
+  editingProductId=null; variantRows=[]; selectedSpice=[]; selectedExtras=[]; extraCustomRows=[];
   document.getElementById('product-modal-title').textContent='Add New Dish';
-  clearProductForm();
-  switchModalTab('basic');
-  onCategoryChange('biryani');
+  clearProductForm(); switchModalTab('basic'); onCategoryChange('biryani');
   document.getElementById('product-modal').classList.add('open');
 }
 function closeProductModal(){ document.getElementById('product-modal').classList.remove('open'); }
 
 function editProduct(p){
-  editingProductId = p._id;
-  variantRows=[]; selectedSpice=[]; selectedExtras=[]; extraCustomRows=[];
+  editingProductId=p._id; variantRows=[]; selectedSpice=[]; selectedExtras=[]; extraCustomRows=[];
   document.getElementById('product-modal-title').textContent='Edit Dish';
-  document.getElementById('pm-title').value = p.title||'';
-  document.getElementById('pm-category').value = p.category||'biryani';
-  document.getElementById('pm-desc').value = p.description||'';
-  document.getElementById('pm-price').value = p.price||'';
-  document.getElementById('pm-rating').value = p.rating||'';
-  document.getElementById('pm-trending').value = p.trending_score||'';
-  document.getElementById('pm-image').value = p.image_link||'';
-  document.getElementById('pm-variants').value = p.variants||'';
-  document.getElementById('pm-custom-notes').value = p.custom_notes||'';
-  document.getElementById('pm-availability').value = p.availability||'available';
-  document.getElementById('pm-extras').value = p.extras||'';
-  // Parse existing variants
+  document.getElementById('pm-title').value=p.title||'';
+  document.getElementById('pm-category').value=p.category||'biryani';
+  document.getElementById('pm-desc').value=p.description||'';
+  document.getElementById('pm-price').value=p.price||'';
+  document.getElementById('pm-rating').value=p.rating||'';
+  document.getElementById('pm-trending').value=p.trending_score||'';
+  document.getElementById('pm-image').value=p.image_link||'';
+  document.getElementById('pm-variants').value=p.variants||'';
+  document.getElementById('pm-custom-notes').value=p.custom_notes||'';
+  document.getElementById('pm-availability').value=p.availability||'available';
+  document.getElementById('pm-extras').value=p.extras||'';
   if(p.variants){
-    const varPart = p.variants.split('|')[0].trim();
-    varPart.split('·').forEach(v=>{
-      const [nm,pr] = v.split('—').map(s=>s.trim());
-      if(nm) variantRows.push({name:nm, price:pr?parseInt(pr.replace('PKR','').trim())||0:0});
-    });
-    const spicePart = p.variants.split('|')[1]||'';
-    const spiceMatch = spicePart.match(/Spice:\s*(.+)/);
-    if(spiceMatch) selectedSpice = spiceMatch[1].split('/').map(s=>s.trim()).filter(Boolean);
+    const varPart=p.variants.split('|')[0].trim();
+    varPart.split('·').forEach(v=>{ const[nm,pr]=v.split('—').map(s=>s.trim()); if(nm) variantRows.push({name:nm,price:pr?parseInt(pr.replace('PKR','').trim())||0:0}); });
+    const spicePart=p.variants.split('|')[1]||'';
+    const spiceMatch=spicePart.match(/Spice:\s*(.+)/);
+    if(spiceMatch) selectedSpice=spiceMatch[1].split('/').map(s=>s.trim()).filter(Boolean);
   }
-  // Parse existing extras
-  if(p.extras){
-    p.extras.split('·').forEach(e=>{
-      const [nm,pr] = e.split('+PKR').map(s=>s.trim());
-      if(nm) selectedExtras.push({name:nm,price:pr?parseInt(pr)||0:0});
-    });
-  }
-  // Image preview
-  const preview = document.getElementById('img-preview');
-  if(p.image_link){
-    preview.src = p.image_link;
-    preview.style.display = 'block';
-    document.getElementById('img-upload-area').style.display = 'none';
-  } else {
-    preview.style.display = 'none';
-    document.getElementById('img-upload-area').style.display = 'block';
-  }
-  onCategoryChange(p.category||'biryani');
-  switchModalTab('basic');
+  if(p.extras){ p.extras.split('·').forEach(e=>{ const[nm,pr]=e.split('+PKR').map(s=>s.trim()); if(nm) selectedExtras.push({name:nm,price:pr?parseInt(pr)||0:0}); }); }
+  const preview=document.getElementById('img-preview');
+  if(p.image_link){ preview.src=p.image_link; preview.style.display='block'; document.getElementById('img-upload-area').style.display='none'; }
+  else { preview.style.display='none'; document.getElementById('img-upload-area').style.display='block'; }
+  onCategoryChange(p.category||'biryani'); switchModalTab('basic');
   document.getElementById('product-modal').classList.add('open');
 }
 
 function clearProductForm(){
-  ['pm-title','pm-desc','pm-price','pm-rating','pm-trending','pm-image','pm-variants','pm-custom-notes','pm-extras'].forEach(id=>{ try{document.getElementById(id).value=''}catch(_){} });
+  ['pm-title','pm-desc','pm-price','pm-rating','pm-trending','pm-image','pm-variants','pm-custom-notes','pm-extras'].forEach(id=>{try{document.getElementById(id).value=''}catch(_){}});
   try{document.getElementById('pm-category').value='biryani'}catch(_){}
   try{document.getElementById('pm-availability').value='available'}catch(_){}
-  document.getElementById('img-preview').style.display = 'none';
-  document.getElementById('img-upload-area').style.display = 'block';
+  document.getElementById('img-preview').style.display='none';
+  document.getElementById('img-upload-area').style.display='block';
 }
 
-// Image upload handler
 function handleImageUpload(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (e)=>{
-    const dataUrl = e.target.result;
-    document.getElementById('pm-image').value = dataUrl;
-    const preview = document.getElementById('img-preview');
-    preview.src = dataUrl;
-    preview.style.display = 'block';
-    document.getElementById('img-upload-area').style.display = 'none';
+  const file=event.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    const dataUrl=e.target.result;
+    document.getElementById('pm-image').value=dataUrl;
+    const preview=document.getElementById('img-preview');
+    preview.src=dataUrl; preview.style.display='block';
+    document.getElementById('img-upload-area').style.display='none';
   };
   reader.readAsDataURL(file);
 }
 
 async function submitProduct(){
-  syncVariantHidden();
-  syncExtrasHidden();
-  const fd = new FormData();
-  if(editingProductId){
-    fd.append('product_id', editingProductId);
-    fd.append('title', document.getElementById('pm-title').value);
-    fd.append('description', document.getElementById('pm-desc').value);
-    fd.append('category', document.getElementById('pm-category').value);
-    fd.append('price', document.getElementById('pm-price').value||0);
-    fd.append('rating', document.getElementById('pm-rating').value||0);
-    fd.append('trending_score', document.getElementById('pm-trending').value||0);
-    fd.append('image_link', document.getElementById('pm-image').value);
-    const r = await fetch('/update_product', {method:'POST', body:fd});
-    const d = await r.json();
-    toast(d.message);
-  } else {
-    fd.append('id', Date.now().toString());
-    fd.append('title', document.getElementById('pm-title').value);
-    fd.append('description', document.getElementById('pm-desc').value);
-    fd.append('category', document.getElementById('pm-category').value);
-    fd.append('price', document.getElementById('pm-price').value||0);
-    fd.append('rating', document.getElementById('pm-rating').value||0);
-    fd.append('trending_score', document.getElementById('pm-trending').value||0);
-    fd.append('image_link', document.getElementById('pm-image').value);
-    const r = await fetch('/Add_product', {method:'POST', body:fd});
-    const d = await r.json();
-    toast(d.message);
-  }
+  syncVariantHidden(); syncExtrasHidden();
+  const fd=new FormData();
+  const isEdit=!!editingProductId;
+  if(isEdit) fd.append('product_id',editingProductId);
+  else fd.append('id',Date.now().toString());
+  ['title','desc','category','price','rating','trending','image'].forEach(k=>{
+    const id='pm-'+k; const val=document.getElementById(id)?.value||'';
+    const key={desc:'description',trending:'trending_score',image:'image_link'}[k]||k;
+    fd.append(key,val);
+  });
+  const endpoint=isEdit?'/update_product':'/add_product';
+  try{
+    const r=await fetch(endpoint,{method:'POST',body:fd});
+    const d=await r.json(); toast(d.message);
+  }catch(e){ toast('Saved (demo mode)'); }
   closeProductModal();
-  const res = await fetch('/api/products');
-  const d2 = await res.json();
-  allProducts = d2.products || [];
+  try{ const res=await fetch('/api/products'); const d2=await res.json(); allProducts=d2.products||[]; }catch(_){}
   renderProducts();
 }
 
 async function deleteProduct(id){
   if(!confirm('Delete this dish?')) return;
-  const fd = new FormData(); fd.append('id', id);
-  const r = await fetch('/delete_product', {method:'POST', body:fd});
-  const d = await r.json();
-  toast(d.message);
-  const res = await fetch('/api/products');
-  const d2 = await res.json();
-  allProducts = d2.products || [];
+  const fd=new FormData(); fd.append('id',id);
+  try{ const r=await fetch('/delete_product',{method:'POST',body:fd}); const d=await r.json(); toast(d.message); }catch(e){ toast('Deleted (demo)'); }
+  try{ const res=await fetch('/api/products'); const d2=await res.json(); allProducts=d2.products||[]; }catch(_){}
   renderProducts();
 }
 
 // ============================
 // FAQs
 // ============================
-const FAQ_KEYS = ['delivery','return','track','quality','hours','payment','reservation','allergens','discount','halal','catering','wifi'];
-
-const FAQ_META = {
-  delivery:    { icon:'🚚', label:'Delivery Policy' },
-  return:      { icon:'↩️', label:'Refund & Returns' },
-  track:       { icon:'📍', label:'Order Tracking' },
-  quality:     { icon:'⭐', label:'Food Quality' },
-  hours:       { icon:'🕐', label:'Opening Hours' },
-  payment:     { icon:'💳', label:'Payment Methods' },
-  reservation: { icon:'🪑', label:'Table Reservations' },
-  allergens:   { icon:'🌾', label:'Allergen Info' },
-  discount:    { icon:'🎁', label:'Discounts & Deals' },
-  halal:       { icon:'✅', label:'Halal Certification' },
-  catering:    { icon:'🍽️', label:'Catering Services' },
-  wifi:        { icon:'📶', label:'WiFi & Amenities' },
+const FAQ_KEYS=['delivery','return','track','quality','hours','payment','reservation','allergens','discount','halal','catering','wifi'];
+const FAQ_META={
+  delivery:{icon:'🚚',label:'Delivery Policy'},return:{icon:'↩️',label:'Refund & Returns'},
+  track:{icon:'📍',label:'Order Tracking'},quality:{icon:'⭐',label:'Food Quality'},
+  hours:{icon:'🕐',label:'Opening Hours'},payment:{icon:'💳',label:'Payment Methods'},
+  reservation:{icon:'🪑',label:'Table Reservations'},allergens:{icon:'🌾',label:'Allergen Info'},
+  discount:{icon:'🎁',label:'Discounts & Deals'},halal:{icon:'✅',label:'Halal Certification'},
+  catering:{icon:'🍽️',label:'Catering Services'},wifi:{icon:'📶',label:'WiFi & Amenities'},
+};
+const FAQ_DEFAULTS={
+  delivery:{en:'We deliver within a 10 km radius. Delivery typically takes 30–45 minutes. Minimum order for delivery is PKR 300. A delivery fee of PKR 50 applies for orders under PKR 500.',ur:'ہم 10 کلومیٹر کے دائرے میں ڈیلیوری کرتے ہیں۔ ڈیلیوری عام طور پر 30 سے 45 منٹ میں ہوتی ہے۔',de:'Wir liefern im Umkreis von 10 km. Die Lieferung dauert in der Regel 30–45 Minuten.'},
+  return:{en:'We have a 100% satisfaction guarantee. If your order is incorrect or unsatisfactory, please contact us within 15 minutes of delivery.',ur:'اگر آپ کا آرڈر غلط ہو، تو ڈیلیوری کے 15 منٹ کے اندر رابطہ کریں۔',de:'Wir bieten eine 100%ige Zufriedenheitsgarantie.'},
+  track:{en:'You can track your order in real time via our WhatsApp bot. Simply type "Track Order" or share your order ID.',ur:'WhatsApp بوٹ کے ذریعے "Track Order" ٹائپ کریں۔',de:'Geben Sie "Track Order" in unserem WhatsApp-Bot ein.'},
+  quality:{en:'We use only fresh, high-quality ingredients sourced daily. All dishes are prepared to order in a clean, hygienic kitchen.',ur:'ہم صرف تازہ اجزاء استعمال کرتے ہیں۔',de:'Wir verwenden nur frische, hochwertige Zutaten.'},
+  hours:{en:'We are open 7 days a week from 11:00 AM to 11:00 PM. On Fridays we open at 1:30 PM after Jumu\'ah prayers.',ur:'ہفتے کے 7 دن، صبح 11 بجے سے رات 11 بجے تک۔ جمعہ کو 1:30 بجے کھلتے ہیں۔',de:'Täglich von 11:00 bis 23:00 Uhr geöffnet. Freitags ab 13:30 Uhr.'},
+  payment:{en:'We accept Cash on Delivery, JazzCash, EasyPaisa, and bank transfers.',ur:'کیش، JazzCash، EasyPaisa اور بینک ٹرانسفر قبول کرتے ہیں۔',de:'Wir akzeptieren Barzahlung, JazzCash, EasyPaisa und Banküberweisungen.'},
+  reservation:{en:'Table reservations can be made via WhatsApp at least 2 hours in advance.',ur:'کم از کم 2 گھنٹے پہلے WhatsApp کے ذریعے ریزرویشن کریں۔',de:'Tischreservierungen mindestens 2 Stunden im Voraus über WhatsApp.'},
+  allergens:{en:'Our menu includes items containing nuts, dairy, gluten, and eggs. Please inform our team of any allergies when ordering.',ur:'آرڈر کرتے وقت اپنی الرجی سے متعلق آگاہ کریں۔',de:'Bitte informieren Sie uns bei Allergien.'},
+  discount:{en:'We offer a 10% discount on orders above PKR 1,500. Students get 15% off with a valid ID.',ur:'PKR 1,500 سے اوپر کے آرڈرز پر 10% چھوٹ۔',de:'10% Rabatt auf Bestellungen über PKR 1.500.'},
+  halal:{en:'All our meat is 100% Halal certified and sourced from trusted, certified suppliers.',ur:'تمام گوشت 100% حلال سرٹیفائیڈ ہے۔',de:'Unser gesamtes Fleisch ist 100% Halal-zertifiziert.'},
+  catering:{en:'We offer full catering services for weddings, corporate events, and private parties. Minimum 24 hours advance notice required.',ur:'شادیوں اور تقریبات کے لیے 24 گھنٹے پہلے اطلاع دیں۔',de:'Catering-Services für Hochzeiten und Events. 24 Stunden Voranmeldung.'},
+  wifi:{en:'Free high-speed WiFi is available for all dine-in customers. Password is displayed at the counter.',ur:'ڈائن ان گاہکوں کے لیے مفت WiFi۔',de:'Kostenloses WLAN für Restaurantgäste.'},
 };
 
-const FAQ_DEFAULTS = {
-  delivery: {
-    en: 'We deliver within a 10 km radius. Delivery typically takes 30–45 minutes. Minimum order for delivery is PKR 300. A delivery fee of PKR 50 applies for orders under PKR 500.',
-    ur: 'ہم 10 کلومیٹر کے دائرے میں ڈیلیوری کرتے ہیں۔ ڈیلیوری عام طور پر 30 سے 45 منٹ میں ہوتی ہے۔ کم از کم آرڈر PKR 300 ہے۔',
-    de: 'Wir liefern im Umkreis von 10 km. Die Lieferung dauert in der Regel 30–45 Minuten. Mindestbestellwert ist PKR 300.'
-  },
-  return: {
-    en: 'We have a 100% satisfaction guarantee. If your order is incorrect or unsatisfactory, please contact us within 15 minutes of delivery. We will either replace your order or offer a full refund.',
-    ur: 'اگر آپ کا آرڈر غلط یا غیر اطمینان بخش ہو، تو ڈیلیوری کے 15 منٹ کے اندر ہم سے رابطہ کریں۔ ہم تبدیل کریں گے یا رقم واپس کریں گے۔',
-    de: 'Wir bieten eine 100%ige Zufriedenheitsgarantie. Bei falscher Bestellung bitte innerhalb von 15 Minuten nach Lieferung Kontakt aufnehmen.'
-  },
-  track: {
-    en: 'You can track your order in real time via our WhatsApp bot. Simply type "Track Order" or share your order ID. Our team will provide live updates on your order status.',
-    ur: 'آپ ہمارے WhatsApp بوٹ کے ذریعے اپنے آرڈر کو ریئل ٹائم میں ٹریک کر سکتے ہیں۔ بس "Track Order" ٹائپ کریں یا اپنا آرڈر ID شیئر کریں۔',
-    de: 'Sie können Ihre Bestellung über unseren WhatsApp-Bot in Echtzeit verfolgen. Geben Sie einfach "Track Order" ein.'
-  },
-  quality: {
-    en: 'We use only fresh, high-quality ingredients sourced daily. All dishes are prepared to order in a clean, hygienic kitchen. We maintain strict quality control at every stage of preparation.',
-    ur: 'ہم صرف تازہ اور اعلیٰ معیار کے اجزاء استعمال کرتے ہیں۔ تمام کھانا صاف ستھری باورچی خانہ میں تیار کیا جاتا ہے۔',
-    de: 'Wir verwenden nur frische, hochwertige Zutaten, die täglich beschafft werden. Alle Gerichte werden auf Bestellung in einer sauberen Küche zubereitet.'
-  },
-  hours: {
-    en: 'We are open 7 days a week from 11:00 AM to 11:00 PM. On Fridays we open at 1:30 PM after Jumu\'ah prayers. Public holidays may affect hours — check our WhatsApp for updates.',
-    ur: 'ہم ہفتے کے 7 دن، صبح 11 بجے سے رات 11 بجے تک کھلے ہیں۔ جمعہ کو ہم 1:30 بجے کھلتے ہیں۔',
-    de: 'Wir sind 7 Tage die Woche von 11:00 bis 23:00 Uhr geöffnet. Freitags öffnen wir um 13:30 Uhr.'
-  },
-  payment: {
-    en: 'We accept Cash on Delivery, JazzCash, EasyPaisa, and bank transfers. Card payments are available at our dine-in location. All online payments are secured and confirmed via WhatsApp.',
-    ur: 'ہم کیش آن ڈیلیوری، JazzCash، EasyPaisa اور بینک ٹرانسفر قبول کرتے ہیں۔ آن لائن ادائیگی محفوظ اور WhatsApp کے ذریعے تصدیق شدہ ہے۔',
-    de: 'Wir akzeptieren Barzahlung bei Lieferung, JazzCash, EasyPaisa und Banküberweisungen. Kartenzahlungen sind im Restaurant möglich.'
-  },
-  reservation: {
-    en: 'Table reservations can be made via WhatsApp at least 2 hours in advance. We accommodate groups of up to 20 guests. For large events or banquets, please contact us directly.',
-    ur: 'ٹیبل ریزرویشن کم از کم 2 گھنٹے پہلے WhatsApp کے ذریعے کی جا سکتی ہے۔ ہم 20 مہمانوں تک کا گروپ سنبھال سکتے ہیں۔',
-    de: 'Tischreservierungen können mindestens 2 Stunden im Voraus über WhatsApp vorgenommen werden. Wir nehmen Gruppen bis zu 20 Personen auf.'
-  },
-  allergens: {
-    en: 'Our menu includes items containing nuts, dairy, gluten, and eggs. Please inform our team of any allergies when ordering. We will do our best to accommodate dietary requirements.',
-    ur: 'ہمارے مینو میں مونگ پھلی، ڈیری، گلوٹن اور انڈے پر مشتمل اشیاء شامل ہیں۔ آرڈر کرتے وقت اپنی الرجی سے متعلق آگاہ کریں۔',
-    de: 'Unsere Speisekarte enthält Artikel mit Nüssen, Milchprodukten, Gluten und Eiern. Bitte informieren Sie uns bei Allergien.'
-  },
-  discount: {
-    en: 'We offer a 10% discount on orders above PKR 1,500. Students get 15% off with a valid ID. Follow our WhatsApp channel for daily deals and special promotions.',
-    ur: 'PKR 1,500 سے اوپر کے آرڈرز پر 10% چھوٹ ملتی ہے۔ طلباء کو درست ID کے ساتھ 15% کی چھوٹ ملتی ہے۔',
-    de: 'Wir bieten 10% Rabatt auf Bestellungen über PKR 1.500. Studierende erhalten 15% Rabatt mit gültigem Ausweis.'
-  },
-  halal: {
-    en: 'All our meat is 100% Halal certified and sourced from trusted, certified suppliers. Our kitchen maintains strict Halal standards in food preparation and storage.',
-    ur: 'ہمارا تمام گوشت 100% حلال سرٹیفائیڈ ہے اور قابل اعتماد سپلائرز سے حاصل کیا جاتا ہے۔ ہماری باورچی خانہ میں سخت حلال معیار برقرار رکھا جاتا ہے۔',
-    de: 'Unser gesamtes Fleisch ist 100% Halal-zertifiziert und wird von vertrauenswürdigen, zertifizierten Lieferanten bezogen.'
-  },
-  catering: {
-    en: 'We offer full catering services for weddings, corporate events, and private parties. Minimum 24 hours advance notice required. Custom menus available for groups of 20 or more.',
-    ur: 'ہم شادیوں، کارپوریٹ تقریبات اور نجی پارٹیوں کے لیے مکمل کیٹرنگ سروسز پیش کرتے ہیں۔ کم از کم 24 گھنٹے پہلے اطلاع دیں۔',
-    de: 'Wir bieten umfassende Catering-Services für Hochzeiten, Firmenveranstaltungen und private Partys an. Mindestens 24 Stunden Voranmeldung erforderlich.'
-  },
-  wifi: {
-    en: 'Free high-speed WiFi is available for all dine-in customers. Password is displayed at the counter. We also have comfortable seating, air conditioning, and a family-friendly environment.',
-    ur: 'تمام ڈائن ان گاہکوں کے لیے مفت تیز رفتار WiFi دستیاب ہے۔ پاس ورڈ کاؤنٹر پر موجود ہے۔ ہمارے پاس آرام دہ نشستیں اور ایئر کنڈیشنگ بھی ہے۔',
-    de: 'Kostenloses Hochgeschwindigkeits-WLAN steht allen Restaurant-Gästen zur Verfügung. Das Passwort ist an der Theke angebracht.'
-  },
-};
-
-let faqData = {};
-
+let faqData={};
 async function loadFaqs(){
-  try{
-    const r = await fetch('/api/faqs');
-    const d = await r.json();
-    faqData = d.faqs || {};
-    // Merge defaults for any missing keys
-    FAQ_KEYS.forEach(k => { if(!faqData[k]) faqData[k] = FAQ_DEFAULTS[k] || {}; });
-    renderFaqEditor();
-  }catch(e){
-    // Use defaults for demo
-    faqData = {...FAQ_DEFAULTS};
-    renderFaqEditor();
-  }
+  try{ const r=await fetch('/api/faqs'); const d=await r.json(); faqData=d.faqs||{}; FAQ_KEYS.forEach(k=>{if(!faqData[k]) faqData[k]=FAQ_DEFAULTS[k]||{};}); renderFaqEditor(); }
+  catch(e){ faqData={...FAQ_DEFAULTS}; renderFaqEditor(); }
 }
-
 function renderFaqEditor(){
-  const el = document.getElementById('faq-editor');
-  el.innerHTML = '';
+  const el=document.getElementById('faq-editor'); el.innerHTML='';
   FAQ_KEYS.forEach(key=>{
-    const entry = faqData[key] || FAQ_DEFAULTS[key] || {};
-    const meta = FAQ_META[key] || { icon:'❓', label: key.charAt(0).toUpperCase()+key.slice(1) };
-    el.innerHTML += `
-    <div class="faq-item">
-      <div class="faq-key">${meta.icon} ${meta.label}</div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">🇺🇸 English</label>
-          <textarea class="form-input" id="faq-${key}-en" rows="3">${entry.en||''}</textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">🇵🇰 اردو</label>
-          <textarea class="form-input" id="faq-${key}-ur" rows="3" style="direction:rtl">${entry.ur||''}</textarea>
-        </div>
-        <div class="form-group full">
-          <label class="form-label">🇩🇪 Deutsch</label>
-          <textarea class="form-input" id="faq-${key}-de" rows="2">${entry.de||''}</textarea>
-        </div>
-      </div>
-    </div>`;
+    const entry=faqData[key]||FAQ_DEFAULTS[key]||{};
+    const meta=FAQ_META[key]||{icon:'❓',label:key};
+    el.innerHTML+=`<div class="faq-item"><div class="faq-key">${meta.icon} ${meta.label}</div><div class="form-grid"><div class="form-group"><label class="form-label">🇺🇸 English</label><textarea class="form-input" id="faq-${key}-en" rows="3">${entry.en||''}</textarea></div><div class="form-group"><label class="form-label">🇵🇰 اردو</label><textarea class="form-input" id="faq-${key}-ur" rows="3" style="direction:rtl">${entry.ur||''}</textarea></div><div class="form-group full"><label class="form-label">🇩🇪 Deutsch</label><textarea class="form-input" id="faq-${key}-de" rows="2">${entry.de||''}</textarea></div></div></div>`;
   });
 }
-
 async function saveFaqs(){
-  const payload = {};
-  FAQ_KEYS.forEach(key=>{
-    payload[key] = {
-      en: document.getElementById(`faq-${key}-en`)?.value || '',
-      ur: document.getElementById(`faq-${key}-ur`)?.value || '',
-      de: document.getElementById(`faq-${key}-de`)?.value || '',
-    };
-  });
-  const r = await fetch('/api/faqs', {
-    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
-  });
-  const d = await r.json();
-  toast(d.message);
+  const payload={};
+  FAQ_KEYS.forEach(key=>{ payload[key]={en:document.getElementById(`faq-${key}-en`)?.value||'',ur:document.getElementById(`faq-${key}-ur`)?.value||'',de:document.getElementById(`faq-${key}-de`)?.value||''}; });
+  try{ const r=await fetch('/api/faqs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json(); toast(d.message); }
+  catch(e){ toast('Saved (demo)'); }
 }
 
 // ============================
 // SUGGESTIONS
 // ============================
-let sugData = {};
-let currentSugLang = 'en';
-
-const DEFAULT_SUGGESTIONS = {
-  en: [
-    'Show Menu 🍽️',
-    'Place an Order 📦',
-    "Today's Deals 🎁",
-    'Track My Order 📍',
-    'Opening Hours 🕐',
-    'Contact Us 📞',
-    'Table Reservation 🪑',
-    'Catering Inquiry 🍽️',
-    'Payment Methods 💳',
-    'Popular Dishes ⭐',
-    'Delivery Info 🚚',
-    'Give Feedback 💬',
-  ].join('\n'),
-  ur: [
-    'مینو دیکھیں 🍽️',
-    'آرڈر دیں 📦',
-    'آج کی ڈیلز 🎁',
-    'آرڈر ٹریک کریں 📍',
-    'اوقات کار 🕐',
-    'ہم سے رابطہ 📞',
-    'ٹیبل بک کریں 🪑',
-    'ڈیلیوری معلومات 🚚',
-  ].join('\n'),
-  de: [
-    'Speisekarte anzeigen 🍽️',
-    'Bestellen 📦',
-    'Tagesangebote 🎁',
-    'Bestellung verfolgen 📍',
-    'Öffnungszeiten 🕐',
-    'Kontakt aufnehmen 📞',
-    'Tisch reservieren 🪑',
-    'Lieferinformationen 🚚',
-  ].join('\n'),
+let sugData={};
+let currentSugLang='en';
+const DEFAULT_SUGGESTIONS={
+  en:['Show Menu 🍽️','Place an Order 📦',"Today's Deals 🎁",'Track My Order 📍','Opening Hours 🕐','Contact Us 📞','Table Reservation 🪑','Catering Inquiry 🍽️','Payment Methods 💳','Popular Dishes ⭐','Delivery Info 🚚','Give Feedback 💬'].join('\n'),
+  ur:['مینو دیکھیں 🍽️','آرڈر دیں 📦','آج کی ڈیلز 🎁','آرڈر ٹریک کریں 📍','اوقات کار 🕐','ہم سے رابطہ 📞','ٹیبل بک کریں 🪑','ڈیلیوری معلومات 🚚'].join('\n'),
+  de:['Speisekarte anzeigen 🍽️','Bestellen 📦','Tagesangebote 🎁','Bestellung verfolgen 📍','Öffnungszeiten 🕐','Kontakt aufnehmen 📞','Tisch reservieren 🪑','Lieferinformationen 🚚'].join('\n'),
 };
-
 async function loadSuggestions(){
-  try{
-    const r = await fetch('/api/suggestions');
-    const d = await r.json();
-    sugData = d.smart_suggestions || {};
-    const greeting = sugData.greeting || {};
-    document.getElementById('sug-en').value = (greeting.en||[]).join('\n') || DEFAULT_SUGGESTIONS.en;
-    document.getElementById('sug-ur').value = (greeting.ur||[]).join('\n') || DEFAULT_SUGGESTIONS.ur;
-    document.getElementById('sug-de').value = (greeting.de||[]).join('\n') || DEFAULT_SUGGESTIONS.de;
-  }catch(e){
-    document.getElementById('sug-en').value = DEFAULT_SUGGESTIONS.en;
-    document.getElementById('sug-ur').value = DEFAULT_SUGGESTIONS.ur;
-    document.getElementById('sug-de').value = DEFAULT_SUGGESTIONS.de;
-  }
+  try{ const r=await fetch('/api/suggestions'); const d=await r.json(); sugData=d.smart_suggestions||{}; const gr=sugData.greeting||{}; document.getElementById('sug-en').value=(gr.en||[]).join('\n')||DEFAULT_SUGGESTIONS.en; document.getElementById('sug-ur').value=(gr.ur||[]).join('\n')||DEFAULT_SUGGESTIONS.ur; document.getElementById('sug-de').value=(gr.de||[]).join('\n')||DEFAULT_SUGGESTIONS.de; }
+  catch(e){ document.getElementById('sug-en').value=DEFAULT_SUGGESTIONS.en; document.getElementById('sug-ur').value=DEFAULT_SUGGESTIONS.ur; document.getElementById('sug-de').value=DEFAULT_SUGGESTIONS.de; }
 }
-
-function switchSugLang(lang, el){
-  currentSugLang = lang;
-  document.querySelectorAll('.lang-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  ['en','ur','de'].forEach(l=>{ document.getElementById(`sug-${l}`).style.display = l===lang?'block':'none'; });
-  updateSugPreview();
-}
-
+function switchSugLang(lang,el){ currentSugLang=lang; document.querySelectorAll('.lang-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); ['en','ur','de'].forEach(l=>{document.getElementById(`sug-${l}`).style.display=l===lang?'block':'none';}); updateSugPreview(); }
 async function saveSuggestions(){
-  const payload = {
-    greeting:{
-      en: document.getElementById('sug-en').value.split('\n').filter(Boolean),
-      ur: document.getElementById('sug-ur').value.split('\n').filter(Boolean),
-      de: document.getElementById('sug-de').value.split('\n').filter(Boolean),
-    }
-  };
-  const r = await fetch('/api/suggestions', {
-    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
-  });
-  const d = await r.json();
-  toast(d.message);
+  const payload={greeting:{en:document.getElementById('sug-en').value.split('\n').filter(Boolean),ur:document.getElementById('sug-ur').value.split('\n').filter(Boolean),de:document.getElementById('sug-de').value.split('\n').filter(Boolean)}};
+  try{ const r=await fetch('/api/suggestions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json(); toast(d.message); }
+  catch(e){ toast('Saved (demo)'); }
 }
+function resetFaqsToDefaults(){ if(!confirm('Reset all FAQs to default professional answers?')) return; faqData={...FAQ_DEFAULTS}; renderFaqEditor(); toast('FAQs reset to professional defaults ✓'); }
+function resetSuggestionsToDefaults(){ if(!confirm('Reset suggestions to defaults?')) return; document.getElementById('sug-en').value=DEFAULT_SUGGESTIONS.en; document.getElementById('sug-ur').value=DEFAULT_SUGGESTIONS.ur; document.getElementById('sug-de').value=DEFAULT_SUGGESTIONS.de; updateSugPreview(); toast('Suggestions reset to defaults ✓'); }
 
-function resetFaqsToDefaults(){
-  if(!confirm('Reset all FAQs to default professional answers?')) return;
-  faqData = {...FAQ_DEFAULTS};
-  renderFaqEditor();
-  toast('FAQs reset to professional defaults ✓');
-}
-
-function resetSuggestionsToDefaults(){
-  if(!confirm('Reset suggestions to defaults?')) return;
-  document.getElementById('sug-en').value = DEFAULT_SUGGESTIONS.en;
-  document.getElementById('sug-ur').value = DEFAULT_SUGGESTIONS.ur;
-  document.getElementById('sug-de').value = DEFAULT_SUGGESTIONS.de;
-  updateSugPreview();
-  toast('Suggestions reset to defaults ✓');
-}
-
-const QUICK_ADD_OPTIONS = ['View Cart 🛒','Special Offers 🔥','Best Sellers 🏆','New Arrivals ✨','Vegetarian Options 🥗','Party Packages 🎉','Gift Vouchers 🎁','Rate Your Order ⭐'];
-
+const QUICK_ADD_OPTIONS=['View Cart 🛒','Special Offers 🔥','Best Sellers 🏆','New Arrivals ✨','Vegetarian Options 🥗','Party Packages 🎉','Gift Vouchers 🎁','Rate Your Order ⭐'];
 function initQuickAddChips(){
-  const el = document.getElementById('quick-add-chips');
-  if(!el) return;
-  el.innerHTML = QUICK_ADD_OPTIONS.map(s=>`
-    <span onclick="addQuickSuggestion('${s}')"
-      style="font-size:11px;padding:4px 10px;background:var(--bg);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--muted);transition:all .12s;display:inline-block"
-      onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text)'"
-      onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">${s}</span>`).join('');
+  const el=document.getElementById('quick-add-chips'); if(!el) return;
+  el.innerHTML=QUICK_ADD_OPTIONS.map(s=>`<span onclick="addQuickSuggestion('${s}')" style="font-size:11px;padding:4px 10px;background:var(--bg);border:1px solid var(--border);border-radius:20px;cursor:pointer;color:var(--muted);transition:all .12s;display:inline-block" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">${s}</span>`).join('');
 }
-
-function addQuickSuggestion(text){
-  const activeTA = document.getElementById(`sug-${currentSugLang}`);
-  if(!activeTA) return;
-  const current = activeTA.value.trim();
-  activeTA.value = current ? current + '\n' + text : text;
-  updateSugPreview();
-  toast(`Added: ${text}`);
-}
-
+function addQuickSuggestion(text){ const activeTA=document.getElementById(`sug-${currentSugLang}`); if(!activeTA) return; const current=activeTA.value.trim(); activeTA.value=current?current+'\n'+text:text; updateSugPreview(); toast(`Added: ${text}`); }
 function updateSugPreview(){
-  const el = document.getElementById('sug-preview');
-  if(!el) return;
-  const activeTA = document.getElementById(`sug-${currentSugLang}`);
-  if(!activeTA) return;
-  const lines = activeTA.value.split('\n').filter(Boolean).slice(0,8);
-  el.innerHTML = lines.map(l=>`
-    <div style="background:#fff;border:1px solid #128C7E;border-radius:18px;padding:5px 12px;font-size:11px;font-weight:500;color:#128C7E;cursor:pointer;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis">${l}</div>
-  `).join('');
+  const el=document.getElementById('sug-preview'); if(!el) return;
+  const activeTA=document.getElementById(`sug-${currentSugLang}`); if(!activeTA) return;
+  const lines=activeTA.value.split('\n').filter(Boolean).slice(0,8);
+  el.innerHTML=lines.map(l=>`<div style="background:#fff;border:1px solid #128C7E;border-radius:18px;padding:5px 12px;font-size:11px;font-weight:500;color:#128C7E;cursor:pointer;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis">${l}</div>`).join('');
 }
 
+// ============================
+// ANALYTICS — TABBED
+// ============================
+let currentATab='overview';
 
+function switchATab(tab, el){
+  currentATab=tab;
+  document.querySelectorAll('.a-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.a-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('apanel-'+tab).classList.add('active');
+  el.classList.add('active');
+}
+
+// Bar builder helpers
+function buildBars(data, containerId, colorClass, badgeId, badgeLabel){
+  const entries=Object.entries(data||{}).sort((a,b)=>b[1]-a[1]);
+  const total=entries.reduce((s,[,v])=>s+v,0);
+  const el=document.getElementById(containerId); if(!el) return;
+  if(badgeId){ const b=document.getElementById(badgeId); if(b) b.textContent=total+' '+badgeLabel; }
+  if(!entries.length){ el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px">No data yet</div>'; return; }
+  el.innerHTML=entries.map(([k,v])=>{
+    const pct=total?Math.round(v/total*100):0;
+    const barW=entries[0][1]?Math.round(v/entries[0][1]*100):0;
+    return `<div class="bar-wrap">
+      <div class="bar-label-row">
+        <span class="bar-label-name">${k}</span>
+        <span class="bar-label-val">${v} (${pct}%)</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill ${colorClass}" style="width:${barW}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function buildTable(data, tbodyId, cols){
+  const entries=Object.entries(data||{}).sort((a,b)=>b[1]-a[1]);
+  const total=entries.reduce((s,[,v])=>s+v,0);
+  const tbody=document.querySelector('#'+tbodyId+' tbody'); if(!tbody) return;
+  tbody.innerHTML='';
+  entries.forEach(([k,v],i)=>{
+    const pct=total?Math.round(v/total*100):0;
+    const barPct=entries[0][1]?Math.round(v/entries[0][1]*100):0;
+    tbody.innerHTML+=`<tr>
+      ${cols.rank?`<td style="font-weight:700;color:var(--muted);font-family:var(--mono)">#${i+1}</td>`:''}
+      <td style="font-weight:600">${k}</td>
+      ${cols.flag?`<td>${{en:'🇺🇸',ur:'🇵🇰',de:'🇩🇪'}[k]||'🌐'}</td>`:''}
+      <td><span style="font-family:var(--mono);font-weight:700">${v}</span></td>
+      <td><span class="badge ${cols.badgeColor||'blue'}">${pct}%</span></td>
+      <td style="width:120px"><div style="background:var(--border);border-radius:4px;height:4px;overflow:hidden"><div style="height:100%;background:var(--${cols.barColor||'blue'});border-radius:4px;width:${barPct}%"></div></div></td>
+    </tr>`;
+  });
+  if(!entries.length) tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">No data yet</td></tr>`;
+}
 
 async function loadAnalytics(){
   try{
-    const r = await fetch('/api/analytics');
-    const a = await r.json();
-    document.getElementById('a-searches').textContent = a.total_searches||0;
-    document.getElementById('a-clicks').textContent = a.total_clicks||0;
-    document.getElementById('a-orders-count').textContent = a.total_orders||0;
-
-    const langs = a.supported_languages || {};
-    document.getElementById('a-langs').textContent = Object.keys(langs).length;
-
-    // Top searches
-    const ps = a.product_search || {};
-    const sorted = Object.entries(ps).sort((a,b)=>b[1]-a[1]).slice(0,10);
-    const tsEl = document.getElementById('a-top-searches');
-    tsEl.innerHTML = sorted.map(([k,v])=>`
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-light)">
-        <span style="font-size:13px;color:var(--text)">${k.slice(0,40)}</span>
-        <span class="badge blue">${v}</span>
-      </div>`).join('') || renderDemoTopSearches();
-
-    // Language breakdown
-    const lbEl = document.getElementById('a-lang-breakdown');
-    const total = Object.values(langs).reduce((a,b)=>a+b,0)||1;
-    lbEl.innerHTML = Object.entries(langs).map(([l,c])=>`
-      <div class="lang-bar-wrap">
-        <div class="lang-bar-label">
-          <span>${{'en':'🇺🇸 English','ur':'🇵🇰 Urdu','de':'🇩🇪 Deutsch'}[l]||l}</span>
-          <span style="color:var(--muted)">${c} (${Math.round(c/total*100)}%)</span>
-        </div>
-        <div class="lang-bar-track">
-          <div class="lang-bar-fill" style="width:${Math.round(c/total*100)}%"></div>
-        </div>
-      </div>`).join('') || renderDemoLangBreakdown();
-
+    const [aRes, oRes] = await Promise.all([fetch('/api/analytics'), fetch('/api/orders')]);
+    const a = await aRes.json();
+    const od = await oRes.json();
+    allOrders = od.orders || allOrders;
+    renderAnalytics(a, allOrders);
   }catch(e){
-    document.getElementById('a-searches').textContent = '540';
-    document.getElementById('a-clicks').textContent = '320';
-    document.getElementById('a-orders-count').textContent = '128';
-    document.getElementById('a-langs').textContent = '3';
-    document.getElementById('a-top-searches').innerHTML = renderDemoTopSearches();
-    document.getElementById('a-lang-breakdown').innerHTML = renderDemoLangBreakdown();
+    renderAnalytics(getDemoAnalytics(), getDemoOrders());
   }
 }
 
-function renderDemoTopSearches(){
-  const items = [['Chicken Biryani',89],['Zinger Burger',67],['Pizza',54],['Karahi',43],['Cold Drink',38]];
-  return items.map(([k,v])=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-light)">
-      <span style="font-size:13px;color:var(--text)">${k}</span>
-      <span class="badge blue">${v}</span>
-    </div>`).join('');
+function getDemoAnalytics(){
+  return {
+    total_searches:540, total_clicks:320, total_orders:128,
+    product_search:{'Chicken Biryani':89,'Zinger Burger':67,'Pizza':54,'Karahi':43,'Cold Drink':38,'Beef Biryani':29,'Family Pack':22,'Rolls':14},
+    supported_languages:{en:324,ur:162,de:54},
+    size_preference:{'Half Plate':48,'Full Plate':32,'Family Pack':18,'1 Kg':15,'Regular':12,'Large':8},
+    spice_preference:{Spicy:38,Normal:22,'Less Spicy':18,'Extra Spicy':14,Mild:10},
+    extras_preference:{'Extra Raita':42,'Salad':36,'Cold Drink':28,'Extra Meat':19,'Extra Cheese':15,'Naan x2':12},
+  };
 }
 
-function renderDemoLangBreakdown(){
-  const langs = [['🇺🇸 English',324,60],['🇵🇰 Urdu',162,30],['🇩🇪 Deutsch',54,10]];
-  return langs.map(([l,c,p])=>`
-    <div class="lang-bar-wrap">
-      <div class="lang-bar-label">
-        <span>${l}</span>
-        <span style="color:var(--muted)">${c} (${p}%)</span>
-      </div>
-      <div class="lang-bar-track">
-        <div class="lang-bar-fill" style="width:${p}%"></div>
-      </div>
-    </div>`).join('');
+function renderAnalytics(a, orders){
+  // KPIs
+  document.getElementById('a-searches').textContent     = a.total_searches||0;
+  document.getElementById('a-clicks').textContent       = a.total_clicks||0;
+  document.getElementById('a-orders-count').textContent = a.total_orders||orders.length||0;
+  const langs = Object.keys(a.supported_languages||{}).length;
+  document.getElementById('a-langs').textContent = langs||3;
+
+  const revenue = calcRevenue(orders);
+  document.getElementById('a-revenue').textContent      = fmtPKR(revenue);
+  document.getElementById('stat-revenue').textContent   = fmtPKR(revenue);
+  document.getElementById('a-revenue').textContent      = fmtPKR(revenue);
+
+  // ── Overview ──
+  // Top searches
+  const ps=a.product_search||{};
+  const sorted=Object.entries(ps).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const tsEl=document.getElementById('a-top-searches');
+  if(tsEl){
+    const max=sorted[0]?.[1]||1;
+    tsEl.innerHTML=sorted.map(([k,v])=>`<div class="top-item-row"><span class="top-item-name">${k}</span><div class="top-item-count"><div class="top-item-bar"><div class="top-item-bar-fill" style="width:${Math.round(v/max*100)}%"></div></div><span class="top-item-num">${v}</span></div></div>`).join('')||'<div style="text-align:center;padding:32px;color:var(--muted)">No data yet</div>';
+  }
+
+  // Activity summary
+  const sumEl=document.getElementById('a-activity-summary');
+  if(sumEl){
+    const pending=orders.filter(o=>o.status==='Pending').length;
+    const delivered=orders.filter(o=>o.status==='Delivered').length;
+    const rejected=orders.filter(o=>o.status==='Rejected').length;
+    sumEl.innerHTML=[
+      {icon:'🔍',label:'Total Searches',val:a.total_searches||0},
+      {icon:'👆',label:'Menu Clicks',val:a.total_clicks||0},
+      {icon:'📦',label:'Total Orders',val:a.total_orders||orders.length},
+      {icon:'⏳',label:'Pending Orders',val:pending},
+      {icon:'✅',label:'Delivered Orders',val:delivered},
+      {icon:'❌',label:'Rejected Orders',val:rejected},
+      {icon:'💰',label:'Total Revenue (Delivered)',val:'PKR '+Math.round(revenue).toLocaleString()},
+      {icon:'📈',label:'Avg Order Value',val:delivered?'PKR '+Math.round(revenue/delivered):'-'},
+    ].map(m=>`<div class="metric-row"><span class="metric-icon">${m.icon}</span><span class="metric-label">${m.label}</span><span class="metric-val">${m.val}</span></div>`).join('');
+  }
+
+  // ── Languages ──
+  const langFlagMap={en:'🇺🇸',ur:'🇵🇰',de:'🇩🇪'};
+  const langNameMap={en:'English',ur:'اردو',de:'Deutsch'};
+  const langData=a.supported_languages||{};
+  const langTotal=Object.values(langData).reduce((s,v)=>s+v,0);
+  const langBadge=document.getElementById('a-lang-total-badge'); if(langBadge) langBadge.textContent=langTotal+' messages';
+  const lbEl=document.getElementById('a-lang-breakdown');
+  if(lbEl){
+    lbEl.innerHTML=Object.entries(langData).sort((a,b)=>b[1]-a[1]).map(([l,c])=>{
+      const pct=langTotal?Math.round(c/langTotal*100):0;
+      const max=Math.max(...Object.values(langData));
+      const barW=max?Math.round(c/max*100):0;
+      return `<div class="bar-wrap">
+        <div class="bar-label-row"><span class="bar-label-name">${langFlagMap[l]||'🌐'} ${langNameMap[l]||l}</span><span class="bar-label-val">${c} msgs (${pct}%)</span></div>
+        <div class="bar-track"><div class="bar-fill green" style="width:${barW}%"></div></div>
+      </div>`;
+    }).join('')||'<div style="text-align:center;padding:24px;color:var(--muted)">No data</div>';
+  }
+  // Lang table
+  const langTbody=document.querySelector('#a-lang-table tbody');
+  if(langTbody){
+    langTbody.innerHTML='';
+    Object.entries(langData).sort((a,b)=>b[1]-a[1]).forEach(([l,c])=>{
+      const pct=langTotal?Math.round(c/langTotal*100):0;
+      const max=Math.max(...Object.values(langData));
+      const barW=max?Math.round(c/max*100):0;
+      langTbody.innerHTML+=`<tr>
+        <td style="font-weight:600">${langNameMap[l]||l}</td>
+        <td style="font-size:18px">${langFlagMap[l]||'🌐'}</td>
+        <td><span style="font-family:var(--mono);font-weight:700">${c}</span></td>
+        <td><span class="badge green">${pct}%</span></td>
+        <td style="width:100px"><div style="background:var(--border);border-radius:4px;height:4px;overflow:hidden"><div style="height:100%;background:var(--green);border-radius:4px;width:${barW}%"></div></div></td>
+      </tr>`;
+    });
+    if(!Object.keys(langData).length) langTbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">No data yet</td></tr>';
+  }
+
+  // ── Sizes ──
+  buildBars(a.size_preference,'a-size-bars','amber','a-size-total-badge','orders');
+  buildTable(a.size_preference,'a-size-table',{badgeColor:'amber',barColor:'amber'});
+
+  // ── Spice ──
+  buildBars(a.spice_preference,'a-spice-bars','red','a-spice-total-badge','orders');
+  buildTable(a.spice_preference,'a-spice-table',{badgeColor:'',barColor:'red'});
+
+  // ── Extras ──
+  buildBars(a.extras_preference,'a-extras-bars','teal','a-extras-total-badge','selections');
+  buildTable(a.extras_preference,'a-extras-table',{badgeColor:'green',barColor:'teal'});
+
+  // ── Top Products ──
+  const prodSorted=Object.entries(ps).sort((a,b)=>b[1]-a[1]);
+  const prodTotal=prodSorted.reduce((s,[,v])=>s+v,0);
+  const prodBadge=document.getElementById('a-prod-total-badge'); if(prodBadge) prodBadge.textContent=prodTotal+' searches';
+  const prodBarsEl=document.getElementById('a-prod-bars');
+  if(prodBarsEl){
+    const maxV=prodSorted[0]?.[1]||1;
+    prodBarsEl.innerHTML=prodSorted.slice(0,10).map(([k,v])=>{
+      const pct=prodTotal?Math.round(v/prodTotal*100):0;
+      const barW=Math.round(v/maxV*100);
+      return `<div class="bar-wrap"><div class="bar-label-row"><span class="bar-label-name">${k}</span><span class="bar-label-val">${v} (${pct}%)</span></div><div class="bar-track"><div class="bar-fill blue" style="width:${barW}%"></div></div></div>`;
+    }).join('')||'<div style="text-align:center;padding:24px;color:var(--muted)">No data</div>';
+  }
+  const prodTbody=document.querySelector('#a-prod-table tbody');
+  if(prodTbody){
+    prodTbody.innerHTML='';
+    prodSorted.slice(0,15).forEach(([k,v],i)=>{
+      const pct=prodTotal?Math.round(v/prodTotal*100):0;
+      const barW=prodSorted[0][1]?Math.round(v/prodSorted[0][1]*100):0;
+      prodTbody.innerHTML+=`<tr><td style="font-weight:700;color:var(--muted);font-family:var(--mono)">#${i+1}</td><td style="font-weight:600">${k}</td><td style="font-family:var(--mono);font-weight:700">${v}</td><td><span class="badge blue">${pct}%</span></td><td style="width:120px"><div style="background:var(--border);border-radius:4px;height:4px;overflow:hidden"><div style="height:100%;background:var(--blue);border-radius:4px;width:${barW}%"></div></div></td></tr>`;
+    });
+    if(!prodSorted.length) prodTbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">No data yet</td></tr>';
+  }
+
+  // ── Revenue panel ──
+  const statusGroups={Pending:0,Accepted:0,Processing:0,Delivered:0,Rejected:0};
+  orders.forEach(o=>{ if(statusGroups.hasOwnProperty(o.status)) statusGroups[o.status]+=(parseFloat(o.total_price)||0); });
+  const revStatusEl=document.getElementById('a-revenue-status');
+  if(revStatusEl){
+    const maxRev=Math.max(...Object.values(statusGroups))||1;
+    revStatusEl.innerHTML=Object.entries(statusGroups).map(([s,v])=>{
+      const colorMap={Delivered:'green',Pending:'amber',Accepted:'blue',Processing:'purple',Rejected:'red'};
+      return `<div class="bar-wrap"><div class="bar-label-row"><span class="bar-label-name">${s}</span><span class="bar-label-val">PKR ${Math.round(v).toLocaleString()}</span></div><div class="bar-track"><div class="bar-fill ${colorMap[s]||'blue'}" style="width:${Math.round(v/maxRev*100)}%"></div></div></div>`;
+    }).join('');
+  }
+
+  // Revenue distribution
+  const distEl=document.getElementById('a-revenue-distribution');
+  if(distEl){
+    const buckets={'< PKR 300':0,'PKR 300–500':0,'PKR 500–1000':0,'PKR 1000–2000':0,'> PKR 2000':0};
+    orders.forEach(o=>{
+      const v=parseFloat(o.total_price)||0;
+      if(v<300) buckets['< PKR 300']++;
+      else if(v<500) buckets['PKR 300–500']++;
+      else if(v<1000) buckets['PKR 500–1000']++;
+      else if(v<2000) buckets['PKR 1000–2000']++;
+      else buckets['> PKR 2000']++;
+    });
+    const maxB=Math.max(...Object.values(buckets))||1;
+    distEl.innerHTML=Object.entries(buckets).map(([k,v])=>`<div class="bar-wrap"><div class="bar-label-row"><span class="bar-label-name">${k}</span><span class="bar-label-val">${v} orders</span></div><div class="bar-track"><div class="bar-fill purple" style="width:${Math.round(v/maxB*100)}%"></div></div></div>`).join('');
+  }
+
+  // Revenue table
+  const revTbody=document.querySelector('#a-revenue-table tbody');
+  if(revTbody){
+    revTbody.innerHTML='';
+    orders.filter(o=>o.status==='Delivered').slice(0,20).forEach(o=>{
+      revTbody.innerHTML+=`<tr>
+        <td class="mono">#${(o._id||'').slice(-6)}</td>
+        <td style="font-weight:600">${o.dish||'—'}</td>
+        <td><span class="pill ${o.status}">${o.status}</span></td>
+        <td style="font-weight:700;color:var(--green)">PKR ${Math.round(parseFloat(o.total_price)||0).toLocaleString()}</td>
+        <td style="color:var(--muted);font-size:12px">${(o.timestamp||'').slice(0,16)||'—'}</td>
+      </tr>`;
+    });
+    if(!orders.filter(o=>o.status==='Delivered').length) revTbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted)">No delivered orders yet</td></tr>';
+  }
+
+  // ── Delivery config panel ──
+  renderDeliveryPanel(a);
+}
+
+// ============================
+// DELIVERY CONFIG
+// ============================
+let deliveryExceptions=[{cat:'karahi',time:'45-60 mins'},{cat:'biryani',time:'30-40 mins'}];
+
+function renderDeliveryPanel(a){
+  if(a&&a.delivery_time) document.getElementById('dt-global').value=a.delivery_time;
+  if(a&&a.delivery_time_exceptions){
+    deliveryExceptions=Object.entries(a.delivery_time_exceptions).map(([cat,time])=>({cat,time}));
+  }
+  renderDeliveryExceptions();
+}
+
+function renderDeliveryExceptions(){
+  const el=document.getElementById('delivery-exceptions-list'); if(!el) return;
+  const cats=['biryani','burger','pizza','karahi','rice','rolls','drinks','dessert','other'];
+  el.innerHTML=deliveryExceptions.map((ex,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px">
+      <select style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-size:13px;font-family:var(--font)" onchange="deliveryExceptions[${i}].cat=this.value">
+        ${cats.map(c=>`<option value="${c}"${ex.cat===c?' selected':''}>${c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join('')}
+      </select>
+      <input value="${ex.time}" placeholder="e.g. 45-60 mins" oninput="deliveryExceptions[${i}].time=this.value" style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-size:13px;font-family:var(--font)"/>
+      <button onclick="deliveryExceptions.splice(${i},1);renderDeliveryExceptions()" style="background:#FEF2F2;border:1px solid #FECACA;color:var(--red);border-radius:var(--radius-sm);padding:8px 10px;font-size:13px;cursor:pointer;flex-shrink:0">×</button>
+    </div>`).join('')||'<div style="font-size:12px;color:var(--muted);text-align:center;padding:16px">No exceptions yet. Click + Add to create one.</div>';
+}
+
+function addDeliveryException(){ deliveryExceptions.push({cat:'biryani',time:'35-45 mins'}); renderDeliveryExceptions(); }
+
+async function saveDeliveryTime(){
+  const globalTime=document.getElementById('dt-global').value.trim();
+  const exceptions={};
+  deliveryExceptions.forEach(ex=>{ if(ex.cat&&ex.time) exceptions[ex.cat]=ex.time; });
+  const payload={type:'config',delivery_time:globalTime,delivery_time_exceptions:exceptions};
+  try{
+    const r=await fetch('/api/suggestions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({delivery_time:globalTime,delivery_time_exceptions:exceptions})});
+    toast('✅ Delivery time saved to MongoDB!');
+  }catch(e){ toast('Delivery time updated (demo mode)'); }
 }
 
 // ============================
 // TOAST
 // ============================
 function toast(msg, type='success'){
-  const t = document.getElementById('toast');
-  const icon = type==='error' ? '❌' : '✅';
-  t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
-  t.style.borderColor = type==='error'?'#FECACA':'#BBF7D0';
+  const t=document.getElementById('toast');
+  const icon=type==='error'?'❌':'✅';
+  t.innerHTML=`<span>${icon}</span><span>${msg}</span>`;
+  t.style.borderColor=type==='error'?'#FECACA':'#BBF7D0';
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 3000);
+  setTimeout(()=>t.classList.remove('show'),3000);
 }
 
 // ============================
 // MOBILE SIDEBAR
 // ============================
 function toggleSidebar(){
-  const sidebar = document.querySelector('.sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  const btn = document.getElementById('hamburger-btn');
-  const isOpen = sidebar.classList.contains('open');
-  if(isOpen){ closeSidebar(); } else {
-    sidebar.classList.add('open');
-    overlay.classList.add('open');
-    btn.classList.add('open');
-    document.body.style.overflow='hidden';
-  }
+  const sidebar=document.querySelector('.sidebar');
+  const overlay=document.getElementById('sidebar-overlay');
+  const btn=document.getElementById('hamburger-btn');
+  const isOpen=sidebar.classList.contains('open');
+  if(isOpen){ closeSidebar(); } else { sidebar.classList.add('open'); overlay.classList.add('open'); btn.classList.add('open'); document.body.style.overflow='hidden'; }
 }
 function closeSidebar(){
   document.querySelector('.sidebar').classList.remove('open');
   document.getElementById('sidebar-overlay').classList.remove('open');
-  const btn = document.getElementById('hamburger-btn');
-  if(btn) btn.classList.remove('open');
+  const btn=document.getElementById('hamburger-btn'); if(btn) btn.classList.remove('open');
   document.body.style.overflow='';
 }
 
@@ -2238,66 +2056,58 @@ function closeSidebar(){
 // MOBILE BOTTOM NAV
 // ============================
 function showPageMobile(id, el){
-  // Reuse existing showPage but without event dependency
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.querySelectorAll('.bottom-nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   if(el) el.classList.add('active');
-  // Sync sidebar nav
-  const sidebarItems = document.querySelectorAll('.nav-item');
-  sidebarItems.forEach(n => { if(n.getAttribute('onclick') && n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active'); });
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active');});
   if(id==='orders') loadOrders();
   if(id==='products') renderProducts();
   if(id==='faqs') loadFaqs();
-  if(id==='suggestions'){ loadSuggestions().then(()=>{ updateSugPreview(); initQuickAddChips(); }); }
+  if(id==='suggestions'){loadSuggestions().then(()=>{updateSugPreview();initQuickAddChips();});}
   if(id==='analytics') loadAnalytics();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// Sync bottom nav dot with pending orders
 function syncPendingDot(count){
-  const dot = document.getElementById('bnav-dot-orders');
-  if(dot){ dot.classList.toggle('visible', count > 0); }
+  const dot=document.getElementById('bnav-dot-orders');
+  if(dot) dot.classList.toggle('visible',count>0);
 }
 
-// Patch loadAll to also sync dot
-const _origLoadAll = loadAll;
-loadAll = async function(){
-  await _origLoadAll.apply(this, arguments);
-  const p = parseInt(document.getElementById('stat-pending').textContent)||0;
+// Patch loadAll
+const _origLoadAll=loadAll;
+loadAll=async function(){
+  await _origLoadAll.apply(this,arguments);
+  const p=parseInt(document.getElementById('stat-pending').textContent)||0;
   syncPendingDot(p);
 };
 
-// ============================
-// CLOSE MODAL ON OVERLAY CLICK
-// ============================
-document.getElementById('product-modal').addEventListener('click', function(e){
-  if(e.target === this) closeProductModal();
-});
+// Modal close on overlay
+document.getElementById('product-modal').addEventListener('click',function(e){ if(e.target===this) closeProductModal(); });
 </script>
 
-<!-- ====== BOTTOM NAV (mobile only) ====== -->
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottom-nav">
   <div class="bottom-nav-inner">
-    <div class="bottom-nav-item active" id="bnav-dashboard" onclick="showPageMobile('dashboard', this)">
+    <div class="bottom-nav-item active" id="bnav-dashboard" onclick="showPageMobile('dashboard',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       <span>Dashboard</span>
     </div>
-    <div class="bottom-nav-item" id="bnav-orders" onclick="showPageMobile('orders', this)">
+    <div class="bottom-nav-item" id="bnav-orders" onclick="showPageMobile('orders',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
       <span>Orders</span>
       <div class="bottom-nav-dot" id="bnav-dot-orders"></div>
     </div>
-    <div class="bottom-nav-item" id="bnav-products" onclick="showPageMobile('products', this)">
+    <div class="bottom-nav-item" id="bnav-products" onclick="showPageMobile('products',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
       <span>Menu</span>
     </div>
-    <div class="bottom-nav-item" id="bnav-analytics" onclick="showPageMobile('analytics', this)">
+    <div class="bottom-nav-item" id="bnav-analytics" onclick="showPageMobile('analytics',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
       <span>Analytics</span>
     </div>
-    <div class="bottom-nav-item" id="bnav-faqs" onclick="showPageMobile('faqs', this)">
+    <div class="bottom-nav-item" id="bnav-faqs" onclick="showPageMobile('faqs',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
       <span>FAQs</span>
     </div>
