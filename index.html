@@ -1,1987 +1,1112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuxeStore | Professional Ops</title>
-
-    <!-- LIBRARIES -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
-
-        /* ============================================================
-           ROOT VARIABLES — LIGHT BLUE & WHITE THEME
-        ============================================================ */
-        :root {
-            --sidebar-width: 260px;
-            --primary: #add8e6;            /* Light Blue */
-            --primary-dark: #7ec8e3;       /* Darker light blue for hover */
-            --primary-text: #1a6b8a;       /* Dark text on light blue */
-            --primary-deep: #0e7490;       /* Deep accent */
-            --accent: #64748b;
-            --bg-main: #ffffff;            /* White background */
-            --bg-side: #add8e6;            /* Light blue sidebar */
-            --border: #e2e8f0;
-            --card-gradient-start: #e8f6fa;
-            --card-gradient-end: #ffffff;
-            --text-dark: #0f172a;
-            --text-muted: #475569;
-        }
-
-        /* ============================================================
-           BASE STYLES — font sizes increased
-        ============================================================ */
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-main);
-            color: var(--text-dark);
-            margin: 0;
-            overflow-x: hidden;
-            font-size: 14px; /* body text 14px */
-        }
-
-        h1, h2, h3, h4, h5, h6,
-        .heading-text {
-            font-size: 16px !important; /* headings 16px */
-            color: var(--text-dark);
-        }
-
-        h2 { font-size: 20px !important; }
-        h3 { font-size: 18px !important; }
-
-        .mono { font-family: 'JetBrains Mono', monospace; }
-
-        /* ============================================================
-           STICKY TOP HEADER
-        ============================================================ */
-        .sticky-top-header {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: var(--primary);
-            border-bottom: 1px solid var(--primary-dark);
-            padding: 0.75rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(173,216,230,0.4);
-        }
-
-        .sticky-top-header h2,
-        .sticky-top-header p {
-            color: var(--primary-text) !important;
-        }
-
-        /* ============================================================
-           SIDEBAR — RIGHT SIDE, LIGHT BLUE
-        ============================================================ */
-        .sidebar {
-            width: var(--sidebar-width);
-            height: 100vh;
-            position: fixed;
-            right: 0;
-            top: 0;
-            background: var(--bg-side); /* Light blue */
-            border-left: 1px solid var(--primary-dark);
-            padding: 2.5rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto;
-        }
-
-        /* Sidebar collapsed state (slides RIGHT off screen) */
-        .sidebar.collapsed {
-            transform: translateX(100%);
-        }
-
-        /* Mobile: hidden by default, slides in from right */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(100%);
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .sidebar.collapsed {
-                transform: translateX(100%);
-            }
-            .main-content {
-                margin-right: 0 !important;
-                padding: 1.5rem !important;
-            }
-            .sidebar-overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(173, 216, 230, 0.55); /* Translucent light blue overlay */
-                backdrop-filter: blur(2px);
-                z-index: 90;
-            }
-            .sidebar-overlay.active {
-                display: block;
-            }
-        }
-
-        /* ============================================================
-           MAIN CONTENT — margin on right because sidebar is right
-        ============================================================ */
-        .main-content {
-            margin-right: var(--sidebar-width);
-            margin-left: 0;
-            padding: 0;
-            min-height: 100vh;
-            transition: margin-right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: var(--bg-main);
-        }
-
-        .main-content.sidebar-collapsed {
-            margin-right: 0;
-        }
-
-        .main-content-inner {
-            padding: 2rem 2.5rem;
-        }
-
-        /* ============================================================
-           NAV ITEMS — hover uses light blue shadow
-        ============================================================ */
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 14px;
-            border-radius: 9999px; /* Pill style */
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--primary-text);
-            transition: all 0.25s ease;
-            cursor: pointer;
-            margin-bottom: 6px;
-        }
-
-        .nav-item:hover {
-            color: var(--primary-deep);
-            background: transparent;
-            box-shadow: 0 4px 12px rgba(14, 116, 144, 0.25); /* Subtle light blue shadow */
-            transform: translateX(-2px);
-        }
-
-        .nav-item.active {
-            background: rgba(255,255,255,0.6);
-            color: var(--primary-deep);
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(14,116,144,0.2);
-        }
-
-        /* ============================================================
-           GLASS CARD — soft light blue gradient, white content area
-        ============================================================ */
-        .glass-card {
-            background: linear-gradient(135deg, var(--card-gradient-start) 0%, var(--card-gradient-end) 60%);
-            border: 1px solid #c7e8f3;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 1px 6px rgba(173,216,230,0.25);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .glass-card:hover {
-            box-shadow: 0 4px 16px rgba(173,216,230,0.45);
-        }
-
-        /* Card header accent */
-        .card-header-accent {
-            background: var(--primary);
-            color: var(--primary-text);
-            border-radius: 8px 8px 0 0;
-            padding: 10px 16px;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 0.04em;
-        }
-
-        /* ============================================================
-           INPUT FIELDS
-        ============================================================ */
-        .input-field {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 9999px; /* Pill inputs */
-            border: 1px solid #a8d8ea;
-            background: #ffffff;
-            font-size: 14px;
-            transition: all 0.2s;
-            outline: none;
-            color: var(--text-dark);
-        }
-
-        .input-field:focus {
-            border-color: var(--primary-deep);
-            box-shadow: 0 0 0 3px rgba(14,116,144,0.1);
-        }
-
-        textarea.input-field {
-            border-radius: 12px; /* Textarea keeps rectangular-ish */
-        }
-
-        /* ============================================================
-           BUTTONS — Pill style, light blue background
-        ============================================================ */
-        .btn-primary {
-            background: var(--primary);
-            color: var(--primary-text);
-            padding: 12px 24px;
-            border-radius: 9999px; /* Pill */
-            font-weight: 700;
-            font-size: 14px;
-            transition: all 0.2s;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 4px 14px rgba(173,216,230,0.6);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: #ffffff;
-            border: 1px solid #a8d8ea;
-            padding: 10px 16px;
-            border-radius: 9999px; /* Pill */
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--primary-text);
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary);
-            border-color: var(--primary-dark);
-        }
-
-        /* ============================================================
-           SIDEBAR TOGGLE BUTTON
-        ============================================================ */
-        .sidebar-toggle-btn {
-            position: fixed;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            z-index: 200;
-            background: var(--primary);
-            color: var(--primary-text);
-            border: none;
-            border-radius: 8px 0 0 8px;
-            width: 24px;
-            height: 48px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            box-shadow: -2px 0 8px rgba(173,216,230,0.4);
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-toggle-btn:hover {
-            background: var(--primary-dark);
-            width: 28px;
-        }
-
-        /* ============================================================
-           TAB PANES
-        ============================================================ */
-        .tab-pane { display: none; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .tab-pane.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ============================================================
-           SCROLLBAR
-        ============================================================ */
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-
-        /* ============================================================
-           GROWTH TAGS & BADGES
-        ============================================================ */
-        .growth-tag {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 9999px;
-            font-weight: 700;
-        }
-
-        /* Trending badge — light blue */
-        .trending-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--primary);
-            color: var(--primary-text);
-            font-size: 9px;
-            font-weight: 800;
-            padding: 3px 8px;
-            border-radius: 9999px;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        /* ============================================================
-           FLOATING CHAT
-        ============================================================ */
-        .floating-chat {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 56px;
-            height: 56px;
-            background: var(--primary);
-            color: var(--primary-text);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 10px 25px rgba(173,216,230,0.5);
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
-        }
-
-        .floating-chat:hover {
-            transform: scale(1.1);
-            box-shadow: 0 14px 30px rgba(173,216,230,0.7);
-        }
-
-        /* ============================================================
-           FLOATING MOBILE MENU BUTTON
-        ============================================================ */
-        .floating-mobile-menu {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 52px;
-            height: 52px;
-            background: var(--primary);
-            color: var(--primary-text);
-            border-radius: 50%;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            box-shadow: 0 8px 20px rgba(173,216,230,0.5);
-            cursor: pointer;
-            z-index: 999;
-            border: none;
-            transition: all 0.3s ease;
-        }
-
-        @media (max-width: 1024px) {
-            .floating-mobile-menu { display: flex; }
-            .floating-chat { bottom: 84px; }
-        }
-
-        /* ============================================================
-           MOBILE TOGGLE
-        ============================================================ */
-        .mobile-toggle {
-            display: none;
-            cursor: pointer;
-            padding: 8px;
-            font-size: 20px;
-            color: var(--primary-text);
-        }
-
-        @media (max-width: 1024px) {
-            .mobile-toggle { display: block; }
-        }
-
-        /* ============================================================
-           TOAST NOTIFICATION
-        ============================================================ */
-        .toast-container {
-            position: fixed;
-            top: 80px;
-            right: 24px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .toast {
-            background: var(--primary);
-            color: var(--primary-text);
-            border: 1px solid var(--primary-dark);
-            border-radius: 9999px;
-            padding: 12px 20px;
-            font-size: 13px;
-            font-weight: 600;
-            box-shadow: 0 6px 20px rgba(173,216,230,0.5);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: toastIn 0.35s ease, toastOut 0.35s ease 2.65s forwards;
-            max-width: 320px;
-        }
-
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateX(40px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes toastOut {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(40px); }
-        }
-
-        /* ============================================================
-           CONFIRMATION POPUP (Delete)
-        ============================================================ */
-        .confirm-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(173,216,230,0.25);
-            backdrop-filter: blur(4px);
-            z-index: 3000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .confirm-overlay.active {
-            display: flex;
-        }
-
-        .confirm-box {
-            background: #fff;
-            border: 1px solid var(--primary);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 420px;
-            width: 90%;
-            box-shadow: 0 20px 50px rgba(173,216,230,0.5);
-            text-align: center;
-        }
-
-        .confirm-box h4 {
-            font-size: 16px !important;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        /* ============================================================
-           FOOTER
-        ============================================================ */
-        .site-footer {
-            background: #ffffff;
-            border-top: 1px solid #c7e8f3;
-            padding: 1.5rem 2.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .site-footer p, .site-footer a {
-            color: var(--primary-text);
-            font-size: 13px;
-            text-decoration: none;
-        }
-
-        .site-footer a:hover {
-            color: var(--primary-deep);
-            text-decoration: underline;
-        }
-
-        /* ============================================================
-           DASHBOARD GRID — 3 columns on large screens
-        ============================================================ */
-        .dashboard-stat-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 1.5rem;
-        }
-
-        @media (min-width: 640px) {
-            .dashboard-stat-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (min-width: 1024px) {
-            .dashboard-stat-grid { grid-template-columns: repeat(3, 1fr); } /* 3 columns */
-        }
-
-        /* ============================================================
-           INVENTORY CARDS — spacing on mobile
-        ============================================================ */
-        @media (max-width: 640px) {
-            #full-inventory-grid .glass-card {
-                margin-bottom: 1rem;
-            }
-        }
-
-        /* ============================================================
-           IMAGE PREVIEW in form
-        ============================================================ */
-        .img-preview-zone {
-            border: 2px dashed #a8d8ea;
-            border-radius: 16px;
-            background: #f0faff;
-            min-height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .img-preview-zone:hover {
-            border-color: var(--primary-deep);
-            background: #e0f4fb;
-        }
-
-        .img-preview-zone img {
-            max-height: 160px;
-            max-width: 100%;
-            object-fit: contain;
-        }
-
-        /* ============================================================
-           ANALYTICS — search filter
-        ============================================================ */
-        .analytics-search {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #fff;
-            border: 1px solid var(--primary);
-            border-radius: 9999px;
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-
-        .analytics-search input {
-            border: none;
-            outline: none;
-            font-size: 13px;
-            background: transparent;
-            width: 180px;
-            color: var(--text-dark);
-        }
-
-        /* ============================================================
-           CHART TOOLTIP CUSTOMIZATION (via Chart.js)
-        ============================================================ */
-
-        /* ============================================================
-           MODAL — light blue header, white form
-        ============================================================ */
-        .modal-header-lb {
-            background: var(--primary);
-            border-radius: 0;
-        }
-
-        /* ============================================================
-           RESPONSIVE: Hide less important sections on mobile
-        ============================================================ */
-        @media (max-width: 640px) {
-            .hide-mobile { display: none !important; }
-            .card-text-scale { font-size: clamp(0.65rem, 2.5vw, 0.875rem); }
-            .stat-number { font-size: clamp(1.5rem, 6vw, 2.5rem) !important; }
-        }
-
-        /* ============================================================
-           AUTH OVERLAY
-        ============================================================ */
-        #auth-overlay input.input-field {
-            border-radius: 9999px;
-        }
-
-        /* ============================================================
-           CLICK CHART TOOLTIPS (styled light blue)
-        ============================================================ */
-        .chartjs-tooltip-lb {
-            background: var(--primary) !important;
-            color: var(--primary-text) !important;
-        }
-
-        /* ============================================================
-           DYNAMIC TEXT SCALE in cards
-        ============================================================ */
-        .card-title {
-            font-size: clamp(0.7rem, 2vw, 0.875rem);
-            font-weight: 700;
-        }
-
-        /* ============================================================
-           SIDEBAR LOGO AREA
-        ============================================================ */
-        .sidebar-logo-text {
-            color: var(--primary-text) !important;
-            font-weight: 800 !important;
-        }
-
-        /* ============================================================
-           SIDEBAR OPEN ANIMATION
-        ============================================================ */
-        @keyframes sidebarSlideIn {
-            from { transform: translateX(100%); opacity: 0.5; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .sidebar.open {
-            animation: sidebarSlideIn 0.35s cubic-bezier(0.4,0,0.2,1);
-        }
-
-        /* ============================================================
-           CLICK CHART BARS TOOLTIP override
-        ============================================================ */
-        .clicks-bar-tooltip {
-            background: var(--primary);
-            color: var(--primary-text);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: 9999px;
-        }
-
-        /* ============================================================
-           NOTIFICATION CARD (clicks drop warning)
-        ============================================================ */
-        .click-drop-warning {
-            display: none;
-            background: #fff;
-            border: 1.5px solid var(--primary);
-            border-left: 4px solid var(--primary-deep);
-            border-radius: 12px;
-            padding: 14px 20px;
-            font-size: 13px;
-            color: var(--primary-text);
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .click-drop-warning.show {
-            display: flex;
-        }
-
-        /* ============================================================
-           TOP SELLING PRODUCT CARD
-        ============================================================ */
-        .top-selling-card {
-            background: #ffffff;
-            border: 1px solid #c7e8f3;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .top-selling-card .card-header-accent {
-            background: var(--primary);
-            color: var(--primary-text);
-            padding: 10px 18px;
-            font-weight: 700;
-            font-size: 13px;
-        }
-
-        /* ============================================================
-           VALIDATION STYLES
-        ============================================================ */
-        .input-field.error {
-            border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
-        }
-
-        .field-error-msg {
-            color: #ef4444;
-            font-size: 11px;
-            font-weight: 600;
-            margin-top: 4px;
-            display: none;
-        }
-
-        /* ============================================================
-           CHART ANALYTICS FILTER BAR
-        ============================================================ */
-        .analytics-filter-bar {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Flintel — Your buyers are on Reddit</title>
+<meta name="description" content="Enter your website. Flintel finds the exact Reddit threads your buyers read, places your product inside them, and boosts it to the top — done for you.">
+<meta property="og:title" content="Flintel — Your buyers are on Reddit">
+<meta property="og:description" content="Done-for-you Reddit intelligence. Free market report in 30 seconds.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23B6FF1E'/%3E%3Cpath d='M16 6c.6 5 3.4 7.8 8.4 8.4-5 .6-7.8 3.4-8.4 8.4-.6-5-3.4-7.8-8.4-8.4 5-.6 7.8-3.4 8.4-8.4z' fill='%230A0A0A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Fustat:wght@400..800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   FLINTEL — SIGNAL SYSTEM  (unchanged — design is 100% as-is)
+═══════════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  background:#fff;color:#0A0A0A;
+  overflow-x:clip;min-height:100vh;
+}
+button,input,textarea{font-family:inherit;}
+input,textarea{-webkit-appearance:none;}
+::selection{background:rgba(104,99,252,.18);}
+h1,h2,h3,h4,h5,h6,
+.nav-logo,.home-h1,.scan-title,.report-h,.rs-title,.thread-title,.step-card-title,
+.rcta-h,.dash-title,.dash-section-title,.camp-thread-title,.intel-title,.ht-title,
+.modal-title,.sub-name,.proof-n,.rh-plan-name{
+  font-family:"Fustat","Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+}
+html{background:#fff;} body{background:#fff;}
+:root{
+  --ink:#0A0A0A; --blue:#6863FC; --lime:#B6FF1E; --white:#FFFFFF;
+  --blue2:#7D78FF; --bluedeep:#4B46D6; --limedeep:#93CC00;
+  --g1:rgba(10,10,10,.82); --g2:rgba(10,10,10,.60); --g3:rgba(10,10,10,.42);
+  --g4:rgba(10,10,10,.16); --g5:rgba(10,10,10,.09); --g6:rgba(10,10,10,.045);
+  --hair:rgba(10,10,10,.12);
+  --on-dark-2:rgba(255,255,255,.62); --on-dark-3:rgba(255,255,255,.42); --on-dark-hair:rgba(255,255,255,.12);
+  --green:var(--blue); --gbg:var(--lime); --amber:var(--bluedeep);
+  --abg:rgba(104,99,252,.12); --red:var(--ink); --rbg:rgba(10,10,10,.06);
+  --navh:68px; --ease:cubic-bezier(.28,.11,.32,1); --ease2:cubic-bezier(.16,1,.3,1);
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:24px;
+  --font-num:"Fustat","Inter",-apple-system,sans-serif;
+  --tk-2xl:-0.045em; --tk-xl:-0.038em; --tk-lg:-0.028em; --tk-md:-0.020em; --tk-sm:-0.010em;
+  --cap-size:11px; --cap-weight:600; --cap-tracking:0.09em;
+}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:var(--r-sm);}
+.screen{display:none;min-height:100vh;animation:fadeIn .5s var(--ease);}
+.screen.active{display:flex;flex-direction:column;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;height:var(--navh);padding:0 max(24px,4vw);
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  background:rgba(255,255,255,.72);backdrop-filter:saturate(140%) blur(20px);-webkit-backdrop-filter:saturate(140%) blur(20px);
+  border-bottom:1px solid rgba(10,10,10,.08);
+}
+.nav-logo{grid-column:1;display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.02em;text-decoration:none;cursor:pointer;justify-self:start;min-height:44px;padding:6px 0;}
+.nav-logo-icon{width:28px;height:28px;background:var(--lime);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-logo-icon svg{width:13px;height:13px;fill:#0A0A0A;}
+.nav-links{grid-column:2;display:flex;align-items:center;gap:34px;justify-self:center;}
+.nav-links.hidden{visibility:hidden;pointer-events:none;}
+.nav-links a{min-height:44px;display:inline-flex;align-items:center;padding:6px 0;font-size:14px;font-weight:400;color:var(--g2);cursor:pointer;transition:color .18s;white-space:nowrap;}
+.nav-links a:hover{color:var(--ink);}
+.nav-actions{grid-column:3;display:flex;align-items:center;gap:8px;justify-self:end;flex-shrink:0;}
+.nav-login{font-size:13.5px;font-weight:600;color:#fff;background:var(--ink);border:none;cursor:pointer;padding:11px 20px;min-height:44px;border-radius:980px;display:inline-flex;align-items:center;gap:8px;transition:transform .16s var(--ease),opacity .16s;}
+.nav-login:hover{opacity:.85;} .nav-login:active{transform:scale(.97);}
+.nav-login svg{width:15px;height:15px;flex-shrink:0;}
+.nav-ghost{font-size:13px;font-weight:400;color:var(--ink);background:none;border:none;cursor:pointer;padding:11px 14px;min-height:44px;border-radius:980px;display:inline-flex;align-items:center;transition:opacity .18s;}
+.nav-ghost:hover{opacity:.6;}
+.nav-cta{font-size:13px;font-weight:600;color:#0A0A0A;background:var(--lime);border:none;cursor:pointer;padding:11px 17px;min-height:44px;border-radius:980px;display:inline-flex;align-items:center;transition:transform .16s var(--ease),box-shadow .16s;box-shadow:0 0 0 0 rgba(182,255,30,0);}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(182,255,30,.35);}
+.nav-cta:active{transform:translateY(0) scale(.98);}
+.nav-user-email{font-size:13px;color:var(--g2);padding:0 2px;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#s-home{align-items:center;justify-content:flex-start;text-align:center;padding:calc(var(--navh) + 72px) 24px 0;position:relative;overflow:visible;background:#fff;background-image:radial-gradient(rgba(10,10,10,.08) 1px,transparent 1px);background-size:22px 22px;background-position:0 0;}
+#s-home::before{display:none;}
+.home-inner{position:relative;z-index:1;max-width:760px;width:100%;margin:0 auto;}
+.home-eyebrow{display:inline-flex;align-items:center;gap:0;font-size:12.5px;font-weight:600;letter-spacing:.01em;border-radius:980px;background:var(--g6);padding:3px;margin-bottom:26px;}
+.home-eyebrow-tag{color:#fff;background:var(--ink);border-radius:980px;padding:7px 15px;font-weight:600;}
+.home-eyebrow-brand{color:var(--g2);padding:7px 15px;font-weight:500;}
+.home-h1{font-size:clamp(30px,4.2vw,46px);font-weight:600;letter-spacing:-.045em;line-height:1.18;color:var(--ink);margin-bottom:20px;}
+.home-h1 em{font-style:normal;background:linear-gradient(100deg,var(--bluedeep) 10%,var(--limedeep) 90%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.home-sub{font-size:clamp(15px,1.4vw,17px);font-weight:400;color:var(--g2);line-height:1.55;letter-spacing:.002em;max-width:480px;margin:0 auto 36px;}
+.url-form{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:460px;margin:0 auto;}
+.url-box{width:100%;display:flex;align-items:center;gap:8px;border:1px solid var(--g4);border-radius:980px;background:#fff;overflow:clip;padding:5px 5px 5px 0;box-shadow:0 2px 10px rgba(10,10,10,.04);transition:border-color .2s,box-shadow .2s,background .2s;}
+.url-box:focus-within{border-color:var(--ink);box-shadow:0 2px 14px rgba(10,10,10,.08);}
+.url-prefix{padding:0 0 0 20px;font-size:14.5px;color:var(--g3);font-weight:400;flex-shrink:0;white-space:nowrap;line-height:1;}
+#url-input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-size:14.5px;color:var(--ink);padding:12px 8px 12px 6px;}
+#url-input::placeholder{color:var(--g3);}
+.url-submit{background:var(--lime);color:#0A0A0A;border:none;cursor:pointer;font-family:var(--font-num);font-size:14.5px;font-weight:500;letter-spacing:var(--tk-md);padding:0 20px;height:40px;border-radius:980px;transition:background .18s,transform .12s,box-shadow .18s;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:7px;}
+.url-submit:hover{background:var(--limedeep);box-shadow:0 6px 20px rgba(182,255,30,.35);}
+.url-submit:active{transform:scale(.98);}
+.url-submit:disabled{opacity:.6;cursor:default;}
+.url-submit svg{width:13px;height:13px;display:none;}
+.home-note{font-size:12px;color:var(--g3);font-weight:400;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+#s-scan{align-items:center;justify-content:center;padding:calc(var(--navh) + 64px) 24px 64px;}
+.scan-wrap{max-width:520px;width:100%;margin:0 auto;text-align:left;}
+.scan-url-display{font-size:13px;font-weight:400;color:var(--g2);margin-bottom:36px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--g5);border-radius:980px;padding:7px 15px;background:var(--g6);}
+.scan-url-display svg{color:var(--g3);}
+.scan-title{font-size:28px;font-weight:600;letter-spacing:-.03em;color:var(--ink);margin-bottom:8px;}
+.scan-subtitle{font-size:16px;color:var(--g2);margin-bottom:40px;}
+.scan-track{height:3px;background:var(--g5);border-radius:980px;margin-bottom:40px;overflow:clip;}
+.scan-fill{height:100%;width:0;background:var(--blue);border-radius:980px;transition:width .8s var(--ease);}
+.scan-steps{display:flex;flex-direction:column;gap:0;}
+.scan-step{display:flex;align-items:flex-start;gap:15px;opacity:.3;transition:opacity .35s;padding:15px 0;border-bottom:1px solid var(--g6);}
+.scan-step:last-child{border-bottom:none;}
+.scan-step.done{opacity:1;} .scan-step.active{opacity:1;}
+.step-icon{width:24px;height:24px;border-radius:980px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0;}
+.step-icon.pending{background:var(--g6);color:var(--g4);}
+.step-icon.spinning{background:rgba(104,99,252,.08);}
+.step-icon.checked{background:var(--gbg);}
+.step-icon svg{width:11px;height:11px;}
+.step-icon.spinning svg{animation:spin .7s linear infinite;color:var(--blue);}
+.step-icon.checked svg{color:var(--ink);}
+.step-text{flex:1;}
+.step-label{font-size:15px;font-weight:500;color:var(--ink);line-height:1.4;}
+.step-detail{font-size:13px;color:var(--g2);margin-top:2px;height:0;overflow:clip;transition:height .3s;}
+.scan-step.active .step-detail{height:20px;}
+.scan-step.done .step-detail{height:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#s-report{padding-top:var(--navh);background:#fff;}
+.report-hero{padding:72px 22px 56px;background:#fff;color:var(--ink);position:relative;overflow:hidden;background-image:radial-gradient(rgba(10,10,10,.08) 1px,transparent 1px);background-size:22px 22px;background-position:0 0;border-bottom:1px solid var(--g5);}
+.report-hero::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 55% at 30% 20%,transparent 0%,rgba(255,255,255,.6) 65%,#fff 100%);}
+.report-hero-inner{max-width:980px;margin:0 auto;width:100%;position:relative;z-index:1;}
+.report-breadcrumb{font-size:12px;font-weight:400;color:var(--g3);margin-bottom:24px;display:flex;align-items:center;gap:6px;}
+.report-breadcrumb svg{color:var(--g3);}
+.report-h{font-size:clamp(28px,3.6vw,46px);font-weight:700;letter-spacing:-.035em;color:var(--ink);margin-bottom:18px;line-height:1.1;max-width:820px;}
+.report-h span{background:linear-gradient(100deg,var(--bluedeep),var(--limedeep));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.report-summary{font-size:17px;color:var(--g2);line-height:1.6;max-width:600px;margin-bottom:30px;}
+.report-summary b{color:var(--ink);font-weight:600;}
+.report-meta-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.rmchip{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:400;color:var(--g2);background:#fff;border:1px solid var(--g5);box-shadow:0 2px 8px rgba(10,10,10,.03);border-radius:980px;padding:8px 15px;}
+.rmchip svg{color:var(--g3);width:13px;height:13px;}
+.report-body{max-width:980px;margin:0 auto;padding:0 22px 88px;width:100%;}
+.report-section{padding-top:88px;}
+.rs-label{font-size:var(--cap-size);font-weight:var(--cap-weight);letter-spacing:var(--cap-tracking);text-transform:uppercase;color:#fff;margin-bottom:14px;display:inline-flex;background:var(--ink);padding:6px 14px;border-radius:var(--r-sm);}
+.rs-title{font-family:var(--font-num);font-size:clamp(22px,2.6vw,30px);font-weight:600;color:var(--ink);letter-spacing:var(--tk-lg);margin-bottom:12px;}
+.rs-desc{font-size:15.5px;color:var(--g2);line-height:1.65;letter-spacing:var(--tk-sm);margin-bottom:38px;max-width:580px;}
+.subreddit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.sub-card{border:none;border-radius:var(--r-lg);border-left:3px solid var(--g4);padding:26px 26px 24px;background:var(--g6);transition:transform .3s var(--ease),box-shadow .3s var(--ease);cursor:default;animation:fadeUp .55s var(--ease2) backwards;}
+.sub-card:nth-child(1){animation-delay:.03s;} .sub-card:nth-child(2){animation-delay:.09s;}
+.sub-card:nth-child(3){animation-delay:.15s;} .sub-card:nth-child(4){animation-delay:.21s;}
+.sub-card:nth-child(5){animation-delay:.27s;} .sub-card:nth-child(6){animation-delay:.33s;}
+.sub-card:has(.rel-high){border-left-color:var(--lime);}
+.sub-card:has(.rel-med){border-left-color:var(--blue);}
+.sub-card:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(0,0,0,.09);}
+.sub-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;}
+.sub-top-left{display:flex;align-items:center;gap:14px;min-width:0;flex:1;}
+.sub-icon{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-num);font-size:16px;font-weight:600;letter-spacing:var(--tk-md);box-shadow:inset 0 -2px 4px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.08);}
+.sub-icon svg{width:19px;height:19px;}
+.sub-name{font-family:var(--font-num);font-size:16px;font-weight:600;color:var(--ink);letter-spacing:var(--tk-md);}
+.sub-members{font-size:12.5px;color:var(--g3);margin-top:3px;}
+.rel-badge{font-size:var(--cap-size);font-weight:var(--cap-weight);letter-spacing:var(--cap-tracking);padding:5px 12px;border-radius:980px;flex-shrink:0;text-transform:uppercase;}
+.rel-high{background:var(--gbg);color:var(--ink);font-weight:var(--cap-weight);}
+.rel-med{background:var(--abg);color:var(--amber);font-weight:var(--cap-weight);}
+.sub-quote{font-size:13.5px;color:var(--g1);line-height:1.6;font-style:normal;background:#fff;border-radius:var(--r-md);padding:13px 15px;margin-bottom:16px;}
+.sub-stats{display:flex;gap:16px;flex-wrap:wrap;}
+.sub-stat{font-size:12.5px;color:var(--g3);}
+.sub-stat b{color:var(--g1);font-weight:600;}
+.thread-list{display:flex;flex-direction:column;gap:14px;}
+.thread-card{border:1px solid var(--g5);border-radius:var(--r-lg);padding:24px 26px;background:#fff;display:flex;gap:22px;align-items:flex-start;transition:border-color .25s,box-shadow .25s,transform .25s;animation:fadeUp .55s var(--ease2) backwards;}
+.thread-card:nth-child(1){animation-delay:.03s;} .thread-card:nth-child(2){animation-delay:.09s;}
+.thread-card:nth-child(3){animation-delay:.15s;} .thread-card:nth-child(4){animation-delay:.21s;}
+.thread-card:nth-child(5){animation-delay:.27s;}
+.thread-card:hover{border-color:var(--g4);box-shadow:0 10px 30px rgba(0,0,0,.07);transform:translateY(-2px);}
+.thread-score-col{flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;width:64px;height:64px;border-radius:50%;align-self:flex-start;position:relative;}
+.thread-score-col::before{content:'';position:absolute;inset:5px;border-radius:50%;background:#fff;}
+.tscore{font-size:19px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;position:relative;z-index:1;}
+.ts-hot{color:var(--limedeep);} .ts-warm{color:var(--bluedeep);} .ts-mid{color:var(--bluedeep);}
+.thread-body{flex:1;min-width:0;}
+.thread-plat{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+.plat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.pd-r{background:#B6FF1E;} .pd-x{background:#0A0A0A;} .pd-t{background:#6863FC;}
+.thread-source{font-size:12.5px;font-weight:400;color:var(--g2);}
+.thread-title{font-size:16px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:8px;letter-spacing:-.01em;}
+.thread-snippet{font-size:14px;color:var(--g2);line-height:1.6;margin-bottom:14px;}
+.thread-pills{display:flex;gap:7px;flex-wrap:wrap;}
+.tpill{font-size:11.5px;font-weight:400;padding:4px 11px;border-radius:980px;background:var(--g6);color:var(--g2);}
+.tpill.open{background:var(--gbg);color:var(--ink);font-weight:600;}
+.tpill.rank1{background:rgba(104,99,252,.09);color:var(--bluedeep);font-weight:500;}
+.step-cards{display:flex;flex-direction:column;gap:16px;}
+.step-card{border:none;border-radius:var(--r-xl);border-top:3px solid var(--g4);overflow:hidden;background:var(--g6);transition:transform .3s var(--ease),box-shadow .3s var(--ease);animation:fadeUp .55s var(--ease2) backwards;}
+.step-card:nth-child(1){border-top-color:var(--lime);animation-delay:.04s;}
+.step-card:nth-child(2){border-top-color:var(--blue);animation-delay:.1s;}
+.step-card:nth-child(3){border-top-color:var(--lime);animation-delay:.16s;}
+.step-card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(0,0,0,.08);}
+.step-card-head{display:flex;align-items:center;gap:15px;padding:22px 26px 0;border-bottom:none;background:transparent;}
+.step-number{width:30px;height:30px;border-radius:980px;background:var(--ink);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-card:nth-child(1) .step-number{background:var(--lime);color:var(--ink);}
+.step-card:nth-child(2) .step-number{background:var(--blue);color:#fff;}
+.step-card:nth-child(3) .step-number{background:var(--lime);color:var(--ink);}
+.step-card-title{font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-.012em;}
+.step-card-body{padding:16px 26px 26px;}
+.step-desc{font-size:14.5px;color:var(--g1);line-height:1.65;margin-bottom:20px;}
+.step-bullets{display:flex;flex-direction:column;gap:10px;margin-bottom:22px;}
+.step-bullet{display:flex;align-items:flex-start;gap:11px;font-size:13.5px;color:var(--g1);line-height:1.5;}
+.bullet-check{width:18px;height:18px;border-radius:980px;background:#fff;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;color:var(--green);}
+.bullet-check svg{width:9px;height:9px;}
+.comment-preview{background:#fff;border:none;border-radius:14px;padding:20px 22px;position:relative;overflow:clip;}
+.cp-label{font-size:var(--cap-size);font-weight:var(--cap-weight);letter-spacing:var(--cap-tracking);text-transform:uppercase;color:var(--g3);margin-bottom:12px;}
+.cp-text{font-size:14px;color:var(--g1);line-height:1.7;}
+.upvote-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border:none;border-radius:0;overflow:visible;}
+.uvt-col{padding:18px 16px;border-right:none;text-align:center;background:#fff;border-radius:14px;}
+.uvt-time{font-size:10.5px;font-weight:500;color:var(--g3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px;}
+.uvt-action{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;letter-spacing:-.01em;}
+.uvt-detail{font-size:12px;color:var(--g2);}
+.report-cta-section{border-top:1px solid var(--g5);padding:76px 22px 84px;max-width:980px;margin:0 auto;width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;}
+.rcta-label{font-size:12px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;}
+.rcta-h{font-size:clamp(26px,3.4vw,40px);font-weight:600;letter-spacing:-.035em;color:var(--ink);margin-bottom:14px;line-height:1.1;}
+.rcta-sub{font-size:16px;color:var(--g2);margin-bottom:44px;max-width:440px;line-height:1.55;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:840px;margin-bottom:30px;}
+.price-card{border:1px solid var(--g5);border-radius:20px;padding:30px 26px;text-align:left;transition:border-color .25s,box-shadow .25s,transform .3s var(--ease);background:#fff;cursor:pointer;position:relative;animation:fadeUp .55s var(--ease2) backwards;}
+.price-card:nth-child(1){animation-delay:.04s;} .price-card:nth-child(2){animation-delay:.1s;} .price-card:nth-child(3){animation-delay:.16s;}
+.price-card:hover{border-color:var(--g4);transform:translateY(-4px);box-shadow:0 14px 38px rgba(0,0,0,.08);}
+.price-card.featured{border-color:var(--ink);background:var(--ink);box-shadow:0 20px 48px rgba(0,0,0,.28);}
+.price-card.featured .pc-tier{color:var(--on-dark-2);}
+.price-card.featured .pc-price,.price-card.featured .pc-placement,.price-card.featured .pc-feat{color:#fff;}
+.price-card.featured .pc-per{color:var(--on-dark-3);}
+.price-card.featured .pc-placement{border-bottom-color:rgba(255,255,255,.14);}
+.price-card.featured:hover{transform:translateY(-6px);}
+.pc-popular{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--lime);color:var(--ink);font-size:11px;font-weight:700;letter-spacing:.02em;padding:4px 14px;border-radius:980px;white-space:nowrap;}
+.pc-tier{font-size:13px;font-weight:600;color:var(--g2);margin-bottom:14px;letter-spacing:-.005em;}
+.pc-price{font-size:44px;font-weight:700;color:var(--ink);letter-spacing:-.03em;margin-bottom:4px;font-variant-numeric:tabular-nums;}
+.pc-per{font-size:14px;font-weight:400;color:var(--g3);letter-spacing:0;}
+.pc-placement{font-size:13.5px;color:var(--g2);margin-bottom:20px;line-height:1.5;padding-bottom:20px;border-bottom:1px solid var(--g6);}
+.pc-feats{display:flex;flex-direction:column;gap:10px;margin-bottom:26px;}
+.pc-feat{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--g1);line-height:1.45;}
+.pc-feat-check{color:var(--blue);flex-shrink:0;margin-top:2px;}
+.pc-feat-check svg{width:11px;height:11px;}
+.pc-btn{width:100%;padding:14px 20px;min-height:48px;border-radius:980px;font-size:15px;font-weight:600;cursor:pointer;transition:background .18s,color .18s;border:none;background:var(--g6);color:var(--ink);}
+.pc-btn:hover{background:var(--g5);}
+.featured .pc-btn{background:var(--lime);color:var(--ink);font-weight:700;}
+.featured .pc-btn:hover{background:var(--limedeep);}
+.featured .pc-feat-check{color:var(--lime);}
+.rcta-note{font-size:13px;color:var(--g3);}
+@media(max-width:1024px){.subreddit-grid{grid-template-columns:repeat(2,1fr);}}
+nav{padding-left:max(24px,env(safe-area-inset-left));padding-right:max(24px,env(safe-area-inset-right));}
+@media(max-width:768px){
+  nav{padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right));}
+  .report-body,.report-hero-inner{padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right));}
+  #toast{bottom:max(28px,env(safe-area-inset-bottom));}
+}
+body,html{-webkit-overflow-scrolling:touch;}
+body{overscroll-behavior-y:contain;}
+html{overflow-x:clip;}
+@media(max-width:768px){
+  nav{grid-template-columns:auto 1fr;padding:0 18px;}
+  .nav-links{display:none!important;}
+  .nav-logo{padding:8px 0;min-height:44px;display:inline-flex;align-items:center;}
+  .nav-login,.nav-cta,.nav-ghost{min-height:44px;}
+  .nav-user-email{display:none;}
+  .pc-btn{min-height:48px;padding:14px 22px;}
+  input,textarea,select{font-size:16px!important;}
+  .home-h1{letter-spacing:-.035em;line-height:1.1;}
+  .home-eyebrow{margin-bottom:24px;}
+  .report-h{font-size:clamp(26px,7vw,34px);line-height:1.15;letter-spacing:-.03em;}
+  .rs-title{font-size:clamp(20px,5.4vw,24px);}
+  .viz-grid-3{grid-template-columns:1fr;gap:12px;}
+  .viz-card{padding:22px 22px;}
+  .live-ticker{gap:14px;padding:16px 18px;flex-direction:column;align-items:stretch;}
+  .lt-metric{min-width:0;justify-content:space-between;}
+  .lt-sep{display:none;}
+  .gap-row{grid-template-columns:110px 1fr 60px;gap:14px;}
+  .gap-name{font-size:13px;} .gap-count{font-size:14px;}
+  .rmchip{font-size:12px;padding:7px 12px;}
+  .sub-icon{width:36px;height:36px;font-size:15px;}
+  .sub-name{font-size:15px;}
+  .thread-card{grid-template-columns:1fr;padding:22px 20px;}
+  .thread-score-col{align-self:flex-start;}
+  .nav-actions{grid-column:auto;justify-self:end;}
+  .nav-ghost{display:none;}
+  .home-h1{font-size:clamp(30px,8vw,42px);}
+  .hb{display:none;}
+  .home-sub{margin-bottom:38px;}
+  .url-prefix{display:none;}
+  #url-input{padding-left:22px;}
+  .url-box{flex-direction:row;}
+  .report-hero{padding:52px 20px 40px;}
+  .report-body{padding:0 20px 64px;}
+  .report-section{padding-top:56px;}
+  .subreddit-grid{grid-template-columns:1fr;}
+  .thread-card{padding:20px;gap:16px;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .report-cta-section{padding:56px 20px 64px;}
+  .upvote-timeline{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:480px){
+  .url-box{flex-direction:column;padding:8px;border-radius:24px;gap:8px;}
+  #url-input{width:100%;text-align:center;padding:12px;}
+  .url-submit{width:100%;justify-content:center;}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;} .screen{animation:none;}}
+
+/* ═══════ REPORT VISUALIZATIONS ═══════ */
+.live-ticker{margin-top:48px;display:flex;align-items:center;gap:28px;flex-wrap:wrap;padding:18px 24px;border:1px solid var(--g5);border-radius:var(--r-md);background:linear-gradient(180deg,#fafafa,#fff);}
+.lt-pulse{width:9px;height:9px;border-radius:50%;background:#22C55E;flex-shrink:0;box-shadow:0 0 0 0 rgba(34,197,94,.5);animation:ltPulse 1.8s ease infinite;}
+@keyframes ltPulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 10px rgba(34,197,94,0)}}
+.lt-label{font-size:var(--cap-size);font-weight:var(--cap-weight);letter-spacing:var(--cap-tracking);text-transform:uppercase;color:#22C55E;}
+.lt-metric{display:flex;align-items:baseline;gap:12px;font-size:14px;color:var(--g2);flex:1;min-width:190px;letter-spacing:var(--tk-sm)}
+.lt-metric b{font-family:var(--font-num);font-size:19px;font-weight:600;color:var(--ink);letter-spacing:var(--tk-md);font-variant-numeric:tabular-nums;min-width:60px;text-align:right}
+.lt-sep{width:1px;height:24px;background:var(--g5);flex-shrink:0}
+.viz-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}
+.viz-card{border:1px solid var(--g5);border-radius:var(--r-lg);padding:28px 28px;background:#fff;transition:border-color .3s var(--ease),box-shadow .3s var(--ease);}
+.viz-card:hover{border-color:var(--g4);box-shadow:0 12px 32px rgba(0,0,0,.05)}
+.viz-title{font-size:13px;font-weight:500;color:var(--g2);letter-spacing:var(--tk-sm);line-height:1.4}
+.viz-value{font-family:var(--font-num);font-size:34px;font-weight:600;color:var(--ink);letter-spacing:var(--tk-xl);margin:10px 0 8px;font-variant-numeric:tabular-nums;line-height:1;}
+.viz-value .unit{font-size:17px;color:var(--g3);font-weight:500;letter-spacing:var(--tk-md);margin-left:3px}
+.viz-delta{font-size:12px;font-weight:600;color:#22C55E;letter-spacing:var(--tk-sm);display:flex;align-items:center;gap:6px}
+.viz-delta.neutral{color:var(--g3);}
+.viz-delta svg{width:10px;height:10px}
+.viz-note{font-size:12px;color:var(--g3);margin-top:22px;line-height:1.5;}
+.gap-viz{margin-top:32px;border-top:1px solid var(--g5);border-bottom:1px solid var(--g5);padding:8px 0}
+.gap-row{display:grid;grid-template-columns:180px 1fr 84px;gap:24px;align-items:center;padding:18px 0;border-bottom:1px solid var(--g6);}
+.gap-row:last-child{border-bottom:none}
+.gap-name{font-size:14px;font-weight:500;color:var(--ink);letter-spacing:-.005em}
+.gap-name.you{color:var(--ink);font-weight:600;display:flex;align-items:center;gap:8px}
+.gap-name.you::before{content:"";width:8px;height:8px;background:var(--lime);border-radius:2px;box-shadow:0 0 0 3px rgba(182,255,30,.25);flex-shrink:0}
+.gap-bar{height:30px;background:var(--g6);border-radius:var(--r-sm);overflow:clip;position:relative;}
+.gap-fill{height:100%;width:0;background:linear-gradient(90deg,#2A2A2A,#0A0A0A);border-radius:var(--r-sm);transition:width 1.4s var(--ease);}
+.gap-fill.you{background:linear-gradient(90deg,#B6FF1E,#8DE500)}
+.gap-fill.you::after{content:"";position:absolute;top:0;right:0;bottom:0;width:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-100%);animation:shimmer 2.4s ease 1.6s infinite}
+@keyframes shimmer{50%,100%{transform:translateX(100%)}}
+.gap-count{font-family:var(--font-num);font-size:16px;font-weight:600;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums;letter-spacing:var(--tk-md)}
+.gap-caption{margin-top:24px;padding:18px 22px;background:var(--g6);border-radius:var(--r-md);font-size:14px;color:var(--g1);line-height:1.65;border-left:3px solid var(--lime);}
+.gap-caption b{color:var(--ink);font-weight:600}
+.empty-note{padding:22px;border:1px dashed var(--g4);border-radius:var(--r-md);color:var(--g3);font-size:13.5px;line-height:1.6;text-align:center;}
+
+/* ═══════ TOAST ═══════ */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(10,10,10,.94);color:#fff;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:13.5px;font-weight:400;padding:12px 20px;border-radius:980px;display:flex;align-items:center;gap:9px;box-shadow:0 10px 32px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:99999;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast svg{color:#B6FF1E;flex-shrink:0;}
+</style>
 </head>
 <body>
 
-<!-- TOAST CONTAINER -->
-<div id="toast-container" class="toast-container"></div>
-
-<!-- MOBILE OVERLAY (translucent light blue) -->
-<div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-<!-- CONFIRM DELETE POPUP -->
-<div id="confirm-overlay" class="confirm-overlay">
-    <div class="confirm-box">
-        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
-            <i class="fa-solid fa-trash text-xl" style="color:var(--primary-text)"></i>
-        </div>
-        <h4>Delete Product?</h4>
-        <p class="text-sm text-slate-500 mb-6 mt-2">This action will permanently remove the product from the registry.</p>
-        <div class="flex gap-3 justify-center">
-            <button onclick="cancelDelete()" class="btn-secondary px-6">Cancel</button>
-            <button onclick="executeDelete()" class="btn-primary px-6">Delete</button>
-        </div>
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav id="main-nav">
+  <a class="nav-logo" onclick="goHome()">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2.5c.5 4.2 2.8 6.5 7 7-4.2.5-6.5 2.8-7 7-.5-4.2-2.8-6.5-7-7 4.2-.5 6.5-2.8 7-7z"/></svg>
     </div>
+    Flintel
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a onclick="goHome()">How it works</a>
+    <a onclick="goHome()">Sources</a>
+    <a onclick="goHome()">Intelligence</a>
+    <a onclick="goHome()">Pricing</a>
+  </div>
+  <div class="nav-actions" id="nav-actions">
+    <button class="nav-login" onclick="loginWithGoogle()">Login</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ SCREEN 1: HOME ═══════════════ -->
+<div class="screen active" id="s-home">
+  <div style="padding:calc(var(--navh) + 32px) 24px 96px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100vh;">
+    <div class="home-inner">
+      <div class="home-eyebrow">
+        <span class="home-eyebrow-tag">Introducing</span>
+        <span class="home-eyebrow-brand">Flintel.ai</span>
+      </div>
+      <h1 class="home-h1">
+        Your buyers are on Reddit,<br class="hb">
+        talking about your <em>competitors</em> right now.
+      </h1>
+      <p class="home-sub">
+        Enter your website. Flintel reads it, finds where your buyers are talking, and builds you a live market report.
+      </p>
+      <div class="url-form">
+        <div class="url-box">
+          <span class="url-prefix">https://</span>
+          <input id="url-input" type="text" placeholder="yourwebsite.com"
+            onkeydown="if(event.key==='Enter')startAnalysis()">
+          <button class="url-submit" id="url-submit-btn" onclick="startAnalysis()">
+            Analyze My Market
+          </button>
+        </div>
+        <div class="home-note">Free market report · Ready in about a minute</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- AUTH OVERLAY -->
-<div id="auth-overlay" class="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-sky-100 z-[1000] flex items-center justify-center p-6">
-    <div class="w-full max-w-md bg-white/90 backdrop-blur-xl border border-blue-200 shadow-2xl rounded-3xl p-10">
-
-        <!-- Logo -->
-        <div class="text-center mb-10">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-xl mx-auto shadow-lg" style="background:var(--primary)">
-                <i class="fa-solid fa-lock" style="color:var(--primary-text)"></i>
-            </div>
-            <h1 class="text-2xl font-bold text-slate-900 mt-6" style="font-size:22px!important">Secure Access</h1>
-            <p class="text-sm text-slate-500 mt-2">Pixup8k Administrative Terminal</p>
-        </div>
-
-        <!-- FORM -->
-        <form action="/password" method="POST" class="space-y-5">
-            <div>
-                <label class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Username</label>
-                <input type="text" name="user_name" required placeholder="Enter username" class="input-field w-full">
-            </div>
-            <div>
-                <label class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Password</label>
-                <input type="password" name="password" required placeholder="Enter password" class="input-field w-full">
-            </div>
-            <button type="submit" class="btn-primary w-full py-3 text-sm tracking-wide shadow-lg" style="box-shadow:0 6px 20px rgba(173,216,230,0.4)">
-                <i class="fa-solid fa-right-to-bracket"></i> Authenticate
-            </button>
-        </form>
-
-        {% if status == "failed" %}
-        <div class="mt-6 text-center text-xs font-bold text-red-500 tracking-widest uppercase" id="error-msg">
-            <i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid Credentials
-        </div>
-        {% endif %}
-
+<!-- ═══════════════ SCREEN 2: SCANNING ═══════════════ -->
+<div class="screen" id="s-scan">
+  <div class="scan-wrap">
+    <div class="scan-url-display">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span id="scan-url-label">yourwebsite.com</span>
     </div>
+    <div class="scan-title">Analyzing your market</div>
+    <div class="scan-subtitle">Reading your site and matching it against tracked Reddit signals</div>
+    <div class="scan-track"><div class="scan-fill" id="scan-fill"></div></div>
+    <div class="scan-steps" id="scan-steps">
+      <div class="scan-step active" id="ss-1">
+        <div class="step-icon spinning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg></div>
+        <div class="step-text"><div class="step-label">Reading your website</div><div class="step-detail">Extracting product, audience, competitors</div></div>
+      </div>
+      <div class="scan-step" id="ss-2">
+        <div class="step-icon pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/></svg></div>
+        <div class="step-text"><div class="step-label">Identifying buyer pain phrases</div><div class="step-detail">What your customers post when frustrated</div></div>
+      </div>
+      <div class="scan-step" id="ss-3">
+        <div class="step-icon pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/></svg></div>
+        <div class="step-text"><div class="step-label">Matching tracked Reddit signals</div><div class="step-detail">Cross-referencing your keywords against stored discussions</div></div>
+      </div>
+      <div class="scan-step" id="ss-4">
+        <div class="step-icon pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/></svg></div>
+        <div class="step-text"><div class="step-label">Scoring competitor mentions</div><div class="step-detail">Building your competitive gap</div></div>
+      </div>
+      <div class="scan-step" id="ss-5">
+        <div class="step-icon pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/></svg></div>
+        <div class="step-text"><div class="step-label">Building your market report</div><div class="step-detail">Compiling communities, threads, momentum</div></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- ============================================================
-     SIDEBAR — RIGHT SIDE, LIGHT BLUE
-============================================================ -->
-<div id="sidebar" class="sidebar">
-    <div class="flex items-center justify-between mb-10 px-2">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-lg shadow-md" style="background:rgba(255,255,255,0.6);color:var(--primary-text)">P</div>
-            <span class="font-bold text-base tracking-tight sidebar-logo-text">Pixup8k</span>
-        </div>
-        <button onclick="toggleSidebar()" class="lg:hidden p-2" style="color:var(--primary-text)">
-            <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
+<!-- ═══════════════ SCREEN 3: REPORT ═══════════════ -->
+<div class="screen" id="s-report">
+  <div class="report-hero">
+   <div class="report-hero-inner">
+    <div class="report-breadcrumb">
+      <span>Flintel</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>Market Report</span>
+    </div>
+    <h1 class="report-h">Your buyers are active across <span id="rh-subs">— communities</span><br>and mention competitors in <span id="rh-posts">— posts</span>.</h1>
+    <p class="report-summary" id="report-summary-text">
+      We analyzed <b id="rs-url">yourwebsite.com</b> and matched it against Reddit discussions already being tracked by Flintel.
+    </p>
+    <div class="report-meta-chips">
+      <div class="rmchip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span id="rmchip-date">Generated today</span>
+      </div>
+      <div class="rmchip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        90-day data window
+      </div>
+      <div class="rmchip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Live signal
+      </div>
+    </div>
+   </div>
+  </div>
+  <div class="report-body">
+
+    <div class="live-ticker" role="status" aria-live="polite">
+      <div class="lt-pulse" aria-hidden="true"></div>
+      <div class="lt-label">Flintel is tracking</div>
+      <div class="lt-metric"><span>Matches found</span><b id="tk-matches">0</b></div>
+      <div class="lt-sep"></div>
+      <div class="lt-metric"><span>Communities matched</span><b id="tk-communities">0</b></div>
+      <div class="lt-sep"></div>
+      <div class="lt-metric"><span>Competitors tracked</span><b id="tk-competitors">0</b></div>
     </div>
 
-    <nav class="flex-1 space-y-1">
-        <div onclick="switchTab('dashboard')" id="link-dashboard" class="nav-item active">
-            <i class="fa-solid fa-chart-line w-5 text-center"></i> Dashboard
-        </div>
-        <div onclick="switchTab('inventory')" id="link-inventory" class="nav-item">
-            <i class="fa-solid fa-box-archive w-5 text-center"></i> Inventory
-        </div>
-        <div onclick="switchTab('analytics')" id="link-analytics" class="nav-item">
-            <i class="fa-solid fa-microchip w-5 text-center"></i> Analytics
-        </div>
-        <div onclick="switchTab('add-product')" id="link-add-product" class="nav-item">
-            <i class="fa-solid fa-plus w-5 text-center"></i> New Entry
-        </div>
-    </nav>
-
-    <!-- Sidebar Footer -->
-    <div class="mt-auto pt-6 border-t" style="border-color:rgba(14,116,144,0.2)">
-        <p class="text-xs text-center" style="color:var(--primary-text);opacity:0.7">&copy; 2025 Pixup8k</p>
+    <!-- Section 01: Communities -->
+    <div class="report-section">
+      <div class="rs-label">Section 01</div>
+      <div class="rs-title">Where your buyers talk</div>
+      <div class="rs-desc">Built from real, already-stored Reddit signal matches — grouped by subreddit and ranked by how often your discovery keywords show up there.</div>
+      <div class="subreddit-grid" id="subreddit-grid">
+        <div class="empty-note">No community matches yet — Flintel will keep watching and these will fill in as matching signals come in.</div>
+      </div>
     </div>
+
+    <!-- Section 02: Top threads -->
+    <div class="report-section">
+      <div class="rs-label">Section 02</div>
+      <div class="rs-title">Top matched threads</div>
+      <div class="rs-desc">Actual stored matches for your discovery keywords, ranked by engagement. Flintel does not yet check Google search-rank for these threads — that field is intentionally left out rather than guessed.</div>
+      <div class="thread-list" id="thread-list">
+        <div class="empty-note">No matched threads yet for this domain.</div>
+      </div>
+    </div>
+
+    <!-- Section 03: Momentum + Gap -->
+    <div class="report-section">
+      <div class="rs-label">Section 03</div>
+      <div class="rs-title">Your market is moving — and it's moving toward you</div>
+      <div class="rs-desc">Real 90-day trend data from your matched signals.</div>
+
+      <div class="viz-grid-3">
+        <div class="viz-card">
+          <div class="viz-title">Competitor complaint volume</div>
+          <div class="viz-value" id="viz-complaint-value">—</div>
+          <div class="viz-delta neutral" id="viz-complaint-delta">Building baseline</div>
+        </div>
+        <div class="viz-card">
+          <div class="viz-title">"Anyone use X?" intent phrases</div>
+          <div class="viz-value" id="viz-intent-value">—</div>
+          <div class="viz-delta neutral" id="viz-intent-delta">Building baseline</div>
+        </div>
+        <div class="viz-card">
+          <div class="viz-title">Threads ranking on Google Page 1</div>
+          <div class="viz-value">—</div>
+          <div class="viz-delta neutral" id="viz-serp-note">Not available yet — no SERP-ranking source is connected.</div>
+        </div>
+      </div>
+
+      <div class="gap-viz" id="gap-viz">
+        <div class="empty-note">No competitor mention data yet.</div>
+      </div>
+    </div>
+
+    <!-- Section 04: How Flintel closes the gap (static explainer — no backend data source) -->
+    <div class="report-section">
+      <div class="rs-label">Section 04</div>
+      <div class="rs-title">How Flintel closes the gap</div>
+      <div class="rs-desc">Once you activate a plan, Flintel keeps matching new Reddit activity against your keywords automatically — this report is a live snapshot of that tracking, not a one-off scan.</div>
+      <div class="step-cards">
+        <div class="step-card">
+          <div class="step-card-head"><div class="step-number">1</div><div class="step-card-title">Continuous matching</div></div>
+          <div class="step-card-body">
+            <p class="step-desc">Flintel keeps checking newly tracked Reddit activity against your discovery keywords in the background, so this report keeps improving the longer your domain is tracked.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-head"><div class="step-number">2</div><div class="step-card-title">Competitor tracking</div></div>
+          <div class="step-card-body">
+            <p class="step-desc">Every competitor named in your analysis is tracked against the same matched signals, so the gap chart above updates as new mentions come in.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-card-head"><div class="step-number">3</div><div class="step-card-title">You stay in control</div></div>
+          <div class="step-card-body">
+            <p class="step-desc">Nothing is posted anywhere automatically from this report — it's read-only market intelligence built from what Flintel has already matched for your domain.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="report-cta-section">
+      <div class="rcta-label">Ready to activate</div>
+      <h2 class="rcta-h">Choose your plan.<br>We start this week.</h2>
+      <p class="rcta-sub">Account creation and onboarding are coming soon — for now, this report reflects your domain's real, live-tracked data.</p>
+      <div class="pricing-grid">
+        <div class="price-card" onclick="comingSoon('Starter plan checkout')">
+          <div class="pc-tier">Starter</div>
+          <div class="pc-price">$799 <span class="pc-per">/ mo</span></div>
+          <div class="pc-placement">5 comment placements per month</div>
+          <div class="pc-feats">
+            <div class="pc-feat"><div class="pc-feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Monthly market report</div>
+            <div class="pc-feat"><div class="pc-feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>5 comments placed in top threads</div>
+            <div class="pc-feat"><div class="pc-feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>You approve before we post</div>
+          </div>
+          <button class="pc-btn">Get started</button>
+        </div>
+        <div class="price-card featured" onclick="comingSoon('Growth plan checkout')">
+          <div class="pc-popular">Most chosen</div>
+          <div class="pc-tier">Growth</div>
+          <div class="pc-price">$1,999 <span class="pc-per">/ mo</span></div>
+          <div class="pc-placement">15 placements + upvote boost on each</div>
+          <div class="pc-feats">
+            <div class="pc-feat"><div class="pc-feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Everything in Starter</div>
+            <div class="pc-feat"><div class="pc-feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>15 comments placed monthly</div>
+            <div class="pc-feat"><div class="pc-feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Competitor intelligence dashboard</div>
+          </div>
+          <button class="pc-btn">Get started</button>
+        </div>
+        <div class="price-card" onclick="comingSoon('Scale plan checkout')">
+          <div class="pc-tier">Scale</div>
+          <div class="pc-price">$3,999 <span class="pc-per">/ mo</span></div>
+          <div class="pc-placement">40 placements + upvotes + strategy call</div>
+          <div class="pc-feats">
+            <div class="pc-feat"><div class="pc-feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Everything in Growth</div>
+            <div class="pc-feat"><div class="pc-feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>40 comments placed monthly</div>
+            <div class="pc-feat"><div class="pc-feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Dedicated account manager</div>
+          </div>
+          <button class="pc-btn">Talk to sales</button>
+        </div>
+      </div>
+      <button class="btn-ghost-sm" style="background:var(--g6);color:var(--ink);border:none;font-size:13.5px;font-weight:500;padding:10px 18px;border-radius:980px;cursor:pointer;" onclick="goHome()">Run another report</button>
+    </div>
+  </div>
 </div>
 
-<!-- SIDEBAR COLLAPSE TOGGLE (desktop) -->
-<button id="sidebar-toggle-btn" class="sidebar-toggle-btn lg:flex hidden" onclick="desktopToggleSidebar()" title="Toggle Sidebar">
-    <i id="sidebar-toggle-icon" class="fa-solid fa-chevron-right"></i>
-</button>
-
-<!-- ============================================================
-     MAIN CONTENT
-============================================================ -->
-<div class="main-content" id="main-content">
-
-    <!-- STICKY TOP HEADER -->
-    <div class="sticky-top-header">
-        <div class="flex items-center gap-4">
-            <button onclick="toggleSidebar()" class="mobile-toggle">
-                <i class="fa-solid fa-bars-staggered"></i>
-            </button>
-            <div>
-                <h2 id="page-title" class="font-bold tracking-tight capitalize" style="font-size:18px!important;color:var(--primary-text)!important">Dashboard</h2>
-                <p class="text-xs" style="color:var(--primary-text);opacity:0.75">System Overview & Data Sync</p>
-            </div>
-        </div>
-        <div id="connection-status" class="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-white/60 rounded-full" style="color:var(--primary-text)">
-            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Syncing Node...
-        </div>
-    </div>
-
-    <!-- CLICK DROP WARNING NOTIFICATION -->
-    <div id="click-drop-warning" class="click-drop-warning mx-6 mt-4">
-        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-        <span>Alert: Total engagement clicks have dropped below 100 in the last 24 hours. Review your product listings.</span>
-    </div>
-
-    <div class="main-content-inner">
-
-    <!-- DASHBOARD TAB -->
-    <div id="tab-dashboard" class="tab-pane active space-y-8">
-
-        <!-- Stats Grid — 3 columns on lg -->
-        <div class="dashboard-stat-grid">
-            <div class="glass-card">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Number of Products</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
-                        <i class="fa-solid fa-layer-group"></i>
-                    </div>
-                </div>
-                <h3 id="stat-count" class="stat-number text-3xl font-bold text-slate-900">--</h3>
-                <div class="mt-4 flex items-center gap-2">
-                    <span class="growth-tag bg-emerald-50 text-emerald-600">growth</span>
-                </div>
-            </div>
-
-            <div class="glass-card">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Active Interactions</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
-                        <i class="fa-solid fa-hand-pointer"></i>
-                    </div>
-                </div>
-                <h3 id="stat-total-clicks" class="stat-number text-3xl font-bold text-slate-900">--</h3>
-                <div class="mt-4 flex items-center gap-2">
-                    <span id="click-growth-percent" class="growth-tag bg-emerald-50 text-emerald-600">Calculating...</span>
-                </div>
-            </div>
-
-            <div class="glass-card">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Avg Product Price</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
-                        <i class="fa-solid fa-dollar-sign"></i>
-                    </div>
-                </div>
-                <h3 id="stat-avg-price" class="stat-number text-3xl font-bold text-slate-900">--</h3>
-                <div class="mt-4 flex items-center gap-2">
-                    <span class="growth-tag text-xs" style="background:var(--primary);color:var(--primary-text)">Market Value</span>
-                </div>
-            </div>
-
-            <div class="glass-card">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Global Queries</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                </div>
-                <h3 id="stat-total-searches" class="stat-number text-3xl font-bold text-slate-900">--</h3>
-                <div class="mt-4 flex items-center gap-2">
-                    <span class="growth-tag text-xs" style="background:var(--primary);color:var(--primary-text)">Stable Node</span>
-                </div>
-            </div>
-
-            <!-- TOP SELLING PRODUCT CARD -->
-            <div class="top-selling-card lg:col-span-2">
-                <div class="card-header-accent flex items-center gap-2">
-                    <i class="fa-solid fa-trophy"></i> Top Selling Product
-                </div>
-                <div id="top-selling-content" class="p-4 flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-xl overflow-hidden bg-white border border-blue-100 flex items-center justify-center flex-shrink-0">
-                        <img id="top-product-img" src="" class="max-h-full object-contain hidden">
-                        <i id="top-product-placeholder" class="fa-solid fa-star text-2xl" style="color:var(--primary)"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p id="top-product-title" class="font-bold text-sm text-slate-900 truncate">Loading...</p>
-                        <p id="top-product-meta" class="text-xs mt-1" style="color:var(--primary-text)">--</p>
-                        <div class="mt-2">
-                            <span id="top-product-score" class="growth-tag text-xs" style="background:var(--primary);color:var(--primary-text)">Trending</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <div class="lg:col-span-3 glass-card">
-                <div class="flex justify-between items-center mb-8">
-                    <h4 class="font-bold text-sm text-slate-800">Global Search Engagement</h4>
-                    <span class="text-[10px] font-bold uppercase tracking-widest hide-mobile" style="color:var(--primary-text)">Last 5 Searches</span>
-                </div>
-                <div class="h-[280px] md:h-[320px] relative">
-                    <canvas id="searchCircleChart"></canvas>
-                </div>
-            </div>
-            <div class="lg:col-span-2 glass-card">
-                <div class="flex justify-between items-center mb-6">
-                    <h4 class="font-bold text-sm text-slate-800">Latest Registry</h4>
-                    <button onclick="switchTab('inventory')" class="text-xs font-bold hover:underline" style="color:var(--primary-text)">View All</button>
-                </div>
-                <div id="recent-grid" class="space-y-4"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- INVENTORY TAB -->
-    <div id="tab-inventory" class="tab-pane">
-        <div class="mb-8 glass-card !p-0 overflow-hidden">
-            <div class="relative w-full">
-                <i class="fa-solid fa-search absolute left-5 top-1/2 -translate-y-1/2 text-sm" style="color:var(--primary-text)"></i>
-                <input type="text" id="inventory-search-input" placeholder="Query Master Registry by ID, Title or Category..."
-                    class="input-field pl-12 py-5 !rounded-none border-none bg-white"
-                    style="border-radius:12px!important">
-            </div>
-        </div>
-        <div id="full-inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-    </div>
-
-    <!-- ANALYTICS TAB -->
-    <div id="tab-analytics" class="tab-pane space-y-8">
-
-        <!-- Analytics Filter Bar -->
-        <div class="analytics-filter-bar">
-            <div class="analytics-search">
-                <i class="fa-solid fa-filter" style="color:var(--primary-text)"></i>
-                <input type="text" id="analytics-search-input" placeholder="Filter charts by product name..." oninput="filterAnalytics(this.value)">
-                <button onclick="filterAnalytics('')" class="text-xs font-bold" style="color:var(--primary-text)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <span class="text-xs font-semibold" style="color:var(--primary-text)">Top engagement products shown</span>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 glass-card overflow-hidden">
-                <div class="flex justify-between items-center mb-10">
-                    <h4 class="font-bold text-sm text-slate-800">Resource Engagement Analytics</h4>
-                    <span class="hide-mobile text-[10px] font-black uppercase" style="color:var(--primary-text)">Total Engagement Points</span>
-                </div>
-                <div class="h-[300px] md:h-[400px]">
-                    <canvas id="clicksChart"></canvas>
-                </div>
-            </div>
-            <div class="space-y-8">
-                <div class="glass-card flex flex-col h-[400px]">
-                    <h4 class="font-bold text-sm text-slate-800 mb-6 flex-shrink-0">User Inquiry Stream</h4>
-                    <div id="questions-list" class="space-y-3 overflow-y-auto custom-scroll pr-2 flex-grow"></div>
-                </div>
-                <div class="glass-card hide-mobile">
-                    <h4 class="font-bold text-sm text-slate-800 mb-4">Supported Languages Usage</h4>
-                    <div class="h-[180px]">
-                        <canvas id="languagesChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="glass-card overflow-hidden !p-0">
-            <div class="p-6 border-b" style="border-color:#c7e8f3">
-                <h4 class="font-bold text-sm text-slate-800">Product Synchronization</h4>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full">
-                    <thead>
-                        <tr class="text-[10px] uppercase font-bold" style="color:var(--primary-text)">
-                            <th class="p-5 text-left" style="background:#f0faff">Products</th>
-                            <th class="p-5 text-left hide-mobile" style="background:#f0faff">Engagement</th>
-                            <th class="p-5 text-right" style="background:#f0faff">Node Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="analytics-tbody" class="text-sm"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- ADD PRODUCT TAB -->
-    <div id="tab-add-product" class="tab-pane max-w-5xl mx-auto">
-        <div class="glass-card p-6 md:p-10">
-            <div class="mb-10 border-b pb-8" style="border-color:#c7e8f3">
-                <h3 class="text-2xl font-bold text-slate-900" style="font-size:18px!important">Product Registration</h3>
-                <p class="text-sm text-slate-500 mt-2">Create a new product record for global distribution.</p>
-            </div>
-            <form id="add-product-form" action="/Add_product" method="POST" onsubmit="return handleAddProduct(event)" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                <input type="hidden" name="trending_score" value="0">
-                <div class="space-y-6">
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Product Name</label>
-                        <input name="title" placeholder="e.g. Premium Tech Fleece" required class="input-field">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Product ID</label>
-                            <input name="id" placeholder="L-X01" required class="input-field">
-                        </div>
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Category</label>
-                            <!-- Category dropdown instead of free text -->
-                            <select name="category" required class="input-field">
-                                <option value="" disabled selected>Select Category</option>
-                                <option value="Apparel">Apparel</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Footwear">Footwear</option>
-                                <option value="Accessories">Accessories</option>
-                                <option value="Home & Living">Home & Living</option>
-                                <option value="Sports">Sports</option>
-                                <option value="Beauty">Beauty</option>
-                                <option value="Books">Books</option>
-                                <option value="Toys">Toys</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Price ($)</label>
-                            <!-- Price: positive numbers only -->
-                            <input type="number" name="price" required min="0.01" step="0.01"
-                                class="input-field" id="add-price" oninput="validatePrice(this)"
-                                placeholder="0.00">
-                            <p class="field-error-msg" id="price-error">Price must be a positive number.</p>
-                        </div>
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Material</label>
-                            <input name="material" placeholder="e.g. Cotton" class="input-field">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Product Details</label>
-                        <textarea name="description" class="input-field h-28 resize-none"></textarea>
-                    </div>
-                </div>
-                <div class="space-y-6">
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Image Link</label>
-                        <input name="image_link" id="add-image-link" required class="input-field"
-                            placeholder="https://..." oninput="previewImg(this.value, 'add-prev')">
-                    </div>
-                    <!-- File upload for image -->
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">
-                            Upload Image File <span class="text-slate-400 normal-case font-normal">(or use link above)</span>
-                        </label>
-                        <label class="flex items-center gap-3 cursor-pointer">
-                            <div class="btn-secondary flex items-center gap-2 text-xs whitespace-nowrap">
-                                <i class="fa-solid fa-cloud-arrow-up"></i> Choose File
-                            </div>
-                            <input type="file" accept="image/*" class="hidden" id="add-file-upload" onchange="handleFileUpload(this)">
-                            <span id="file-name-display" class="text-xs text-slate-400">No file selected</span>
-                        </label>
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Page Link</label>
-                        <input name="image" required class="input-field" placeholder="https://...">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Color</label>
-                            <input name="color" placeholder="Color" class="input-field">
-                        </div>
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Rating (0–5)</label>
-                            <!-- Rating: 0 to 5, step 0.1 -->
-                            <input name="rating" id="add-rating" type="number" min="0" max="5" step="0.1"
-                                placeholder="0.0" class="input-field" oninput="validateRating(this)">
-                            <p class="field-error-msg" id="rating-error">Rating must be between 0 and 5.</p>
-                        </div>
-                    </div>
-                    <!-- Live image preview -->
-                    <div class="img-preview-zone" onclick="document.getElementById('add-file-upload').click()">
-                        <img id="add-prev" class="max-h-full hidden z-10">
-                        <div id="add-prev-txt" class="text-center">
-                            <i class="fa-solid fa-image text-3xl mb-2" style="color:var(--primary)"></i>
-                            <p class="text-[10px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Live Preview</p>
-                            <p class="text-[9px] mt-1 text-slate-400">Paste a link above or upload a file</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="md:col-span-2 pt-8">
-                    <button type="submit" class="btn-primary w-full py-4 text-sm tracking-widest uppercase">
-                        <i class="fa-solid fa-rocket mr-2"></i>Confirm and Execute Registration
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="site-footer mt-12">
-        <p>&copy; 2025 <strong>Pixup8k</strong> — LuxeStore Professional Ops</p>
-        <div class="flex gap-6 flex-wrap">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
-            <a href="#">Support</a>
-            <a href="/">Dashboard</a>
-        </div>
-    </footer>
-
-    </div><!-- /main-content-inner -->
-</div><!-- /main-content -->
-
-<!-- EDIT MODAL -->
-<div id="edit-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4 md:p-6">
-    <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
-        <!-- Modal Header — light blue -->
-        <div class="p-6 md:p-8 border-b flex justify-between items-center modal-header-lb" style="border-color:var(--primary-dark)">
-            <div>
-                <h3 class="font-bold text-xl" style="color:var(--primary-text);font-size:18px!important">Edit Product</h3>
-                <p id="modal-sku-display" class="text-[11px] font-bold tracking-widest uppercase mt-1" style="color:var(--primary-text);opacity:0.75">--</p>
-            </div>
-            <button onclick="closeEditModal()" class="w-10 h-10 rounded-full bg-white/40 hover:bg-white flex items-center justify-center transition-all" style="color:var(--primary-text)">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        <div class="p-6 md:p-10 overflow-y-auto flex-1">
-            <form id="edit-form" action="/update_product" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                <input type="hidden" name="product_id" id="edit-id">
-                <div class="space-y-5">
-                    <label class="text-[10px] font-bold uppercase" style="color:var(--primary-text)">Product Information</label>
-                    <input name="title" id="edit-title" class="input-field" placeholder="Title">
-                    <div class="grid grid-cols-2 gap-4">
-                        <!-- Edit category dropdown -->
-                        <select name="category" id="edit-category" class="input-field">
-                            <option value="">Select Category</option>
-                            <option value="Apparel">Apparel</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Footwear">Footwear</option>
-                            <option value="Accessories">Accessories</option>
-                            <option value="Home & Living">Home & Living</option>
-                            <option value="Sports">Sports</option>
-                            <option value="Beauty">Beauty</option>
-                            <option value="Books">Books</option>
-                            <option value="Toys">Toys</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <input name="price" type="number" min="0.01" step="0.01" id="edit-price" class="input-field" placeholder="Price" oninput="validatePrice(this)">
-                    </div>
-                    <textarea name="description" id="edit-description" class="input-field h-40" placeholder="Product Description"></textarea>
-                    <div class="grid grid-cols-2 gap-4">
-                        <input name="material" id="edit-material" class="input-field" placeholder="Material">
-                        <input name="color" id="edit-color" class="input-field" placeholder="Color">
-                    </div>
-                </div>
-                <div class="space-y-5">
-                    <label class="text-[10px] font-bold uppercase" style="color:var(--primary-text)">Media & Logic</label>
-                    <input name="image_link" id="edit-image-link" class="input-field" placeholder="Image Link" oninput="previewImg(this.value, 'edit-prev')">
-                    <input name="image" id="edit-image" class="input-field" placeholder="Page link">
-                    <div class="grid grid-cols-2 gap-4">
-                        <input name="rating" id="edit-rating" type="number" min="0" max="5" step="0.1" class="input-field" placeholder="Rating (0–5)">
-                        <input name="trending_score" id="edit-trending" class="input-field" placeholder="Trending score">
-                    </div>
-                    <div class="img-preview-zone" style="height:13rem">
-                        <img id="edit-prev" class="max-h-full hidden">
-                        <p id="edit-prev-txt" class="text-[10px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">No Preview</p>
-                    </div>
-                    <button type="submit" class="btn-primary w-full uppercase tracking-widest text-xs py-5 mt-4">
-                        <i class="fa-solid fa-floppy-disk mr-2"></i>Commit System Changes
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+<!-- ═══════════════ TOAST ═══════════════ -->
+<div id="toast">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-text">Done.</span>
 </div>
 
-<!-- FLOATING CHAT ICON -->
-<a href="/" class="floating-chat" aria-label="Open Chat">
-    <i class="fa-solid fa-comment-dots"></i>
-</a>
-
-<!-- FLOATING MOBILE MENU BUTTON -->
-<button class="floating-mobile-menu" onclick="showMobileNav()" id="mobile-fab" title="Quick Navigation">
-    <i class="fa-solid fa-grid-2" style="color:var(--primary-text)"></i>
-</button>
-
-<!-- MOBILE QUICK NAV PANEL -->
-<div id="mobile-quick-nav" class="fixed bottom-20 right-4 z-[998] flex-col gap-2 hidden">
-    <button onclick="switchTab('dashboard');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
-        <i class="fa-solid fa-chart-line w-4"></i> Dashboard
-    </button>
-    <button onclick="switchTab('inventory');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
-        <i class="fa-solid fa-box-archive w-4"></i> Inventory
-    </button>
-    <button onclick="switchTab('analytics');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
-        <i class="fa-solid fa-microchip w-4"></i> Analytics
-    </button>
-    <button onclick="switchTab('add-product');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
-        <i class="fa-solid fa-plus w-4"></i> New Entry
-    </button>
-</div>
-
-<!-- ============================================================
-     JAVASCRIPT
-============================================================ -->
 <script>
-/**
- * LuxeStore | Pixup8k Admin Panel
- * Full Logic — Light Blue & White Theme
- * Lines: 890+
- */
+'use strict';
+/* ═══════════════════════════════════════════════════════════════════
+   FLINTEL — CLIENT APPLICATION (real backend, no mocks)
+   ───────────────────────────────────────────────────────────────────
+   Flow kept intentionally small per current scope:
+     s-home → s-scan → s-report
+   Signup / onboarding / dashboard are SKIPPED for now.
 
-/* ============================================================
-   GLOBAL STATE
-============================================================ */
-let globalData = { products: [] };
-let globalAnalytics = {
-    total_searches: 0,
-    total_clicks: 0,
-    most_questions: {},
-    product_search: {},
-    product_clicks: {},
-    price_updates: {},
-    supported_languages: {}
+   /api/analyze requires a logged-in session (get_current_user reads
+   request.session["user_email"]). Since there is no signup screen in
+   this build yet, ensureSession() transparently creates a lightweight
+   guest account behind the scenes on first analyze — so the "no signup"
+   promise on the homepage still holds from the user's point of view.
+   This is a stopgap: once a real signup/login screen is built, this
+   should be replaced with an actual auth flow.
+
+   REAL GOOGLE AUTH (new): the backend already exposes a full Google
+   OAuth flow — /auth/google/login (redirect to Google),
+   /auth/google/callback (creates/finds the user, sets the session
+   cookie, redirects to /dashboard), and /api/me (tells us who, if
+   anyone, is currently logged in). None of that was touched.
+   This file just wires the existing "Login" button in the nav to that
+   real flow instead of the old comingSoon() stub, and reflects the
+   logged-in state (name/email + logout) in the nav once a session
+   exists. ensureSession() already checks /api/me first and only
+   creates a guest account if nobody is logged in — so a real Google
+   user who clicks "Analyze My Market" is correctly treated as already
+   authenticated and never gets a guest account created underneath them.
+═══════════════════════════════════════════════════════════════════ */
+
+const CONFIG = Object.freeze({
+  TOAST_MS: 3200,
+  STORAGE_KEY: 'flintel_report_state_v1',
+});
+
+const store = {
+  domain: '',
+  company: '',
+  url: '',
+  report: null,      // report object returned by /api/analyze
+  matches: [],        // matches array returned by /api/analyze
+  matchesFound: 0,
+  momentum: null,      // /api/report/market-momentum response
 };
-let chartClicks = null;
-let chartCircle = null;
-let chartLanguages = null;
-let sidebarDesktopCollapsed = false;
-let analyticsFilterQuery = '';
-let pendingDeleteForm = null;
 
-const authStatus = "{{ status }}";
+// Mirrors whatever /api/me last told us. Populated by refreshAuthState().
+const authState = {
+  loggedIn: false,
+  email: null,
+  name: null,
+  authMethod: null, // "google" | "manual" | null
+};
 
-/* ============================================================
-   SIDEBAR — TOGGLE (MOBILE)
-============================================================ */
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('active');
+const $ = (id) => document.getElementById(id);
+
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+}[c]));
+
+function normalizeDomain(raw) {
+  let v = String(raw || '').trim().toLowerCase()
+    .replace(/^https?:\/\//, '').replace(/^www\./, '')
+    .split(/[/?#]/)[0];
+  const DOMAIN_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/;
+  return DOMAIN_RE.test(v) ? v : null;
+}
+const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+/* ── GOOGLE AUTH (real, wired to existing backend routes) ─────────── */
+async function refreshAuthState() {
+  try {
+    const res = await fetch('/api/me', { credentials: 'include' });
+    const data = await res.json().catch(() => ({ logged_in: false }));
+    authState.loggedIn = !!data.logged_in;
+    authState.email = data.email || null;
+    authState.name = data.name || null;
+    authState.authMethod = data.auth_method || null;
+  } catch (e) {
+    console.warn('[auth] /api/me check failed', e);
+    authState.loggedIn = false;
+    authState.email = null;
+    authState.name = null;
+    authState.authMethod = null;
+  }
+  updateNav(currentScreenId());
 }
 
-/* ============================================================
-   SIDEBAR — DESKTOP COLLAPSE/EXPAND
-============================================================ */
-function desktopToggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('main-content');
-    const icon = document.getElementById('sidebar-toggle-icon');
-    const btn = document.getElementById('sidebar-toggle-btn');
-
-    sidebarDesktopCollapsed = !sidebarDesktopCollapsed;
-
-    if (sidebarDesktopCollapsed) {
-        sidebar.classList.add('collapsed');
-        mainContent.classList.add('sidebar-collapsed');
-        icon.className = 'fa-solid fa-chevron-left';
-        btn.style.right = '0';
-    } else {
-        sidebar.classList.remove('collapsed');
-        mainContent.classList.remove('sidebar-collapsed');
-        icon.className = 'fa-solid fa-chevron-right';
-        btn.style.right = '0';
-    }
+function currentScreenId() {
+  return SCREENS.find((s) => { const el = $(s); return el && el.classList.contains('active'); }) || 's-home';
 }
 
-/* ============================================================
-   MOBILE QUICK NAV
-============================================================ */
-function showMobileNav() {
-    const nav = document.getElementById('mobile-quick-nav');
-    nav.classList.toggle('hidden');
-    nav.classList.toggle('flex');
+function loginWithGoogle() {
+  // Full navigation (not fetch) — this has to leave the SPA so Google's
+  // own consent screen can load, exactly as /auth/google/login expects.
+  window.location.href = '/auth/google/login';
 }
 
-function hideMobileNav() {
-    const nav = document.getElementById('mobile-quick-nav');
-    nav.classList.add('hidden');
-    nav.classList.remove('flex');
+async function logout() {
+  try {
+    await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
+  } catch (e) {
+    console.warn('[auth] logout request failed', e);
+  }
+  authState.loggedIn = false;
+  authState.email = null;
+  authState.name = null;
+  authState.authMethod = null;
+  try { sessionStorage.removeItem(CONFIG.STORAGE_KEY); } catch {}
+  showToast('Logged out.');
+  goHome();
 }
 
-/* ============================================================
-   TOAST NOTIFICATIONS — Light Blue Styled
-============================================================ */
-function showToast(message, icon = 'fa-circle-check') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.innerHTML = `<i class="fa-solid ${icon}"></i><span>${message}</span>`;
-    container.appendChild(toast);
-    setTimeout(() => {
-        if (toast.parentNode) toast.parentNode.removeChild(toast);
-    }, 3000);
+/* ── API LAYER — talks to the real FastAPI backend ────────────────── */
+async function ensureSession() {
+  const meRes = await fetch('/api/me', { credentials: 'include' });
+  const me = await meRes.json().catch(() => ({ logged_in: false }));
+  if (me.logged_in) return;
+
+  const rid = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+  const email = `guest_${rid}@guest.flintel.local`;
+  const password = rid + rid.split('').reverse().join('') + '!Aa1';
+
+  const res = await fetch('/auth/signup', {
+    method: 'POST', credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || 'Could not start a session with the backend.');
+  }
 }
 
-/* ============================================================
-   CONFIRM DELETE POPUP
-============================================================ */
-function confirmDelete(form) {
-    pendingDeleteForm = form;
-    const overlay = document.getElementById('confirm-overlay');
-    overlay.classList.add('active');
-    return false; // Prevent default form submission
-}
-
-function cancelDelete() {
-    pendingDeleteForm = null;
-    document.getElementById('confirm-overlay').classList.remove('active');
-}
-
-function executeDelete() {
-    if (pendingDeleteForm) {
-        pendingDeleteForm.submit();
-    }
-    document.getElementById('confirm-overlay').classList.remove('active');
-}
-
-/* ============================================================
-   DOM READY
-============================================================ */
-document.addEventListener("DOMContentLoaded", () => {
-    if (authStatus === "success") {
-        document.getElementById("auth-overlay").classList.add("hidden");
-        sync();
-    } else if (authStatus === "failed") {
-        const errEl = document.getElementById("error-msg");
-        if (errEl) errEl.classList.remove("hidden");
-    }
-
-    const searchInput = document.getElementById('inventory-search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => filterInventory(e.target.value));
-    }
-
-    // Close mobile quick nav when clicking outside
-    document.addEventListener('click', (e) => {
-        const nav = document.getElementById('mobile-quick-nav');
-        const fab = document.getElementById('mobile-fab');
-        if (!nav.contains(e.target) && !fab.contains(e.target)) {
-            nav.classList.add('hidden');
-            nav.classList.remove('flex');
-        }
+const api = {
+  async analyze(url) {
+    const res = await fetch('/api/analyze', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
     });
-});
-
-/* ============================================================
-   SYNC — Fetch Data & Analytics
-============================================================ */
-async function sync() {
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || `Analyze failed (${res.status})`);
+    }
+    return res.json();
+  },
+  async marketMomentum() {
     try {
-        const [d, a] = await Promise.all([
-            fetch("/api/data"),
-            fetch("/api/analytics")
-        ]);
-        globalData = await d.json();
-        globalAnalytics = await a.json();
+      const res = await fetch('/api/report/market-momentum', { credentials: 'include' });
+      if (!res.ok) return null;
+      return res.json();
+    } catch { return null; }
+  },
+};
 
-        document.getElementById("connection-status").innerHTML =
-            `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Online`;
+/* ── ROUTER ──────────────────────────────────────────────────────── */
+const SCREENS = ['s-home', 's-scan', 's-report'];
 
-        refreshDashboard();
-        refreshInventory(globalData.products || []);
-        checkClickDropWarning();
-    } catch (e) {
-        document.getElementById("connection-status").innerHTML =
-            `<span class="w-2 h-2 rounded-full bg-red-500"></span> Offline Node`;
+function showScreen(id) {
+  SCREENS.forEach((s) => { const el = $(s); if (el) el.classList.remove('active'); });
+  const target = $(id);
+  if (!target) return console.error(`[router] unknown screen "${id}"`);
+  target.classList.add('active');
+  window.scrollTo(0, 0);
+  updateNav(id);
+}
+
+const GOOGLE_ICON_SVG = `<svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.6 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6 29.6 4 24 4c-7.4 0-13.8 4.1-17.1 10.1z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.4C29.7 35 27 36 24 36c-5.2 0-9.6-3.3-11.2-7.9l-6.6 5.1C9.9 39.7 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.6l6.6 5.4C41.5 36 44 30.5 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>`;
+
+function updateNav(id) {
+  const actions = $('nav-actions');
+  const links = $('nav-links');
+  links.classList.toggle('hidden', id !== 's-home');
+
+  // Only treat a *real* Google-authenticated user as "logged in" for
+  // display purposes — the transparent guest account created by
+  // ensureSession() is a backend implementation detail and should never
+  // show up as a logged-in user in the nav.
+  const isGoogleUser = authState.loggedIn && authState.authMethod === 'google';
+
+  const loginOrUserChip = isGoogleUser
+    ? `<span class="nav-user-email" title="${esc(authState.email || '')}">${esc(authState.name || authState.email || '')}</span>
+       <button class="nav-ghost" type="button" onclick="logout()">Log out</button>`
+    : `<button class="nav-login" type="button" onclick="loginWithGoogle()">${GOOGLE_ICON_SVG}Login with Google</button>`;
+
+  if (id === 's-report') {
+    actions.innerHTML = `
+      <button class="nav-ghost" type="button" onclick="goHome()">New report</button>
+      ${isGoogleUser ? `<span class="nav-user-email" title="${esc(authState.email || '')}">${esc(authState.name || authState.email || '')}</span>
+      <button class="nav-ghost" type="button" onclick="logout()">Log out</button>` : ''}
+      <button class="nav-cta" type="button" onclick="document.querySelector('.report-cta-section').scrollIntoView({behavior:'smooth'})">View plans</button>`;
+  } else {
+    actions.innerHTML = loginOrUserChip;
+  }
+}
+
+function goHome() {
+  const input = $('url-input');
+  if (input) input.value = '';
+  try { sessionStorage.removeItem(CONFIG.STORAGE_KEY); } catch {}
+  showScreen('s-home');
+}
+
+function comingSoon(what) {
+  showToast(`${what} isn't wired up yet — coming soon.`);
+}
+
+/* ── PERSISTENCE — survive a refresh while on the report screen ───── */
+function persistReport() {
+  try {
+    sessionStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify({
+      domain: store.domain, company: store.company, url: store.url,
+      report: store.report, matches: store.matches,
+      matchesFound: store.matchesFound, momentum: store.momentum,
+    }));
+  } catch (e) { console.warn('[persist] failed', e); }
+}
+function restoreReport() {
+  try {
+    const raw = sessionStorage.getItem(CONFIG.STORAGE_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !parsed.report) return false;
+    Object.assign(store, parsed);
+    return true;
+  } catch { return false; }
+}
+
+/* ── SCAN CONTROLLER (visual only — real work happens in startAnalysis) ─ */
+let scanTimers = [];
+function clearScanTimers() { scanTimers.forEach(clearTimeout); scanTimers = []; }
+
+function runScanAnimation() {
+  clearScanTimers();
+  const fill = $('scan-fill');
+  const steps = [
+    { id: 'ss-1', detail: 'Reading homepage and secondary pages', pct: 20 },
+    { id: 'ss-2', detail: 'Extracting buyer pain phrases and competitors', pct: 40 },
+    { id: 'ss-3', detail: 'Matching discovery keywords against tracked signals', pct: 65 },
+    { id: 'ss-4', detail: 'Scoring competitor mentions', pct: 85 },
+    { id: 'ss-5', detail: 'Waiting on backend to finish analysis…', pct: 96 },
+  ];
+  const CHECK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+  const SPIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>`;
+  const IDLE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>`;
+
+  steps.forEach((s) => {
+    const el = $(s.id); el.className = 'scan-step';
+    const icon = el.querySelector('.step-icon'); icon.className = 'step-icon pending'; icon.innerHTML = IDLE;
+  });
+  fill.style.transition = 'none'; fill.style.width = '0';
+
+  let idx = 0;
+  function nextStep() {
+    if (idx >= steps.length) return; // last step just holds — real data drives the transition to s-report
+    const s = steps[idx];
+    const el = $(s.id);
+    if (idx > 0) {
+      const prev = $(steps[idx - 1].id);
+      prev.classList.remove('active'); prev.classList.add('done');
+      const pi = prev.querySelector('.step-icon'); pi.className = 'step-icon checked'; pi.innerHTML = CHECK;
     }
+    el.classList.add('active');
+    const icon = el.querySelector('.step-icon'); icon.className = 'step-icon spinning'; icon.innerHTML = SPIN;
+    fill.style.width = s.pct + '%';
+    el.querySelector('.step-detail').textContent = s.detail;
+    idx += 1;
+    scanTimers.push(setTimeout(nextStep, 850));
+  }
+  scanTimers.push(setTimeout(() => { fill.style.transition = 'width .8s ease'; nextStep(); }, 50));
 }
 
-/* ============================================================
-   CLICK DROP WARNING — Alert if total clicks < 100
-============================================================ */
-function checkClickDropWarning() {
-    const totalClicks = globalAnalytics.total_clicks || 0;
-    const warningEl = document.getElementById('click-drop-warning');
-    if (totalClicks < 100 && totalClicks > 0) {
-        warningEl.classList.add('show');
-    } else {
-        warningEl.classList.remove('show');
-    }
+function finishScanAnimation() {
+  clearScanTimers();
+  const fill = $('scan-fill'); if (fill) fill.style.width = '100%';
+  document.querySelectorAll('#scan-steps .scan-step').forEach((el) => {
+    el.classList.remove('active'); el.classList.add('done');
+    const icon = el.querySelector('.step-icon');
+    icon.className = 'step-icon checked';
+    icon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+  });
 }
 
-/* ============================================================
-   SWITCH TAB
-============================================================ */
-function switchTab(tabId) {
-    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+/* ── ANALYZE ────────────────────────────────────────────────────── */
+let analyzeInFlight = false;
+async function startAnalysis() {
+  if (analyzeInFlight) return; // guards against double-fire (Enter + click, double-click, etc.)
+  const raw = $('url-input').value;
+  const domain = normalizeDomain(raw);
+  if (!domain) { $('url-input').focus(); return; }
 
-    document.getElementById('tab-' + tabId).classList.add('active');
-    document.getElementById('link-' + tabId).classList.add('active');
-    document.getElementById('page-title').innerText = tabId.replace('-', ' ');
+  analyzeInFlight = true;
+  store.domain = domain;
+  store.company = capitalize(domain.split('.')[0]);
+  const fullUrl = /^https?:\/\//i.test(raw.trim()) ? raw.trim() : ('https://' + domain);
+  store.url = fullUrl;
 
-    if (window.innerWidth < 1024) {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
-    }
+  $('scan-url-label').textContent = domain;
+  $('rs-url').textContent = domain;
 
-    if (tabId === 'analytics') renderCharts();
-    if (tabId === 'dashboard') renderDashboardCharts();
+  showScreen('s-scan');
+  runScanAnimation();
+
+  const btn = $('url-submit-btn');
+  if (btn) btn.disabled = true;
+
+  try {
+    await ensureSession();
+    const data = await api.analyze(fullUrl);
+    store.report = data.report || {};
+    store.matches = data.matches || [];
+    store.matchesFound = data.matches_found || (data.matches || []).length;
+    store.momentum = await api.marketMomentum();
+
+    finishScanAnimation();
+    persistReport();
+    setTimeout(renderReport, 400);
+  } catch (err) {
+    console.error('[analyze] failed', err);
+    showToast(err.message || 'Could not analyze this site — please try again.');
+    goHome();
+  } finally {
+    if (btn) btn.disabled = false;
+    analyzeInFlight = false;
+  }
 }
 
-/* ============================================================
-   REFRESH DASHBOARD
-============================================================ */
-function refreshDashboard() {
-    const products = globalData.products || [];
-    document.getElementById("stat-count").innerText = products.length;
-    document.getElementById("stat-total-clicks").innerText = globalAnalytics.total_clicks || 0;
-    document.getElementById("stat-total-searches").innerText = globalAnalytics.total_searches || 0;
-
-    // Auto-calculate and update average price
-    updateAveragePrice(products);
-
-    const growth = globalAnalytics.total_clicks > 0
-        ? (globalAnalytics.total_clicks / 500 * 100).toFixed(1)
-        : 0;
-    document.getElementById("click-growth-percent").innerText = `+${growth}% efficiency`;
-
-    // Recent 4 products
-    const recent = [...products].slice(-4).reverse();
-    document.getElementById("recent-grid").innerHTML = recent.map(p => `
-        <div class="flex items-center gap-4 p-4 border rounded-2xl hover:shadow-sm transition-all cursor-default" style="border-color:#c7e8f3">
-            <div class="w-12 h-12 shadow-sm bg-white overflow-hidden rounded-lg border flex items-center justify-center flex-shrink-0" style="border-color:#c7e8f3">
-                <img src="${p.image_link}" class="max-h-full object-contain"
-                    onerror="this.src='https://placehold.co/48x48?text=N%2FA'">
-            </div>
-            <div class="flex-1 min-w-0">
-                <p class="card-title truncate text-slate-800 uppercase tracking-tight">${p.title}</p>
-                <p class="text-[10px] font-bold mt-0.5" style="color:var(--primary-text)">$${p.price} • ${p.category}</p>
-            </div>
-            <span class="text-[9px] font-black px-2 py-1 rounded-md flex-shrink-0" style="background:var(--primary);color:var(--primary-text)">recorded</span>
-        </div>
-    `).join("");
-
-    // Top Selling Product
-    updateTopSellingCard(products);
-
-    renderDashboardCharts();
+/* ── helpers to turn real match rows into UI shapes ───────────────── */
+function matchScore(m) {
+  const v = m.upvotes ?? m.score ?? m.ups ?? m.num_upvotes;
+  return typeof v === 'number' ? v : 0;
 }
 
-/* ============================================================
-   UPDATE AVERAGE PRICE — Auto-updates when product added
-============================================================ */
-function updateAveragePrice(products) {
-    const prods = products || globalData.products || [];
-    if (prods.length > 0) {
-        const totalValue = prods.reduce((acc, p) => acc + (parseFloat(p.price) || 0), 0);
-        const avg = (totalValue / prods.length).toFixed(2);
-        document.getElementById("stat-avg-price").innerText = `$${avg}`;
-    } else {
-        document.getElementById("stat-avg-price").innerText = "$0.00";
-    }
-}
-
-/* ============================================================
-   TOP SELLING PRODUCT CARD
-============================================================ */
-function updateTopSellingCard(products) {
-    if (!products || products.length === 0) return;
-
-    // Find product with highest trending_score
-    const topProduct = products.reduce((best, p) => {
-        const score = parseFloat(p.trending_score) || 0;
-        const bestScore = parseFloat(best.trending_score) || 0;
-        return score > bestScore ? p : best;
-    }, products[0]);
-
-    document.getElementById('top-product-title').innerText = topProduct.title || 'Unknown';
-    document.getElementById('top-product-meta').innerText =
-        `$${topProduct.price} • ${topProduct.category} • Rating: ${topProduct.rating || 'N/A'}`;
-    document.getElementById('top-product-score').innerText =
-        `Trending Score: ${topProduct.trending_score || 0}`;
-
-    const img = document.getElementById('top-product-img');
-    const placeholder = document.getElementById('top-product-placeholder');
-    if (topProduct.image_link) {
-        img.src = topProduct.image_link;
-        img.classList.remove('hidden');
-        placeholder.classList.add('hidden');
-    }
-
-    // Highlight products with trending_score > 80
-    highlightTrendingProducts();
-}
-
-/* ============================================================
-   HIGHLIGHT TRENDING PRODUCTS (score > 80)
-============================================================ */
-function highlightTrendingProducts() {
-    // Applied in refreshInventory via the template
-}
-
-/* ============================================================
-   RENDER DASHBOARD CHARTS — Doughnut shows last 5 searches
-============================================================ */
-function renderDashboardCharts() {
-    const searchData = globalAnalytics.product_search || {};
-    // Last 5 searches only
-    const sortedEntries = Object.entries(searchData).sort((a, b) => b[1] - a[1]).slice(0, 5);
-    const labels = sortedEntries.map(e => e[0]);
-    const counts = sortedEntries.map(e => e[1]);
-
-    if (chartCircle) chartCircle.destroy();
-    const ctx = document.getElementById('searchCircleChart');
-    if (!ctx || labels.length === 0) return;
-
-    // Light blue color palette for doughnut segments
-    chartCircle = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: counts,
-                backgroundColor: [
-                    '#add8e6', '#7ec8e3', '#4ab4d1',
-                    '#c5e8f0', '#85c9de'
-                ],
-                borderWidth: 2,
-                borderColor: '#ffffff',
-                hoverOffset: 15
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '70%',
-            rotation: -90,
-            circumference: 180,
-            plugins: {
-                tooltip: {
-                    backgroundColor: 'var(--primary, #add8e6)',
-                    titleColor: '#1a6b8a',
-                    bodyColor: '#1a6b8a',
-                    titleFont: { size: 12, weight: '600' },
-                    padding: 12,
-                    displayColors: true,
-                    boxPadding: 6,
-                    callbacks: {
-                        labelColor: function(context) {
-                            return { borderColor: '#add8e6', backgroundColor: '#add8e6' };
-                        }
-                    }
-                },
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        usePointStyle: true,
-                        pointStyle: 'rectRounded',
-                        padding: 15,
-                        font: { size: 10, weight: '600' },
-                        color: '#1a6b8a'
-                    }
-                }
-            }
-        }
-    });
-}
-
-/* ============================================================
-   REFRESH INVENTORY GRID
-============================================================ */
-function refreshInventory(list) {
-    const grid = document.getElementById("full-inventory-grid");
-    if (!grid) return;
-
-    grid.innerHTML = list.length ? list.map(p => {
-        const tScore = parseFloat(p.trending_score) || 0;
-        const trendBadge = tScore > 80
-            ? `<span class="trending-badge"><i class="fa-solid fa-fire-flame-curved"></i> Trending</span>`
-            : '';
-        return `
-        <div class="glass-card group flex flex-col items-center text-center p-6" style="border-color:#c7e8f3">
-            <div class="w-full aspect-square bg-white rounded-xl p-6 flex items-center justify-center border mb-6 transition-all group-hover:shadow-inner" style="border-color:#c7e8f3">
-                <img src="${p.image_link}" class="max-h-full max-w-full object-contain"
-                    onerror="this.src='https://placehold.co/200x200?text=Asset+Missing'">
-            </div>
-            <div class="w-full flex-1">
-                <p class="text-[10px] font-bold uppercase tracking-widest mb-1" style="color:var(--primary-text)">${p.category}</p>
-                <p class="card-title font-bold text-slate-900 uppercase truncate mb-2">${p.title}</p>
-                ${trendBadge}
-                <div class="flex items-center justify-center gap-4 mt-3 mb-4">
-                    <p class="text-base font-bold text-slate-900">$${p.price}</p>
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-                    <p class="text-[10px] font-bold mono" style="color:var(--primary-text)">${p.id}</p>
-                </div>
-            </div>
-            <div class="w-full grid grid-cols-2 gap-2 pt-4 border-t" style="border-color:#c7e8f3">
-                <button onclick="openEditModal('${p._id}')" class="btn-secondary text-xs py-2">
-                    <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
-                </button>
-                <form action="/delete_product" method="POST" onsubmit="return confirmDelete(this)" class="w-full">
-                    <input type="hidden" name="id" value="${p._id}">
-                    <button type="submit" class="btn-secondary w-full text-xs py-2 !text-red-500 hover:!bg-red-50">
-                        <i class="fa-solid fa-trash mr-1"></i>Delete
-                    </button>
-                </form>
-            </div>
-        </div>
-    `}).join("") : `
-        <div class="col-span-full py-20 text-center font-bold tracking-widest uppercase text-sm" style="color:var(--primary-text)">
-            <i class="fa-solid fa-box-open text-4xl mb-4 block" style="color:var(--primary)"></i>
-            No Registry Found
-        </div>`;
-}
-
-/* ============================================================
-   FILTER INVENTORY
-============================================================ */
-function filterInventory(q) {
-    const query = q.toLowerCase();
-    const filtered = globalData.products.filter(p =>
-        (p.title && p.title.toLowerCase().includes(query)) ||
-        (p.id && p.id.toLowerCase().includes(query)) ||
-        (p.category && p.category.toLowerCase().includes(query))
-    );
-    refreshInventory(filtered);
-}
-
-/* ============================================================
-   ANALYTICS SEARCH FILTER
-============================================================ */
-function filterAnalytics(q) {
-    analyticsFilterQuery = q.toLowerCase().trim();
-    renderCharts();
-}
-
-/* ============================================================
-   RENDER ANALYTICS CHARTS
-============================================================ */
-function renderCharts() {
-    const clickData = globalAnalytics.product_clicks || {};
-    const questionData = globalAnalytics.most_questions || {};
-    const languageData = globalAnalytics.supported_languages || {};
-
-    let entries = Object.entries(clickData).sort((a, b) => b[1] - a[1]).slice(0, 10);
-
-    // Apply analytics filter if set
-    if (analyticsFilterQuery) {
-        entries = entries.filter(([id]) => {
-            const p = globalData.products.find(x => x._id === id);
-            if (!p) return false;
-            return p.title.toLowerCase().includes(analyticsFilterQuery) ||
-                   (p.category && p.category.toLowerCase().includes(analyticsFilterQuery));
-        });
-    }
-
-    const labels = entries.map(([id]) => {
-        const p = globalData.products.find(x => x._id === id);
-        return p ? p.title.substring(0, 14) : id.substring(0, 6);
-    });
-    const values = entries.map(e => e[1]);
-
-    if (chartClicks) chartClicks.destroy();
-    const clicksCtx = document.getElementById('clicksChart');
-    if (clicksCtx && values.length > 0) {
-        chartClicks = new Chart(clicksCtx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Engagement Index',
-                    data: values,
-                    backgroundColor: '#add8e6',
-                    hoverBackgroundColor: '#7ec8e3',
-                    borderRadius: 9999, // Pill bars
-                    barThickness: window.innerWidth < 640 ? 15 : 24
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#f0faff', drawBorder: false },
-                        ticks: { font: { size: 10, weight: '600' }, color: '#1a6b8a' }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 9, weight: '600' }, color: '#1a6b8a' }
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        // Light blue styled tooltips
-                        backgroundColor: '#add8e6',
-                        titleColor: '#1a6b8a',
-                        bodyColor: '#1a6b8a',
-                        titleFont: { size: 11, weight: '700' },
-                        bodyFont: { size: 11 },
-                        padding: 10,
-                        cornerRadius: 9999,
-                        displayColors: false,
-                        callbacks: {
-                            title: function(items) {
-                                return items[0].label;
-                            },
-                            label: function(item) {
-                                return `Clicks: ${item.formattedValue}`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    if (chartLanguages) chartLanguages.destroy();
-    const langCtx = document.getElementById('languagesChart');
-    const langLabels = Object.keys(languageData);
-    const langValues = Object.values(languageData);
-
-    if (langCtx && langLabels.length > 0) {
-        chartLanguages = new Chart(langCtx, {
-            type: 'pie',
-            data: {
-                labels: langLabels.map(l => l.toUpperCase()),
-                datasets: [{
-                    data: langValues,
-                    backgroundColor: ['#add8e6', '#7ec8e3', '#4ab4d1', '#c5e8f0', '#85c9de'],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            font: { size: 9, weight: 'bold' },
-                            boxWidth: 10,
-                            padding: 8,
-                            color: '#1a6b8a'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: '#add8e6',
-                        titleColor: '#1a6b8a',
-                        bodyColor: '#1a6b8a'
-                    }
-                }
-            }
-        });
-    }
-
-    // Questions list
-    const qList = document.getElementById("questions-list");
-    const sortedQ = Object.entries(questionData).sort((a, b) => b[1] - a[1]);
-    qList.innerHTML = sortedQ.length ? sortedQ.map(([q, count]) => `
-        <div class="flex items-start justify-between p-3 rounded-xl transition-all group" style="background:#f0faff;border:1px solid #c7e8f3">
-            <div class="flex-1 pr-4">
-                <p class="text-xs font-semibold leading-relaxed italic text-slate-800">"${q}"</p>
-            </div>
-            <div class="flex-shrink-0">
-                <span class="text-[10px] font-bold bg-white px-3 py-1 rounded-full border" style="color:var(--primary-text);border-color:#add8e6">${count}</span>
-            </div>
-        </div>
-    `).join("") : `<div class="text-center py-10 text-xs font-bold uppercase tracking-widest" style="color:var(--primary-text);opacity:0.5">Inquiry Stream Clear</div>`;
-
-    // Analytics table
-    document.getElementById("analytics-tbody").innerHTML = globalData.products.slice(0, 20).map(p => `
-        <tr class="hover:bg-blue-50/40 transition-colors">
-            <td class="font-semibold text-slate-900 p-5">${p.title}
-                <span class="block text-[10px] mono mt-1" style="color:var(--primary-text)">${p.id}</span>
-            </td>
-            <td class="font-bold hide-mobile p-5" style="color:var(--primary-text)">${clickData[p._id] || 0} clicks</td>
-            <td class="text-right p-5">
-                <span class="text-[10px] font-black uppercase px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-600">Synchronized</span>
-            </td>
-        </tr>
-    `).join("");
-}
-
-/* ============================================================
-   EDIT MODAL — Prefill fields by product ID
-============================================================ */
-function openEditModal(id) {
-    const p = globalData.products.find(x => x._id === id);
-    if (!p) {
-        showToast('Product not found in registry.', 'fa-circle-exclamation');
-        return;
-    }
-
-    document.getElementById("edit-id").value = p._id;
-    document.getElementById("edit-title").value = p.title || '';
-
-    // Prefill category dropdown
-    const editCat = document.getElementById("edit-category");
-    const catExists = Array.from(editCat.options).some(o => o.value === p.category);
-    if (catExists) {
-        editCat.value = p.category;
-    } else {
-        // Add the category if not in list, then select
-        const opt = document.createElement('option');
-        opt.value = p.category || '';
-        opt.text = p.category || '';
-        editCat.appendChild(opt);
-        editCat.value = p.category || '';
-    }
-
-    document.getElementById("edit-price").value = p.price || 0;
-    document.getElementById("edit-image-link").value = p.image_link || '';
-    document.getElementById("edit-image").value = p.image || '';
-    document.getElementById("edit-material").value = p.material || '';
-    document.getElementById("edit-color").value = p.color || '';
-    document.getElementById("edit-rating").value = p.rating || '';
-    document.getElementById("edit-trending").value = p.trending_score || 0;
-    document.getElementById("edit-description").value = p.description || '';
-
-    document.getElementById("modal-sku-display").innerText = p.id || '--';
-    previewImg(p.image_link, 'edit-prev');
-
-    document.getElementById("edit-modal").classList.remove("hidden");
-    document.body.style.overflow = 'hidden';
-}
-
-function closeEditModal() {
-    document.getElementById("edit-modal").classList.add("hidden");
-    document.body.style.overflow = 'auto';
-}
-
-/* ============================================================
-   LIVE IMAGE PREVIEW
-============================================================ */
-function previewImg(url, id) {
-    const img = document.getElementById(id);
-    const txt = document.getElementById(id + '-txt');
-    if (url && url.trim() !== '') {
-        img.src = url;
-        img.classList.remove('hidden');
-        if (txt) txt.classList.add('hidden');
-    } else {
-        img.classList.add('hidden');
-        if (txt) txt.classList.remove('hidden');
-    }
-}
-
-/* ============================================================
-   FILE UPLOAD — Live preview from file input
-============================================================ */
-function handleFileUpload(input) {
-    const file = input.files[0];
-    const nameDisplay = document.getElementById('file-name-display');
-    if (!file) return;
-
-    nameDisplay.textContent = file.name;
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const img = document.getElementById('add-prev');
-        const txt = document.getElementById('add-prev-txt');
-        img.src = e.target.result;
-        img.classList.remove('hidden');
-        if (txt) txt.classList.add('hidden');
-        // Also set the image-link input for form submission reference
-        document.getElementById('add-image-link').value = e.target.result;
+function buildCommunities(matches) {
+  const groups = {};
+  matches.forEach((m) => {
+    const key = m.subreddit_or_channel || m.matched_keyword || 'unknown';
+    if (!groups[key]) groups[key] = { name: key, count: 0, sample: '' };
+    groups[key].count += 1;
+    if (!groups[key].sample && m.text) groups[key].sample = m.text;
+  });
+  const arr = Object.values(groups).sort((a, b) => b.count - a.count);
+  const max = arr.length ? arr[0].count : 1;
+  return arr.slice(0, 6).map((g) => {
+    const name = /^r\//i.test(g.name) ? g.name : ('r/' + String(g.name).replace(/^r\//i, ''));
+    const isHigh = g.count >= Math.max(2, Math.round(max * 0.5));
+    return {
+      name,
+      rel: isHigh ? 'HIGH' : 'MED',
+      relClass: isHigh ? 'rel-high' : 'rel-med',
+      quote: g.sample ? `"${g.sample.slice(0, 150)}${g.sample.length > 150 ? '…' : ''}"` : 'No sample text captured for this community yet.',
+      posts: `${g.count} matched signal${g.count === 1 ? '' : 's'}`,
     };
-    reader.readAsDataURL(file);
+  });
 }
 
-/* ============================================================
-   FORM VALIDATION
-============================================================ */
-function validatePrice(input) {
-    const errorEl = document.getElementById('price-error');
-    const val = parseFloat(input.value);
-    if (input.value !== '' && (isNaN(val) || val <= 0)) {
-        input.classList.add('error');
-        if (errorEl) { errorEl.style.display = 'block'; }
-        return false;
-    } else {
-        input.classList.remove('error');
-        if (errorEl) { errorEl.style.display = 'none'; }
-        return true;
-    }
+function buildThreads(matches) {
+  const sorted = [...matches].sort((a, b) => matchScore(b) - matchScore(a)).slice(0, 5);
+  const maxScore = Math.max(1, ...sorted.map(matchScore));
+  return sorted.map((m) => {
+    const s = matchScore(m);
+    const norm = Math.min(98, Math.max(38, Math.round((s / maxScore) * 55) + 40));
+    const text = m.text || '';
+    return {
+      score: norm,
+      sClass: norm >= 85 ? 'ts-hot' : norm >= 65 ? 'ts-warm' : 'ts-mid',
+      platClass: 'pd-r',
+      src: `${m.subreddit_or_channel || 'reddit'} · matched "${m.matched_keyword || '—'}"`,
+      title: text ? text.slice(0, 130) : 'Untitled matched thread',
+      snippet: text ? text.slice(0, 220) : 'No text captured for this match.',
+      pills: [ s ? `${s} upvotes` : null ].filter(Boolean),
+    };
+  });
 }
 
-function validateRating(input) {
-    const errorEl = document.getElementById('rating-error');
-    const val = parseFloat(input.value);
-    if (input.value !== '' && (isNaN(val) || val < 0 || val > 5)) {
-        input.classList.add('error');
-        if (errorEl) { errorEl.style.display = 'block'; }
-        return false;
-    } else {
-        input.classList.remove('error');
-        if (errorEl) { errorEl.style.display = 'none'; }
-        return true;
-    }
+const SUB_COLORS = ['#FF4500','#0079D3','#7193FF','#00A6A6','#EA0027','#46A508','#8B5CF6','#F59E0B','#0F172A','#DB2777'];
+function subredditHash(name) { let h = 0; for (let i=0;i<name.length;i++) h = ((h<<5)-h+name.charCodeAt(i))|0; return Math.abs(h); }
+function subredditColor(name) { const clean = name.replace(/^r\//i,''); return SUB_COLORS[subredditHash(clean) % SUB_COLORS.length]; }
+function subredditGlyph(name) { const clean = name.replace(/^r\//i,''); return esc(clean.charAt(0).toUpperCase() || '?'); }
+
+/* ── MOMENTUM (Section 03) ────────────────────────────────────────── */
+function renderMomentum(momentum) {
+  const fmtDelta = (pct) => {
+    if (pct === null || pct === undefined) return { text: 'Building baseline', cls: 'neutral' };
+    const sign = pct > 0 ? '+' : '';
+    return { text: `${sign}${pct}% vs prior period`, cls: pct >= 0 ? '' : 'neutral' };
+  };
+
+  if (!momentum) {
+    $('viz-complaint-value').textContent = '—';
+    $('viz-intent-value').textContent = '—';
+    return;
+  }
+
+  const cv = momentum.competitor_complaint_volume || {};
+  $('viz-complaint-value').textContent = cv.current_period_count ?? 0;
+  const cd = fmtDelta(cv.pct_change_vs_prior_period);
+  const cEl = $('viz-complaint-delta'); cEl.textContent = cd.text; cEl.className = 'viz-delta ' + cd.cls;
+
+  const iv = momentum.intent_search_phrases || {};
+  $('viz-intent-value').textContent = iv.current_period_count ?? 0;
+  const id_ = fmtDelta(iv.pct_change_vs_prior_period);
+  const iEl = $('viz-intent-delta'); iEl.textContent = id_.text; iEl.className = 'viz-delta ' + id_.cls;
+
+  $('viz-serp-note').textContent = momentum.page_one_threads_reason || 'Not available yet — no SERP-ranking source is connected.';
+
+  const bars = (momentum.competitor_bar_chart && momentum.competitor_bar_chart.bars) || [];
+  const gapEl = $('gap-viz');
+  if (!bars.length) {
+    gapEl.innerHTML = '<div class="empty-note">No competitor mention data yet.</div>';
+  } else {
+    const max = Math.max(1, ...bars.map((b) => b.mentions || 0));
+    const multiple = momentum.competitor_bar_chart.talked_about_multiple;
+    const rows = bars.map((b) => `
+      <div class="gap-row">
+        <div class="gap-name ${b.is_you ? 'you' : ''}">${esc(b.name)}</div>
+        <div class="gap-bar"><div class="gap-fill ${b.is_you ? 'you' : ''}" data-w="${Math.round(((b.mentions||0)/max)*100)}"></div></div>
+        <div class="gap-count">${b.mentions || 0}</div>
+      </div>`).join('');
+    const caption = multiple
+      ? `<p class="gap-caption">Your competitors are being <b>talked about ${multiple}&times; more</b> than you across the same matched signals.</p>`
+      : `<p class="gap-caption">Not enough mentions of your own domain yet to compute a comparison — this fills in as more matches come in.</p>`;
+    gapEl.innerHTML = rows + caption;
+    requestAnimationFrame(() => {
+      gapEl.querySelectorAll('.gap-fill').forEach((el, i) => {
+        setTimeout(() => { el.style.width = el.dataset.w + '%'; }, 150 + i * 120);
+      });
+    });
+  }
 }
 
-/* ============================================================
-   HANDLE ADD PRODUCT — Toast on success + avg price update
-============================================================ */
-function handleAddProduct(event) {
-    const priceInput = document.getElementById('add-price');
-    const ratingInput = document.getElementById('add-rating');
+/* ── REPORT CONTROLLER ─────────────────────────────────────────────── */
+function renderReport() {
+  const report = store.report || {};
+  const matches = store.matches || [];
+  const communities = buildCommunities(matches);
+  const threads = buildThreads(matches);
+  const competitorCount = (report.competitors || []).length;
 
-    const priceValid = validatePrice(priceInput);
-    const ratingValid = validateRating(ratingInput);
+  $('rs-url').textContent = store.domain;
+  $('scan-url-label').textContent = store.domain;
+  $('rmchip-date').textContent = 'Generated ' + new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  $('rh-subs').textContent = `${communities.length} ${communities.length === 1 ? 'community' : 'communities'}`;
+  $('rh-posts').textContent = `${store.matchesFound} matched ${store.matchesFound === 1 ? 'post' : 'posts'}`;
 
-    if (!priceValid || !ratingValid) {
-        event.preventDefault();
-        showToast('Please fix validation errors before submitting.', 'fa-triangle-exclamation');
-        return false;
-    }
+  if (report.company_summary) {
+    $('report-summary-text').innerHTML =
+      `${esc(report.company_summary)} — matched against Reddit discussions already tracked by Flintel for <b>${esc(store.domain)}</b>.`;
+  }
 
-    // Show success toast (the form will POST normally)
-    showToast('Product registration submitted successfully!', 'fa-circle-check');
+  $('tk-matches').textContent = store.matchesFound;
+  $('tk-communities').textContent = communities.length;
+  $('tk-competitors').textContent = competitorCount;
 
-    // Optimistically update average price if we have current products
-    const products = globalData.products || [];
-    const newPrice = parseFloat(priceInput.value) || 0;
-    const allPrices = [...products.map(p => parseFloat(p.price) || 0), newPrice];
-    const newAvg = (allPrices.reduce((a, b) => a + b, 0) / allPrices.length).toFixed(2);
-    const avgEl = document.getElementById('stat-avg-price');
-    if (avgEl) avgEl.innerText = `$${newAvg}`;
+  $('subreddit-grid').innerHTML = communities.length ? communities.map((s) => `
+    <div class="sub-card">
+      <div class="sub-top">
+        <div class="sub-top-left">
+          <div class="sub-icon" style="background:${subredditColor(s.name)}">${subredditGlyph(s.name)}</div>
+          <div><div class="sub-name">${esc(s.name)}</div></div>
+        </div>
+        <div class="rel-badge ${esc(s.relClass)}">${esc(s.rel)}</div>
+      </div>
+      <div class="sub-quote">${esc(s.quote)}</div>
+      <div class="sub-stats"><div class="sub-stat"><b>${esc(s.posts)}</b></div></div>
+    </div>`).join('') : '<div class="empty-note">No community matches yet — Flintel will keep watching and these will fill in as matching signals come in.</div>';
 
-    return true; // Allow form submission
+  const ringColor = (t) => (t.sClass === 'ts-hot' ? '#B6FF1E' : '#6863FC');
+  $('thread-list').innerHTML = threads.length ? threads.map((t) => `
+    <div class="thread-card">
+      <div class="thread-score-col" style="background:conic-gradient(${ringColor(t)} ${t.score * 3.6}deg, var(--g5) 0deg)">
+        <div class="tscore ${esc(t.sClass)}">${esc(t.score)}</div>
+      </div>
+      <div class="thread-body">
+        <div class="thread-plat"><div class="plat-dot ${esc(t.platClass)}"></div><div class="thread-source">${esc(t.src)}</div></div>
+        <div class="thread-title">${esc(t.title)}</div>
+        <div class="thread-snippet">${esc(t.snippet)}</div>
+        <div class="thread-pills">${t.pills.map((p) => `<div class="tpill">${esc(p)}</div>`).join('')}</div>
+      </div>
+    </div>`).join('') : '<div class="empty-note">No matched threads yet for this domain.</div>';
+
+  renderMomentum(store.momentum);
+
+  showScreen('s-report');
 }
 
-/* ============================================================
-   RESPONSIVE WINDOW HANDLER
-============================================================ */
-window.addEventListener('resize', () => {
-    if (window.innerWidth >= 1024) {
-        const overlay = document.getElementById('sidebar-overlay');
-        overlay.classList.remove('active');
-    }
-});
+
+/* ── TOAST ───────────────────────────────────────────────────────── */
+let toastTimer = null;
+function showToast(msg) {
+  const t = $('toast'); $('toast-text').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), CONFIG.TOAST_MS);
+}
+
+/* ── GLOBAL KEYBOARD ─────────────────────────────────────────────── */
+/* Note: Enter-to-submit is handled once, via the input's own onkeydown
+   in the HTML. No duplicate global listener here — having both fired
+   startAnalysis() twice per Enter press, which double-hit /api/analyze
+   (visible as every secondary path being fetched twice in the logs). */
+
+/* ── INIT — restore report on refresh instead of bouncing to home,
+   and check real auth state so the nav reflects an existing Google
+   session (e.g. after /auth/google/callback redirected back here) ─── */
+(function init() {
+  refreshAuthState();
+  if (restoreReport()) {
+    renderReport();
+  } else {
+    showScreen('s-home');
+  }
+})();
 </script>
 </body>
 </html>
+
