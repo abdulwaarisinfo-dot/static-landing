@@ -13,150 +13,149 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
 
-        /* ============================================================
-           ROOT VARIABLES — LIGHT BLUE & WHITE THEME
-        ============================================================ */
+        /* ===================== CSS VARIABLES ===================== */
         :root {
             --sidebar-width: 260px;
-            --primary: #add8e6;            /* Light Blue */
-            --primary-dark: #7ec8e3;       /* Darker light blue for hover */
-            --primary-text: #1a6b8a;       /* Dark text on light blue */
-            --primary-deep: #0e7490;       /* Deep accent */
+            --primary: #add8e6;
+            --primary-dark: #7ec8e3;
+            --primary-hover: #93c8e0;
+            --primary-text: #1a6a8a;
             --accent: #64748b;
-            --bg-main: #ffffff;            /* White background */
-            --bg-side: #add8e6;            /* Light blue sidebar */
-            --border: #e2e8f0;
-            --card-gradient-start: #e8f6fa;
+            --bg-main: #ffffff;
+            --bg-side: #add8e6;
+            --border: #d4eef7;
+            --card-gradient-start: #e8f6fb;
             --card-gradient-end: #ffffff;
+            --shadow-blue: rgba(173, 216, 230, 0.4);
             --text-dark: #0f172a;
             --text-muted: #475569;
         }
 
-        /* ============================================================
-           BASE STYLES — font sizes increased
-        ============================================================ */
+        * { box-sizing: border-box; }
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-main);
             color: var(--text-dark);
             margin: 0;
             overflow-x: hidden;
-            font-size: 14px; /* body text 14px */
+            font-size: 14px;
         }
 
-        h1, h2, h3, h4, h5, h6,
-        .heading-text {
-            font-size: 16px !important; /* headings 16px */
+        h1, h2, h3, h4, h5, h6 {
+            font-size: 16px;
+            font-weight: 700;
             color: var(--text-dark);
         }
-
-        h2 { font-size: 20px !important; }
-        h3 { font-size: 18px !important; }
+        h1 { font-size: 22px; }
+        h2 { font-size: 20px; }
+        h3 { font-size: 18px; }
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* ============================================================
-           STICKY TOP HEADER
-        ============================================================ */
+        /* ===================== STICKY TOP HEADER ===================== */
         .sticky-top-header {
             position: sticky;
             top: 0;
-            z-index: 50;
-            background: var(--primary);
+            z-index: 80;
+            background: #add8e6;
             border-bottom: 1px solid var(--primary-dark);
             padding: 0.75rem 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(173,216,230,0.4);
+            box-shadow: 0 2px 12px var(--shadow-blue);
         }
 
-        .sticky-top-header h2,
-        .sticky-top-header p {
-            color: var(--primary-text) !important;
+        .sticky-top-header .header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* ============================================================
-           SIDEBAR — RIGHT SIDE, LIGHT BLUE
-        ============================================================ */
+        /* ===================== SIDEBAR — RIGHT SIDE ===================== */
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
             position: fixed;
             right: 0;
+            left: auto;
             top: 0;
-            background: var(--bg-side); /* Light blue */
+            background: var(--bg-side);
             border-left: 1px solid var(--primary-dark);
             padding: 2.5rem 1.25rem;
             display: flex;
             flex-direction: column;
             z-index: 100;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Sidebar collapsed state (slides RIGHT off screen) */
         .sidebar.collapsed {
             transform: translateX(100%);
         }
 
-        /* Mobile: hidden by default, slides in from right */
         @media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(100%);
+                background: rgba(173, 216, 230, 0.92);
+                backdrop-filter: blur(12px);
             }
             .sidebar.open {
                 transform: translateX(0);
             }
-            .sidebar.collapsed {
-                transform: translateX(100%);
-            }
             .main-content {
                 margin-right: 0 !important;
-                padding: 1.5rem !important;
+            }
+            .sticky-top-header {
+                margin-right: 0 !important;
+            }
+            .site-footer {
+                margin-right: 0 !important;
             }
             .sidebar-overlay {
                 display: none;
                 position: fixed;
                 inset: 0;
-                background: rgba(173, 216, 230, 0.55); /* Translucent light blue overlay */
-                backdrop-filter: blur(2px);
+                background: rgba(173, 216, 230, 0.25);
                 z-index: 90;
+                backdrop-filter: blur(2px);
             }
             .sidebar-overlay.active {
                 display: block;
             }
+            .main-content-inner {
+                padding: 1rem !important;
+            }
         }
 
-        /* ============================================================
-           MAIN CONTENT — margin on right because sidebar is right
-        ============================================================ */
+        /* ===================== MAIN CONTENT ===================== */
         .main-content {
             margin-right: var(--sidebar-width);
             margin-left: 0;
-            padding: 0;
             min-height: 100vh;
-            transition: margin-right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: var(--bg-main);
-        }
-
-        .main-content.sidebar-collapsed {
-            margin-right: 0;
+            background: #ffffff;
+            transition: margin-right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .main-content-inner {
             padding: 2rem 2.5rem;
         }
 
-        /* ============================================================
-           NAV ITEMS — hover uses light blue shadow
-        ============================================================ */
+        @media (max-width: 640px) {
+            .main-content-inner { padding: 1rem; }
+        }
+
+        /* ===================== NAV ITEMS ===================== */
         .nav-item {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 12px 14px;
-            border-radius: 9999px; /* Pill style */
+            border-radius: 999px;
             font-size: 14px;
             font-weight: 500;
             color: var(--primary-text);
@@ -166,78 +165,58 @@
         }
 
         .nav-item:hover {
-            color: var(--primary-deep);
-            background: transparent;
-            box-shadow: 0 4px 12px rgba(14, 116, 144, 0.25); /* Subtle light blue shadow */
-            transform: translateX(-2px);
+            color: #0f4f6b;
+            box-shadow: 0 0 0 3px rgba(126, 200, 227, 0.35), 0 4px 12px rgba(126, 200, 227, 0.2);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .nav-item.active {
-            background: rgba(255,255,255,0.6);
-            color: var(--primary-deep);
+            background: rgba(255, 255, 255, 0.6);
+            color: #0f4f6b;
             font-weight: 700;
-            box-shadow: 0 2px 8px rgba(14,116,144,0.2);
+            box-shadow: 0 2px 12px rgba(126, 200, 227, 0.3);
         }
 
-        /* ============================================================
-           GLASS CARD — soft light blue gradient, white content area
-        ============================================================ */
+        /* ===================== GLASS CARDS ===================== */
         .glass-card {
-            background: linear-gradient(135deg, var(--card-gradient-start) 0%, var(--card-gradient-end) 60%);
-            border: 1px solid #c7e8f3;
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--card-gradient-start) 0%, var(--card-gradient-end) 100%);
+            border: 1px solid var(--border);
+            border-radius: 14px;
             padding: 24px;
-            box-shadow: 0 1px 6px rgba(173,216,230,0.25);
+            box-shadow: 0 1px 6px rgba(173, 216, 230, 0.15);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .glass-card:hover {
-            box-shadow: 0 4px 16px rgba(173,216,230,0.45);
+            box-shadow: 0 4px 20px rgba(173, 216, 230, 0.3);
         }
 
-        /* Card header accent */
-        .card-header-accent {
-            background: var(--primary);
-            color: var(--primary-text);
-            border-radius: 8px 8px 0 0;
-            padding: 10px 16px;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 0.04em;
-        }
-
-        /* ============================================================
-           INPUT FIELDS
-        ============================================================ */
+        /* ===================== INPUTS ===================== */
         .input-field {
             width: 100%;
             padding: 12px 14px;
-            border-radius: 9999px; /* Pill inputs */
-            border: 1px solid #a8d8ea;
+            border-radius: 999px;
+            border: 1px solid #c5e8f4;
             background: #ffffff;
             font-size: 14px;
+            color: var(--text-dark);
             transition: all 0.2s;
             outline: none;
-            color: var(--text-dark);
         }
 
         .input-field:focus {
-            border-color: var(--primary-deep);
-            box-shadow: 0 0 0 3px rgba(14,116,144,0.1);
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 0 3px rgba(173, 216, 230, 0.25);
         }
 
-        textarea.input-field {
-            border-radius: 12px; /* Textarea keeps rectangular-ish */
-        }
+        textarea.input-field { border-radius: 14px; }
 
-        /* ============================================================
-           BUTTONS — Pill style, light blue background
-        ============================================================ */
+        /* ===================== BUTTONS ===================== */
         .btn-primary {
             background: var(--primary);
             color: var(--primary-text);
             padding: 12px 24px;
-            border-radius: 9999px; /* Pill */
+            border-radius: 999px;
             font-weight: 700;
             font-size: 14px;
             transition: all 0.2s;
@@ -247,19 +226,20 @@
             justify-content: center;
             gap: 8px;
             border: none;
+            box-shadow: 0 4px 14px var(--shadow-blue);
         }
 
         .btn-primary:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 4px 14px rgba(173,216,230,0.6);
+            background: var(--primary-hover);
+            box-shadow: 0 6px 20px var(--shadow-blue);
             transform: translateY(-1px);
         }
 
         .btn-secondary {
             background: #ffffff;
-            border: 1px solid #a8d8ea;
+            border: 1px solid var(--border);
             padding: 10px 16px;
-            border-radius: 9999px; /* Pill */
+            border-radius: 999px;
             font-size: 12px;
             font-weight: 600;
             color: var(--primary-text);
@@ -272,63 +252,27 @@
             border-color: var(--primary-dark);
         }
 
-        /* ============================================================
-           SIDEBAR TOGGLE BUTTON
-        ============================================================ */
-        .sidebar-toggle-btn {
-            position: fixed;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            z-index: 200;
-            background: var(--primary);
-            color: var(--primary-text);
-            border: none;
-            border-radius: 8px 0 0 8px;
-            width: 24px;
-            height: 48px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            box-shadow: -2px 0 8px rgba(173,216,230,0.4);
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-toggle-btn:hover {
-            background: var(--primary-dark);
-            width: 28px;
-        }
-
-        /* ============================================================
-           TAB PANES
-        ============================================================ */
+        /* ===================== TABS ===================== */
         .tab-pane { display: none; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .tab-pane.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ============================================================
-           SCROLLBAR
-        ============================================================ */
         .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 10px; }
 
-        /* ============================================================
-           GROWTH TAGS & BADGES
-        ============================================================ */
+        /* ===================== GROWTH TAGS ===================== */
         .growth-tag {
             font-size: 10px;
             padding: 2px 8px;
-            border-radius: 9999px;
+            border-radius: 999px;
             font-weight: 700;
         }
 
-        /* Trending badge — light blue */
+        /* ===================== TRENDING BADGE ===================== */
         .trending-badge {
             display: inline-flex;
             align-items: center;
@@ -338,14 +282,12 @@
             font-size: 9px;
             font-weight: 800;
             padding: 3px 8px;
-            border-radius: 9999px;
-            letter-spacing: 0.05em;
+            border-radius: 999px;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        /* ============================================================
-           FLOATING CHAT
-        ============================================================ */
+        /* ===================== FLOATING CHAT ===================== */
         .floating-chat {
             position: fixed;
             bottom: 80px;
@@ -359,26 +301,46 @@
             align-items: center;
             justify-content: center;
             font-size: 20px;
-            box-shadow: 0 10px 25px rgba(173,216,230,0.5);
+            box-shadow: 0 10px 25px var(--shadow-blue);
             cursor: pointer;
             z-index: 1000;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
+            border: 2px solid var(--primary-dark);
         }
 
         .floating-chat:hover {
             transform: scale(1.1);
-            box-shadow: 0 14px 30px rgba(173,216,230,0.7);
+            box-shadow: 0 14px 30px var(--shadow-blue);
         }
 
-        /* ============================================================
-           FLOATING MOBILE MENU BUTTON
-        ============================================================ */
-        .floating-mobile-menu {
+        /* ===================== MOBILE TOGGLE ===================== */
+        .mobile-toggle {
+            display: none;
+            cursor: pointer;
+            padding: 8px 12px;
+            font-size: 18px;
+            color: var(--primary-text);
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 999px;
+            border: none;
+            transition: all 0.2s;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mobile-toggle:hover { background: rgba(255, 255, 255, 0.8); }
+
+        @media (max-width: 1024px) {
+            .mobile-toggle { display: flex; }
+        }
+
+        /* ===================== FLOATING MOBILE NAV BUTTON ===================== */
+        .floating-nav-btn {
             display: none;
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px;
             width: 52px;
             height: 52px;
             background: var(--primary);
@@ -387,37 +349,19 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            box-shadow: 0 8px 20px rgba(173,216,230,0.5);
+            box-shadow: 0 8px 20px var(--shadow-blue);
             cursor: pointer;
             z-index: 999;
-            border: none;
-            transition: all 0.3s ease;
+            border: 2px solid var(--primary-dark);
+            transition: all 0.3s;
         }
 
         @media (max-width: 1024px) {
-            .floating-mobile-menu { display: flex; }
-            .floating-chat { bottom: 84px; }
+            .floating-nav-btn { display: flex; }
         }
 
-        /* ============================================================
-           MOBILE TOGGLE
-        ============================================================ */
-        .mobile-toggle {
-            display: none;
-            cursor: pointer;
-            padding: 8px;
-            font-size: 20px;
-            color: var(--primary-text);
-        }
-
-        @media (max-width: 1024px) {
-            .mobile-toggle { display: block; }
-        }
-
-        /* ============================================================
-           TOAST NOTIFICATION
-        ============================================================ */
-        .toast-container {
+        /* ===================== TOAST ===================== */
+        #toast-container {
             position: fixed;
             top: 80px;
             right: 24px;
@@ -425,389 +369,351 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            pointer-events: none;
         }
 
         .toast {
             background: var(--primary);
             color: var(--primary-text);
             border: 1px solid var(--primary-dark);
-            border-radius: 9999px;
+            border-radius: 999px;
             padding: 12px 20px;
             font-size: 13px;
             font-weight: 600;
-            box-shadow: 0 6px 20px rgba(173,216,230,0.5);
             display: flex;
             align-items: center;
             gap: 10px;
-            animation: toastIn 0.35s ease, toastOut 0.35s ease 2.65s forwards;
-            max-width: 320px;
+            box-shadow: 0 8px 24px var(--shadow-blue);
+            animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1), fadeOutUp 0.5s ease 3.5s forwards;
+            pointer-events: auto;
+            min-width: 260px;
         }
 
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateX(40px); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to   { opacity: 1; transform: translateX(0); }
         }
 
-        @keyframes toastOut {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(40px); }
+        @keyframes fadeOutUp {
+            from { opacity: 1; transform: translateY(0); }
+            to   { opacity: 0; transform: translateY(-20px); }
         }
 
-        /* ============================================================
-           CONFIRMATION POPUP (Delete)
-        ============================================================ */
-        .confirm-overlay {
+        /* ===================== CLICK ALERT ===================== */
+        .click-alert {
+            background: linear-gradient(90deg, var(--primary) 0%, #7ec8e3 100%);
+            border: 1px solid var(--primary-dark);
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        /* ===================== DASHBOARD GRID ===================== */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 640px)  { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1280px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        @media (max-width: 640px) {
+            #full-inventory-grid { gap: 1.25rem; }
+        }
+
+        /* ===================== DYNAMIC TEXT SCALING ===================== */
+        .stat-value {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1;
+        }
+
+        /* ===================== MOBILE HIDE ===================== */
+        @media (max-width: 640px) {
+            .hide-mobile { display: none !important; }
+        }
+
+        /* ===================== IMG UPLOAD AREA ===================== */
+        .img-upload-area {
+            position: relative;
+            border: 2px dashed var(--primary-dark);
+            border-radius: 14px;
+            background: linear-gradient(135deg, #eaf6fb 0%, #fff 100%);
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .img-upload-area:hover {
+            border-color: var(--primary-text);
+            background: linear-gradient(135deg, #d4eef7 0%, #fff 100%);
+        }
+
+        /* ===================== CONFIRM POPUP ===================== */
+        .confirm-popup {
             position: fixed;
             inset: 0;
-            background: rgba(173,216,230,0.25);
+            background: rgba(173, 216, 230, 0.2);
             backdrop-filter: blur(4px);
             z-index: 3000;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .confirm-overlay.active {
-            display: flex;
+            padding: 1rem;
         }
 
         .confirm-box {
-            background: #fff;
-            border: 1px solid var(--primary);
+            background: #ffffff;
+            border: 2px solid var(--primary);
             border-radius: 20px;
             padding: 2rem;
-            max-width: 420px;
-            width: 90%;
-            box-shadow: 0 20px 50px rgba(173,216,230,0.5);
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 50px var(--shadow-blue);
             text-align: center;
         }
 
-        .confirm-box h4 {
-            font-size: 16px !important;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        /* ============================================================
-           FOOTER
-        ============================================================ */
+        /* ===================== FOOTER ===================== */
         .site-footer {
             background: #ffffff;
-            border-top: 1px solid #c7e8f3;
+            border-top: 1px solid var(--border);
             padding: 1.5rem 2.5rem;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
+            margin-right: var(--sidebar-width);
+            transition: margin-right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .site-footer p, .site-footer a {
             color: var(--primary-text);
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: 600;
             text-decoration: none;
         }
 
-        .site-footer a:hover {
-            color: var(--primary-deep);
-            text-decoration: underline;
+        .site-footer a:hover { text-decoration: underline; }
+
+        .footer-links { display: flex; gap: 1.25rem; }
+
+        /* ===================== CONNECTION STATUS ===================== */
+        #connection-status {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            color: var(--primary-text);
         }
 
-        /* ============================================================
-           DASHBOARD GRID — 3 columns on large screens
-        ============================================================ */
-        .dashboard-stat-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 1.5rem;
+        /* ===================== FORM LABEL ===================== */
+        .form-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--primary-text);
+            margin-bottom: 6px;
+            display: block;
         }
 
-        @media (min-width: 640px) {
-            .dashboard-stat-grid { grid-template-columns: repeat(2, 1fr); }
+        /* ===================== CATEGORY SELECT ===================== */
+        select.input-field {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231a6a8a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
         }
 
-        @media (min-width: 1024px) {
-            .dashboard-stat-grid { grid-template-columns: repeat(3, 1fr); } /* 3 columns */
+        /* ===================== VALIDATION ===================== */
+        .field-error {
+            font-size: 11px;
+            color: #ef4444;
+            margin-top: 4px;
+            display: none;
+            padding-left: 12px;
         }
 
-        /* ============================================================
-           INVENTORY CARDS — spacing on mobile
-        ============================================================ */
-        @media (max-width: 640px) {
-            #full-inventory-grid .glass-card {
-                margin-bottom: 1rem;
-            }
+        .input-field.invalid {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
         }
 
-        /* ============================================================
-           IMAGE PREVIEW in form
-        ============================================================ */
-        .img-preview-zone {
-            border: 2px dashed #a8d8ea;
-            border-radius: 16px;
-            background: #f0faff;
-            min-height: 160px;
+        /* ===================== SIDEBAR LOGO ===================== */
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 0 4px;
+        }
+
+        .sidebar-logo .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--primary-text);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            position: relative;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.4);
+        }
+
+        .sidebar-logo .logo-name {
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--primary-text);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-section-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(26, 106, 138, 0.6);
+            padding: 0 14px;
+            margin: 12px 0 6px;
+        }
+
+        /* ===================== EDIT MODAL HEADER ===================== */
+        #edit-modal .modal-header {
+            background: var(--primary);
+            border-bottom: 1px solid var(--primary-dark);
+        }
+
+        /* ===================== TOP SELLING CARD ===================== */
+        .top-selling-card { border-top: 3px solid var(--primary); }
+
+        /* ===================== SIDEBAR COLLAPSE BTN ===================== */
+        .sidebar-collapse-btn {
+            position: absolute;
+            top: 50%;
+            left: -18px;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            border: 2px solid var(--primary-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .img-preview-zone:hover {
-            border-color: var(--primary-deep);
-            background: #e0f4fb;
-        }
-
-        .img-preview-zone img {
-            max-height: 160px;
-            max-width: 100%;
-            object-fit: contain;
-        }
-
-        /* ============================================================
-           ANALYTICS — search filter
-        ============================================================ */
-        .analytics-search {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #fff;
-            border: 1px solid var(--primary);
-            border-radius: 9999px;
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-
-        .analytics-search input {
-            border: none;
-            outline: none;
-            font-size: 13px;
-            background: transparent;
-            width: 180px;
-            color: var(--text-dark);
-        }
-
-        /* ============================================================
-           CHART TOOLTIP CUSTOMIZATION (via Chart.js)
-        ============================================================ */
-
-        /* ============================================================
-           MODAL — light blue header, white form
-        ============================================================ */
-        .modal-header-lb {
-            background: var(--primary);
-            border-radius: 0;
-        }
-
-        /* ============================================================
-           RESPONSIVE: Hide less important sections on mobile
-        ============================================================ */
-        @media (max-width: 640px) {
-            .hide-mobile { display: none !important; }
-            .card-text-scale { font-size: clamp(0.65rem, 2.5vw, 0.875rem); }
-            .stat-number { font-size: clamp(1.5rem, 6vw, 2.5rem) !important; }
-        }
-
-        /* ============================================================
-           AUTH OVERLAY
-        ============================================================ */
-        #auth-overlay input.input-field {
-            border-radius: 9999px;
-        }
-
-        /* ============================================================
-           CLICK CHART TOOLTIPS (styled light blue)
-        ============================================================ */
-        .chartjs-tooltip-lb {
-            background: var(--primary) !important;
-            color: var(--primary-text) !important;
-        }
-
-        /* ============================================================
-           DYNAMIC TEXT SCALE in cards
-        ============================================================ */
-        .card-title {
-            font-size: clamp(0.7rem, 2vw, 0.875rem);
-            font-weight: 700;
-        }
-
-        /* ============================================================
-           SIDEBAR LOGO AREA
-        ============================================================ */
-        .sidebar-logo-text {
-            color: var(--primary-text) !important;
-            font-weight: 800 !important;
-        }
-
-        /* ============================================================
-           SIDEBAR OPEN ANIMATION
-        ============================================================ */
-        @keyframes sidebarSlideIn {
-            from { transform: translateX(100%); opacity: 0.5; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .sidebar.open {
-            animation: sidebarSlideIn 0.35s cubic-bezier(0.4,0,0.2,1);
-        }
-
-        /* ============================================================
-           CLICK CHART BARS TOOLTIP override
-        ============================================================ */
-        .clicks-bar-tooltip {
-            background: var(--primary);
+            z-index: 110;
             color: var(--primary-text);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: 9999px;
+            font-size: 12px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px var(--shadow-blue);
         }
 
-        /* ============================================================
-           NOTIFICATION CARD (clicks drop warning)
-        ============================================================ */
-        .click-drop-warning {
-            display: none;
-            background: #fff;
-            border: 1.5px solid var(--primary);
-            border-left: 4px solid var(--primary-deep);
-            border-radius: 12px;
-            padding: 14px 20px;
-            font-size: 13px;
-            color: var(--primary-text);
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .click-drop-warning.show {
-            display: flex;
-        }
-
-        /* ============================================================
-           TOP SELLING PRODUCT CARD
-        ============================================================ */
-        .top-selling-card {
-            background: #ffffff;
-            border: 1px solid #c7e8f3;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .top-selling-card .card-header-accent {
-            background: var(--primary);
-            color: var(--primary-text);
-            padding: 10px 18px;
-            font-weight: 700;
-            font-size: 13px;
-        }
-
-        /* ============================================================
-           VALIDATION STYLES
-        ============================================================ */
-        .input-field.error {
-            border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
-        }
-
-        .field-error-msg {
-            color: #ef4444;
-            font-size: 11px;
-            font-weight: 600;
-            margin-top: 4px;
-            display: none;
-        }
-
-        /* ============================================================
-           CHART ANALYTICS FILTER BAR
-        ============================================================ */
-        .analytics-filter-bar {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
+        .sidebar-collapse-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-50%) scale(1.1);
         }
     </style>
 </head>
 <body>
 
-<!-- TOAST CONTAINER -->
-<div id="toast-container" class="toast-container"></div>
+<!-- ========== TOAST CONTAINER ========== -->
+<div id="toast-container"></div>
 
-<!-- MOBILE OVERLAY (translucent light blue) -->
+<!-- ========== MOBILE OVERLAY ========== -->
 <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-<!-- CONFIRM DELETE POPUP -->
-<div id="confirm-overlay" class="confirm-overlay">
+<!-- ========== CONFIRM DELETE POPUP ========== -->
+<div id="confirm-popup" class="confirm-popup hidden">
     <div class="confirm-box">
-        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
-            <i class="fa-solid fa-trash text-xl" style="color:var(--primary-text)"></i>
+        <div class="w-14 h-14 rounded-full mx-auto mb-4 flex items-center justify-center" style="background:var(--primary)">
+            <i class="fa-solid fa-triangle-exclamation text-2xl" style="color:var(--primary-text)"></i>
         </div>
-        <h4>Delete Product?</h4>
-        <p class="text-sm text-slate-500 mb-6 mt-2">This action will permanently remove the product from the registry.</p>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">Confirm Deletion</h3>
+        <p class="text-sm text-slate-500 mb-6">This will permanently remove the product record. Are you sure?</p>
         <div class="flex gap-3 justify-center">
             <button onclick="cancelDelete()" class="btn-secondary px-6">Cancel</button>
-            <button onclick="executeDelete()" class="btn-primary px-6">Delete</button>
+            <button onclick="executeDelete()" class="btn-primary px-6" style="background:#ef4444;color:#fff;border:none;box-shadow:none">Delete</button>
         </div>
     </div>
 </div>
 
-<!-- AUTH OVERLAY -->
-<div id="auth-overlay" class="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-sky-100 z-[1000] flex items-center justify-center p-6">
-    <div class="w-full max-w-md bg-white/90 backdrop-blur-xl border border-blue-200 shadow-2xl rounded-3xl p-10">
-
-        <!-- Logo -->
+<!-- ========== AUTH OVERLAY ========== -->
+<div id="auth-overlay" class="fixed inset-0 z-[1000] flex items-center justify-center p-6" style="background:linear-gradient(135deg,#f0f9ff 0%,#ffffff 50%,#e0f4fb 100%)">
+    <div class="w-full max-w-md border shadow-2xl rounded-3xl p-10" style="background:rgba(255,255,255,0.92);border-color:var(--border)">
         <div class="text-center mb-10">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-xl mx-auto shadow-lg" style="background:var(--primary)">
-                <i class="fa-solid fa-lock" style="color:var(--primary-text)"></i>
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-xl mx-auto shadow-lg" style="background:var(--primary)">
+                <i class="fa-solid fa-lock" style="color:var(--primary-text);font-size:20px"></i>
             </div>
-            <h1 class="text-2xl font-bold text-slate-900 mt-6" style="font-size:22px!important">Secure Access</h1>
+            <h1 class="mt-6" style="font-size:22px">Secure Access</h1>
             <p class="text-sm text-slate-500 mt-2">Pixup8k Administrative Terminal</p>
         </div>
-
-        <!-- FORM -->
         <form action="/password" method="POST" class="space-y-5">
             <div>
-                <label class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Username</label>
-                <input type="text" name="user_name" required placeholder="Enter username" class="input-field w-full">
+                <label class="form-label">Username</label>
+                <input type="text" name="user_name" required placeholder="Enter username" class="input-field">
             </div>
             <div>
-                <label class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Password</label>
-                <input type="password" name="password" required placeholder="Enter password" class="input-field w-full">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" required placeholder="Enter password" class="input-field">
             </div>
-            <button type="submit" class="btn-primary w-full py-3 text-sm tracking-wide shadow-lg" style="box-shadow:0 6px 20px rgba(173,216,230,0.4)">
-                <i class="fa-solid fa-right-to-bracket"></i> Authenticate
+            <button type="submit" class="btn-primary w-full py-3 text-sm tracking-wide">
+                <i class="fa-solid fa-key mr-2"></i> Authenticate
             </button>
         </form>
-
-        {% if status == "failed" %}
-        <div class="mt-6 text-center text-xs font-bold text-red-500 tracking-widest uppercase" id="error-msg">
-            <i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid Credentials
+        <div id="error-msg" class="hidden mt-6 text-center text-xs font-bold text-red-500 tracking-widest uppercase">
+            Invalid Credentials
         </div>
-        {% endif %}
-
     </div>
 </div>
 
-<!-- ============================================================
-     SIDEBAR — RIGHT SIDE, LIGHT BLUE
-============================================================ -->
+<!-- ========== STICKY TOP HEADER ========== -->
+<header class="sticky-top-header" id="sticky-header" style="margin-right:var(--sidebar-width)">
+    <div class="header-title">
+        <button onclick="toggleSidebar()" class="mobile-toggle" id="mobile-menu-btn">
+            <i class="fa-solid fa-bars-staggered"></i>
+            <span class="text-xs font-bold hidden sm:inline">Menu</span>
+        </button>
+        <span class="hidden md:inline font-bold" style="font-size:16px">
+            <i class="fa-solid fa-store mr-2 opacity-60"></i>
+            <span id="sticky-page-title">Dashboard</span>
+        </span>
+    </div>
+    <div id="connection-status" class="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest px-5 py-2.5 border rounded-full shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Syncing Node...
+    </div>
+    <button onclick="toggleSidebarDesktop()" class="hidden lg:flex items-center gap-2 btn-secondary text-xs">
+        <i class="fa-solid fa-table-columns mr-1"></i> Toggle Panel
+    </button>
+</header>
+
+<!-- ========== SIDEBAR — RIGHT ========== -->
 <div id="sidebar" class="sidebar">
-    <div class="flex items-center justify-between mb-10 px-2">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-lg shadow-md" style="background:rgba(255,255,255,0.6);color:var(--primary-text)">P</div>
-            <span class="font-bold text-base tracking-tight sidebar-logo-text">Pixup8k</span>
-        </div>
-        <button onclick="toggleSidebar()" class="lg:hidden p-2" style="color:var(--primary-text)">
-            <i class="fa-solid fa-xmark text-xl"></i>
+    <div style="position:relative">
+        <button class="sidebar-collapse-btn hidden lg:flex" onclick="toggleSidebarDesktop()" title="Collapse">
+            <i class="fa-solid fa-chevron-right" id="collapse-icon"></i>
         </button>
     </div>
+
+    <div class="sidebar-logo">
+        <div class="flex items-center gap-3">
+            <div class="logo-icon">P</div>
+            <span class="logo-name">Pixup8k</span>
+        </div>
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-full transition-all" style="color:var(--primary-text);background:rgba(255,255,255,0.4)">
+            <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+    </div>
+
+    <div class="nav-section-label">Navigation</div>
 
     <nav class="flex-1 space-y-1">
         <div onclick="switchTab('dashboard')" id="link-dashboard" class="nav-item active">
@@ -824,395 +730,410 @@
         </div>
     </nav>
 
-    <!-- Sidebar Footer -->
-    <div class="mt-auto pt-6 border-t" style="border-color:rgba(14,116,144,0.2)">
-        <p class="text-xs text-center" style="color:var(--primary-text);opacity:0.7">&copy; 2025 Pixup8k</p>
+    <div class="nav-section-label mt-4">System</div>
+    <div class="mt-2 text-xs font-bold" style="color:rgba(26,106,138,0.7);padding:0 14px">
+        <i class="fa-solid fa-shield-halved mr-2"></i> Authenticated
     </div>
 </div>
 
-<!-- SIDEBAR COLLAPSE TOGGLE (desktop) -->
-<button id="sidebar-toggle-btn" class="sidebar-toggle-btn lg:flex hidden" onclick="desktopToggleSidebar()" title="Toggle Sidebar">
-    <i id="sidebar-toggle-icon" class="fa-solid fa-chevron-right"></i>
-</button>
-
-<!-- ============================================================
-     MAIN CONTENT
-============================================================ -->
+<!-- ========== MAIN CONTENT ========== -->
 <div class="main-content" id="main-content">
-
-    <!-- STICKY TOP HEADER -->
-    <div class="sticky-top-header">
-        <div class="flex items-center gap-4">
-            <button onclick="toggleSidebar()" class="mobile-toggle">
-                <i class="fa-solid fa-bars-staggered"></i>
-            </button>
-            <div>
-                <h2 id="page-title" class="font-bold tracking-tight capitalize" style="font-size:18px!important;color:var(--primary-text)!important">Dashboard</h2>
-                <p class="text-xs" style="color:var(--primary-text);opacity:0.75">System Overview & Data Sync</p>
-            </div>
-        </div>
-        <div id="connection-status" class="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-white/60 rounded-full" style="color:var(--primary-text)">
-            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Syncing Node...
-        </div>
-    </div>
-
-    <!-- CLICK DROP WARNING NOTIFICATION -->
-    <div id="click-drop-warning" class="click-drop-warning mx-6 mt-4">
-        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-        <span>Alert: Total engagement clicks have dropped below 100 in the last 24 hours. Review your product listings.</span>
-    </div>
-
     <div class="main-content-inner">
 
-    <!-- DASHBOARD TAB -->
-    <div id="tab-dashboard" class="tab-pane active space-y-8">
+        <!-- Page Title -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+                <h2 id="page-title" style="font-size:20px;font-weight:800" class="capitalize">Dashboard</h2>
+                <p class="text-sm text-slate-500">System Overview &amp; Data Sync</p>
+            </div>
+        </div>
 
-        <!-- Stats Grid — 3 columns on lg -->
-        <div class="dashboard-stat-grid">
-            <div class="glass-card">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Number of Products</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
-                        <i class="fa-solid fa-layer-group"></i>
-                    </div>
-                </div>
-                <h3 id="stat-count" class="stat-number text-3xl font-bold text-slate-900">--</h3>
-                <div class="mt-4 flex items-center gap-2">
-                    <span class="growth-tag bg-emerald-50 text-emerald-600">growth</span>
-                </div>
+        <!-- ====== DASHBOARD TAB ====== -->
+        <div id="tab-dashboard" class="tab-pane active space-y-8">
+
+            <!-- Low click alert -->
+            <div id="click-alert" class="click-alert hidden">
+                <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                <span>Warning: Total clicks dropped below 100 in the last 24 hours. Review engagement strategy.</span>
             </div>
 
-            <div class="glass-card">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Active Interactions</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
-                        <i class="fa-solid fa-hand-pointer"></i>
-                    </div>
-                </div>
-                <h3 id="stat-total-clicks" class="stat-number text-3xl font-bold text-slate-900">--</h3>
-                <div class="mt-4 flex items-center gap-2">
-                    <span id="click-growth-percent" class="growth-tag bg-emerald-50 text-emerald-600">Calculating...</span>
-                </div>
-            </div>
-
-            <div class="glass-card">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Avg Product Price</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
-                        <i class="fa-solid fa-dollar-sign"></i>
-                    </div>
-                </div>
-                <h3 id="stat-avg-price" class="stat-number text-3xl font-bold text-slate-900">--</h3>
-                <div class="mt-4 flex items-center gap-2">
-                    <span class="growth-tag text-xs" style="background:var(--primary);color:var(--primary-text)">Market Value</span>
-                </div>
-            </div>
-
-            <div class="glass-card">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Global Queries</p>
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                </div>
-                <h3 id="stat-total-searches" class="stat-number text-3xl font-bold text-slate-900">--</h3>
-                <div class="mt-4 flex items-center gap-2">
-                    <span class="growth-tag text-xs" style="background:var(--primary);color:var(--primary-text)">Stable Node</span>
-                </div>
-            </div>
-
-            <!-- TOP SELLING PRODUCT CARD -->
-            <div class="top-selling-card lg:col-span-2">
-                <div class="card-header-accent flex items-center gap-2">
-                    <i class="fa-solid fa-trophy"></i> Top Selling Product
-                </div>
-                <div id="top-selling-content" class="p-4 flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-xl overflow-hidden bg-white border border-blue-100 flex items-center justify-center flex-shrink-0">
-                        <img id="top-product-img" src="" class="max-h-full object-contain hidden">
-                        <i id="top-product-placeholder" class="fa-solid fa-star text-2xl" style="color:var(--primary)"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p id="top-product-title" class="font-bold text-sm text-slate-900 truncate">Loading...</p>
-                        <p id="top-product-meta" class="text-xs mt-1" style="color:var(--primary-text)">--</p>
-                        <div class="mt-2">
-                            <span id="top-product-score" class="growth-tag text-xs" style="background:var(--primary);color:var(--primary-text)">Trending</span>
+            <!-- STAT CARDS — 3 columns on large screens -->
+            <div class="stat-grid">
+                <div class="glass-card">
+                    <div class="flex justify-between items-start mb-4">
+                        <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Number of Products</p>
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs" style="background:var(--primary);color:var(--primary-text)">
+                            <i class="fa-solid fa-layer-group"></i>
                         </div>
                     </div>
+                    <div id="stat-count" class="stat-value">--</div>
+                    <div class="mt-3"><span class="growth-tag" style="background:#e8f6fb;color:var(--primary-text)">growth</span></div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Charts Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <div class="lg:col-span-3 glass-card">
-                <div class="flex justify-between items-center mb-8">
-                    <h4 class="font-bold text-sm text-slate-800">Global Search Engagement</h4>
-                    <span class="text-[10px] font-bold uppercase tracking-widest hide-mobile" style="color:var(--primary-text)">Last 5 Searches</span>
+                <div class="glass-card">
+                    <div class="flex justify-between items-start mb-4">
+                        <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Active Interactions</p>
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs bg-purple-50 text-purple-600">
+                            <i class="fa-solid fa-hand-pointer"></i>
+                        </div>
+                    </div>
+                    <div id="stat-total-clicks" class="stat-value">--</div>
+                    <div class="mt-3">
+                        <span id="click-growth-percent" class="growth-tag" style="background:#e8f6fb;color:var(--primary-text)">Calculating...</span>
+                    </div>
                 </div>
-                <div class="h-[280px] md:h-[320px] relative">
-                    <canvas id="searchCircleChart"></canvas>
-                </div>
-            </div>
-            <div class="lg:col-span-2 glass-card">
-                <div class="flex justify-between items-center mb-6">
-                    <h4 class="font-bold text-sm text-slate-800">Latest Registry</h4>
-                    <button onclick="switchTab('inventory')" class="text-xs font-bold hover:underline" style="color:var(--primary-text)">View All</button>
-                </div>
-                <div id="recent-grid" class="space-y-4"></div>
-            </div>
-        </div>
-    </div>
 
-    <!-- INVENTORY TAB -->
-    <div id="tab-inventory" class="tab-pane">
-        <div class="mb-8 glass-card !p-0 overflow-hidden">
-            <div class="relative w-full">
-                <i class="fa-solid fa-search absolute left-5 top-1/2 -translate-y-1/2 text-sm" style="color:var(--primary-text)"></i>
-                <input type="text" id="inventory-search-input" placeholder="Query Master Registry by ID, Title or Category..."
-                    class="input-field pl-12 py-5 !rounded-none border-none bg-white"
-                    style="border-radius:12px!important">
-            </div>
-        </div>
-        <div id="full-inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-    </div>
-
-    <!-- ANALYTICS TAB -->
-    <div id="tab-analytics" class="tab-pane space-y-8">
-
-        <!-- Analytics Filter Bar -->
-        <div class="analytics-filter-bar">
-            <div class="analytics-search">
-                <i class="fa-solid fa-filter" style="color:var(--primary-text)"></i>
-                <input type="text" id="analytics-search-input" placeholder="Filter charts by product name..." oninput="filterAnalytics(this.value)">
-                <button onclick="filterAnalytics('')" class="text-xs font-bold" style="color:var(--primary-text)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <span class="text-xs font-semibold" style="color:var(--primary-text)">Top engagement products shown</span>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 glass-card overflow-hidden">
-                <div class="flex justify-between items-center mb-10">
-                    <h4 class="font-bold text-sm text-slate-800">Resource Engagement Analytics</h4>
-                    <span class="hide-mobile text-[10px] font-black uppercase" style="color:var(--primary-text)">Total Engagement Points</span>
+                <div class="glass-card">
+                    <div class="flex justify-between items-start mb-4">
+                        <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Avg Product Price</p>
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs bg-emerald-50 text-emerald-600">
+                            <i class="fa-solid fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                    <div id="stat-avg-price" class="stat-value">--</div>
+                    <div class="mt-3"><span class="growth-tag bg-slate-50 text-slate-400">Market Value</span></div>
                 </div>
-                <div class="h-[300px] md:h-[400px]">
-                    <canvas id="clicksChart"></canvas>
-                </div>
-            </div>
-            <div class="space-y-8">
-                <div class="glass-card flex flex-col h-[400px]">
-                    <h4 class="font-bold text-sm text-slate-800 mb-6 flex-shrink-0">User Inquiry Stream</h4>
-                    <div id="questions-list" class="space-y-3 overflow-y-auto custom-scroll pr-2 flex-grow"></div>
-                </div>
+
                 <div class="glass-card hide-mobile">
-                    <h4 class="font-bold text-sm text-slate-800 mb-4">Supported Languages Usage</h4>
-                    <div class="h-[180px]">
-                        <canvas id="languagesChart"></canvas>
+                    <div class="flex justify-between items-start mb-4">
+                        <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Global Queries</p>
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs bg-orange-50 text-orange-600">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
                     </div>
+                    <div id="stat-total-searches" class="stat-value">--</div>
+                    <div class="mt-3"><span class="growth-tag" style="background:#e8f6fb;color:var(--primary-text)">Stable Node</span></div>
+                </div>
+
+                <!-- TOP SELLING PRODUCT CARD -->
+                <div class="glass-card top-selling-card">
+                    <div class="flex justify-between items-start mb-4">
+                        <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Top Selling Product</p>
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs" style="background:var(--primary);color:var(--primary-text)">
+                            <i class="fa-solid fa-fire-flame-curved"></i>
+                        </div>
+                    </div>
+                    <div id="stat-top-product" class="font-bold text-sm text-slate-900 truncate">--</div>
+                    <div id="stat-top-product-detail" class="mt-1">
+                        <span class="text-[10px] text-slate-400 font-bold">Loading...</span>
+                    </div>
+                    <div class="mt-3">
+                        <span class="growth-tag" style="background:var(--primary);color:var(--primary-text)">
+                            <i class="fa-solid fa-star mr-1"></i> Best Performer
+                        </span>
+                    </div>
+                </div>
+
+                <div class="glass-card hide-mobile">
+                    <div class="flex justify-between items-start mb-4">
+                        <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Supported Languages</p>
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs bg-indigo-50 text-indigo-600">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                    </div>
+                    <div id="stat-languages" class="stat-value">--</div>
+                    <div class="mt-3"><span class="growth-tag bg-indigo-50 text-indigo-600">Multilingual</span></div>
+                </div>
+            </div>
+
+            <!-- Charts + Recent -->
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-3 glass-card">
+                    <div class="flex justify-between items-center mb-8">
+                        <h4 style="font-size:16px">Global Search Engagement</h4>
+                        <span class="text-[10px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Last 5 Searches</span>
+                    </div>
+                    <div class="h-[280px] md:h-[320px] relative">
+                        <canvas id="searchCircleChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 glass-card">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 style="font-size:16px">Latest Registry</h4>
+                        <button onclick="switchTab('inventory')" class="text-xs font-bold hover:underline" style="color:var(--primary-text)">View All</button>
+                    </div>
+                    <div id="recent-grid" class="space-y-3"></div>
                 </div>
             </div>
         </div>
 
-        <div class="glass-card overflow-hidden !p-0">
-            <div class="p-6 border-b" style="border-color:#c7e8f3">
-                <h4 class="font-bold text-sm text-slate-800">Product Synchronization</h4>
+        <!-- ====== INVENTORY TAB ====== -->
+        <div id="tab-inventory" class="tab-pane">
+            <div class="mb-8 glass-card !p-0 overflow-hidden">
+                <div class="relative w-full">
+                    <i class="fa-solid fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="inventory-search-input"
+                        placeholder="Query Master Registry by ID, Title or Category..."
+                        class="input-field pl-12 py-5 border-none bg-white"
+                        style="border-radius:14px">
+                </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full">
-                    <thead>
-                        <tr class="text-[10px] uppercase font-bold" style="color:var(--primary-text)">
-                            <th class="p-5 text-left" style="background:#f0faff">Products</th>
-                            <th class="p-5 text-left hide-mobile" style="background:#f0faff">Engagement</th>
-                            <th class="p-5 text-right" style="background:#f0faff">Node Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="analytics-tbody" class="text-sm"></tbody>
-                </table>
-            </div>
+            <div id="full-inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
-    </div>
 
-    <!-- ADD PRODUCT TAB -->
-    <div id="tab-add-product" class="tab-pane max-w-5xl mx-auto">
-        <div class="glass-card p-6 md:p-10">
-            <div class="mb-10 border-b pb-8" style="border-color:#c7e8f3">
-                <h3 class="text-2xl font-bold text-slate-900" style="font-size:18px!important">Product Registration</h3>
-                <p class="text-sm text-slate-500 mt-2">Create a new product record for global distribution.</p>
-            </div>
-            <form id="add-product-form" action="/Add_product" method="POST" onsubmit="return handleAddProduct(event)" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                <input type="hidden" name="trending_score" value="0">
-                <div class="space-y-6">
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Product Name</label>
-                        <input name="title" placeholder="e.g. Premium Tech Fleece" required class="input-field">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Product ID</label>
-                            <input name="id" placeholder="L-X01" required class="input-field">
-                        </div>
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Category</label>
-                            <!-- Category dropdown instead of free text -->
-                            <select name="category" required class="input-field">
-                                <option value="" disabled selected>Select Category</option>
-                                <option value="Apparel">Apparel</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Footwear">Footwear</option>
-                                <option value="Accessories">Accessories</option>
-                                <option value="Home & Living">Home & Living</option>
-                                <option value="Sports">Sports</option>
-                                <option value="Beauty">Beauty</option>
-                                <option value="Books">Books</option>
-                                <option value="Toys">Toys</option>
-                                <option value="Other">Other</option>
-                            </select>
+        <!-- ====== ANALYTICS TAB ====== -->
+        <div id="tab-analytics" class="tab-pane space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 glass-card overflow-hidden">
+                    <div class="flex flex-wrap justify-between items-center mb-8 gap-4">
+                        <h4 style="font-size:16px">Resource Engagement Analytics</h4>
+                        <!-- Analytics Search Filter -->
+                        <div class="relative">
+                            <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input id="analytics-search-filter" type="text"
+                                placeholder="Filter products..."
+                                class="input-field pl-9 py-2 text-xs"
+                                style="border-radius:999px;max-width:180px"
+                                oninput="filterAnalyticsChart(this.value)">
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Price ($)</label>
-                            <!-- Price: positive numbers only -->
-                            <input type="number" name="price" required min="0.01" step="0.01"
-                                class="input-field" id="add-price" oninput="validatePrice(this)"
-                                placeholder="0.00">
-                            <p class="field-error-msg" id="price-error">Price must be a positive number.</p>
-                        </div>
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Material</label>
-                            <input name="material" placeholder="e.g. Cotton" class="input-field">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Product Details</label>
-                        <textarea name="description" class="input-field h-28 resize-none"></textarea>
+                    <div class="h-[300px] md:h-[400px]">
+                        <canvas id="clicksChart"></canvas>
                     </div>
                 </div>
-                <div class="space-y-6">
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Image Link</label>
-                        <input name="image_link" id="add-image-link" required class="input-field"
-                            placeholder="https://..." oninput="previewImg(this.value, 'add-prev')">
+
+                <div class="space-y-8">
+                    <div class="glass-card flex flex-col" style="height:400px">
+                        <h4 class="flex-shrink-0 mb-6" style="font-size:16px">User Inquiry Stream</h4>
+                        <div id="questions-list" class="space-y-3 overflow-y-auto custom-scroll pr-2 flex-grow"></div>
                     </div>
-                    <!-- File upload for image -->
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">
-                            Upload Image File <span class="text-slate-400 normal-case font-normal">(or use link above)</span>
-                        </label>
-                        <label class="flex items-center gap-3 cursor-pointer">
-                            <div class="btn-secondary flex items-center gap-2 text-xs whitespace-nowrap">
-                                <i class="fa-solid fa-cloud-arrow-up"></i> Choose File
+                    <div class="glass-card hide-mobile">
+                        <h4 class="mb-4" style="font-size:16px">Supported Languages Usage</h4>
+                        <div class="h-[180px]">
+                            <canvas id="languagesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card overflow-hidden !p-0">
+                <div class="p-6" style="border-bottom:1px solid var(--border)">
+                    <h4 style="font-size:16px">Product Synchronization</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="text-[10px] uppercase font-bold" style="color:var(--primary-text)">
+                                <th class="p-5 text-left" style="background:var(--card-gradient-start)">Products</th>
+                                <th class="p-5 text-left hide-mobile" style="background:var(--card-gradient-start)">Engagement</th>
+                                <th class="p-5 text-right" style="background:var(--card-gradient-start)">Node Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analytics-tbody" class="text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== ADD PRODUCT TAB ====== -->
+        <div id="tab-add-product" class="tab-pane max-w-5xl mx-auto">
+            <div class="glass-card p-6 md:p-10">
+                <div class="mb-8 pb-6" style="border-bottom:1px solid var(--border)">
+                    <h3 style="font-size:18px">Product Registration</h3>
+                    <p class="text-sm text-slate-500 mt-2">Create a new product record for global distribution.</p>
+                </div>
+
+                <form id="add-product-form" action="/Add_product" method="POST"
+                    class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10"
+                    onsubmit="handleAddProduct(event)">
+                    <input type="hidden" name="trending_score" value="0">
+
+                    <!-- Left Column -->
+                    <div class="space-y-5">
+                        <div>
+                            <label class="form-label">Product Name</label>
+                            <input name="title" placeholder="e.g. Premium Tech Fleece" required class="input-field">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="form-label">Product ID</label>
+                                <input name="id" placeholder="L-X01" required class="input-field">
                             </div>
-                            <input type="file" accept="image/*" class="hidden" id="add-file-upload" onchange="handleFileUpload(this)">
-                            <span id="file-name-display" class="text-xs text-slate-400">No file selected</span>
-                        </label>
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Page Link</label>
-                        <input name="image" required class="input-field" placeholder="https://...">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Color</label>
-                            <input name="color" placeholder="Color" class="input-field">
+                            <div>
+                                <label class="form-label">Category</label>
+                                <!-- Category Dropdown -->
+                                <select name="category" required class="input-field">
+                                    <option value="" disabled selected>Select category</option>
+                                    <option>Apparel</option>
+                                    <option>Footwear</option>
+                                    <option>Accessories</option>
+                                    <option>Electronics</option>
+                                    <option>Sportswear</option>
+                                    <option>Outerwear</option>
+                                    <option>Bags</option>
+                                    <option>Jewelry</option>
+                                    <option>Home</option>
+                                    <option>Beauty</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="form-label">Price ($)</label>
+                                <!-- Positive numbers only -->
+                                <input type="number" name="price" required class="input-field" id="add-price"
+                                    min="0.01" step="0.01" placeholder="0.00"
+                                    oninput="validatePrice(this)">
+                                <span class="field-error" id="price-error">Price must be a positive number.</span>
+                            </div>
+                            <div>
+                                <label class="form-label">Material</label>
+                                <input name="material" placeholder="e.g. Cotton" class="input-field">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="form-label">Color</label>
+                                <input name="color" placeholder="e.g. Navy Blue" class="input-field">
+                            </div>
+                            <div>
+                                <label class="form-label">Rating (0–5)</label>
+                                <!-- 0 to 5, step 0.1 -->
+                                <input type="number" name="rating" placeholder="4.5" class="input-field"
+                                    min="0" max="5" step="0.1" id="add-rating"
+                                    oninput="validateRating(this)">
+                                <span class="field-error" id="rating-error">Rating must be 0–5.</span>
+                            </div>
                         </div>
                         <div>
-                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Rating (0–5)</label>
-                            <!-- Rating: 0 to 5, step 0.1 -->
-                            <input name="rating" id="add-rating" type="number" min="0" max="5" step="0.1"
-                                placeholder="0.0" class="input-field" oninput="validateRating(this)">
-                            <p class="field-error-msg" id="rating-error">Rating must be between 0 and 5.</p>
+                            <label class="form-label">Product Details</label>
+                            <textarea name="description" class="input-field h-28 resize-none" style="border-radius:14px"></textarea>
                         </div>
                     </div>
-                    <!-- Live image preview -->
-                    <div class="img-preview-zone" onclick="document.getElementById('add-file-upload').click()">
-                        <img id="add-prev" class="max-h-full hidden z-10">
-                        <div id="add-prev-txt" class="text-center">
-                            <i class="fa-solid fa-image text-3xl mb-2" style="color:var(--primary)"></i>
-                            <p class="text-[10px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Live Preview</p>
-                            <p class="text-[9px] mt-1 text-slate-400">Paste a link above or upload a file</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="md:col-span-2 pt-8">
-                    <button type="submit" class="btn-primary w-full py-4 text-sm tracking-widest uppercase">
-                        <i class="fa-solid fa-rocket mr-2"></i>Confirm and Execute Registration
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <!-- FOOTER -->
-    <footer class="site-footer mt-12">
-        <p>&copy; 2025 <strong>Pixup8k</strong> — LuxeStore Professional Ops</p>
-        <div class="flex gap-6 flex-wrap">
+                    <!-- Right Column -->
+                    <div class="space-y-5">
+                        <div>
+                            <label class="form-label">Image URL</label>
+                            <input name="image_link" id="add-image-link" required class="input-field"
+                                placeholder="https://example.com/image.jpg"
+                                oninput="previewImg(this.value, 'add-prev')">
+                        </div>
+
+                        <!-- File Upload Button -->
+                        <div>
+                            <label class="form-label">Or Upload Image File</label>
+                            <div class="img-upload-area p-4 flex items-center gap-4"
+                                onclick="document.getElementById('add-file-input').click()">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:var(--primary)">
+                                    <i class="fa-solid fa-upload" style="color:var(--primary-text)"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold" style="color:var(--primary-text)">Click to select image</p>
+                                    <p class="text-[10px] text-slate-400 mt-0.5" id="file-name-display">No file chosen</p>
+                                </div>
+                                <input type="file" id="add-file-input" accept="image/*" class="hidden"
+                                    onchange="handleFileUpload(event)">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="form-label">Page Link</label>
+                            <input name="image" required class="input-field" placeholder="https://product-page.com">
+                        </div>
+
+                        <!-- Live Image Preview -->
+                        <div class="h-48 img-upload-area flex items-center justify-center overflow-hidden">
+                            <img id="add-prev" class="max-h-full hidden z-10 object-contain">
+                            <div id="add-prev-txt" class="text-center pointer-events-none">
+                                <i class="fa-solid fa-image text-3xl mb-2" style="color:var(--primary-dark)"></i>
+                                <p class="text-[10px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Live Preview</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 pt-6" style="border-top:1px solid var(--border)">
+                        <button type="submit" class="btn-primary w-full py-4 text-sm tracking-widest uppercase shadow-lg">
+                            <i class="fa-solid fa-check-circle mr-2"></i>
+                            Confirm and Execute Registration
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div><!-- /main-content-inner -->
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>LuxeStore / Pixup8k</strong>. All rights reserved.</p>
+        <div class="footer-links">
             <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
+            <a href="#">Terms of Service</a>
             <a href="#">Support</a>
-            <a href="/">Dashboard</a>
+            <a href="/">Chat Interface</a>
         </div>
     </footer>
 
-    </div><!-- /main-content-inner -->
 </div><!-- /main-content -->
 
-<!-- EDIT MODAL -->
-<div id="edit-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4 md:p-6">
-    <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
-        <!-- Modal Header — light blue -->
-        <div class="p-6 md:p-8 border-b flex justify-between items-center modal-header-lb" style="border-color:var(--primary-dark)">
+<!-- ========== EDIT MODAL ========== -->
+<div id="edit-modal" class="fixed inset-0 z-[2000] hidden flex items-center justify-center p-4 md:p-6"
+    style="background:rgba(173,216,230,0.2);backdrop-filter:blur(6px)">
+    <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col" style="max-height:95vh">
+        <div class="modal-header p-6 md:p-8 flex justify-between items-center">
             <div>
-                <h3 class="font-bold text-xl" style="color:var(--primary-text);font-size:18px!important">Edit Product</h3>
-                <p id="modal-sku-display" class="text-[11px] font-bold tracking-widest uppercase mt-1" style="color:var(--primary-text);opacity:0.75">--</p>
+                <h3 style="color:var(--primary-text);font-size:18px">Edit Product</h3>
+                <p id="modal-sku-display" class="text-[11px] font-bold tracking-widest uppercase mt-1" style="color:var(--primary-text);opacity:0.7">--</p>
             </div>
-            <button onclick="closeEditModal()" class="w-10 h-10 rounded-full bg-white/40 hover:bg-white flex items-center justify-center transition-all" style="color:var(--primary-text)">
+            <button onclick="closeEditModal()" class="w-10 h-10 rounded-full flex items-center justify-center transition-all"
+                style="color:var(--primary-text);background:rgba(255,255,255,0.5)">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
+
         <div class="p-6 md:p-10 overflow-y-auto flex-1">
-            <form id="edit-form" action="/update_product" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+            <form id="edit-form" action="/update_product" method="POST"
+                class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                 <input type="hidden" name="product_id" id="edit-id">
+
                 <div class="space-y-5">
-                    <label class="text-[10px] font-bold uppercase" style="color:var(--primary-text)">Product Information</label>
+                    <label class="form-label">Product Information</label>
                     <input name="title" id="edit-title" class="input-field" placeholder="Title">
                     <div class="grid grid-cols-2 gap-4">
-                        <!-- Edit category dropdown -->
                         <select name="category" id="edit-category" class="input-field">
-                            <option value="">Select Category</option>
-                            <option value="Apparel">Apparel</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Footwear">Footwear</option>
-                            <option value="Accessories">Accessories</option>
-                            <option value="Home & Living">Home & Living</option>
-                            <option value="Sports">Sports</option>
-                            <option value="Beauty">Beauty</option>
-                            <option value="Books">Books</option>
-                            <option value="Toys">Toys</option>
-                            <option value="Other">Other</option>
+                            <option value="" disabled>Select category</option>
+                            <option>Apparel</option>
+                            <option>Footwear</option>
+                            <option>Accessories</option>
+                            <option>Electronics</option>
+                            <option>Sportswear</option>
+                            <option>Outerwear</option>
+                            <option>Bags</option>
+                            <option>Jewelry</option>
+                            <option>Home</option>
+                            <option>Beauty</option>
+                            <option>Other</option>
                         </select>
-                        <input name="price" type="number" min="0.01" step="0.01" id="edit-price" class="input-field" placeholder="Price" oninput="validatePrice(this)">
+                        <input name="price" type="number" id="edit-price" class="input-field"
+                            placeholder="Price" min="0.01" step="0.01" oninput="validatePrice(this)">
                     </div>
-                    <textarea name="description" id="edit-description" class="input-field h-40" placeholder="Product Description"></textarea>
+                    <textarea name="description" id="edit-description" class="input-field h-40 resize-none" style="border-radius:14px" placeholder="Product Description"></textarea>
                     <div class="grid grid-cols-2 gap-4">
                         <input name="material" id="edit-material" class="input-field" placeholder="Material">
                         <input name="color" id="edit-color" class="input-field" placeholder="Color">
                     </div>
                 </div>
+
                 <div class="space-y-5">
-                    <label class="text-[10px] font-bold uppercase" style="color:var(--primary-text)">Media & Logic</label>
-                    <input name="image_link" id="edit-image-link" class="input-field" placeholder="Image Link" oninput="previewImg(this.value, 'edit-prev')">
+                    <label class="form-label">Media &amp; Logic</label>
+                    <input name="image_link" id="edit-image-link" class="input-field"
+                        placeholder="Image Link" oninput="previewImg(this.value, 'edit-prev')">
                     <input name="image" id="edit-image" class="input-field" placeholder="Page link">
                     <div class="grid grid-cols-2 gap-4">
-                        <input name="rating" id="edit-rating" type="number" min="0" max="5" step="0.1" class="input-field" placeholder="Rating (0–5)">
+                        <input name="rating" id="edit-rating" class="input-field"
+                            placeholder="Rating (0–5)" type="number" min="0" max="5" step="0.1"
+                            oninput="validateRating(this)">
                         <input name="trending_score" id="edit-trending" class="input-field" placeholder="Trending score">
                     </div>
-                    <div class="img-preview-zone" style="height:13rem">
-                        <img id="edit-prev" class="max-h-full hidden">
-                        <p id="edit-prev-txt" class="text-[10px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">No Preview</p>
+                    <div class="h-52 rounded-2xl flex items-center justify-center overflow-hidden img-upload-area">
+                        <img id="edit-prev" class="max-h-full hidden object-contain">
+                        <p id="edit-prev-txt" class="text-xs font-bold uppercase tracking-widest" style="color:var(--primary-text);opacity:0.6">Image Preview</p>
                     </div>
-                    <button type="submit" class="btn-primary w-full uppercase tracking-widest text-xs py-5 mt-4">
-                        <i class="fa-solid fa-floppy-disk mr-2"></i>Commit System Changes
+                    <button type="submit" class="btn-primary w-full py-4 uppercase tracking-widest text-xs mt-4">
+                        Commit System Changes
                     </button>
                 </div>
             </form>
@@ -1220,67 +1141,42 @@
     </div>
 </div>
 
-<!-- FLOATING CHAT ICON -->
-<a href="/" class="floating-chat" aria-label="Open Chat">
+<!-- ========== FLOATING CHAT ========== -->
+<a href="/" class="floating-chat" aria-label="Open Chat" title="Open Chat">
     <i class="fa-solid fa-comment-dots"></i>
 </a>
 
-<!-- FLOATING MOBILE MENU BUTTON -->
-<button class="floating-mobile-menu" onclick="showMobileNav()" id="mobile-fab" title="Quick Navigation">
-    <i class="fa-solid fa-grid-2" style="color:var(--primary-text)"></i>
-</button>
-
-<!-- MOBILE QUICK NAV PANEL -->
-<div id="mobile-quick-nav" class="fixed bottom-20 right-4 z-[998] flex-col gap-2 hidden">
-    <button onclick="switchTab('dashboard');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
-        <i class="fa-solid fa-chart-line w-4"></i> Dashboard
-    </button>
-    <button onclick="switchTab('inventory');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
-        <i class="fa-solid fa-box-archive w-4"></i> Inventory
-    </button>
-    <button onclick="switchTab('analytics');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
-        <i class="fa-solid fa-microchip w-4"></i> Analytics
-    </button>
-    <button onclick="switchTab('add-product');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
-        <i class="fa-solid fa-plus w-4"></i> New Entry
-    </button>
+<!-- ========== FLOATING MOBILE NAV ========== -->
+<div class="floating-nav-btn" onclick="toggleSidebar()" title="Quick Navigation">
+    <i class="fa-solid fa-compass" style="color:var(--primary-text)"></i>
 </div>
 
-<!-- ============================================================
-     JAVASCRIPT
-============================================================ -->
 <script>
 /**
- * LuxeStore | Pixup8k Admin Panel
- * Full Logic — Light Blue & White Theme
+ * LuxeStore | Pixup8k — Enhanced Dashboard Script
+ * Light Blue & White Theme — All features implemented
  * Lines: 890+
  */
 
-/* ============================================================
-   GLOBAL STATE
-============================================================ */
+/* ===================== GLOBALS ===================== */
 let globalData = { products: [] };
 let globalAnalytics = {
-    total_searches: 0,
-    total_clicks: 0,
-    most_questions: {},
-    product_search: {},
-    product_clicks: {},
-    price_updates: {},
+    total_searches: 0, total_clicks: 0,
+    most_questions: {}, product_search: {},
+    product_clicks: {}, price_updates: {},
     supported_languages: {}
 };
 let chartClicks = null;
 let chartCircle = null;
 let chartLanguages = null;
-let sidebarDesktopCollapsed = false;
-let analyticsFilterQuery = '';
-let pendingDeleteForm = null;
+let sidebarCollapsed = false;
+let allClickLabels = [];
+let allClickValues = [];
+let pendingDeleteId = null;
 
 const authStatus = "{{ status }}";
 
-/* ============================================================
-   SIDEBAR — TOGGLE (MOBILE)
-============================================================ */
+/* ===================== SIDEBAR TOGGLE ===================== */
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
@@ -1288,91 +1184,39 @@ function toggleSidebar() {
     overlay.classList.toggle('active');
 }
 
-/* ============================================================
-   SIDEBAR — DESKTOP COLLAPSE/EXPAND
-============================================================ */
-function desktopToggleSidebar() {
+/* ===================== SIDEBAR COLLAPSE (DESKTOP) ===================== */
+function toggleSidebarDesktop() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('main-content');
-    const icon = document.getElementById('sidebar-toggle-icon');
-    const btn = document.getElementById('sidebar-toggle-btn');
+    const stickyHeader = document.getElementById('sticky-header');
+    const footer = document.querySelector('.site-footer');
+    const icon = document.getElementById('collapse-icon');
 
-    sidebarDesktopCollapsed = !sidebarDesktopCollapsed;
+    sidebarCollapsed = !sidebarCollapsed;
 
-    if (sidebarDesktopCollapsed) {
+    if (sidebarCollapsed) {
         sidebar.classList.add('collapsed');
-        mainContent.classList.add('sidebar-collapsed');
-        icon.className = 'fa-solid fa-chevron-left';
-        btn.style.right = '0';
+        mainContent.style.marginRight = '0';
+        if (stickyHeader) stickyHeader.style.marginRight = '0';
+        if (footer) footer.style.marginRight = '0';
+        if (icon) { icon.classList.replace('fa-chevron-right', 'fa-chevron-left'); }
     } else {
         sidebar.classList.remove('collapsed');
-        mainContent.classList.remove('sidebar-collapsed');
-        icon.className = 'fa-solid fa-chevron-right';
-        btn.style.right = '0';
+        mainContent.style.marginRight = 'var(--sidebar-width)';
+        if (stickyHeader) stickyHeader.style.marginRight = 'var(--sidebar-width)';
+        if (footer) footer.style.marginRight = 'var(--sidebar-width)';
+        if (icon) { icon.classList.replace('fa-chevron-left', 'fa-chevron-right'); }
     }
 }
 
-/* ============================================================
-   MOBILE QUICK NAV
-============================================================ */
-function showMobileNav() {
-    const nav = document.getElementById('mobile-quick-nav');
-    nav.classList.toggle('hidden');
-    nav.classList.toggle('flex');
-}
-
-function hideMobileNav() {
-    const nav = document.getElementById('mobile-quick-nav');
-    nav.classList.add('hidden');
-    nav.classList.remove('flex');
-}
-
-/* ============================================================
-   TOAST NOTIFICATIONS — Light Blue Styled
-============================================================ */
-function showToast(message, icon = 'fa-circle-check') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.innerHTML = `<i class="fa-solid ${icon}"></i><span>${message}</span>`;
-    container.appendChild(toast);
-    setTimeout(() => {
-        if (toast.parentNode) toast.parentNode.removeChild(toast);
-    }, 3000);
-}
-
-/* ============================================================
-   CONFIRM DELETE POPUP
-============================================================ */
-function confirmDelete(form) {
-    pendingDeleteForm = form;
-    const overlay = document.getElementById('confirm-overlay');
-    overlay.classList.add('active');
-    return false; // Prevent default form submission
-}
-
-function cancelDelete() {
-    pendingDeleteForm = null;
-    document.getElementById('confirm-overlay').classList.remove('active');
-}
-
-function executeDelete() {
-    if (pendingDeleteForm) {
-        pendingDeleteForm.submit();
-    }
-    document.getElementById('confirm-overlay').classList.remove('active');
-}
-
-/* ============================================================
-   DOM READY
-============================================================ */
+/* ===================== DOM READY ===================== */
 document.addEventListener("DOMContentLoaded", () => {
     if (authStatus === "success") {
         document.getElementById("auth-overlay").classList.add("hidden");
         sync();
     } else if (authStatus === "failed") {
-        const errEl = document.getElementById("error-msg");
-        if (errEl) errEl.classList.remove("hidden");
+        const err = document.getElementById("error-msg");
+        if (err) err.classList.remove("hidden");
     }
 
     const searchInput = document.getElementById('inventory-search-input');
@@ -1380,20 +1224,29 @@ document.addEventListener("DOMContentLoaded", () => {
         searchInput.addEventListener('input', (e) => filterInventory(e.target.value));
     }
 
-    // Close mobile quick nav when clicking outside
-    document.addEventListener('click', (e) => {
-        const nav = document.getElementById('mobile-quick-nav');
-        const fab = document.getElementById('mobile-fab');
-        if (!nav.contains(e.target) && !fab.contains(e.target)) {
-            nav.classList.add('hidden');
-            nav.classList.remove('flex');
-        }
-    });
+    window.addEventListener('resize', handleResize);
+    handleResize();
 });
 
-/* ============================================================
-   SYNC — Fetch Data & Analytics
-============================================================ */
+/* ===================== RESIZE HANDLER ===================== */
+function handleResize() {
+    const header = document.getElementById('sticky-header');
+    const footer = document.querySelector('.site-footer');
+    const mainContent = document.getElementById('main-content');
+
+    if (window.innerWidth <= 1024) {
+        if (header) header.style.marginRight = '0';
+        if (footer) footer.style.marginRight = '0';
+        if (mainContent) mainContent.style.marginRight = '0';
+    } else {
+        const offset = sidebarCollapsed ? '0' : 'var(--sidebar-width)';
+        if (header) header.style.marginRight = offset;
+        if (footer) footer.style.marginRight = offset;
+        if (mainContent) mainContent.style.marginRight = offset;
+    }
+}
+
+/* ===================== SYNC DATA ===================== */
 async function sync() {
     try {
         const [d, a] = await Promise.all([
@@ -1408,146 +1261,157 @@ async function sync() {
 
         refreshDashboard();
         refreshInventory(globalData.products || []);
-        checkClickDropWarning();
-    } catch (e) {
+    } catch(e) {
         document.getElementById("connection-status").innerHTML =
             `<span class="w-2 h-2 rounded-full bg-red-500"></span> Offline Node`;
     }
 }
 
-/* ============================================================
-   CLICK DROP WARNING — Alert if total clicks < 100
-============================================================ */
-function checkClickDropWarning() {
-    const totalClicks = globalAnalytics.total_clicks || 0;
-    const warningEl = document.getElementById('click-drop-warning');
-    if (totalClicks < 100 && totalClicks > 0) {
-        warningEl.classList.add('show');
-    } else {
-        warningEl.classList.remove('show');
-    }
-}
-
-/* ============================================================
-   SWITCH TAB
-============================================================ */
+/* ===================== SWITCH TAB ===================== */
 function switchTab(tabId) {
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
 
-    document.getElementById('tab-' + tabId).classList.add('active');
-    document.getElementById('link-' + tabId).classList.add('active');
-    document.getElementById('page-title').innerText = tabId.replace('-', ' ');
+    const tabEl = document.getElementById('tab-' + tabId);
+    const linkEl = document.getElementById('link-' + tabId);
 
+    if (tabEl) tabEl.classList.add('active');
+    if (linkEl) linkEl.classList.add('active');
+
+    const title = tabId.replace('-', ' ');
+    const pageTitleEl = document.getElementById('page-title');
+    const stickyEl = document.getElementById('sticky-page-title');
+    if (pageTitleEl) pageTitleEl.innerText = title;
+    if (stickyEl) stickyEl.innerText = title;
+
+    // Close sidebar on mobile after tab switch
     if (window.innerWidth < 1024) {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebar-overlay');
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
+        if (sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
     }
 
     if (tabId === 'analytics') renderCharts();
     if (tabId === 'dashboard') renderDashboardCharts();
 }
 
-/* ============================================================
-   REFRESH DASHBOARD
-============================================================ */
+/* ===================== REFRESH DASHBOARD ===================== */
 function refreshDashboard() {
     const products = globalData.products || [];
-    document.getElementById("stat-count").innerText = products.length;
-    document.getElementById("stat-total-clicks").innerText = globalAnalytics.total_clicks || 0;
-    document.getElementById("stat-total-searches").innerText = globalAnalytics.total_searches || 0;
 
-    // Auto-calculate and update average price
+    const statCount = document.getElementById("stat-count");
+    const statClicks = document.getElementById("stat-total-clicks");
+    const statSearches = document.getElementById("stat-total-searches");
+    const statLanguages = document.getElementById("stat-languages");
+
+    if (statCount) statCount.innerText = products.length;
+    if (statClicks) statClicks.innerText = globalAnalytics.total_clicks || 0;
+    if (statSearches) statSearches.innerText = globalAnalytics.total_searches || 0;
+
+    if (statLanguages) {
+        const langCount = Object.keys(globalAnalytics.supported_languages || {}).length;
+        statLanguages.innerText = langCount || '--';
+    }
+
+    // Auto-update average price
     updateAveragePrice(products);
 
+    // Click growth percentage
     const growth = globalAnalytics.total_clicks > 0
         ? (globalAnalytics.total_clicks / 500 * 100).toFixed(1)
         : 0;
-    document.getElementById("click-growth-percent").innerText = `+${growth}% efficiency`;
+    const growthEl = document.getElementById("click-growth-percent");
+    if (growthEl) growthEl.innerText = `+${growth}% efficiency`;
 
-    // Recent 4 products
+    // Low-click notification
+    const clickAlert = document.getElementById('click-alert');
+    if (clickAlert) {
+        if ((globalAnalytics.total_clicks || 0) < 100) {
+            clickAlert.classList.remove('hidden');
+        } else {
+            clickAlert.classList.add('hidden');
+        }
+    }
+
+    // Top selling product
+    updateTopSellingProduct(products);
+
+    // Recent products list
     const recent = [...products].slice(-4).reverse();
-    document.getElementById("recent-grid").innerHTML = recent.map(p => `
-        <div class="flex items-center gap-4 p-4 border rounded-2xl hover:shadow-sm transition-all cursor-default" style="border-color:#c7e8f3">
-            <div class="w-12 h-12 shadow-sm bg-white overflow-hidden rounded-lg border flex items-center justify-center flex-shrink-0" style="border-color:#c7e8f3">
-                <img src="${p.image_link}" class="max-h-full object-contain"
-                    onerror="this.src='https://placehold.co/48x48?text=N%2FA'">
-            </div>
-            <div class="flex-1 min-w-0">
-                <p class="card-title truncate text-slate-800 uppercase tracking-tight">${p.title}</p>
-                <p class="text-[10px] font-bold mt-0.5" style="color:var(--primary-text)">$${p.price} • ${p.category}</p>
-            </div>
-            <span class="text-[9px] font-black px-2 py-1 rounded-md flex-shrink-0" style="background:var(--primary);color:var(--primary-text)">recorded</span>
-        </div>
-    `).join("");
-
-    // Top Selling Product
-    updateTopSellingCard(products);
+    const recentGrid = document.getElementById("recent-grid");
+    if (recentGrid) {
+        recentGrid.innerHTML = recent.map(p => {
+            const isTrending = (parseFloat(p.trending_score) || 0) > 80;
+            return `
+            <div class="flex items-center gap-4 p-3 rounded-2xl hover:bg-blue-50 transition-all cursor-default" style="border:1px solid var(--border)">
+                <div class="w-12 h-12 overflow-hidden rounded-xl border bg-white flex items-center justify-center flex-shrink-0" style="border-color:var(--border)">
+                    <img src="${p.image_link}" class="max-h-full object-contain" onerror="this.src='https://placehold.co/60x60?text=?'">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <p class="text-xs font-bold truncate text-slate-800 uppercase tracking-tight">${p.title}</p>
+                        ${isTrending ? '<span class="trending-badge"><i class="fa-solid fa-fire-flame-curved mr-1"></i>Hot</span>' : ''}
+                    </div>
+                    <p class="text-[10px] text-slate-400 font-bold mt-0.5">$${p.price} • ${p.category}</p>
+                </div>
+                <span class="text-[9px] font-black px-2 py-1 rounded-md flex-shrink-0" style="background:var(--primary);color:var(--primary-text)">new</span>
+            </div>`;
+        }).join("");
+    }
 
     renderDashboardCharts();
 }
 
-/* ============================================================
-   UPDATE AVERAGE PRICE — Auto-updates when product added
-============================================================ */
+/* ===================== UPDATE AVERAGE PRICE ===================== */
 function updateAveragePrice(products) {
-    const prods = products || globalData.products || [];
-    if (prods.length > 0) {
-        const totalValue = prods.reduce((acc, p) => acc + (parseFloat(p.price) || 0), 0);
-        const avg = (totalValue / prods.length).toFixed(2);
-        document.getElementById("stat-avg-price").innerText = `$${avg}`;
+    const el = document.getElementById("stat-avg-price");
+    if (!el) return;
+    if (products && products.length > 0) {
+        const total = products.reduce((acc, p) => acc + (parseFloat(p.price) || 0), 0);
+        const avg = (total / products.length).toFixed(2);
+        el.innerText = `$${avg}`;
     } else {
-        document.getElementById("stat-avg-price").innerText = "$0.00";
+        el.innerText = "$0.00";
     }
 }
 
-/* ============================================================
-   TOP SELLING PRODUCT CARD
-============================================================ */
-function updateTopSellingCard(products) {
-    if (!products || products.length === 0) return;
+/* ===================== TOP SELLING PRODUCT ===================== */
+function updateTopSellingProduct(products) {
+    const clickData = globalAnalytics.product_clicks || {};
+    const topEl = document.getElementById('stat-top-product');
+    const topDetail = document.getElementById('stat-top-product-detail');
+    if (!topEl) return;
 
-    // Find product with highest trending_score
-    const topProduct = products.reduce((best, p) => {
-        const score = parseFloat(p.trending_score) || 0;
-        const bestScore = parseFloat(best.trending_score) || 0;
-        return score > bestScore ? p : best;
-    }, products[0]);
-
-    document.getElementById('top-product-title').innerText = topProduct.title || 'Unknown';
-    document.getElementById('top-product-meta').innerText =
-        `$${topProduct.price} • ${topProduct.category} • Rating: ${topProduct.rating || 'N/A'}`;
-    document.getElementById('top-product-score').innerText =
-        `Trending Score: ${topProduct.trending_score || 0}`;
-
-    const img = document.getElementById('top-product-img');
-    const placeholder = document.getElementById('top-product-placeholder');
-    if (topProduct.image_link) {
-        img.src = topProduct.image_link;
-        img.classList.remove('hidden');
-        placeholder.classList.add('hidden');
+    if (!Object.keys(clickData).length || !products.length) {
+        topEl.innerText = 'N/A';
+        if (topDetail) topDetail.innerHTML = '<span class="text-[10px] text-slate-400 font-bold">No data yet</span>';
+        return;
     }
 
-    // Highlight products with trending_score > 80
-    highlightTrendingProducts();
+    const [topId, topClicks] = Object.entries(clickData).sort((a, b) => b[1] - a[1])[0];
+    const topProduct = products.find(x => x._id === topId);
+
+    if (topProduct) {
+        topEl.innerText = topProduct.title;
+        if (topDetail) {
+            topDetail.innerHTML = `<span class="text-[10px] font-bold text-slate-500">${topClicks} clicks • $${topProduct.price} • ${topProduct.category}</span>`;
+        }
+    } else {
+        topEl.innerText = topId.substring(0, 18) + '...';
+        if (topDetail) topDetail.innerHTML = `<span class="text-[10px] font-bold text-slate-500">${topClicks} clicks</span>`;
+    }
 }
 
-/* ============================================================
-   HIGHLIGHT TRENDING PRODUCTS (score > 80)
-============================================================ */
-function highlightTrendingProducts() {
-    // Applied in refreshInventory via the template
-}
-
-/* ============================================================
-   RENDER DASHBOARD CHARTS — Doughnut shows last 5 searches
-============================================================ */
+/* ===================== DASHBOARD CHARTS (doughnut — last 5) ===================== */
 function renderDashboardCharts() {
     const searchData = globalAnalytics.product_search || {};
-    // Last 5 searches only
-    const sortedEntries = Object.entries(searchData).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const sortedEntries = Object.entries(searchData)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);   // Last 5 searches only
+
     const labels = sortedEntries.map(e => e[0]);
     const counts = sortedEntries.map(e => e[1]);
 
@@ -1555,17 +1419,14 @@ function renderDashboardCharts() {
     const ctx = document.getElementById('searchCircleChart');
     if (!ctx || labels.length === 0) return;
 
-    // Light blue color palette for doughnut segments
     chartCircle = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: labels,
             datasets: [{
                 data: counts,
-                backgroundColor: [
-                    '#add8e6', '#7ec8e3', '#4ab4d1',
-                    '#c5e8f0', '#85c9de'
-                ],
+                // Light blue palette segments
+                backgroundColor: ['#add8e6', '#7ec8e3', '#b0e0e6', '#87ceeb', '#c9e8f4'],
                 borderWidth: 2,
                 borderColor: '#ffffff',
                 hoverOffset: 15
@@ -1579,18 +1440,11 @@ function renderDashboardCharts() {
             circumference: 180,
             plugins: {
                 tooltip: {
-                    backgroundColor: 'var(--primary, #add8e6)',
-                    titleColor: '#1a6b8a',
-                    bodyColor: '#1a6b8a',
+                    backgroundColor: '#1a6a8a',
                     titleFont: { size: 12, weight: '600' },
                     padding: 12,
                     displayColors: true,
-                    boxPadding: 6,
-                    callbacks: {
-                        labelColor: function(context) {
-                            return { borderColor: '#add8e6', backgroundColor: '#add8e6' };
-                        }
-                    }
+                    boxPadding: 6
                 },
                 legend: {
                     position: 'bottom',
@@ -1599,7 +1453,7 @@ function renderDashboardCharts() {
                         pointStyle: 'rectRounded',
                         padding: 15,
                         font: { size: 10, weight: '600' },
-                        color: '#1a6b8a'
+                        color: '#64748b'
                     }
                 }
             }
@@ -1607,56 +1461,39 @@ function renderDashboardCharts() {
     });
 }
 
-/* ============================================================
-   REFRESH INVENTORY GRID
-============================================================ */
+/* ===================== REFRESH INVENTORY ===================== */
 function refreshInventory(list) {
     const grid = document.getElementById("full-inventory-grid");
     if (!grid) return;
 
     grid.innerHTML = list.length ? list.map(p => {
-        const tScore = parseFloat(p.trending_score) || 0;
-        const trendBadge = tScore > 80
-            ? `<span class="trending-badge"><i class="fa-solid fa-fire-flame-curved"></i> Trending</span>`
-            : '';
+        const isTrending = (parseFloat(p.trending_score) || 0) > 80;
         return `
-        <div class="glass-card group flex flex-col items-center text-center p-6" style="border-color:#c7e8f3">
-            <div class="w-full aspect-square bg-white rounded-xl p-6 flex items-center justify-center border mb-6 transition-all group-hover:shadow-inner" style="border-color:#c7e8f3">
+        <div class="glass-card group flex flex-col items-center text-center p-5">
+            <div class="w-full aspect-square rounded-xl p-4 flex items-center justify-center mb-4 transition-all bg-white group-hover:shadow-inner" style="border:1px solid var(--border)">
                 <img src="${p.image_link}" class="max-h-full max-w-full object-contain"
-                    onerror="this.src='https://placehold.co/200x200?text=Asset+Missing'">
+                    onerror="this.src='https://placehold.co/200x200?text=No+Image'">
             </div>
             <div class="w-full flex-1">
                 <p class="text-[10px] font-bold uppercase tracking-widest mb-1" style="color:var(--primary-text)">${p.category}</p>
-                <p class="card-title font-bold text-slate-900 uppercase truncate mb-2">${p.title}</p>
-                ${trendBadge}
-                <div class="flex items-center justify-center gap-4 mt-3 mb-4">
+                <p class="text-sm font-bold text-slate-900 uppercase truncate mb-1">${p.title}</p>
+                ${isTrending ? '<span class="trending-badge mb-2"><i class="fa-solid fa-fire-flame-curved mr-1"></i>Trending</span>' : ''}
+                <div class="flex items-center justify-center gap-3 mb-4 mt-2">
                     <p class="text-base font-bold text-slate-900">$${p.price}</p>
                     <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
-                    <p class="text-[10px] font-bold mono" style="color:var(--primary-text)">${p.id}</p>
+                    <p class="text-[10px] font-bold text-slate-400 mono">${p.id}</p>
                 </div>
             </div>
-            <div class="w-full grid grid-cols-2 gap-2 pt-4 border-t" style="border-color:#c7e8f3">
-                <button onclick="openEditModal('${p._id}')" class="btn-secondary text-xs py-2">
-                    <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
-                </button>
-                <form action="/delete_product" method="POST" onsubmit="return confirmDelete(this)" class="w-full">
-                    <input type="hidden" name="id" value="${p._id}">
-                    <button type="submit" class="btn-secondary w-full text-xs py-2 !text-red-500 hover:!bg-red-50">
-                        <i class="fa-solid fa-trash mr-1"></i>Delete
-                    </button>
-                </form>
+            <div class="w-full grid grid-cols-2 gap-2 pt-4" style="border-top:1px solid var(--border)">
+                <button onclick="openEditModal('${p._id}')" class="btn-secondary">Edit</button>
+                <button onclick="confirmDelete(this, '${p._id}')" class="btn-secondary !text-red-500 hover:!bg-red-50">Delete</button>
             </div>
-        </div>
-    `}).join("") : `
-        <div class="col-span-full py-20 text-center font-bold tracking-widest uppercase text-sm" style="color:var(--primary-text)">
-            <i class="fa-solid fa-box-open text-4xl mb-4 block" style="color:var(--primary)"></i>
-            No Registry Found
         </div>`;
+    }).join("") :
+    '<div class="col-span-full py-20 text-center text-slate-400 font-bold tracking-widest uppercase text-sm">No Registry Found</div>';
 }
 
-/* ============================================================
-   FILTER INVENTORY
-============================================================ */
+/* ===================== FILTER INVENTORY ===================== */
 function filterInventory(q) {
     const query = q.toLowerCase();
     const filtered = globalData.products.filter(p =>
@@ -1667,96 +1504,22 @@ function filterInventory(q) {
     refreshInventory(filtered);
 }
 
-/* ============================================================
-   ANALYTICS SEARCH FILTER
-============================================================ */
-function filterAnalytics(q) {
-    analyticsFilterQuery = q.toLowerCase().trim();
-    renderCharts();
-}
-
-/* ============================================================
-   RENDER ANALYTICS CHARTS
-============================================================ */
+/* ===================== RENDER ANALYTICS CHARTS ===================== */
 function renderCharts() {
     const clickData = globalAnalytics.product_clicks || {};
     const questionData = globalAnalytics.most_questions || {};
     const languageData = globalAnalytics.supported_languages || {};
 
-    let entries = Object.entries(clickData).sort((a, b) => b[1] - a[1]).slice(0, 10);
-
-    // Apply analytics filter if set
-    if (analyticsFilterQuery) {
-        entries = entries.filter(([id]) => {
-            const p = globalData.products.find(x => x._id === id);
-            if (!p) return false;
-            return p.title.toLowerCase().includes(analyticsFilterQuery) ||
-                   (p.category && p.category.toLowerCase().includes(analyticsFilterQuery));
-        });
-    }
-
-    const labels = entries.map(([id]) => {
+    const entries = Object.entries(clickData).sort((a, b) => b[1] - a[1]).slice(0, 10);
+    allClickLabels = entries.map(([id]) => {
         const p = globalData.products.find(x => x._id === id);
         return p ? p.title.substring(0, 14) : id.substring(0, 6);
     });
-    const values = entries.map(e => e[1]);
+    allClickValues = entries.map(e => e[1]);
 
-    if (chartClicks) chartClicks.destroy();
-    const clicksCtx = document.getElementById('clicksChart');
-    if (clicksCtx && values.length > 0) {
-        chartClicks = new Chart(clicksCtx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Engagement Index',
-                    data: values,
-                    backgroundColor: '#add8e6',
-                    hoverBackgroundColor: '#7ec8e3',
-                    borderRadius: 9999, // Pill bars
-                    barThickness: window.innerWidth < 640 ? 15 : 24
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#f0faff', drawBorder: false },
-                        ticks: { font: { size: 10, weight: '600' }, color: '#1a6b8a' }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 9, weight: '600' }, color: '#1a6b8a' }
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        // Light blue styled tooltips
-                        backgroundColor: '#add8e6',
-                        titleColor: '#1a6b8a',
-                        bodyColor: '#1a6b8a',
-                        titleFont: { size: 11, weight: '700' },
-                        bodyFont: { size: 11 },
-                        padding: 10,
-                        cornerRadius: 9999,
-                        displayColors: false,
-                        callbacks: {
-                            title: function(items) {
-                                return items[0].label;
-                            },
-                            label: function(item) {
-                                return `Clicks: ${item.formattedValue}`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
+    renderClicksChart(allClickLabels, allClickValues);
 
+    // Language chart
     if (chartLanguages) chartLanguages.destroy();
     const langCtx = document.getElementById('languagesChart');
     const langLabels = Object.keys(languageData);
@@ -1769,7 +1532,7 @@ function renderCharts() {
                 labels: langLabels.map(l => l.toUpperCase()),
                 datasets: [{
                     data: langValues,
-                    backgroundColor: ['#add8e6', '#7ec8e3', '#4ab4d1', '#c5e8f0', '#85c9de'],
+                    backgroundColor: ['#add8e6', '#7ec8e3', '#87ceeb', '#b0e0e6', '#cce8f4'],
                     borderWidth: 2,
                     borderColor: '#ffffff'
                 }]
@@ -1780,18 +1543,9 @@ function renderCharts() {
                 plugins: {
                     legend: {
                         position: 'right',
-                        labels: {
-                            font: { size: 9, weight: 'bold' },
-                            boxWidth: 10,
-                            padding: 8,
-                            color: '#1a6b8a'
-                        }
+                        labels: { font: { size: 9, weight: 'bold' }, boxWidth: 10, padding: 8 }
                     },
-                    tooltip: {
-                        backgroundColor: '#add8e6',
-                        titleColor: '#1a6b8a',
-                        bodyColor: '#1a6b8a'
-                    }
+                    tooltip: { backgroundColor: '#1a6a8a', padding: 10 }
                 }
             }
         });
@@ -1800,58 +1554,113 @@ function renderCharts() {
     // Questions list
     const qList = document.getElementById("questions-list");
     const sortedQ = Object.entries(questionData).sort((a, b) => b[1] - a[1]);
-    qList.innerHTML = sortedQ.length ? sortedQ.map(([q, count]) => `
-        <div class="flex items-start justify-between p-3 rounded-xl transition-all group" style="background:#f0faff;border:1px solid #c7e8f3">
-            <div class="flex-1 pr-4">
-                <p class="text-xs font-semibold leading-relaxed italic text-slate-800">"${q}"</p>
+    if (qList) {
+        qList.innerHTML = sortedQ.length ? sortedQ.map(([q, count]) => `
+            <div class="flex items-start justify-between p-3 rounded-xl hover:bg-blue-50 transition-all" style="border:1px solid var(--border);background:var(--card-gradient-start)">
+                <div class="flex-1 pr-4">
+                    <p class="text-xs font-semibold text-slate-800 leading-relaxed italic">"${q}"</p>
+                </div>
+                <span class="text-[10px] font-bold px-3 py-1 rounded-full flex-shrink-0" style="background:var(--primary);color:var(--primary-text)">${count}</span>
             </div>
-            <div class="flex-shrink-0">
-                <span class="text-[10px] font-bold bg-white px-3 py-1 rounded-full border" style="color:var(--primary-text);border-color:#add8e6">${count}</span>
-            </div>
-        </div>
-    `).join("") : `<div class="text-center py-10 text-xs font-bold uppercase tracking-widest" style="color:var(--primary-text);opacity:0.5">Inquiry Stream Clear</div>`;
+        `).join("") :
+        '<div class="text-center py-10 text-slate-300 text-xs font-bold uppercase tracking-widest">Inquiry Stream Clear</div>';
+    }
 
     // Analytics table
-    document.getElementById("analytics-tbody").innerHTML = globalData.products.slice(0, 20).map(p => `
-        <tr class="hover:bg-blue-50/40 transition-colors">
-            <td class="font-semibold text-slate-900 p-5">${p.title}
-                <span class="block text-[10px] mono mt-1" style="color:var(--primary-text)">${p.id}</span>
-            </td>
-            <td class="font-bold hide-mobile p-5" style="color:var(--primary-text)">${clickData[p._id] || 0} clicks</td>
-            <td class="text-right p-5">
-                <span class="text-[10px] font-black uppercase px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-600">Synchronized</span>
-            </td>
-        </tr>
-    `).join("");
+    const tbody = document.getElementById("analytics-tbody");
+    if (tbody) {
+        tbody.innerHTML = globalData.products.slice(0, 20).map(p => `
+            <tr class="hover:bg-blue-50 transition-colors" style="border-bottom:1px solid var(--border)">
+                <td class="font-semibold text-slate-900 p-5">
+                    ${p.title}
+                    <span class="block text-[10px] text-slate-400 mono mt-1">${p.id}</span>
+                </td>
+                <td class="text-slate-500 font-bold whitespace-nowrap hide-mobile p-5">${clickData[p._id] || 0} clicks</td>
+                <td class="text-right p-5">
+                    <span class="text-[10px] font-black uppercase px-3 py-1.5 rounded-full" style="background:var(--primary);color:var(--primary-text)">Synchronized</span>
+                </td>
+            </tr>
+        `).join("");
+    }
 }
 
-/* ============================================================
-   EDIT MODAL — Prefill fields by product ID
-============================================================ */
-function openEditModal(id) {
-    const p = globalData.products.find(x => x._id === id);
-    if (!p) {
-        showToast('Product not found in registry.', 'fa-circle-exclamation');
+/* ===================== RENDER CLICKS CHART (with tooltips) ===================== */
+function renderClicksChart(labels, values) {
+    if (chartClicks) chartClicks.destroy();
+    const clicksCtx = document.getElementById('clicksChart');
+
+    if (clicksCtx && values.length > 0) {
+        chartClicks = new Chart(clicksCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Engagement Index',
+                    data: values,
+                    backgroundColor: '#add8e6',
+                    hoverBackgroundColor: '#7ec8e3',
+                    borderRadius: 8,
+                    barThickness: window.innerWidth < 640 ? 15 : 24
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9', drawBorder: false },
+                        ticks: { font: { size: 10, weight: '600' }, color: '#94a3b8' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 9, weight: '600' }, color: '#64748b' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    // Light blue styled tooltips on analytics bars
+                    tooltip: {
+                        backgroundColor: '#1a6a8a',
+                        titleColor: '#ffffff',
+                        bodyColor: '#e0f4fb',
+                        titleFont: { size: 12, weight: '700' },
+                        bodyFont: { size: 11 },
+                        padding: 12,
+                        cornerRadius: 10,
+                        displayColors: false,
+                        callbacks: {
+                            title: (items) => items[0].label,
+                            label: (item) => `Clicks: ${item.raw}`
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+/* ===================== ANALYTICS FILTER ===================== */
+function filterAnalyticsChart(q) {
+    if (!q) {
+        renderClicksChart(allClickLabels, allClickValues);
         return;
     }
+    const query = q.toLowerCase();
+    const filtered = allClickLabels
+        .map((label, i) => ({ label, value: allClickValues[i] }))
+        .filter(item => item.label.toLowerCase().includes(query));
+    renderClicksChart(filtered.map(i => i.label), filtered.map(i => i.value));
+}
 
+/* ===================== OPEN EDIT MODAL ===================== */
+function openEditModal(id) {
+    const p = globalData.products.find(x => x._id === id);
+    if (!p) return;
+
+    // Prefill all fields dynamically from product ID
     document.getElementById("edit-id").value = p._id;
     document.getElementById("edit-title").value = p.title || '';
-
-    // Prefill category dropdown
-    const editCat = document.getElementById("edit-category");
-    const catExists = Array.from(editCat.options).some(o => o.value === p.category);
-    if (catExists) {
-        editCat.value = p.category;
-    } else {
-        // Add the category if not in list, then select
-        const opt = document.createElement('option');
-        opt.value = p.category || '';
-        opt.text = p.category || '';
-        editCat.appendChild(opt);
-        editCat.value = p.category || '';
-    }
-
     document.getElementById("edit-price").value = p.price || 0;
     document.getElementById("edit-image-link").value = p.image_link || '';
     document.getElementById("edit-image").value = p.image || '';
@@ -1861,25 +1670,38 @@ function openEditModal(id) {
     document.getElementById("edit-trending").value = p.trending_score || 0;
     document.getElementById("edit-description").value = p.description || '';
 
+    // Set category dropdown
+    const catSelect = document.getElementById("edit-category");
+    if (catSelect && p.category) {
+        const existingOpt = [...catSelect.options].find(o => o.value === p.category);
+        if (existingOpt) {
+            catSelect.value = p.category;
+        } else {
+            const opt = document.createElement('option');
+            opt.value = p.category;
+            opt.text = p.category;
+            catSelect.add(opt);
+            catSelect.value = p.category;
+        }
+    }
+
     document.getElementById("modal-sku-display").innerText = p.id || '--';
     previewImg(p.image_link, 'edit-prev');
-
     document.getElementById("edit-modal").classList.remove("hidden");
     document.body.style.overflow = 'hidden';
 }
 
+/* ===================== CLOSE EDIT MODAL ===================== */
 function closeEditModal() {
     document.getElementById("edit-modal").classList.add("hidden");
     document.body.style.overflow = 'auto';
 }
 
-/* ============================================================
-   LIVE IMAGE PREVIEW
-============================================================ */
+/* ===================== IMAGE PREVIEW ===================== */
 function previewImg(url, id) {
     const img = document.getElementById(id);
     const txt = document.getElementById(id + '-txt');
-    if (url && url.trim() !== '') {
+    if (url && url.length > 5) {
         img.src = url;
         img.classList.remove('hidden');
         if (txt) txt.classList.add('hidden');
@@ -1889,99 +1711,152 @@ function previewImg(url, id) {
     }
 }
 
-/* ============================================================
-   FILE UPLOAD — Live preview from file input
-============================================================ */
-function handleFileUpload(input) {
-    const file = input.files[0];
-    const nameDisplay = document.getElementById('file-name-display');
+/* ===================== FILE UPLOAD LIVE PREVIEW ===================== */
+function handleFileUpload(event) {
+    const file = event.target.files[0];
     if (!file) return;
 
-    nameDisplay.textContent = file.name;
+    const nameDisplay = document.getElementById('file-name-display');
+    if (nameDisplay) nameDisplay.innerText = file.name;
 
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = (e) => {
         const img = document.getElementById('add-prev');
         const txt = document.getElementById('add-prev-txt');
-        img.src = e.target.result;
-        img.classList.remove('hidden');
+        if (img) {
+            img.src = e.target.result;
+            img.classList.remove('hidden');
+        }
         if (txt) txt.classList.add('hidden');
-        // Also set the image-link input for form submission reference
-        document.getElementById('add-image-link').value = e.target.result;
     };
     reader.readAsDataURL(file);
 }
 
-/* ============================================================
-   FORM VALIDATION
-============================================================ */
+/* ===================== PRICE VALIDATION (positive only) ===================== */
 function validatePrice(input) {
-    const errorEl = document.getElementById('price-error');
     const val = parseFloat(input.value);
-    if (input.value !== '' && (isNaN(val) || val <= 0)) {
-        input.classList.add('error');
-        if (errorEl) { errorEl.style.display = 'block'; }
-        return false;
+    const errorId = input.id === 'add-price' ? 'price-error' : null;
+    const errorEl = errorId ? document.getElementById(errorId) : null;
+
+    if (isNaN(val) || val <= 0) {
+        input.classList.add('invalid');
+        if (errorEl) errorEl.style.display = 'block';
     } else {
-        input.classList.remove('error');
-        if (errorEl) { errorEl.style.display = 'none'; }
-        return true;
+        input.classList.remove('invalid');
+        if (errorEl) errorEl.style.display = 'none';
     }
 }
 
+/* ===================== RATING VALIDATION (0-5, step 0.1) ===================== */
 function validateRating(input) {
-    const errorEl = document.getElementById('rating-error');
     const val = parseFloat(input.value);
-    if (input.value !== '' && (isNaN(val) || val < 0 || val > 5)) {
-        input.classList.add('error');
-        if (errorEl) { errorEl.style.display = 'block'; }
-        return false;
+    const errorEl = document.getElementById('rating-error');
+
+    if (isNaN(val) || val < 0 || val > 5) {
+        input.classList.add('invalid');
+        if (errorEl) errorEl.style.display = 'block';
     } else {
-        input.classList.remove('error');
-        if (errorEl) { errorEl.style.display = 'none'; }
-        return true;
+        input.classList.remove('invalid');
+        if (errorEl) errorEl.style.display = 'none';
     }
 }
 
-/* ============================================================
-   HANDLE ADD PRODUCT — Toast on success + avg price update
-============================================================ */
-function handleAddProduct(event) {
+/* ===================== ADD PRODUCT HANDLER ===================== */
+function handleAddProduct(e) {
     const priceInput = document.getElementById('add-price');
-    const ratingInput = document.getElementById('add-rating');
-
-    const priceValid = validatePrice(priceInput);
-    const ratingValid = validateRating(ratingInput);
-
-    if (!priceValid || !ratingValid) {
-        event.preventDefault();
-        showToast('Please fix validation errors before submitting.', 'fa-triangle-exclamation');
-        return false;
+    if (priceInput) {
+        const val = parseFloat(priceInput.value);
+        if (isNaN(val) || val <= 0) {
+            e.preventDefault();
+            validatePrice(priceInput);
+            priceInput.focus();
+            showToast('Please enter a valid positive price.', 'fa-circle-exclamation');
+            return false;
+        }
     }
 
-    // Show success toast (the form will POST normally)
-    showToast('Product registration submitted successfully!', 'fa-circle-check');
+    // Show success toast
+    showToast('Product registered successfully!', 'fa-circle-check');
 
-    // Optimistically update average price if we have current products
-    const products = globalData.products || [];
-    const newPrice = parseFloat(priceInput.value) || 0;
-    const allPrices = [...products.map(p => parseFloat(p.price) || 0), newPrice];
-    const newAvg = (allPrices.reduce((a, b) => a + b, 0) / allPrices.length).toFixed(2);
-    const avgEl = document.getElementById('stat-avg-price');
-    if (avgEl) avgEl.innerText = `$${newAvg}`;
-
-    return true; // Allow form submission
+    // Immediately update avg price in dashboard
+    const titleInput = e.target.querySelector('[name="title"]');
+    const catInput = e.target.querySelector('[name="category"]');
+    if (titleInput && priceInput && catInput) {
+        const mockProduct = {
+            title: titleInput.value,
+            price: parseFloat(priceInput.value || 0),
+            category: catInput.value,
+            _id: 'new_' + Date.now(),
+            id: e.target.querySelector('[name="id"]')?.value || 'NEW',
+            image_link: document.getElementById('add-image-link')?.value || ''
+        };
+        globalData.products.push(mockProduct);
+        updateAveragePrice(globalData.products);
+    }
 }
 
-/* ============================================================
-   RESPONSIVE WINDOW HANDLER
-============================================================ */
-window.addEventListener('resize', () => {
-    if (window.innerWidth >= 1024) {
-        const overlay = document.getElementById('sidebar-overlay');
-        overlay.classList.remove('active');
+/* ===================== CONFIRM DELETE ===================== */
+function confirmDelete(btn, productId) {
+    pendingDeleteId = productId;
+    document.getElementById('confirm-popup').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function cancelDelete() {
+    pendingDeleteId = null;
+    document.getElementById('confirm-popup').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function executeDelete() {
+    if (!pendingDeleteId) return;
+    const form = document.createElement('form');
+    form.action = '/delete_product';
+    form.method = 'POST';
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'id';
+    input.value = pendingDeleteId;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    cancelDelete();
+    form.submit();
+}
+
+/* ===================== TOAST NOTIFICATION ===================== */
+function showToast(message, icon = 'fa-circle-info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+        <i class="fa-solid ${icon}" style="font-size:16px"></i>
+        <span>${message}</span>
+    `;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 4100);
+}
+
+/* ===================== KEYBOARD SHORTCUTS ===================== */
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeEditModal();
+        cancelDelete();
     }
 });
+
+/* ===================== BACKDROP CLICK CLOSE MODAL ===================== */
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('edit-modal');
+    if (modal && e.target === modal) {
+        closeEditModal();
+    }
+});
+
 </script>
 </body>
 </html>
