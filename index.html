@@ -2,1021 +2,1986 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PIXUP8K | Professional Neural Upscaling & Text-to-Image</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxeStore | Professional Ops</title>
+
+    <!-- LIBRARIES -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        /* ============================================================
+           ROOT VARIABLES — LIGHT BLUE & WHITE THEME
+        ============================================================ */
         :root {
-            --blue-50: #f0f8ff;
-            --blue-100: #dbeafe;
-            --blue-200: #add8e6;
-            --blue-300: #7ec8e3;
-            --blue-400: #4fb3d4;
-            --blue-500: #2196c4;
-            --blue-600: #1a7aa8;
-            --accent: #add8e6;
-            --accent-deep: #5ba3c9;
-            --accent-glow: rgba(173,216,230,0.35);
-            --bg: #ffffff;
-            --surface: #f8fbff;
-            --surface-2: #eef6fb;
-            --border: rgba(173,216,230,0.35);
-            --border-strong: rgba(91,163,201,0.3);
-            --text-primary: #1e293b;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
-            --shadow-sm: 0 1px 3px rgba(0,90,140,0.06), 0 1px 2px rgba(0,90,140,0.04);
-            --shadow-md: 0 4px 16px rgba(0,90,140,0.09), 0 2px 6px rgba(0,90,140,0.06);
-            --shadow-lg: 0 12px 40px rgba(0,90,140,0.12), 0 4px 12px rgba(0,90,140,0.07);
-            --shadow-xl: 0 24px 64px rgba(0,90,140,0.15), 0 8px 20px rgba(0,90,140,0.08);
-            --radius: 20px;
-            --radius-lg: 28px;
-            --radius-pill: 999px;
+            --sidebar-width: 260px;
+            --primary: #add8e6;            /* Light Blue */
+            --primary-dark: #7ec8e3;       /* Darker light blue for hover */
+            --primary-text: #1a6b8a;       /* Dark text on light blue */
+            --primary-deep: #0e7490;       /* Deep accent */
+            --accent: #64748b;
+            --bg-main: #ffffff;            /* White background */
+            --bg-side: #add8e6;            /* Light blue sidebar */
+            --border: #e2e8f0;
+            --card-gradient-start: #e8f6fa;
+            --card-gradient-end: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        * { transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease, transform 0.2s ease, opacity 0.2s ease; }
-
-        html { height: -webkit-fill-available; scroll-behavior: smooth; }
-
+        /* ============================================================
+           BASE STYLES — font sizes increased
+        ============================================================ */
         body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-dark);
+            margin: 0;
+            overflow-x: hidden;
+            font-size: 14px; /* body text 14px */
+        }
+
+        h1, h2, h3, h4, h5, h6,
+        .heading-text {
+            font-size: 16px !important; /* headings 16px */
+            color: var(--text-dark);
+        }
+
+        h2 { font-size: 20px !important; }
+        h3 { font-size: 18px !important; }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* ============================================================
+           STICKY TOP HEADER
+        ============================================================ */
+        .sticky-top-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--primary);
+            border-bottom: 1px solid var(--primary-dark);
+            padding: 0.75rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(173,216,230,0.4);
+        }
+
+        .sticky-top-header h2,
+        .sticky-top-header p {
+            color: var(--primary-text) !important;
+        }
+
+        /* ============================================================
+           SIDEBAR — RIGHT SIDE, LIGHT BLUE
+        ============================================================ */
+        .sidebar {
+            width: var(--sidebar-width);
             height: 100vh;
-            height: -webkit-fill-available;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Scrollbar */
-        .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: var(--blue-200); border-radius: 10px; }
-
-        /* 3D Canvas */
-        #canvas-container {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none;
-            opacity: 0.07;
-        }
-
-        /* Glass Panel */
-        .glass {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-        }
-
-        .card {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Buttons */
-        .btn-primary {
-            background: var(--accent-deep);
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.8rem;
-            letter-spacing: 0.025em;
-            border-radius: var(--radius-pill);
-            padding: 0.75rem 1.75rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .btn-primary:hover { background: var(--blue-600); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(91,163,201,0.35); }
-        .btn-primary:active { transform: scale(0.97); }
-        .btn-primary:disabled { opacity: 0.35; pointer-events: none; }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--accent-deep);
-            font-weight: 600;
-            font-size: 0.8rem;
-            letter-spacing: 0.025em;
-            border-radius: var(--radius-pill);
-            padding: 0.75rem 1.75rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            border: 1.5px solid var(--border-strong);
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .btn-outline:hover { background: var(--blue-50); border-color: var(--accent-deep); }
-        .btn-outline:active { transform: scale(0.97); }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-muted);
-            font-weight: 500;
-            font-size: 0.75rem;
-            border-radius: var(--radius-pill);
-            padding: 0.5rem 1rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-ghost:hover { color: var(--accent-deep); background: var(--blue-50); }
-
-        /* Badge */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            background: var(--blue-50);
-            border: 1px solid var(--border-strong);
-            color: var(--accent-deep);
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            padding: 0.3rem 0.75rem;
-            border-radius: var(--radius-pill);
-        }
-
-        /* Comparison Slider */
-        .comparison-slider {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            height: 240px;
-            overflow: hidden;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-strong);
-            box-shadow: var(--shadow-xl);
-            touch-action: pan-y;
-            cursor: ew-resize;
-        }
-        @media (min-width: 768px) { .comparison-slider { height: 420px; } }
-
-        .comparison-img {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover;
-        }
-        .comparison-after {
-            width: 50%;
-            z-index: 1;
-            border-right: 2px solid rgba(255,255,255,0.9);
-        }
-        .comparison-handle {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            width: 40px; height: 40px;
-            background: white;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--accent-deep);
-            font-size: 12px;
-            box-shadow: 0 2px 16px rgba(0,90,140,0.2);
-            cursor: ew-resize;
-        }
-
-        /* Animations */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .animate-premium { animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .animate-fade { animation: fadeIn 0.4s ease forwards; }
-
-        .stagger-1 { animation-delay: 0.05s; opacity: 0; }
-        .stagger-2 { animation-delay: 0.12s; opacity: 0; }
-        .stagger-3 { animation-delay: 0.19s; opacity: 0; }
-        .stagger-4 { animation-delay: 0.26s; opacity: 0; }
-
-        /* Spinner */
-        .spinner {
-            width: 28px; height: 28px;
-            border: 2.5px solid var(--blue-200);
-            border-top-color: var(--accent-deep);
-            border-radius: 50%;
-            animation: spin 0.75s linear infinite;
-        }
-
-        /* Progress bar */
-        .progress-track {
-            height: 4px;
-            background: var(--surface-2);
-            border-radius: var(--radius-pill);
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent-deep));
-            border-radius: var(--radius-pill);
-            transition: width 4s cubic-bezier(0.4,0,0.2,1);
-        }
-
-        /* App container */
-        .app-container {
+            right: 0;
+            top: 0;
+            background: var(--bg-side); /* Light blue */
+            border-left: 1px solid var(--primary-dark);
+            padding: 2.5rem 1.25rem;
             display: flex;
             flex-direction: column;
-            height: 100%;
-            width: 100%;
-            position: relative;
-            z-index: 10;
+            z-index: 100;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
         }
 
-        /* Sidebar */
-        .sidebar-responsive {
-            width: 100%;
-            max-height: 210px;
-        }
-        @media (min-width: 768px) {
-            .sidebar-responsive { width: 17rem; max-height: none; }
+        /* Sidebar collapsed state (slides RIGHT off screen) */
+        .sidebar.collapsed {
+            transform: translateX(100%);
         }
 
-        /* Feature icon */
-        .feat-icon {
-            width: 40px; height: 40px;
+        /* Mobile: hidden by default, slides in from right */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar.collapsed {
+                transform: translateX(100%);
+            }
+            .main-content {
+                margin-right: 0 !important;
+                padding: 1.5rem !important;
+            }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(173, 216, 230, 0.55); /* Translucent light blue overlay */
+                backdrop-filter: blur(2px);
+                z-index: 90;
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+        }
+
+        /* ============================================================
+           MAIN CONTENT — margin on right because sidebar is right
+        ============================================================ */
+        .main-content {
+            margin-right: var(--sidebar-width);
+            margin-left: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: margin-right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--bg-main);
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-right: 0;
+        }
+
+        .main-content-inner {
+            padding: 2rem 2.5rem;
+        }
+
+        /* ============================================================
+           NAV ITEMS — hover uses light blue shadow
+        ============================================================ */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 9999px; /* Pill style */
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary-text);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            margin-bottom: 6px;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-deep);
+            background: transparent;
+            box-shadow: 0 4px 12px rgba(14, 116, 144, 0.25); /* Subtle light blue shadow */
+            transform: translateX(-2px);
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.6);
+            color: var(--primary-deep);
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(14,116,144,0.2);
+        }
+
+        /* ============================================================
+           GLASS CARD — soft light blue gradient, white content area
+        ============================================================ */
+        .glass-card {
+            background: linear-gradient(135deg, var(--card-gradient-start) 0%, var(--card-gradient-end) 60%);
+            border: 1px solid #c7e8f3;
             border-radius: 12px;
-            background: var(--blue-50);
-            border: 1px solid var(--border-strong);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--accent-deep);
-            font-size: 0.9rem;
-            flex-shrink: 0;
+            padding: 24px;
+            box-shadow: 0 1px 6px rgba(173,216,230,0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* Nav link */
-        .nav-link {
-            font-size: 0.75rem;
-            font-weight: 600;
+        .glass-card:hover {
+            box-shadow: 0 4px 16px rgba(173,216,230,0.45);
+        }
+
+        /* Card header accent */
+        .card-header-accent {
+            background: var(--primary);
+            color: var(--primary-text);
+            border-radius: 8px 8px 0 0;
+            padding: 10px 16px;
+            font-weight: 700;
+            font-size: 13px;
             letter-spacing: 0.04em;
-            color: var(--text-muted);
-            padding: 0.3rem 0.6rem;
-            border-radius: 8px;
-            display: flex; align-items: center; gap: 6px;
         }
-        .nav-link:hover { color: var(--accent-deep); background: var(--blue-50); }
-        .nav-link.active { color: var(--accent-deep); background: var(--blue-50); }
 
-        /* Input */
+        /* ============================================================
+           INPUT FIELDS
+        ============================================================ */
         .input-field {
             width: 100%;
-            padding: 0.85rem 1.25rem;
-            background: var(--surface);
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-pill);
+            padding: 12px 14px;
+            border-radius: 9999px; /* Pill inputs */
+            border: 1px solid #a8d8ea;
+            background: #ffffff;
+            font-size: 14px;
+            transition: all 0.2s;
             outline: none;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.875rem;
-            color: var(--text-primary);
-        }
-        .input-field::placeholder { color: var(--text-muted); }
-        .input-field:focus { border-color: var(--accent-deep); box-shadow: 0 0 0 3px rgba(91,163,201,0.12); background: #fff; }
-
-        /* Logo mark */
-        .logo-mark {
-            width: 28px; height: 28px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
+            color: var(--text-dark);
         }
 
-        /* Divider */
-        .divider {
-            height: 1px;
-            background: var(--border);
-            margin: 1rem 0;
+        .input-field:focus {
+            border-color: var(--primary-deep);
+            box-shadow: 0 0 0 3px rgba(14,116,144,0.1);
         }
 
-        /* Hero mesh bg */
-        .hero-mesh {
-            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(173,216,230,0.18) 0%, transparent 70%),
-                        radial-gradient(ellipse 40% 40% at 80% 60%, rgba(91,163,201,0.08) 0%, transparent 60%),
-                        #ffffff;
+        textarea.input-field {
+            border-radius: 12px; /* Textarea keeps rectangular-ish */
         }
 
-        /* Text-to-image demo mock */
-        .ttimg-prompt-bar {
-            background: var(--surface);
-            border: 1.5px solid var(--border-strong);
-            border-radius: var(--radius-pill);
-            padding: 0.6rem 1.2rem;
-            display: flex; align-items: center; gap: 0.75rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* Section heading */
-        .section-label {
-            font-size: 0.65rem;
+        /* ============================================================
+           BUTTONS — Pill style, light blue background
+        ============================================================ */
+        .btn-primary {
+            background: var(--primary);
+            color: var(--primary-text);
+            padding: 12px 24px;
+            border-radius: 9999px; /* Pill */
             font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--accent-deep);
-        }
-
-        /* Tooltip tag */
-        .img-tag {
-            position: absolute;
-            font-size: 0.6rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 0.25rem 0.6rem;
-            border-radius: var(--radius-pill);
-        }
-        .img-tag-source { bottom: 10px; left: 10px; background: rgba(255,255,255,0.92); color: var(--text-secondary); box-shadow: var(--shadow-sm); }
-        .img-tag-output { bottom: 10px; right: 10px; background: var(--accent-deep); color: #fff; box-shadow: var(--shadow-md); }
-
-        /* Hover scale */
-        .hover-lift:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-
-        /* Welcome scroll */
-        #welcome-screen { background: var(--bg); }
-
-        /* Pricing card highlight */
-        .pricing-highlight {
-            border-color: var(--accent-deep) !important;
-            background: linear-gradient(135deg, var(--blue-50) 0%, #fff 100%);
-            position: relative;
-        }
-        .pricing-highlight::before {
-            content: 'Most Popular';
-            position: absolute;
-            top: -12px; left: 50%;
-            transform: translateX(-50%);
-            background: var(--accent-deep);
-            color: white;
-            font-size: 0.6rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 0.25rem 0.9rem;
-            border-radius: var(--radius-pill);
-            white-space: nowrap;
-        }
-
-        /* Check list */
-        .check-list li {
-            display: flex; align-items: center; gap: 0.6rem;
-            font-size: 0.82rem;
-            color: var(--text-secondary);
-            padding: 0.2rem 0;
-        }
-        .check-list li::before {
-            content: '';
-            width: 16px; height: 16px; flex-shrink: 0;
-            background: var(--blue-50);
-            border: 1px solid var(--border-strong);
-            border-radius: 50%;
+            font-size: 14px;
+            transition: all 0.2s;
+            cursor: pointer;
             display: inline-flex;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 5' stroke='%235ba3c9' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-size: cover;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
         }
 
-        /* Mobile menu adjustments */
-        @media (max-width: 767px) {
-            .hero-title { font-size: clamp(2rem, 7vw, 3rem); }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 14px rgba(173,216,230,0.6);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            border: 1px solid #a8d8ea;
+            padding: 10px 16px;
+            border-radius: 9999px; /* Pill */
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-text);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            border-color: var(--primary-dark);
+        }
+
+        /* ============================================================
+           SIDEBAR TOGGLE BUTTON
+        ============================================================ */
+        .sidebar-toggle-btn {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 200;
+            background: var(--primary);
+            color: var(--primary-text);
+            border: none;
+            border-radius: 8px 0 0 8px;
+            width: 24px;
+            height: 48px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            box-shadow: -2px 0 8px rgba(173,216,230,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle-btn:hover {
+            background: var(--primary-dark);
+            width: 28px;
+        }
+
+        /* ============================================================
+           TAB PANES
+        ============================================================ */
+        .tab-pane { display: none; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .tab-pane.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           SCROLLBAR
+        ============================================================ */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        /* ============================================================
+           GROWTH TAGS & BADGES
+        ============================================================ */
+        .growth-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 700;
+        }
+
+        /* Trending badge — light blue */
+        .trending-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--primary);
+            color: var(--primary-text);
+            font-size: 9px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 9999px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* ============================================================
+           FLOATING CHAT
+        ============================================================ */
+        .floating-chat {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            color: var(--primary-text);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 10px 25px rgba(173,216,230,0.5);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+        }
+
+        .floating-chat:hover {
+            transform: scale(1.1);
+            box-shadow: 0 14px 30px rgba(173,216,230,0.7);
+        }
+
+        /* ============================================================
+           FLOATING MOBILE MENU BUTTON
+        ============================================================ */
+        .floating-mobile-menu {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 52px;
+            height: 52px;
+            background: var(--primary);
+            color: var(--primary-text);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 8px 20px rgba(173,216,230,0.5);
+            cursor: pointer;
+            z-index: 999;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 1024px) {
+            .floating-mobile-menu { display: flex; }
+            .floating-chat { bottom: 84px; }
+        }
+
+        /* ============================================================
+           MOBILE TOGGLE
+        ============================================================ */
+        .mobile-toggle {
+            display: none;
+            cursor: pointer;
+            padding: 8px;
+            font-size: 20px;
+            color: var(--primary-text);
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-toggle { display: block; }
+        }
+
+        /* ============================================================
+           TOAST NOTIFICATION
+        ============================================================ */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: var(--primary);
+            color: var(--primary-text);
+            border: 1px solid var(--primary-dark);
+            border-radius: 9999px;
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 6px 20px rgba(173,216,230,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: toastIn 0.35s ease, toastOut 0.35s ease 2.65s forwards;
+            max-width: 320px;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(40px); }
+        }
+
+        /* ============================================================
+           CONFIRMATION POPUP (Delete)
+        ============================================================ */
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(173,216,230,0.25);
+            backdrop-filter: blur(4px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirm-overlay.active {
+            display: flex;
+        }
+
+        .confirm-box {
+            background: #fff;
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(173,216,230,0.5);
+            text-align: center;
+        }
+
+        .confirm-box h4 {
+            font-size: 16px !important;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        .site-footer {
+            background: #ffffff;
+            border-top: 1px solid #c7e8f3;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .site-footer p, .site-footer a {
+            color: var(--primary-text);
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .site-footer a:hover {
+            color: var(--primary-deep);
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+           DASHBOARD GRID — 3 columns on large screens
+        ============================================================ */
+        .dashboard-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .dashboard-stat-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .dashboard-stat-grid { grid-template-columns: repeat(3, 1fr); } /* 3 columns */
+        }
+
+        /* ============================================================
+           INVENTORY CARDS — spacing on mobile
+        ============================================================ */
+        @media (max-width: 640px) {
+            #full-inventory-grid .glass-card {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* ============================================================
+           IMAGE PREVIEW in form
+        ============================================================ */
+        .img-preview-zone {
+            border: 2px dashed #a8d8ea;
+            border-radius: 16px;
+            background: #f0faff;
+            min-height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .img-preview-zone:hover {
+            border-color: var(--primary-deep);
+            background: #e0f4fb;
+        }
+
+        .img-preview-zone img {
+            max-height: 160px;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        /* ============================================================
+           ANALYTICS — search filter
+        ============================================================ */
+        .analytics-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            border: 1px solid var(--primary);
+            border-radius: 9999px;
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .analytics-search input {
+            border: none;
+            outline: none;
+            font-size: 13px;
+            background: transparent;
+            width: 180px;
+            color: var(--text-dark);
+        }
+
+        /* ============================================================
+           CHART TOOLTIP CUSTOMIZATION (via Chart.js)
+        ============================================================ */
+
+        /* ============================================================
+           MODAL — light blue header, white form
+        ============================================================ */
+        .modal-header-lb {
+            background: var(--primary);
+            border-radius: 0;
+        }
+
+        /* ============================================================
+           RESPONSIVE: Hide less important sections on mobile
+        ============================================================ */
+        @media (max-width: 640px) {
+            .hide-mobile { display: none !important; }
+            .card-text-scale { font-size: clamp(0.65rem, 2.5vw, 0.875rem); }
+            .stat-number { font-size: clamp(1.5rem, 6vw, 2.5rem) !important; }
+        }
+
+        /* ============================================================
+           AUTH OVERLAY
+        ============================================================ */
+        #auth-overlay input.input-field {
+            border-radius: 9999px;
+        }
+
+        /* ============================================================
+           CLICK CHART TOOLTIPS (styled light blue)
+        ============================================================ */
+        .chartjs-tooltip-lb {
+            background: var(--primary) !important;
+            color: var(--primary-text) !important;
+        }
+
+        /* ============================================================
+           DYNAMIC TEXT SCALE in cards
+        ============================================================ */
+        .card-title {
+            font-size: clamp(0.7rem, 2vw, 0.875rem);
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           SIDEBAR LOGO AREA
+        ============================================================ */
+        .sidebar-logo-text {
+            color: var(--primary-text) !important;
+            font-weight: 800 !important;
+        }
+
+        /* ============================================================
+           SIDEBAR OPEN ANIMATION
+        ============================================================ */
+        @keyframes sidebarSlideIn {
+            from { transform: translateX(100%); opacity: 0.5; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .sidebar.open {
+            animation: sidebarSlideIn 0.35s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        /* ============================================================
+           CLICK CHART BARS TOOLTIP override
+        ============================================================ */
+        .clicks-bar-tooltip {
+            background: var(--primary);
+            color: var(--primary-text);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 9999px;
+        }
+
+        /* ============================================================
+           NOTIFICATION CARD (clicks drop warning)
+        ============================================================ */
+        .click-drop-warning {
+            display: none;
+            background: #fff;
+            border: 1.5px solid var(--primary);
+            border-left: 4px solid var(--primary-deep);
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-size: 13px;
+            color: var(--primary-text);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .click-drop-warning.show {
+            display: flex;
+        }
+
+        /* ============================================================
+           TOP SELLING PRODUCT CARD
+        ============================================================ */
+        .top-selling-card {
+            background: #ffffff;
+            border: 1px solid #c7e8f3;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .top-selling-card .card-header-accent {
+            background: var(--primary);
+            color: var(--primary-text);
+            padding: 10px 18px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        /* ============================================================
+           VALIDATION STYLES
+        ============================================================ */
+        .input-field.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+        }
+
+        .field-error-msg {
+            color: #ef4444;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+            display: none;
+        }
+
+        /* ============================================================
+           CHART ANALYTICS FILTER BAR
+        ============================================================ */
+        .analytics-filter-bar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
         }
     </style>
 </head>
 <body>
 
-<div id="canvas-container"></div>
+<!-- TOAST CONTAINER -->
+<div id="toast-container" class="toast-container"></div>
 
-<!-- ===================== WELCOME / LANDING PAGE ===================== -->
-<div id="welcome-screen" class="fixed inset-0 z-[100] overflow-y-auto custom-scroll hero-mesh">
+<!-- MOBILE OVERLAY (translucent light blue) -->
+<div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-    <!-- Navbar -->
-    <nav class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-lg border-b border-blue-100">
-        <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-                <div class="logo-mark">
-                    <i class="fas fa-expand text-white text-xs"></i>
-                </div>
-                <span class="text-base font-bold tracking-tight text-slate-800" style="font-family:'DM Serif Display',serif;">PIXUP8K</span>
+<!-- CONFIRM DELETE POPUP -->
+<div id="confirm-overlay" class="confirm-overlay">
+    <div class="confirm-box">
+        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
+            <i class="fa-solid fa-trash text-xl" style="color:var(--primary-text)"></i>
+        </div>
+        <h4>Delete Product?</h4>
+        <p class="text-sm text-slate-500 mb-6 mt-2">This action will permanently remove the product from the registry.</p>
+        <div class="flex gap-3 justify-center">
+            <button onclick="cancelDelete()" class="btn-secondary px-6">Cancel</button>
+            <button onclick="executeDelete()" class="btn-primary px-6">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay" class="fixed inset-0 bg-gradient-to-br from-blue-50 via-white to-sky-100 z-[1000] flex items-center justify-center p-6">
+    <div class="w-full max-w-md bg-white/90 backdrop-blur-xl border border-blue-200 shadow-2xl rounded-3xl p-10">
+
+        <!-- Logo -->
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-xl mx-auto shadow-lg" style="background:var(--primary)">
+                <i class="fa-solid fa-lock" style="color:var(--primary-text)"></i>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="showLogin()" class="btn-ghost">Sign In</button>
-                <button onclick="showLogin()" class="btn-primary text-sm px-5 py-2.5">Get Started</button>
+            <h1 class="text-2xl font-bold text-slate-900 mt-6" style="font-size:22px!important">Secure Access</h1>
+            <p class="text-sm text-slate-500 mt-2">Pixup8k Administrative Terminal</p>
+        </div>
+
+        <!-- FORM -->
+        <form action="/password" method="POST" class="space-y-5">
+            <div>
+                <label class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Username</label>
+                <input type="text" name="user_name" required placeholder="Enter username" class="input-field w-full">
             </div>
+            <div>
+                <label class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2 block">Password</label>
+                <input type="password" name="password" required placeholder="Enter password" class="input-field w-full">
+            </div>
+            <button type="submit" class="btn-primary w-full py-3 text-sm tracking-wide shadow-lg" style="box-shadow:0 6px 20px rgba(173,216,230,0.4)">
+                <i class="fa-solid fa-right-to-bracket"></i> Authenticate
+            </button>
+        </form>
+
+        {% if status == "failed" %}
+        <div class="mt-6 text-center text-xs font-bold text-red-500 tracking-widest uppercase" id="error-msg">
+            <i class="fa-solid fa-circle-exclamation mr-1"></i> Invalid Credentials
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- ============================================================
+     SIDEBAR — RIGHT SIDE, LIGHT BLUE
+============================================================ -->
+<div id="sidebar" class="sidebar">
+    <div class="flex items-center justify-between mb-10 px-2">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-lg shadow-md" style="background:rgba(255,255,255,0.6);color:var(--primary-text)">P</div>
+            <span class="font-bold text-base tracking-tight sidebar-logo-text">Pixup8k</span>
+        </div>
+        <button onclick="toggleSidebar()" class="lg:hidden p-2" style="color:var(--primary-text)">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+    </div>
+
+    <nav class="flex-1 space-y-1">
+        <div onclick="switchTab('dashboard')" id="link-dashboard" class="nav-item active">
+            <i class="fa-solid fa-chart-line w-5 text-center"></i> Dashboard
+        </div>
+        <div onclick="switchTab('inventory')" id="link-inventory" class="nav-item">
+            <i class="fa-solid fa-box-archive w-5 text-center"></i> Inventory
+        </div>
+        <div onclick="switchTab('analytics')" id="link-analytics" class="nav-item">
+            <i class="fa-solid fa-microchip w-5 text-center"></i> Analytics
+        </div>
+        <div onclick="switchTab('add-product')" id="link-add-product" class="nav-item">
+            <i class="fa-solid fa-plus w-5 text-center"></i> New Entry
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="max-w-6xl mx-auto px-5 pt-16 pb-10 text-center animate-premium">
-        <div class="badge mb-5">
-            <i class="fas fa-bolt text-[10px]"></i> Neural Engine v4.0.1
-        </div>
-        <h1 class="hero-title text-5xl md:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1] mb-5" style="font-family:'DM Serif Display',serif;">
-            Images Reimagined<br>
-            <em class="not-italic" style="color:var(--accent-deep);">in 8K Clarity</em>
-        </h1>
-        <p class="text-slate-500 text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed font-light">
-            Upscale any image to cinema-grade 8K — or generate entirely new visuals from a single sentence. Powered by advanced neural reconstruction.
-        </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <button onclick="showLogin()" class="btn-primary text-sm px-7 py-3 w-full sm:w-auto">
-                <i class="fas fa-arrow-up-right-from-square"></i> Start Processing
-            </button>
-            <button onclick="togglePricing(true)" class="btn-outline text-sm px-7 py-3 w-full sm:w-auto">
-                View Pricing
-            </button>
-        </div>
-
-        <!-- Social proof -->
-        <p class="text-slate-400 text-xs mt-6 font-medium">Trusted by photographers, designers & studios worldwide</p>
-    </section>
-
-    <!-- ====== SECTION 1: AI Upscaling Demo ====== -->
-    <section class="max-w-6xl mx-auto px-5 py-12">
-        <div class="text-center mb-8 stagger-1 animate-premium">
-            <div class="section-label mb-2">AI Upscaling</div>
-            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2" style="font-family:'DM Serif Display',serif;">Before & After — Side by Side</h2>
-            <p class="text-slate-400 text-sm max-w-sm mx-auto">Drag the slider to reveal the 8K reconstruction in real time</p>
-        </div>
-
-        <div class="relative group" id="how-it-works">
-            <div class="comparison-slider mx-auto shadow-xl">
-                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop" class="comparison-img blur-sm opacity-50" alt="Before">
-                <div class="comparison-after comparison-img overflow-hidden" id="slider-box">
-                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop" class="comparison-img" style="width:800px;max-width:none;" alt="After">
-                </div>
-                <div class="comparison-handle" id="slider-handle"><i class="fas fa-arrows-left-right"></i></div>
-                <span class="img-tag img-tag-source">Source</span>
-                <span class="img-tag img-tag-output">8K Output</span>
-            </div>
-        </div>
-
-        <!-- Feature pills under slider -->
-        <div class="flex flex-wrap justify-center gap-3 mt-8">
-            <div class="flex items-center gap-2 card px-4 py-2.5 rounded-full text-sm font-medium text-slate-600 hover-lift" style="border-radius:var(--radius-pill);">
-                <i class="fas fa-expand text-blue-400 text-xs"></i> Ultra-HD Upscaling
-            </div>
-            <div class="flex items-center gap-2 card px-4 py-2.5 rounded-full text-sm font-medium text-slate-600 hover-lift" style="border-radius:var(--radius-pill);">
-                <i class="fas fa-shield-alt text-blue-400 text-xs"></i> Detail Preservation
-            </div>
-            <div class="flex items-center gap-2 card px-4 py-2.5 rounded-full text-sm font-medium text-slate-600 hover-lift" style="border-radius:var(--radius-pill);">
-                <i class="fas fa-bolt text-blue-400 text-xs"></i> Fast Processing
-            </div>
-        </div>
-    </section>
-
-    <!-- ====== SECTION 2: Text-to-Image Demo ====== -->
-    <section class="max-w-6xl mx-auto px-5 py-12">
-        <div class="text-center mb-8 stagger-2 animate-premium">
-            <div class="section-label mb-2">Text to Image</div>
-            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2" style="font-family:'DM Serif Display',serif;">Describe It. Watch It Appear.</h2>
-            <p class="text-slate-400 text-sm max-w-sm mx-auto">Type a prompt, get a high-fidelity image — no artistic skill required</p>
-        </div>
-
-        <!-- Mock UI Demo -->
-        <div class="card max-w-3xl mx-auto overflow-hidden" style="border-radius:var(--radius-lg);">
-            <!-- Top bar -->
-            <div class="flex items-center justify-between px-5 py-3 border-b border-blue-50">
-                <div class="flex items-center gap-2">
-                    <div class="w-2.5 h-2.5 rounded-full bg-red-300"></div>
-                    <div class="w-2.5 h-2.5 rounded-full bg-yellow-300"></div>
-                    <div class="w-2.5 h-2.5 rounded-full bg-green-300"></div>
-                </div>
-                <span class="text-xs font-medium text-slate-400">AI Generator — Preview</span>
-                <div></div>
-            </div>
-
-            <div class="p-5 md:p-8">
-                <!-- Prompt bar mock -->
-                <div class="ttimg-prompt-bar mb-5">
-                    <i class="fas fa-magic text-blue-300 text-sm flex-shrink-0"></i>
-                    <span>"A serene mountain lake at golden hour, hyper-realistic, 8K..."</span>
-                </div>
-
-                <!-- Image grid mock -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
-                    <div class="aspect-square rounded-2xl overflow-hidden relative hover-lift">
-                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=60&w=400&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    </div>
-                    <div class="aspect-square rounded-2xl overflow-hidden relative hover-lift">
-                        <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?q=60&w=400&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    </div>
-                    <div class="aspect-square rounded-2xl overflow-hidden relative hover-lift">
-                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=60&w=400&auto=format&fit=crop" class="w-full h-full object-cover" alt="">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    </div>
-                    <div class="aspect-square rounded-2xl bg-blue-50 border border-dashed border-blue-200 flex flex-col items-center justify-center gap-2 hover-lift cursor-pointer" onclick="showLogin()">
-                        <i class="fas fa-plus text-blue-300 text-lg"></i>
-                        <span class="text-xs text-blue-300 font-medium">Generate</span>
-                    </div>
-                </div>
-
-                <!-- CTA row -->
-                <div class="flex items-center justify-between">
-                    <p class="text-xs text-slate-400">Access requires sign in</p>
-                    <button onclick="showLogin()" class="btn-primary text-xs px-5 py-2">
-                        Try AI Gen <i class="fas fa-arrow-right text-[10px]"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Feature Grid -->
-    <section class="max-w-6xl mx-auto px-5 py-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 stagger-3 animate-premium">
-            <div class="card p-6 hover-lift">
-                <div class="feat-icon mb-4"><i class="fas fa-expand"></i></div>
-                <h3 class="font-bold text-slate-800 text-base mb-1.5">Ultra-HD Upscaling</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Reconstruct low-res images into cinematic 8K masterpieces with our neural engine.</p>
-            </div>
-            <div class="card p-6 hover-lift">
-                <div class="feat-icon mb-4"><i class="fas fa-magic"></i></div>
-                <h3 class="font-bold text-slate-800 text-base mb-1.5">Text to Image</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">High-fidelity art generated from a single prompt — from concept to canvas in seconds.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer spacer -->
-    <div class="pb-16 text-center">
-        <p class="text-slate-300 text-xs">© 2025 PIXUP8K · Powered by Neural Engine v4</p>
+    <!-- Sidebar Footer -->
+    <div class="mt-auto pt-6 border-t" style="border-color:rgba(14,116,144,0.2)">
+        <p class="text-xs text-center" style="color:var(--primary-text);opacity:0.7">&copy; 2025 Pixup8k</p>
     </div>
 </div>
 
-<!-- ===================== PRICING MODAL ===================== -->
-<div id="pricing-screen" class="hidden fixed inset-0 z-[120] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 md:p-6 overflow-y-auto custom-scroll animate-fade">
-    <div class="max-w-5xl w-full py-10 animate-premium">
-        <div class="text-center mb-10">
-            <div class="section-label mb-2">Plans & Pricing</div>
-            <h2 class="text-2xl md:text-4xl font-bold text-slate-800 mb-2" style="font-family:'DM Serif Display',serif;">Precision Plans</h2>
-            <p class="text-slate-400 text-sm">Unlock full neural capacity for high-scale workflows.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Solo -->
-            <div class="card p-7 md:p-9 flex flex-col hover-lift" style="border-radius:var(--radius-lg);">
-                <span class="section-label mb-1">Solo</span>
-                <div class="text-3xl md:text-4xl font-bold text-slate-800 mt-1 mb-5">1,299<span class="text-base font-medium text-slate-400"> pkr</span></div>
-                <ul class="check-list space-y-2 mb-7 flex-1">
-                    <li>20 Upscales / Month</li>
-                    <li>8K Resolution</li>
-                    <li>35 Text-to-Image / Mo</li>
-                </ul>
-                <button onclick="openWhatsApp('Solo')" class="btn-outline w-full py-3">Get Started</button>
-            </div>
-            <!-- Master -->
-            <div class="card pricing-highlight p-7 md:p-9 flex flex-col hover-lift" style="border: 1.5px solid var(--accent-deep); border-radius:var(--radius-lg); margin-top: 10px;">
-                <span class="section-label mb-1" style="color:var(--accent-deep);">Master</span>
-                <div class="text-3xl md:text-4xl font-bold text-slate-800 mt-1 mb-5">1,999<span class="text-base font-medium text-slate-400"> pkr</span></div>
-                <ul class="check-list space-y-2 mb-7 flex-1">
-                    <li>35 Upscales / Month</li>
-                    <li>8K Resolution</li>
-                    <li>50 Text-to-Image / Mo</li>
-                </ul>
-                <button onclick="openWhatsApp('Master')" class="btn-primary w-full py-3">Go Pro</button>
-            </div>
-            <!-- Studio -->
-            <div class="card p-7 md:p-9 flex flex-col hover-lift" style="border-radius:var(--radius-lg);">
-                <span class="section-label mb-1">Studio</span>
-                <div class="text-3xl md:text-4xl font-bold text-slate-800 mt-1 mb-5">2,499<span class="text-base font-medium text-slate-400"> pkr</span></div>
-                <ul class="check-list space-y-2 mb-7 flex-1">
-                    <li>50 Upscales / Month</li>
-                    <li>8K Resolution</li>
-                    <li>70 Text-to-Image / Mo</li>
-                </ul>
-                <button onclick="openWhatsApp('Studio')" class="btn-outline w-full py-3">Contact Us</button>
-            </div>
-        </div>
-        <div class="text-center mt-10">
-            <button onclick="togglePricing(false)" class="btn-ghost text-slate-400 hover:text-slate-600">
-                <i class="fas fa-arrow-left text-xs"></i> Back to Studio
+<!-- SIDEBAR COLLAPSE TOGGLE (desktop) -->
+<button id="sidebar-toggle-btn" class="sidebar-toggle-btn lg:flex hidden" onclick="desktopToggleSidebar()" title="Toggle Sidebar">
+    <i id="sidebar-toggle-icon" class="fa-solid fa-chevron-right"></i>
+</button>
+
+<!-- ============================================================
+     MAIN CONTENT
+============================================================ -->
+<div class="main-content" id="main-content">
+
+    <!-- STICKY TOP HEADER -->
+    <div class="sticky-top-header">
+        <div class="flex items-center gap-4">
+            <button onclick="toggleSidebar()" class="mobile-toggle">
+                <i class="fa-solid fa-bars-staggered"></i>
             </button>
+            <div>
+                <h2 id="page-title" class="font-bold tracking-tight capitalize" style="font-size:18px!important;color:var(--primary-text)!important">Dashboard</h2>
+                <p class="text-xs" style="color:var(--primary-text);opacity:0.75">System Overview & Data Sync</p>
+            </div>
+        </div>
+        <div id="connection-status" class="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest px-4 py-2 bg-white/60 rounded-full" style="color:var(--primary-text)">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Syncing Node...
+        </div>
+    </div>
+
+    <!-- CLICK DROP WARNING NOTIFICATION -->
+    <div id="click-drop-warning" class="click-drop-warning mx-6 mt-4">
+        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+        <span>Alert: Total engagement clicks have dropped below 100 in the last 24 hours. Review your product listings.</span>
+    </div>
+
+    <div class="main-content-inner">
+
+    <!-- DASHBOARD TAB -->
+    <div id="tab-dashboard" class="tab-pane active space-y-8">
+
+        <!-- Stats Grid — 3 columns on lg -->
+        <div class="dashboard-stat-grid">
+            <div class="glass-card">
+                <div class="flex justify-between items-start mb-4">
+                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Number of Products</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                </div>
+                <h3 id="stat-count" class="stat-number text-3xl font-bold text-slate-900">--</h3>
+                <div class="mt-4 flex items-center gap-2">
+                    <span class="growth-tag bg-emerald-50 text-emerald-600">growth</span>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="flex justify-between items-start mb-4">
+                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Active Interactions</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
+                        <i class="fa-solid fa-hand-pointer"></i>
+                    </div>
+                </div>
+                <h3 id="stat-total-clicks" class="stat-number text-3xl font-bold text-slate-900">--</h3>
+                <div class="mt-4 flex items-center gap-2">
+                    <span id="click-growth-percent" class="growth-tag bg-emerald-50 text-emerald-600">Calculating...</span>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="flex justify-between items-start mb-4">
+                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Avg Product Price</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <h3 id="stat-avg-price" class="stat-number text-3xl font-bold text-slate-900">--</h3>
+                <div class="mt-4 flex items-center gap-2">
+                    <span class="growth-tag text-xs" style="background:var(--primary);color:var(--primary-text)">Market Value</span>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="flex justify-between items-start mb-4">
+                    <p class="text-[11px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Global Queries</p>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:rgba(173,216,230,0.3);color:var(--primary-text)">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+                <h3 id="stat-total-searches" class="stat-number text-3xl font-bold text-slate-900">--</h3>
+                <div class="mt-4 flex items-center gap-2">
+                    <span class="growth-tag text-xs" style="background:var(--primary);color:var(--primary-text)">Stable Node</span>
+                </div>
+            </div>
+
+            <!-- TOP SELLING PRODUCT CARD -->
+            <div class="top-selling-card lg:col-span-2">
+                <div class="card-header-accent flex items-center gap-2">
+                    <i class="fa-solid fa-trophy"></i> Top Selling Product
+                </div>
+                <div id="top-selling-content" class="p-4 flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-xl overflow-hidden bg-white border border-blue-100 flex items-center justify-center flex-shrink-0">
+                        <img id="top-product-img" src="" class="max-h-full object-contain hidden">
+                        <i id="top-product-placeholder" class="fa-solid fa-star text-2xl" style="color:var(--primary)"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p id="top-product-title" class="font-bold text-sm text-slate-900 truncate">Loading...</p>
+                        <p id="top-product-meta" class="text-xs mt-1" style="color:var(--primary-text)">--</p>
+                        <div class="mt-2">
+                            <span id="top-product-score" class="growth-tag text-xs" style="background:var(--primary);color:var(--primary-text)">Trending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <div class="lg:col-span-3 glass-card">
+                <div class="flex justify-between items-center mb-8">
+                    <h4 class="font-bold text-sm text-slate-800">Global Search Engagement</h4>
+                    <span class="text-[10px] font-bold uppercase tracking-widest hide-mobile" style="color:var(--primary-text)">Last 5 Searches</span>
+                </div>
+                <div class="h-[280px] md:h-[320px] relative">
+                    <canvas id="searchCircleChart"></canvas>
+                </div>
+            </div>
+            <div class="lg:col-span-2 glass-card">
+                <div class="flex justify-between items-center mb-6">
+                    <h4 class="font-bold text-sm text-slate-800">Latest Registry</h4>
+                    <button onclick="switchTab('inventory')" class="text-xs font-bold hover:underline" style="color:var(--primary-text)">View All</button>
+                </div>
+                <div id="recent-grid" class="space-y-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INVENTORY TAB -->
+    <div id="tab-inventory" class="tab-pane">
+        <div class="mb-8 glass-card !p-0 overflow-hidden">
+            <div class="relative w-full">
+                <i class="fa-solid fa-search absolute left-5 top-1/2 -translate-y-1/2 text-sm" style="color:var(--primary-text)"></i>
+                <input type="text" id="inventory-search-input" placeholder="Query Master Registry by ID, Title or Category..."
+                    class="input-field pl-12 py-5 !rounded-none border-none bg-white"
+                    style="border-radius:12px!important">
+            </div>
+        </div>
+        <div id="full-inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+    </div>
+
+    <!-- ANALYTICS TAB -->
+    <div id="tab-analytics" class="tab-pane space-y-8">
+
+        <!-- Analytics Filter Bar -->
+        <div class="analytics-filter-bar">
+            <div class="analytics-search">
+                <i class="fa-solid fa-filter" style="color:var(--primary-text)"></i>
+                <input type="text" id="analytics-search-input" placeholder="Filter charts by product name..." oninput="filterAnalytics(this.value)">
+                <button onclick="filterAnalytics('')" class="text-xs font-bold" style="color:var(--primary-text)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <span class="text-xs font-semibold" style="color:var(--primary-text)">Top engagement products shown</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 glass-card overflow-hidden">
+                <div class="flex justify-between items-center mb-10">
+                    <h4 class="font-bold text-sm text-slate-800">Resource Engagement Analytics</h4>
+                    <span class="hide-mobile text-[10px] font-black uppercase" style="color:var(--primary-text)">Total Engagement Points</span>
+                </div>
+                <div class="h-[300px] md:h-[400px]">
+                    <canvas id="clicksChart"></canvas>
+                </div>
+            </div>
+            <div class="space-y-8">
+                <div class="glass-card flex flex-col h-[400px]">
+                    <h4 class="font-bold text-sm text-slate-800 mb-6 flex-shrink-0">User Inquiry Stream</h4>
+                    <div id="questions-list" class="space-y-3 overflow-y-auto custom-scroll pr-2 flex-grow"></div>
+                </div>
+                <div class="glass-card hide-mobile">
+                    <h4 class="font-bold text-sm text-slate-800 mb-4">Supported Languages Usage</h4>
+                    <div class="h-[180px]">
+                        <canvas id="languagesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card overflow-hidden !p-0">
+            <div class="p-6 border-b" style="border-color:#c7e8f3">
+                <h4 class="font-bold text-sm text-slate-800">Product Synchronization</h4>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="text-[10px] uppercase font-bold" style="color:var(--primary-text)">
+                            <th class="p-5 text-left" style="background:#f0faff">Products</th>
+                            <th class="p-5 text-left hide-mobile" style="background:#f0faff">Engagement</th>
+                            <th class="p-5 text-right" style="background:#f0faff">Node Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analytics-tbody" class="text-sm"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD PRODUCT TAB -->
+    <div id="tab-add-product" class="tab-pane max-w-5xl mx-auto">
+        <div class="glass-card p-6 md:p-10">
+            <div class="mb-10 border-b pb-8" style="border-color:#c7e8f3">
+                <h3 class="text-2xl font-bold text-slate-900" style="font-size:18px!important">Product Registration</h3>
+                <p class="text-sm text-slate-500 mt-2">Create a new product record for global distribution.</p>
+            </div>
+            <form id="add-product-form" action="/Add_product" method="POST" onsubmit="return handleAddProduct(event)" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                <input type="hidden" name="trending_score" value="0">
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Product Name</label>
+                        <input name="title" placeholder="e.g. Premium Tech Fleece" required class="input-field">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Product ID</label>
+                            <input name="id" placeholder="L-X01" required class="input-field">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Category</label>
+                            <!-- Category dropdown instead of free text -->
+                            <select name="category" required class="input-field">
+                                <option value="" disabled selected>Select Category</option>
+                                <option value="Apparel">Apparel</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Footwear">Footwear</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="Home & Living">Home & Living</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Beauty">Beauty</option>
+                                <option value="Books">Books</option>
+                                <option value="Toys">Toys</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Price ($)</label>
+                            <!-- Price: positive numbers only -->
+                            <input type="number" name="price" required min="0.01" step="0.01"
+                                class="input-field" id="add-price" oninput="validatePrice(this)"
+                                placeholder="0.00">
+                            <p class="field-error-msg" id="price-error">Price must be a positive number.</p>
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Material</label>
+                            <input name="material" placeholder="e.g. Cotton" class="input-field">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Product Details</label>
+                        <textarea name="description" class="input-field h-28 resize-none"></textarea>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Image Link</label>
+                        <input name="image_link" id="add-image-link" required class="input-field"
+                            placeholder="https://..." oninput="previewImg(this.value, 'add-prev')">
+                    </div>
+                    <!-- File upload for image -->
+                    <div>
+                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">
+                            Upload Image File <span class="text-slate-400 normal-case font-normal">(or use link above)</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <div class="btn-secondary flex items-center gap-2 text-xs whitespace-nowrap">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Choose File
+                            </div>
+                            <input type="file" accept="image/*" class="hidden" id="add-file-upload" onchange="handleFileUpload(this)">
+                            <span id="file-name-display" class="text-xs text-slate-400">No file selected</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Page Link</label>
+                        <input name="image" required class="input-field" placeholder="https://...">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Color</label>
+                            <input name="color" placeholder="Color" class="input-field">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold uppercase mb-2 block" style="color:var(--primary-text)">Rating (0–5)</label>
+                            <!-- Rating: 0 to 5, step 0.1 -->
+                            <input name="rating" id="add-rating" type="number" min="0" max="5" step="0.1"
+                                placeholder="0.0" class="input-field" oninput="validateRating(this)">
+                            <p class="field-error-msg" id="rating-error">Rating must be between 0 and 5.</p>
+                        </div>
+                    </div>
+                    <!-- Live image preview -->
+                    <div class="img-preview-zone" onclick="document.getElementById('add-file-upload').click()">
+                        <img id="add-prev" class="max-h-full hidden z-10">
+                        <div id="add-prev-txt" class="text-center">
+                            <i class="fa-solid fa-image text-3xl mb-2" style="color:var(--primary)"></i>
+                            <p class="text-[10px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">Live Preview</p>
+                            <p class="text-[9px] mt-1 text-slate-400">Paste a link above or upload a file</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-2 pt-8">
+                    <button type="submit" class="btn-primary w-full py-4 text-sm tracking-widest uppercase">
+                        <i class="fa-solid fa-rocket mr-2"></i>Confirm and Execute Registration
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer mt-12">
+        <p>&copy; 2025 <strong>Pixup8k</strong> — LuxeStore Professional Ops</p>
+        <div class="flex gap-6 flex-wrap">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Support</a>
+            <a href="/">Dashboard</a>
+        </div>
+    </footer>
+
+    </div><!-- /main-content-inner -->
+</div><!-- /main-content -->
+
+<!-- EDIT MODAL -->
+<div id="edit-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4 md:p-6">
+    <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
+        <!-- Modal Header — light blue -->
+        <div class="p-6 md:p-8 border-b flex justify-between items-center modal-header-lb" style="border-color:var(--primary-dark)">
+            <div>
+                <h3 class="font-bold text-xl" style="color:var(--primary-text);font-size:18px!important">Edit Product</h3>
+                <p id="modal-sku-display" class="text-[11px] font-bold tracking-widest uppercase mt-1" style="color:var(--primary-text);opacity:0.75">--</p>
+            </div>
+            <button onclick="closeEditModal()" class="w-10 h-10 rounded-full bg-white/40 hover:bg-white flex items-center justify-center transition-all" style="color:var(--primary-text)">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="p-6 md:p-10 overflow-y-auto flex-1">
+            <form id="edit-form" action="/update_product" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                <input type="hidden" name="product_id" id="edit-id">
+                <div class="space-y-5">
+                    <label class="text-[10px] font-bold uppercase" style="color:var(--primary-text)">Product Information</label>
+                    <input name="title" id="edit-title" class="input-field" placeholder="Title">
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Edit category dropdown -->
+                        <select name="category" id="edit-category" class="input-field">
+                            <option value="">Select Category</option>
+                            <option value="Apparel">Apparel</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Footwear">Footwear</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Home & Living">Home & Living</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Beauty">Beauty</option>
+                            <option value="Books">Books</option>
+                            <option value="Toys">Toys</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input name="price" type="number" min="0.01" step="0.01" id="edit-price" class="input-field" placeholder="Price" oninput="validatePrice(this)">
+                    </div>
+                    <textarea name="description" id="edit-description" class="input-field h-40" placeholder="Product Description"></textarea>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input name="material" id="edit-material" class="input-field" placeholder="Material">
+                        <input name="color" id="edit-color" class="input-field" placeholder="Color">
+                    </div>
+                </div>
+                <div class="space-y-5">
+                    <label class="text-[10px] font-bold uppercase" style="color:var(--primary-text)">Media & Logic</label>
+                    <input name="image_link" id="edit-image-link" class="input-field" placeholder="Image Link" oninput="previewImg(this.value, 'edit-prev')">
+                    <input name="image" id="edit-image" class="input-field" placeholder="Page link">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input name="rating" id="edit-rating" type="number" min="0" max="5" step="0.1" class="input-field" placeholder="Rating (0–5)">
+                        <input name="trending_score" id="edit-trending" class="input-field" placeholder="Trending score">
+                    </div>
+                    <div class="img-preview-zone" style="height:13rem">
+                        <img id="edit-prev" class="max-h-full hidden">
+                        <p id="edit-prev-txt" class="text-[10px] font-bold uppercase tracking-widest" style="color:var(--primary-text)">No Preview</p>
+                    </div>
+                    <button type="submit" class="btn-primary w-full uppercase tracking-widest text-xs py-5 mt-4">
+                        <i class="fa-solid fa-floppy-disk mr-2"></i>Commit System Changes
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<!-- ===================== LOGIN MODAL ===================== -->
-<div id="login-view" class="hidden fixed inset-0 z-[130] flex items-center justify-center bg-black/30 backdrop-blur-sm p-4 animate-fade">
-    <div class="w-full max-w-sm bg-white rounded-3xl p-8 md:p-10 animate-premium" style="box-shadow: var(--shadow-xl); border: 1px solid var(--border);">
-        <!-- Header -->
-        <div class="text-center mb-7">
-            <div class="flex justify-center mb-4">
-                <div class="logo-mark w-12 h-12 rounded-2xl" style="width:48px;height:48px;border-radius:16px;">
-                    <i class="fas fa-expand text-white text-base"></i>
-                </div>
-            </div>
-            <h3 class="text-xl font-bold text-slate-800 mb-1" style="font-family:'DM Serif Display',serif;">Welcome Back</h3>
-            <p class="text-slate-400 text-sm">Sign in to your PIXUP8K account</p>
-        </div>
+<!-- FLOATING CHAT ICON -->
+<a href="/" class="floating-chat" aria-label="Open Chat">
+    <i class="fa-solid fa-comment-dots"></i>
+</a>
 
-        <div class="space-y-3">
-            <input type="email" id="login-email" placeholder="Email address" class="input-field">
-            <input type="password" id="login-password" placeholder="Password" class="input-field">
-            <div id="login-error" class="hidden text-red-400 text-xs font-medium text-center py-1 px-3 bg-red-50 rounded-full border border-red-100">Invalid credentials</div>
-            <button onclick="doLogin()" class="btn-primary w-full py-3.5 mt-1 text-sm">
-                Sign In <i class="fas fa-arrow-right text-xs"></i>
-            </button>
-            <button onclick="hideLogin()" class="btn-ghost w-full text-sm text-slate-400">Cancel</button>
-        </div>
+<!-- FLOATING MOBILE MENU BUTTON -->
+<button class="floating-mobile-menu" onclick="showMobileNav()" id="mobile-fab" title="Quick Navigation">
+    <i class="fa-solid fa-grid-2" style="color:var(--primary-text)"></i>
+</button>
 
-        <p class="text-center text-slate-300 text-xs mt-5">Secured · Private · Professional</p>
-    </div>
+<!-- MOBILE QUICK NAV PANEL -->
+<div id="mobile-quick-nav" class="fixed bottom-20 right-4 z-[998] flex-col gap-2 hidden">
+    <button onclick="switchTab('dashboard');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
+        <i class="fa-solid fa-chart-line w-4"></i> Dashboard
+    </button>
+    <button onclick="switchTab('inventory');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
+        <i class="fa-solid fa-box-archive w-4"></i> Inventory
+    </button>
+    <button onclick="switchTab('analytics');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
+        <i class="fa-solid fa-microchip w-4"></i> Analytics
+    </button>
+    <button onclick="switchTab('add-product');hideMobileNav()" class="btn-primary text-xs px-4 py-2 flex items-center gap-2">
+        <i class="fa-solid fa-plus w-4"></i> New Entry
+    </button>
 </div>
 
-<!-- ===================== MAIN APP ===================== -->
-<main id="app-view" class="hidden app-container" style="background:var(--surface);">
-
-    <!-- Header -->
-    <header class="h-14 md:h-16 border-b border-blue-100 flex items-center justify-between px-4 md:px-6 bg-white shrink-0" style="box-shadow: 0 1px 0 rgba(173,216,230,0.3);">
-        <div class="flex items-center gap-4 md:gap-6">
-            <div class="flex items-center gap-2">
-                <div class="logo-mark w-7 h-7" style="width:28px;height:28px;">
-                    <i class="fas fa-expand text-white text-xs"></i>
-                </div>
-                <span class="font-bold text-sm text-slate-800 tracking-tight" style="font-family:'DM Serif Display',serif;">PIXUP8K</span>
-            </div>
-            <div class="h-4 w-px bg-blue-100 hidden md:block"></div>
-            <nav class="flex items-center gap-1">
-                <a href="#" class="nav-link active">
-                    <i class="fas fa-expand text-[10px]"></i> Upscaling
-                </a>
-                <button onclick="redirectToAppPage()" class="nav-link">
-                    <i class="fas fa-magic text-[10px]"></i>
-                    <span class="hidden sm:inline">AI Generator</span>
-                    <span class="sm:hidden">AI Gen</span>
-                </button>
-            </nav>
-        </div>
-        <button onclick="logout()" class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100 hover:bg-blue-100 hover:border-blue-200 text-blue-400 hover:text-blue-500">
-            <i class="fas fa-sign-out-alt text-xs"></i>
-        </button>
-    </header>
-
-    <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
-
-        <!-- Sidebar -->
-        <aside class="sidebar-responsive border-b md:border-b-0 md:border-r border-blue-100 p-4 md:p-5 bg-white overflow-x-auto md:overflow-y-auto shrink-0 custom-scroll">
-            <div class="flex flex-row md:flex-col gap-4 md:gap-5 w-full">
-
-                <!-- Token balance -->
-                <div class="flex-1 min-w-[150px] md:min-w-0">
-                    <p class="section-label mb-2">Balance</p>
-                    <div class="card p-4" style="border-radius:16px; background:var(--blue-50);">
-                        <div class="flex justify-between items-end mb-2.5">
-                            <span id="usage-val" class="text-2xl font-bold text-slate-800">--</span>
-                            <span class="text-[10px] font-semibold text-slate-400 mb-0.5 uppercase tracking-wider">Tokens</span>
-                        </div>
-                        <div class="progress-track">
-                            <div id="usage-bar" class="progress-fill" style="width:0%"></div>
-                        </div>
-                        <p id="usage-text" class="text-[10px] text-slate-400 mt-2 font-medium truncate">Loading...</p>
-                    </div>
-                </div>
-
-                <!-- AI Gen link -->
-                <div class="flex-1 md:flex-none min-w-[130px] md:min-w-0">
-                    <p class="hidden md:block section-label mb-2">Tools</p>
-                    <button onclick="redirectToAppPage()" class="w-full p-3.5 rounded-2xl flex items-center justify-between text-sm font-semibold hover-lift cursor-pointer group"
-                        style="background:var(--blue-50); border:1px solid var(--border-strong); color:var(--accent-deep);">
-                        <span class="flex items-center gap-2">
-                            <i class="fas fa-magic text-sm"></i>
-                            <span>AI Generator</span>
-                        </span>
-                        <i class="fas fa-chevron-right text-xs opacity-40 group-hover:opacity-100 hidden md:block"></i>
-                    </button>
-                </div>
-
-            </div>
-        </aside>
-
-        <!-- Main workspace -->
-        <section class="flex-1 flex flex-col p-3 md:p-5 overflow-hidden" style="background:var(--surface);">
-            <div id="chat-messages" class="flex-1 overflow-y-auto space-y-5 custom-scroll pb-5 px-1 md:px-2">
-
-                <!-- Empty state -->
-                <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center px-4">
-                    <div class="w-16 h-16 md:w-20 md:h-20 mb-5 rounded-3xl flex items-center justify-center border-2 border-dashed border-blue-200" style="background:var(--blue-50);">
-                        <i class="fas fa-cloud-upload-alt text-xl md:text-2xl text-blue-300"></i>
-                    </div>
-                    <h3 class="text-sm md:text-base font-semibold text-slate-700 mb-1.5">Ready for reconstruction</h3>
-                    <p class="text-xs md:text-sm text-slate-400">Upload your image below to begin 8K processing</p>
-                </div>
-
-            </div>
-
-            <!-- Upload Controls -->
-            <div class="max-w-3xl mx-auto w-full pt-4 shrink-0">
-
-                <!-- File preview chip -->
-                <div id="file-preview" class="hidden mb-3 p-3 rounded-2xl flex items-center justify-between animate-premium" style="background:#fff; border:1px solid var(--border); box-shadow:var(--shadow-sm);">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <img id="preview-img" src="" class="w-10 h-10 rounded-xl object-cover border border-blue-100 shrink-0" alt="">
-                        <div class="overflow-hidden">
-                            <p id="target-name" class="text-xs font-semibold text-slate-700 truncate"></p>
-                            <p class="text-[10px] font-medium" style="color:var(--accent-deep);">Source staged</p>
-                        </div>
-                    </div>
-                    <button onclick="clearFile()" class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-400 text-slate-400">
-                        <i class="fas fa-times text-xs"></i>
-                    </button>
-                </div>
-
-                <!-- Input bar -->
-                <div class="flex items-center gap-2 p-1.5 rounded-full bg-white border border-blue-200" style="box-shadow: var(--shadow-md);">
-                    <label class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full cursor-pointer hover:opacity-90 shrink-0 transition-all" style="background:var(--accent-deep);">
-                        <i class="fas fa-arrow-up text-white text-sm"></i>
-                        <input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleFile(event)">
-                    </label>
-                    <input type="text" id="status-text" readonly placeholder="Select an image file to upscale..." class="flex-1 bg-transparent px-2 outline-none text-xs md:text-sm text-slate-500 font-medium truncate">
-                    <button id="process-btn" disabled onclick="startProcessing()" class="btn-primary px-5 md:px-7 py-2.5 md:py-3 text-xs md:text-sm shrink-0">
-                        Process <i class="fas fa-bolt text-xs"></i>
-                    </button>
-                </div>
-                <p class="text-[10px] text-slate-400 text-center mt-2.5 font-medium">Neural Engine v4.0.1 Stable</p>
-            </div>
-        </section>
-    </div>
-</main>
-
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
 <script>
-// --- LOGIC PRESERVED 100% ---
-let scene, camera, renderer, particles;
-function init3D(){
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 3000);
-    renderer = new THREE.WebGLRenderer({alpha:true, antialias:true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('canvas-container').appendChild(renderer.domElement);
-    const geometry = new THREE.BufferGeometry();
-    const vertices = [];
-    for(let i=0; i<3000; i++){
-        vertices.push(THREE.MathUtils.randFloatSpread(2500), THREE.MathUtils.randFloatSpread(2500), THREE.MathUtils.randFloatSpread(2500));
+/**
+ * LuxeStore | Pixup8k Admin Panel
+ * Full Logic — Light Blue & White Theme
+ * Lines: 890+
+ */
+
+/* ============================================================
+   GLOBAL STATE
+============================================================ */
+let globalData = { products: [] };
+let globalAnalytics = {
+    total_searches: 0,
+    total_clicks: 0,
+    most_questions: {},
+    product_search: {},
+    product_clicks: {},
+    price_updates: {},
+    supported_languages: {}
+};
+let chartClicks = null;
+let chartCircle = null;
+let chartLanguages = null;
+let sidebarDesktopCollapsed = false;
+let analyticsFilterQuery = '';
+let pendingDeleteForm = null;
+
+const authStatus = "{{ status }}";
+
+/* ============================================================
+   SIDEBAR — TOGGLE (MOBILE)
+============================================================ */
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('active');
+}
+
+/* ============================================================
+   SIDEBAR — DESKTOP COLLAPSE/EXPAND
+============================================================ */
+function desktopToggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('main-content');
+    const icon = document.getElementById('sidebar-toggle-icon');
+    const btn = document.getElementById('sidebar-toggle-btn');
+
+    sidebarDesktopCollapsed = !sidebarDesktopCollapsed;
+
+    if (sidebarDesktopCollapsed) {
+        sidebar.classList.add('collapsed');
+        mainContent.classList.add('sidebar-collapsed');
+        icon.className = 'fa-solid fa-chevron-left';
+        btn.style.right = '0';
+    } else {
+        sidebar.classList.remove('collapsed');
+        mainContent.classList.remove('sidebar-collapsed');
+        icon.className = 'fa-solid fa-chevron-right';
+        btn.style.right = '0';
     }
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-    particles = new THREE.Points(geometry, new THREE.PointsMaterial({color: 0x10b981, size: 1.0, transparent: true, opacity: 0.4}));
-    scene.add(particles);
-    camera.position.z = 1000;
-    function animate(){
-        requestAnimationFrame(animate);
-        particles.rotation.y += 0.0002;
-        renderer.render(scene, camera);
+}
+
+/* ============================================================
+   MOBILE QUICK NAV
+============================================================ */
+function showMobileNav() {
+    const nav = document.getElementById('mobile-quick-nav');
+    nav.classList.toggle('hidden');
+    nav.classList.toggle('flex');
+}
+
+function hideMobileNav() {
+    const nav = document.getElementById('mobile-quick-nav');
+    nav.classList.add('hidden');
+    nav.classList.remove('flex');
+}
+
+/* ============================================================
+   TOAST NOTIFICATIONS — Light Blue Styled
+============================================================ */
+function showToast(message, icon = 'fa-circle-check') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<i class="fa-solid ${icon}"></i><span>${message}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 3000);
+}
+
+/* ============================================================
+   CONFIRM DELETE POPUP
+============================================================ */
+function confirmDelete(form) {
+    pendingDeleteForm = form;
+    const overlay = document.getElementById('confirm-overlay');
+    overlay.classList.add('active');
+    return false; // Prevent default form submission
+}
+
+function cancelDelete() {
+    pendingDeleteForm = null;
+    document.getElementById('confirm-overlay').classList.remove('active');
+}
+
+function executeDelete() {
+    if (pendingDeleteForm) {
+        pendingDeleteForm.submit();
     }
-    animate();
+    document.getElementById('confirm-overlay').classList.remove('active');
 }
 
-const slider = document.getElementById('how-it-works');
-const sliderBox = document.getElementById('slider-box');
-const sliderHandle = document.getElementById('slider-handle');
+/* ============================================================
+   DOM READY
+============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+    if (authStatus === "success") {
+        document.getElementById("auth-overlay").classList.add("hidden");
+        sync();
+    } else if (authStatus === "failed") {
+        const errEl = document.getElementById("error-msg");
+        if (errEl) errEl.classList.remove("hidden");
+    }
 
-function updateSlider(clientX) {
-    if (!slider) return;
-    const rect = slider.getBoundingClientRect();
-    const x = ((clientX - rect.left) / rect.width) * 100;
-    if (x >= 0 && x <= 100) {
-        sliderBox.style.width = `${x}%`;
-        sliderHandle.style.left = `${x}%`;
+    const searchInput = document.getElementById('inventory-search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => filterInventory(e.target.value));
+    }
+
+    // Close mobile quick nav when clicking outside
+    document.addEventListener('click', (e) => {
+        const nav = document.getElementById('mobile-quick-nav');
+        const fab = document.getElementById('mobile-fab');
+        if (!nav.contains(e.target) && !fab.contains(e.target)) {
+            nav.classList.add('hidden');
+            nav.classList.remove('flex');
+        }
+    });
+});
+
+/* ============================================================
+   SYNC — Fetch Data & Analytics
+============================================================ */
+async function sync() {
+    try {
+        const [d, a] = await Promise.all([
+            fetch("/api/data"),
+            fetch("/api/analytics")
+        ]);
+        globalData = await d.json();
+        globalAnalytics = await a.json();
+
+        document.getElementById("connection-status").innerHTML =
+            `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Online`;
+
+        refreshDashboard();
+        refreshInventory(globalData.products || []);
+        checkClickDropWarning();
+    } catch (e) {
+        document.getElementById("connection-status").innerHTML =
+            `<span class="w-2 h-2 rounded-full bg-red-500"></span> Offline Node`;
     }
 }
 
-slider.onmousemove = (e) => updateSlider(e.clientX);
-slider.ontouchmove = (e) => updateSlider(e.touches[0].clientX);
-
-let authToken = localStorage.getItem('pro_token'), activeFile = null;
-
-function togglePricing(show) { document.getElementById('pricing-screen').classList.toggle('hidden', !show); }
-function showLogin() { document.getElementById('login-view').classList.remove('hidden'); document.getElementById('login-error').classList.add('hidden'); }
-function hideLogin() { document.getElementById('login-view').classList.add('hidden'); }
-
-function redirectToAppPage() {
-    window.location.href = '/app';
+/* ============================================================
+   CLICK DROP WARNING — Alert if total clicks < 100
+============================================================ */
+function checkClickDropWarning() {
+    const totalClicks = globalAnalytics.total_clicks || 0;
+    const warningEl = document.getElementById('click-drop-warning');
+    if (totalClicks < 100 && totalClicks > 0) {
+        warningEl.classList.add('show');
+    } else {
+        warningEl.classList.remove('show');
+    }
 }
 
-function openWhatsApp(planName) {
-    const phoneNumber = "923260341402";
-    const message = `Hello Pixup8k Team! I am interested in the ${planName} Plan. Please provide more details on how to upgrade.`;
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+/* ============================================================
+   SWITCH TAB
+============================================================ */
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+
+    document.getElementById('tab-' + tabId).classList.add('active');
+    document.getElementById('link-' + tabId).classList.add('active');
+    document.getElementById('page-title').innerText = tabId.replace('-', ' ');
+
+    if (window.innerWidth < 1024) {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    }
+
+    if (tabId === 'analytics') renderCharts();
+    if (tabId === 'dashboard') renderDashboardCharts();
 }
 
-async function doLogin() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    const errorMsg = document.getElementById('login-error');
-    if(!email || !password) {
-        errorMsg.innerText = "Please fill all fields";
-        errorMsg.classList.remove('hidden');
+/* ============================================================
+   REFRESH DASHBOARD
+============================================================ */
+function refreshDashboard() {
+    const products = globalData.products || [];
+    document.getElementById("stat-count").innerText = products.length;
+    document.getElementById("stat-total-clicks").innerText = globalAnalytics.total_clicks || 0;
+    document.getElementById("stat-total-searches").innerText = globalAnalytics.total_searches || 0;
+
+    // Auto-calculate and update average price
+    updateAveragePrice(products);
+
+    const growth = globalAnalytics.total_clicks > 0
+        ? (globalAnalytics.total_clicks / 500 * 100).toFixed(1)
+        : 0;
+    document.getElementById("click-growth-percent").innerText = `+${growth}% efficiency`;
+
+    // Recent 4 products
+    const recent = [...products].slice(-4).reverse();
+    document.getElementById("recent-grid").innerHTML = recent.map(p => `
+        <div class="flex items-center gap-4 p-4 border rounded-2xl hover:shadow-sm transition-all cursor-default" style="border-color:#c7e8f3">
+            <div class="w-12 h-12 shadow-sm bg-white overflow-hidden rounded-lg border flex items-center justify-center flex-shrink-0" style="border-color:#c7e8f3">
+                <img src="${p.image_link}" class="max-h-full object-contain"
+                    onerror="this.src='https://placehold.co/48x48?text=N%2FA'">
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="card-title truncate text-slate-800 uppercase tracking-tight">${p.title}</p>
+                <p class="text-[10px] font-bold mt-0.5" style="color:var(--primary-text)">$${p.price} • ${p.category}</p>
+            </div>
+            <span class="text-[9px] font-black px-2 py-1 rounded-md flex-shrink-0" style="background:var(--primary);color:var(--primary-text)">recorded</span>
+        </div>
+    `).join("");
+
+    // Top Selling Product
+    updateTopSellingCard(products);
+
+    renderDashboardCharts();
+}
+
+/* ============================================================
+   UPDATE AVERAGE PRICE — Auto-updates when product added
+============================================================ */
+function updateAveragePrice(products) {
+    const prods = products || globalData.products || [];
+    if (prods.length > 0) {
+        const totalValue = prods.reduce((acc, p) => acc + (parseFloat(p.price) || 0), 0);
+        const avg = (totalValue / prods.length).toFixed(2);
+        document.getElementById("stat-avg-price").innerText = `$${avg}`;
+    } else {
+        document.getElementById("stat-avg-price").innerText = "$0.00";
+    }
+}
+
+/* ============================================================
+   TOP SELLING PRODUCT CARD
+============================================================ */
+function updateTopSellingCard(products) {
+    if (!products || products.length === 0) return;
+
+    // Find product with highest trending_score
+    const topProduct = products.reduce((best, p) => {
+        const score = parseFloat(p.trending_score) || 0;
+        const bestScore = parseFloat(best.trending_score) || 0;
+        return score > bestScore ? p : best;
+    }, products[0]);
+
+    document.getElementById('top-product-title').innerText = topProduct.title || 'Unknown';
+    document.getElementById('top-product-meta').innerText =
+        `$${topProduct.price} • ${topProduct.category} • Rating: ${topProduct.rating || 'N/A'}`;
+    document.getElementById('top-product-score').innerText =
+        `Trending Score: ${topProduct.trending_score || 0}`;
+
+    const img = document.getElementById('top-product-img');
+    const placeholder = document.getElementById('top-product-placeholder');
+    if (topProduct.image_link) {
+        img.src = topProduct.image_link;
+        img.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+    }
+
+    // Highlight products with trending_score > 80
+    highlightTrendingProducts();
+}
+
+/* ============================================================
+   HIGHLIGHT TRENDING PRODUCTS (score > 80)
+============================================================ */
+function highlightTrendingProducts() {
+    // Applied in refreshInventory via the template
+}
+
+/* ============================================================
+   RENDER DASHBOARD CHARTS — Doughnut shows last 5 searches
+============================================================ */
+function renderDashboardCharts() {
+    const searchData = globalAnalytics.product_search || {};
+    // Last 5 searches only
+    const sortedEntries = Object.entries(searchData).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const labels = sortedEntries.map(e => e[0]);
+    const counts = sortedEntries.map(e => e[1]);
+
+    if (chartCircle) chartCircle.destroy();
+    const ctx = document.getElementById('searchCircleChart');
+    if (!ctx || labels.length === 0) return;
+
+    // Light blue color palette for doughnut segments
+    chartCircle = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: counts,
+                backgroundColor: [
+                    '#add8e6', '#7ec8e3', '#4ab4d1',
+                    '#c5e8f0', '#85c9de'
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                hoverOffset: 15
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            rotation: -90,
+            circumference: 180,
+            plugins: {
+                tooltip: {
+                    backgroundColor: 'var(--primary, #add8e6)',
+                    titleColor: '#1a6b8a',
+                    bodyColor: '#1a6b8a',
+                    titleFont: { size: 12, weight: '600' },
+                    padding: 12,
+                    displayColors: true,
+                    boxPadding: 6,
+                    callbacks: {
+                        labelColor: function(context) {
+                            return { borderColor: '#add8e6', backgroundColor: '#add8e6' };
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'rectRounded',
+                        padding: 15,
+                        font: { size: 10, weight: '600' },
+                        color: '#1a6b8a'
+                    }
+                }
+            }
+        }
+    });
+}
+
+/* ============================================================
+   REFRESH INVENTORY GRID
+============================================================ */
+function refreshInventory(list) {
+    const grid = document.getElementById("full-inventory-grid");
+    if (!grid) return;
+
+    grid.innerHTML = list.length ? list.map(p => {
+        const tScore = parseFloat(p.trending_score) || 0;
+        const trendBadge = tScore > 80
+            ? `<span class="trending-badge"><i class="fa-solid fa-fire-flame-curved"></i> Trending</span>`
+            : '';
+        return `
+        <div class="glass-card group flex flex-col items-center text-center p-6" style="border-color:#c7e8f3">
+            <div class="w-full aspect-square bg-white rounded-xl p-6 flex items-center justify-center border mb-6 transition-all group-hover:shadow-inner" style="border-color:#c7e8f3">
+                <img src="${p.image_link}" class="max-h-full max-w-full object-contain"
+                    onerror="this.src='https://placehold.co/200x200?text=Asset+Missing'">
+            </div>
+            <div class="w-full flex-1">
+                <p class="text-[10px] font-bold uppercase tracking-widest mb-1" style="color:var(--primary-text)">${p.category}</p>
+                <p class="card-title font-bold text-slate-900 uppercase truncate mb-2">${p.title}</p>
+                ${trendBadge}
+                <div class="flex items-center justify-center gap-4 mt-3 mb-4">
+                    <p class="text-base font-bold text-slate-900">$${p.price}</p>
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
+                    <p class="text-[10px] font-bold mono" style="color:var(--primary-text)">${p.id}</p>
+                </div>
+            </div>
+            <div class="w-full grid grid-cols-2 gap-2 pt-4 border-t" style="border-color:#c7e8f3">
+                <button onclick="openEditModal('${p._id}')" class="btn-secondary text-xs py-2">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i>Edit
+                </button>
+                <form action="/delete_product" method="POST" onsubmit="return confirmDelete(this)" class="w-full">
+                    <input type="hidden" name="id" value="${p._id}">
+                    <button type="submit" class="btn-secondary w-full text-xs py-2 !text-red-500 hover:!bg-red-50">
+                        <i class="fa-solid fa-trash mr-1"></i>Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    `}).join("") : `
+        <div class="col-span-full py-20 text-center font-bold tracking-widest uppercase text-sm" style="color:var(--primary-text)">
+            <i class="fa-solid fa-box-open text-4xl mb-4 block" style="color:var(--primary)"></i>
+            No Registry Found
+        </div>`;
+}
+
+/* ============================================================
+   FILTER INVENTORY
+============================================================ */
+function filterInventory(q) {
+    const query = q.toLowerCase();
+    const filtered = globalData.products.filter(p =>
+        (p.title && p.title.toLowerCase().includes(query)) ||
+        (p.id && p.id.toLowerCase().includes(query)) ||
+        (p.category && p.category.toLowerCase().includes(query))
+    );
+    refreshInventory(filtered);
+}
+
+/* ============================================================
+   ANALYTICS SEARCH FILTER
+============================================================ */
+function filterAnalytics(q) {
+    analyticsFilterQuery = q.toLowerCase().trim();
+    renderCharts();
+}
+
+/* ============================================================
+   RENDER ANALYTICS CHARTS
+============================================================ */
+function renderCharts() {
+    const clickData = globalAnalytics.product_clicks || {};
+    const questionData = globalAnalytics.most_questions || {};
+    const languageData = globalAnalytics.supported_languages || {};
+
+    let entries = Object.entries(clickData).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+    // Apply analytics filter if set
+    if (analyticsFilterQuery) {
+        entries = entries.filter(([id]) => {
+            const p = globalData.products.find(x => x._id === id);
+            if (!p) return false;
+            return p.title.toLowerCase().includes(analyticsFilterQuery) ||
+                   (p.category && p.category.toLowerCase().includes(analyticsFilterQuery));
+        });
+    }
+
+    const labels = entries.map(([id]) => {
+        const p = globalData.products.find(x => x._id === id);
+        return p ? p.title.substring(0, 14) : id.substring(0, 6);
+    });
+    const values = entries.map(e => e[1]);
+
+    if (chartClicks) chartClicks.destroy();
+    const clicksCtx = document.getElementById('clicksChart');
+    if (clicksCtx && values.length > 0) {
+        chartClicks = new Chart(clicksCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Engagement Index',
+                    data: values,
+                    backgroundColor: '#add8e6',
+                    hoverBackgroundColor: '#7ec8e3',
+                    borderRadius: 9999, // Pill bars
+                    barThickness: window.innerWidth < 640 ? 15 : 24
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f0faff', drawBorder: false },
+                        ticks: { font: { size: 10, weight: '600' }, color: '#1a6b8a' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 9, weight: '600' }, color: '#1a6b8a' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        // Light blue styled tooltips
+                        backgroundColor: '#add8e6',
+                        titleColor: '#1a6b8a',
+                        bodyColor: '#1a6b8a',
+                        titleFont: { size: 11, weight: '700' },
+                        bodyFont: { size: 11 },
+                        padding: 10,
+                        cornerRadius: 9999,
+                        displayColors: false,
+                        callbacks: {
+                            title: function(items) {
+                                return items[0].label;
+                            },
+                            label: function(item) {
+                                return `Clicks: ${item.formattedValue}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    if (chartLanguages) chartLanguages.destroy();
+    const langCtx = document.getElementById('languagesChart');
+    const langLabels = Object.keys(languageData);
+    const langValues = Object.values(languageData);
+
+    if (langCtx && langLabels.length > 0) {
+        chartLanguages = new Chart(langCtx, {
+            type: 'pie',
+            data: {
+                labels: langLabels.map(l => l.toUpperCase()),
+                datasets: [{
+                    data: langValues,
+                    backgroundColor: ['#add8e6', '#7ec8e3', '#4ab4d1', '#c5e8f0', '#85c9de'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: { size: 9, weight: 'bold' },
+                            boxWidth: 10,
+                            padding: 8,
+                            color: '#1a6b8a'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#add8e6',
+                        titleColor: '#1a6b8a',
+                        bodyColor: '#1a6b8a'
+                    }
+                }
+            }
+        });
+    }
+
+    // Questions list
+    const qList = document.getElementById("questions-list");
+    const sortedQ = Object.entries(questionData).sort((a, b) => b[1] - a[1]);
+    qList.innerHTML = sortedQ.length ? sortedQ.map(([q, count]) => `
+        <div class="flex items-start justify-between p-3 rounded-xl transition-all group" style="background:#f0faff;border:1px solid #c7e8f3">
+            <div class="flex-1 pr-4">
+                <p class="text-xs font-semibold leading-relaxed italic text-slate-800">"${q}"</p>
+            </div>
+            <div class="flex-shrink-0">
+                <span class="text-[10px] font-bold bg-white px-3 py-1 rounded-full border" style="color:var(--primary-text);border-color:#add8e6">${count}</span>
+            </div>
+        </div>
+    `).join("") : `<div class="text-center py-10 text-xs font-bold uppercase tracking-widest" style="color:var(--primary-text);opacity:0.5">Inquiry Stream Clear</div>`;
+
+    // Analytics table
+    document.getElementById("analytics-tbody").innerHTML = globalData.products.slice(0, 20).map(p => `
+        <tr class="hover:bg-blue-50/40 transition-colors">
+            <td class="font-semibold text-slate-900 p-5">${p.title}
+                <span class="block text-[10px] mono mt-1" style="color:var(--primary-text)">${p.id}</span>
+            </td>
+            <td class="font-bold hide-mobile p-5" style="color:var(--primary-text)">${clickData[p._id] || 0} clicks</td>
+            <td class="text-right p-5">
+                <span class="text-[10px] font-black uppercase px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-600">Synchronized</span>
+            </td>
+        </tr>
+    `).join("");
+}
+
+/* ============================================================
+   EDIT MODAL — Prefill fields by product ID
+============================================================ */
+function openEditModal(id) {
+    const p = globalData.products.find(x => x._id === id);
+    if (!p) {
+        showToast('Product not found in registry.', 'fa-circle-exclamation');
         return;
     }
-    const formData = new FormData(); 
-    formData.append('email', email); 
-    formData.append('password', password);
-    try {
-        const res = await fetch('/login', { method: 'POST', body: formData });
-        const data = await res.json();
-        if(res.ok) {
-            authToken = data.access_token; 
-            localStorage.setItem('pro_token', authToken); 
-            enterApp();
-        } else {
-            errorMsg.innerText = "Invalid credentials";
-            errorMsg.classList.remove('hidden');
-        }
-    } catch(err) {
-        enterApp(); 
+
+    document.getElementById("edit-id").value = p._id;
+    document.getElementById("edit-title").value = p.title || '';
+
+    // Prefill category dropdown
+    const editCat = document.getElementById("edit-category");
+    const catExists = Array.from(editCat.options).some(o => o.value === p.category);
+    if (catExists) {
+        editCat.value = p.category;
+    } else {
+        // Add the category if not in list, then select
+        const opt = document.createElement('option');
+        opt.value = p.category || '';
+        opt.text = p.category || '';
+        editCat.appendChild(opt);
+        editCat.value = p.category || '';
+    }
+
+    document.getElementById("edit-price").value = p.price || 0;
+    document.getElementById("edit-image-link").value = p.image_link || '';
+    document.getElementById("edit-image").value = p.image || '';
+    document.getElementById("edit-material").value = p.material || '';
+    document.getElementById("edit-color").value = p.color || '';
+    document.getElementById("edit-rating").value = p.rating || '';
+    document.getElementById("edit-trending").value = p.trending_score || 0;
+    document.getElementById("edit-description").value = p.description || '';
+
+    document.getElementById("modal-sku-display").innerText = p.id || '--';
+    previewImg(p.image_link, 'edit-prev');
+
+    document.getElementById("edit-modal").classList.remove("hidden");
+    document.body.style.overflow = 'hidden';
+}
+
+function closeEditModal() {
+    document.getElementById("edit-modal").classList.add("hidden");
+    document.body.style.overflow = 'auto';
+}
+
+/* ============================================================
+   LIVE IMAGE PREVIEW
+============================================================ */
+function previewImg(url, id) {
+    const img = document.getElementById(id);
+    const txt = document.getElementById(id + '-txt');
+    if (url && url.trim() !== '') {
+        img.src = url;
+        img.classList.remove('hidden');
+        if (txt) txt.classList.add('hidden');
+    } else {
+        img.classList.add('hidden');
+        if (txt) txt.classList.remove('hidden');
     }
 }
 
-async function enterApp() {
-    document.getElementById('welcome-screen').classList.add('hidden');
-    document.getElementById('login-view').classList.add('hidden');
-    document.getElementById('app-view').classList.remove('hidden');
-    refreshProfile();
+/* ============================================================
+   FILE UPLOAD — Live preview from file input
+============================================================ */
+function handleFileUpload(input) {
+    const file = input.files[0];
+    const nameDisplay = document.getElementById('file-name-display');
+    if (!file) return;
+
+    nameDisplay.textContent = file.name;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = document.getElementById('add-prev');
+        const txt = document.getElementById('add-prev-txt');
+        img.src = e.target.result;
+        img.classList.remove('hidden');
+        if (txt) txt.classList.add('hidden');
+        // Also set the image-link input for form submission reference
+        document.getElementById('add-image-link').value = e.target.result;
+    };
+    reader.readAsDataURL(file);
 }
 
-async function refreshProfile() {
-    try {
-        const res = await fetch('/me', { headers: { 'Authorization': `Bearer ${authToken}` } });
-        const user = await res.json();
-        document.getElementById('usage-text').innerText = `${user.images_used} / ${user.image_limit} Tokens used`;
-        document.getElementById('usage-val').innerText = user.image_limit - user.images_used;
-        document.getElementById('usage-bar').style.width = (user.images_used / user.image_limit * 100) + '%';
-    } catch {
-        document.getElementById('usage-val').innerText = "∞";
-        document.getElementById('usage-text').innerText = "Trial Mode Active";
+/* ============================================================
+   FORM VALIDATION
+============================================================ */
+function validatePrice(input) {
+    const errorEl = document.getElementById('price-error');
+    const val = parseFloat(input.value);
+    if (input.value !== '' && (isNaN(val) || val <= 0)) {
+        input.classList.add('error');
+        if (errorEl) { errorEl.style.display = 'block'; }
+        return false;
+    } else {
+        input.classList.remove('error');
+        if (errorEl) { errorEl.style.display = 'none'; }
+        return true;
     }
 }
 
-function handleFile(e) {
-    activeFile = e.target.files[0];
-    if(activeFile) {
-        document.getElementById('empty-state').classList.add('hidden');
-        document.getElementById('target-name').innerText = activeFile.name;
-        document.getElementById('file-preview').classList.remove('hidden');
-        document.getElementById('status-text').value = `STAGED: ${activeFile.name}`;
-        document.getElementById('preview-img').src = URL.createObjectURL(activeFile);
-        document.getElementById('process-btn').disabled = false;
+function validateRating(input) {
+    const errorEl = document.getElementById('rating-error');
+    const val = parseFloat(input.value);
+    if (input.value !== '' && (isNaN(val) || val < 0 || val > 5)) {
+        input.classList.add('error');
+        if (errorEl) { errorEl.style.display = 'block'; }
+        return false;
+    } else {
+        input.classList.remove('error');
+        if (errorEl) { errorEl.style.display = 'none'; }
+        return true;
     }
 }
 
-function clearFile() {
-    activeFile = null;
-    document.getElementById('file-input').value = '';
-    document.getElementById('file-preview').classList.add('hidden');
-    document.getElementById('status-text').value = '';
-    document.getElementById('process-btn').disabled = true;
-}
+/* ============================================================
+   HANDLE ADD PRODUCT — Toast on success + avg price update
+============================================================ */
+function handleAddProduct(event) {
+    const priceInput = document.getElementById('add-price');
+    const ratingInput = document.getElementById('add-rating');
 
-async function startProcessing() {
-    if(!activeFile) return;
-    const container = document.getElementById('chat-messages');
-    const bubbleId = 'proc-' + Date.now();
-    const wrap = document.createElement('div');
-    wrap.className = 'animate-premium max-w-3xl mx-auto w-full mb-6 px-1 md:px-0';
-    wrap.innerHTML = `
-        <div class="bg-white rounded-3xl overflow-hidden p-5 md:p-7" style="border:1px solid var(--border);box-shadow:var(--shadow-md);">
-            <div class="flex justify-between items-center mb-5">
-                <div class="flex items-center gap-3">
-                    <span class="badge"><i class="fas fa-bolt text-[10px]"></i> Processing 8K</span>
-                    <span class="text-[10px] font-medium text-slate-400">#${bubbleId.slice(-6)}</span>
-                </div>
-                <span id="perc-${bubbleId}" class="text-sm font-bold text-slate-700">0%</span>
-            </div>
+    const priceValid = validatePrice(priceInput);
+    const ratingValid = validateRating(ratingInput);
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-5">
-                <div class="space-y-2">
-                    <p class="section-label">Original</p>
-                    <div class="aspect-square rounded-2xl overflow-hidden" style="background:var(--surface-2);border:1px solid var(--border);">
-                        <img src="${URL.createObjectURL(activeFile)}" class="w-full h-full object-cover">
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <p class="section-label">8K Reconstruction</p>
-                    <div class="aspect-square rounded-2xl overflow-hidden relative" style="background:var(--surface-2);border:1px solid var(--border);">
-                        <img id="result-${bubbleId}" src="" class="w-full h-full object-cover opacity-0" style="transition:opacity 1s ease;">
-                        <div id="loader-${bubbleId}" class="absolute inset-0 flex flex-col items-center justify-center" style="background:rgba(240,248,255,0.7);backdrop-filter:blur(4px);">
-                            <div class="spinner"></div>
-                            <p class="text-xs text-slate-400 mt-3 font-medium">Reconstructing...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="progress-track mb-5">
-                <div id="bar-${bubbleId}" class="progress-fill" style="width:0%;"></div>
-            </div>
-            
-            <div id="actions-${bubbleId}" class="hidden flex flex-col md:flex-row justify-between items-center gap-4 pt-5 animate-premium" style="border-top:1px solid var(--border);">
-                <div class="flex items-center gap-2">
-                    <div class="w-5 h-5 rounded-full flex items-center justify-center" style="background:var(--blue-50);border:1px solid var(--border-strong);">
-                        <i class="fas fa-check text-[8px]" style="color:var(--accent-deep);"></i>
-                    </div>
-                    <p class="text-xs font-medium text-slate-500">Task completed successfully</p>
-                </div>
-                <div class="flex gap-3 w-full md:w-auto">
-                    <button onclick="this.closest('.animate-premium').remove()" class="btn-ghost flex-1 md:flex-none text-slate-400">Dismiss</button>
-                    <a id="dl-${bubbleId}" href="#" download class="btn-primary flex-1 md:flex-none text-center px-6 py-2.5 text-xs">
-                        <i class="fas fa-download text-[10px]"></i> Download
-                    </a>
-                </div>
-            </div>
-        </div>
-    `;
-    container.prepend(wrap);
-    
-    setTimeout(() => {
-        const bar = document.getElementById(`bar-${bubbleId}`);
-        if(bar) bar.style.width = '100%';
-        let p = 0;
-        const interval = setInterval(() => {
-            p += 1;
-            const perc = document.getElementById(`perc-${bubbleId}`);
-            if(perc) perc.innerText = p + '%';
-            if(p >= 100) clearInterval(interval);
-        }, 35);
-    }, 100);
-
-    const formData = new FormData();
-    formData.append('file', activeFile);
-    
-    try {
-        const res = await fetch('/images/upload', {
-            method: 'POST',
-            headers: {'Authorization': `Bearer ${authToken}`},
-            body: formData
-        });
-        const data = await res.json();
-        if(res.ok) {
-            setTimeout(() => {
-                const resultImg = document.getElementById(`result-${bubbleId}`);
-                if(resultImg) {
-                    resultImg.src = data.download_url;
-                    resultImg.classList.replace('opacity-0', 'opacity-100');
-                }
-                const loader = document.getElementById(`loader-${bubbleId}`);
-                if(loader) loader.remove();
-                const actions = document.getElementById(`actions-${bubbleId}`);
-                if(actions) actions.classList.remove('hidden');
-                const dl = document.getElementById(`dl-${bubbleId}`);
-                if(dl) dl.href = data.download_url;
-                refreshProfile();
-                clearFile();
-            }, 4200);
-        }
-    } catch {
-        setTimeout(() => {
-            const resultImg = document.getElementById(`result-${bubbleId}`);
-            if(resultImg) {
-                resultImg.src = URL.createObjectURL(activeFile);
-                resultImg.classList.replace('opacity-0', 'opacity-100');
-            }
-            const loader = document.getElementById(`loader-${bubbleId}`);
-            if(loader) loader.remove();
-            const actions = document.getElementById(`actions-${bubbleId}`);
-            if(actions) actions.classList.remove('hidden');
-        }, 4200);
+    if (!priceValid || !ratingValid) {
+        event.preventDefault();
+        showToast('Please fix validation errors before submitting.', 'fa-triangle-exclamation');
+        return false;
     }
+
+    // Show success toast (the form will POST normally)
+    showToast('Product registration submitted successfully!', 'fa-circle-check');
+
+    // Optimistically update average price if we have current products
+    const products = globalData.products || [];
+    const newPrice = parseFloat(priceInput.value) || 0;
+    const allPrices = [...products.map(p => parseFloat(p.price) || 0), newPrice];
+    const newAvg = (allPrices.reduce((a, b) => a + b, 0) / allPrices.length).toFixed(2);
+    const avgEl = document.getElementById('stat-avg-price');
+    if (avgEl) avgEl.innerText = `$${newAvg}`;
+
+    return true; // Allow form submission
 }
 
-function logout() { localStorage.removeItem('pro_token'); window.location.reload(); }
-window.onload = () => { 
-    init3D(); 
-    if(authToken) enterApp();
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-};
+/* ============================================================
+   RESPONSIVE WINDOW HANDLER
+============================================================ */
+window.addEventListener('resize', () => {
+    if (window.innerWidth >= 1024) {
+        const overlay = document.getElementById('sidebar-overlay');
+        overlay.classList.remove('active');
+    }
+});
 </script>
 </body>
 </html>
