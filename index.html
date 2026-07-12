@@ -23,7 +23,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--paper);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden;background-image:radial-gradient(rgba(28,35,33,.035) 1px,transparent 1px);background-size:22px 22px}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;border:none;outline:none;font-family:var(--font);background:none}
 ::-webkit-scrollbar{width:8px}
@@ -37,10 +37,14 @@ header{position:sticky;top:0;z-index:400;background:rgba(245,243,234,.9);backdro
 .brand-icon{width:32px;height:32px;background:var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--paper)}
 .brand span{color:var(--muted);font-weight:500}
 nav.links{display:flex;align-items:center;gap:26px}
-nav.links a{font-size:13.5px;font-weight:600;color:var(--muted)}
+nav.links a{font-size:13.5px;font-weight:600;color:var(--muted);position:relative;padding-bottom:2px;transition:color .15s}
+nav.links a::after{content:'';position:absolute;left:0;right:100%;bottom:-2px;height:1.5px;background:var(--brass);transition:right .2s ease}
+nav.links a:hover::after{right:0}
 nav.links a:hover{color:var(--ink)}
 .nav-cta{display:flex;align-items:center;gap:9px}
-.btn{border-radius:var(--radius-sm);padding:10px 18px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;transition:all .15s}
+.btn{border-radius:var(--radius-sm);padding:10px 18px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;transition:all .15s;letter-spacing:.01em}
+.btn:active{transform:translateY(1px)}
+.btn-dark:hover,.btn-brass:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(28,35,33,.18)}
 .btn-dark{background:var(--ink);color:var(--paper)}
 .btn-dark:hover{background:var(--ink-soft)}
 .btn-outline{background:var(--surface);border:1.5px solid var(--border-strong);color:var(--ink)}
@@ -66,7 +70,7 @@ nav.links.mobile-open{display:flex;position:absolute;top:60px;left:0;right:0;bac
 .eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border-strong);border-radius:20px;padding:6px 13px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:20px}
 .eyebrow .dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-h1.hero-title{font-family:var(--display);font-size:48px;font-weight:700;line-height:1.08;letter-spacing:-.01em;margin-bottom:18px}
+h1.hero-title{font-family:var(--display);font-size:51px;font-weight:700;line-height:1.06;letter-spacing:-.015em;margin-bottom:18px}
 h1.hero-title .accent{color:var(--brass)}
 .hero-sub{font-size:16px;color:var(--muted);line-height:1.65;max-width:480px;margin-bottom:26px}
 .hero-ctas{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:16px}
@@ -113,7 +117,7 @@ h1.hero-title .accent{color:var(--brass)}
 .strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 0;background:var(--surface)}
 .strip-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px}
 .strip-item{display:flex;align-items:center;gap:10px}
-.strip-item .num{font-family:var(--display);font-size:21px;font-weight:700}
+.strip-item .num{font-family:var(--display);font-size:21px;font-weight:700;color:var(--brass-deep)}
 .strip-item .lbl{font-size:11.5px;color:var(--muted);max-width:150px;line-height:1.35}
 
 /* TRUST STRIP */
@@ -163,7 +167,8 @@ h2.sec-title{font-family:var(--display);font-size:31px;font-weight:700;letter-sp
 
 /* FEATURES */
 .feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;display:flex;gap:18px}
+.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;display:flex;gap:18px;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.feat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--border-strong)}
 .feat-ic{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .feat-card h3{font-family:var(--display);font-size:16.5px;font-weight:700;margin-bottom:8px}
 .feat-card p{font-size:13px;color:var(--muted);line-height:1.6}
@@ -183,7 +188,8 @@ h2.sec-title{font-family:var(--display);font-size:31px;font-weight:700;letter-sp
 
 /* CHANNELS */
 .chan-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.chan-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;position:relative}
+.chan-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;position:relative;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.chan-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--border-strong)}
 .chan-card .chan-step{position:absolute;top:22px;right:22px;font-family:var(--mono);font-size:11px;color:var(--muted2)}
 .chan-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:14px}
 .chan-card h4{font-family:var(--display);font-size:15.5px;font-weight:700;margin-bottom:7px}
@@ -202,8 +208,12 @@ h2.sec-title{font-family:var(--display);font-size:31px;font-weight:700;letter-sp
 .crm-list li{color:rgba(255,255,255,.85);font-size:13px;display:flex;align-items:center;gap:9px}
 .crm-list li::before{content:'✓';width:17px;height:17px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
 .crm-mock{background:var(--paper);border-radius:13px;padding:14px}
-.crm-mock-top{display:flex;gap:6px;margin-bottom:12px}
-.crm-mock-top span{width:8px;height:8px;border-radius:50%;background:var(--border-strong)}
+.crm-mock-top{display:flex;align-items:center;gap:6px;margin-bottom:12px}
+.crm-mock-top span{width:8px;height:8px;border-radius:50%}
+.crm-mock-top span:nth-child(1){background:#E4867A}
+.crm-mock-top span:nth-child(2){background:#E8C468}
+.crm-mock-top span:nth-child(3){background:#8FBF9F}
+.crm-mock-top .lbl{margin-left:6px;font-family:var(--mono);font-size:9.5px;color:var(--muted2)}
 .crm-mock-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .crm-mock-stats .s{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px}
 .crm-mock-stats .s .l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:4px}
@@ -216,7 +226,9 @@ h2.sec-title{font-family:var(--display);font-size:31px;font-weight:700;letter-sp
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
 .price-card{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:28px 24px;display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease}
 .price-card.pop{border-color:var(--brass);box-shadow:var(--shadow-lg);transform:scale(1.035);z-index:2}
-.price-badge{position:absolute;top:-12px;left:24px;background:var(--brass);color:#fff;font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:20px}
+.price-card:not(.pop):hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--border-strong)}
+.price-badge{position:absolute;top:-12px;left:24px;background:var(--brass);color:#fff;font-size:10.5px;font-weight:700;padding:4px 12px 4px 14px;border-radius:3px 20px 20px 3px;letter-spacing:.02em;box-shadow:0 3px 8px rgba(138,90,36,.35)}
+.price-badge::before{content:'';position:absolute;left:-5px;top:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-right:6px solid var(--brass-deep)}
 .price-plan{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:var(--mono)}
 .price-name{font-family:var(--display);font-size:19px;font-weight:700;margin-bottom:9px}
 .price-amt{display:flex;align-items:baseline;gap:5px;margin-bottom:6px}
@@ -263,7 +275,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
 
 <header>
   <div class="wrap nav-inner">
-    <a href="#top" class="brand"><div class="brand-icon">🍽</div>Restaurant<span>Bot</span></a>
+    <a href="#top" class="brand"><div class="brand-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F5F3EA" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M17 3c-1.5 0-3 1.5-3 4.5S15.5 12 17 12v9"/></svg></div>Restaurant<span>Bot</span></a>
     <nav class="links" id="navLinks">
       <a href="#features">Ordering</a>
       <a href="#reservations">Reservations</a>
@@ -297,7 +309,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
 
         <div class="hero-ctas">
           <a href="web.html" class="btn btn-brass btn-lg">Build your assistant →</a>
-          <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-ghost">💬 Try a live demo on WhatsApp</a>
+          <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-ghost"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Try a live demo on WhatsApp</a>
         </div>
         <div class="hero-note">Free to set up · Keep your own number · Cancel any time</div>
       </div>
@@ -305,11 +317,11 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <div class="phone">
           <div class="phone-screen">
             <div class="wa-head">
-              <div class="ic">🍽</div>
+              <div class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1C2321" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M17 3c-1.5 0-3 1.5-3 4.5S15.5 12 17 12v9"/></svg></div>
               <div><div class="nm">Your Restaurant</div><div class="st"><span class="lv"></span> Online</div></div>
             </div>
             <div class="wa-body" id="waBody"></div>
-            <div class="wa-input"><div class="fld">Type a message…</div><div class="snd">➤</div></div>
+            <div class="wa-input"><div class="fld">Type a message…</div><div class="snd"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M3 11.5 20.5 3l-6 18-4-7-7.5-2.5Z"/></svg></div></div>
           </div>
         </div>
       </div>
@@ -329,11 +341,11 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
     <div class="wrap">
       <div class="trust-label">Built for restaurants like</div>
       <div class="trust-row">
-        <div class="trust-chip"><span class="ic" style="background:var(--brass-bg)">🍢</span> Karachi Grill House</div>
-        <div class="trust-chip"><span class="ic" style="background:var(--blue-bg)">🍕</span> Slice & Co. Pizzeria</div>
-        <div class="trust-chip"><span class="ic" style="background:var(--green-bg)">🍛</span> Biryani Junction</div>
-        <div class="trust-chip"><span class="ic" style="background:var(--brass-bg)">🥘</span> The Karahi Room</div>
-        <div class="trust-chip"><span class="ic" style="background:var(--blue-bg)">☕</span> Cloud Nine Café</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--brass-bg);color:#8A5A24"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Karachi Grill House</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--blue-bg);color:#2A4C7A"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Slice & Co. Pizzeria</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--green-bg);color:#2E6B4F"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Biryani Junction</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--brass-bg);color:#8A5A24"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> The Karahi Room</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--blue-bg);color:#2A4C7A"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Cloud Nine Café</div>
       </div>
       <div class="gallery-strip">
         <div class="g-img g-tall">
@@ -426,15 +438,15 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <p class="sec-sub">Each feature is wired to a real screen in your dashboard, so what the bot promises a customer is exactly what your kitchen sees.</p>
       </div>
       <div class="feat-grid">
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--brass-bg)">📦</div><div><h3>Live order taking</h3><p>Customers pick sizes, spice levels and extras in chat, with replies in under 4 seconds. Orders land on your Live Orders board instantly.</p></div></div>
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--brass-bg)">🏷</div><div><h3>Deals, combos & promo codes</h3><p>Run combo or happy-hour deals the bot surfaces automatically, and issue coupon codes with usage limits you track from the dashboard.</p></div></div>
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--blue-bg)">🍽</div><div><h3>Smart menu browsing</h3><p>The bot suggests dishes by category and stays in sync with the menu you edit in the dashboard — no re-training, no delay.</p></div></div>
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--green-bg)">📊</div><div><h3>Built-in analytics</h3><p>See what sells, size and spice preferences, and revenue by status — no spreadsheets, no manual counting.</p></div></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--brass-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A5A24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16l-1.5 11a2 2 0 0 1-2 1.7H7.5a2 2 0 0 1-2-1.7L4 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></div><div><h3>Live order taking</h3><p>Customers pick sizes, spice levels and extras in chat, with replies in under 4 seconds. Orders land on your Live Orders board instantly.</p></div></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--brass-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A5A24" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 3.5 20 11l-8.5 8.5a2 2 0 0 1-2.8 0l-6.2-6.2a2 2 0 0 1 0-2.8L11 3.5h1.5Z"/><circle cx="15.5" cy="8.5" r="1.4" fill="#8A5A24" stroke="none"/></svg></div><div><h3>Deals, combos & promo codes</h3><p>Run combo or happy-hour deals the bot surfaces automatically, and issue coupon codes with usage limits you track from the dashboard.</p></div></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--blue-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A4C7A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"/><path d="M12 4h6.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H12"/><path d="M7 8h3M7 11.5h3M14.5 8h3M14.5 11.5h3"/></svg></div><div><h3>Smart menu browsing</h3><p>The bot suggests dishes by category and stays in sync with the menu you edit in the dashboard — no re-training, no delay.</p></div></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--green-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E6B4F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round"/></svg></div><div><h3>Built-in analytics</h3><p>See what sells, size and spice preferences, and revenue by status — no spreadsheets, no manual counting.</p></div></div>
       </div>
       <div class="feat-more">
-        <span>💬 Multilingual FAQs (EN / UR / DE)</span>
-        <span>📍 Live order tracking</span>
-        <span>🧑‍🍳 Hand off to a teammate anytime</span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3B433F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 3.5 20 11l-8.5 8.5a2 2 0 0 1-2.8 0l-6.2-6.2a2 2 0 0 1 0-2.8L11 3.5h1.5Z"/><circle cx="15.5" cy="8.5" r="1.2" fill="#3B433F" stroke="none"/></svg> Multilingual FAQs (EN / UR / DE)</span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3B433F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.2"/></svg> Live order tracking</span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3B433F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h8M13 8l4 4-4 4"/><circle cx="6" cy="12" r="2.5"/></svg> Hand off to a teammate anytime</span>
       </div>
     </div>
   </section>
@@ -541,7 +553,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
       <div class="chan-wrap">
         <div class="chan-card reveal">
           <span class="chan-step">Step 1</span>
-          <div class="chan-ic" style="background:#DCF8C6;color:#1DA851">💬</div>
+          <div class="chan-ic" style="background:#DCF8C6"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1DA851" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
           <h4>WhatsApp Business number</h4>
           <p>Your customers message the number they already have saved. Nothing changes for them except how fast it's answered.</p>
           <ul>
@@ -553,7 +565,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         </div>
         <div class="chan-card reveal">
           <span class="chan-step">Step 2</span>
-          <div class="chan-ic" style="background:var(--blue-bg)">🌐</div>
+          <div class="chan-ic" style="background:var(--blue-bg)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2A4C7A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
           <h4>Website chat widget (Web App)</h4>
           <p>The same assistant as a chat bubble on your own restaurant website — one line of code, same brain, same menu.</p>
           <ul>
@@ -582,7 +594,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
           <a href="crm.html" class="btn btn-brass btn-lg">Open your dashboard →</a>
         </div>
         <div class="crm-mock">
-          <div class="crm-mock-top"><span></span><span></span><span></span></div>
+          <div class="crm-mock-top"><span></span><span></span><span></span><span class="lbl">Live Orders</span></div>
           <div class="crm-mock-stats">
             <div class="s"><div class="l">Pending</div><div class="v">3</div></div>
             <div class="s"><div class="l">Revenue</div><div class="v">PKR 8.4K</div></div>
@@ -674,7 +686,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <p>Enter your restaurant details, connect your WhatsApp number, and add your menu — no code required.</p>
         <div class="final-ctas">
           <a href="web.html" class="btn btn-brass btn-lg">Build your assistant →</a>
-          <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-outline btn-lg">💬 Try a live demo</a>
+          <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-outline btn-lg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Try a live demo</a>
         </div>
       </div>
     </div>
@@ -686,7 +698,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <a href="#top" class="brand"><div class="brand-icon">🍽</div>Restaurant<span>Bot</span></a>
+        <a href="#top" class="brand"><div class="brand-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F5F3EA" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M17 3c-1.5 0-3 1.5-3 4.5S15.5 12 17 12v9"/></svg></div>Restaurant<span>Bot</span></a>
         <p>Connect your WhatsApp number and website, then manage every order from one dashboard.</p>
       </div>
       <div class="foot-col">
