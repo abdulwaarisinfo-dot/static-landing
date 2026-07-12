@@ -4,26 +4,26 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>RestaurantBot — WhatsApp ordering assistant for restaurants</title>
-<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --ink:#122420;--ink-soft:#37493F;
-  --paper:#F3F0E6;--surface:#FFFFFF;--surface2:#E9E6D6;
-  --border:#DFDACA;--border-strong:#C7C1A9;
-  --teal:#0B6E58;--teal-deep:#075441;--teal-bg:#E3F1EC;
-  --stamp:#B9432B;--stamp-bg:#F7E9E3;
-  --blue:#2A4C7A;--blue-bg:#EAEFF6;
+  --bg:#F7F6F3;--surface:#FFFFFF;--surface2:#F0EFE9;--border:#E4E2D8;--border-strong:#D2CFC1;
+  --accent:#1A1A18;--accent2:#D4621A;--accent2-bg:#FBEADD;
+  --green:#1C7A4A;--green-deep:#155C38;--green-bg:#E9F5EE;
+  --red:#C42B2B;--red-bg:#FDEEEE;--blue:#1A4FD6;--blue-bg:#EAF0FD;
+  --amber:#A05A0D;--amber-bg:#FEF5E7;--purple:#5B21B6;--purple-bg:#F1EDFD;
+  --pink:#B5136F;--pink-bg:#FDE8F3;
   --wa:#25D366;--wa-deep:#1DA851;--wa-dark:#075E54;
-  --muted:#5E695F;--muted2:#7C8578;
-  --font:'Inter',sans-serif;--display:'Zilla Slab',serif;--mono:'DM Mono',monospace;
-  --radius:14px;--radius-sm:9px;
-  --shadow:0 1px 2px rgba(18,36,32,.07);
-  --shadow-md:0 8px 22px rgba(18,36,32,.09);
-  --shadow-lg:0 20px 48px rgba(18,36,32,.15);
+  --text:#1A1A18;--muted:#6B6A63;--muted2:#A29F95;
+  --font:'DM Sans',sans-serif;--display:'Syne',sans-serif;--mono:'DM Mono',monospace;
+  --radius:16px;--radius-sm:10px;--radius-xs:6px;
+  --shadow:0 1px 3px rgba(26,26,24,.05),0 1px 2px rgba(26,26,24,.03);
+  --shadow-md:0 4px 16px rgba(26,26,24,.07),0 2px 6px rgba(26,26,24,.04);
+  --shadow-lg:0 20px 48px rgba(26,26,24,.12),0 4px 14px rgba(26,26,24,.05);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden;background-image:radial-gradient(rgba(18,36,32,.035) 1px,transparent 1px);background-size:22px 22px}
+body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;border:none;outline:none;font-family:var(--font);background:none}
 ::-webkit-scrollbar{width:8px}
@@ -31,31 +31,30 @@ button{cursor:pointer;border:none;outline:none;font-family:var(--font);backgroun
 .wrap{max-width:1140px;margin:0 auto;padding:0 32px}
 @media(max-width:640px){.wrap{padding:0 18px}}
 
-header{position:sticky;top:0;z-index:400;background:rgba(243,240,230,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+header{position:sticky;top:0;z-index:400;background:rgba(247,246,243,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 0;position:relative}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:18px;font-weight:700}
-.brand-icon{width:32px;height:32px;background:var(--wa-dark);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
-.brand span{color:var(--muted);font-weight:500}
+.brand-icon{width:32px;height:32px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+.brand span{color:var(--muted);font-weight:400}
 nav.links{display:flex;align-items:center;gap:26px}
-nav.links a{font-size:13.5px;font-weight:600;color:var(--muted);position:relative;padding-bottom:2px;transition:color .15s}
-nav.links a::after{content:'';position:absolute;left:0;right:100%;bottom:-2px;height:1.5px;background:var(--teal);transition:right .2s ease}
+nav.links a{font-size:13px;font-weight:600;color:var(--muted);position:relative;padding-bottom:2px;transition:color .15s}
+nav.links a::after{content:'';position:absolute;left:0;right:100%;bottom:-2px;height:1.5px;background:var(--accent2);transition:right .2s ease}
 nav.links a:hover::after{right:0}
-nav.links a:hover{color:var(--ink)}
+nav.links a:hover{color:var(--text)}
 .nav-cta{display:flex;align-items:center;gap:9px}
-.btn{border-radius:var(--radius-sm);padding:10px 18px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;transition:all .15s;letter-spacing:.01em}
-.btn:active{transform:translateY(1px)}
-.btn-dark:hover,.btn-teal:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(18,36,32,.2)}
-.btn-dark{background:var(--ink);color:var(--paper)}
-.btn-dark:hover{background:var(--ink-soft)}
-.btn-outline{background:var(--surface);border:1.5px solid var(--border-strong);color:var(--ink)}
-.btn-outline:hover{border-color:var(--ink)}
-.btn-ghost{background:transparent;border:none;color:var(--ink-soft);padding:10px 6px}
-.btn-ghost:hover{color:var(--ink)}
-.btn-teal{background:var(--teal);color:#fff}
-.btn-teal:hover{background:var(--teal-deep)}
-.btn-lg{padding:13px 24px;font-size:14px;border-radius:10px}
-.menu-toggle{display:none;width:36px;height:36px;border-radius:8px;background:var(--surface);border:1px solid var(--border-strong);align-items:center;justify-content:center;position:relative;flex-shrink:0}
-.menu-toggle span{position:absolute;width:16px;height:1.6px;background:var(--ink);border-radius:2px;transition:transform .2s ease,opacity .2s ease}
+.btn{border-radius:var(--radius-sm);padding:10px 18px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;transition:all .15s;letter-spacing:.01em;font-family:var(--display)}
+.btn:active{transform:scale(.98)}
+.btn-dark:hover,.btn-teal:hover{background:#2d2d2a}
+.btn-dark{background:var(--accent);color:#fff;box-shadow:var(--shadow)}
+.btn-outline{background:var(--surface);border:1.5px solid var(--border);color:var(--text);box-shadow:var(--shadow)}
+.btn-outline:hover{border-color:var(--accent)}
+.btn-ghost{background:transparent;border:none;color:var(--muted);padding:10px 6px;font-family:var(--font);font-weight:600}
+.btn-ghost:hover{color:var(--text)}
+.btn-teal{background:var(--green);color:#fff;box-shadow:var(--shadow)}
+.btn-teal:hover{background:var(--green-deep)}
+.btn-lg{padding:13px 24px;font-size:14px;border-radius:var(--radius-sm)}
+.menu-toggle{display:none;width:36px;height:36px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border-strong);align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.menu-toggle span{position:absolute;width:16px;height:1.6px;background:var(--accent);border-radius:2px;transition:transform .2s ease,opacity .2s ease}
 .menu-toggle span:nth-child(1){transform:translateY(-4px)}
 .menu-toggle span:nth-child(3){transform:translateY(4px)}
 .menu-toggle.open span:nth-child(1){transform:translateY(0) rotate(45deg)}
@@ -67,28 +66,28 @@ nav.links.mobile-open{display:flex;position:absolute;top:60px;left:0;right:0;bac
 /* HERO */
 .hero{padding:64px 0 40px}
 .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:52px;align-items:center}
-.eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border-strong);border-radius:20px;padding:6px 13px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:20px}
-.eyebrow .dot{width:6px;height:6px;background:var(--wa-deep);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border-strong);border-radius:20px;padding:6px 13px;font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:20px;font-family:var(--mono)}
+.eyebrow .dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-h1.hero-title{font-family:var(--display);font-size:50px;font-weight:700;line-height:1.08;letter-spacing:-.01em;margin-bottom:18px}
-h1.hero-title .accent{color:var(--teal)}
+h1.hero-title{font-family:var(--display);font-size:50px;font-weight:800;line-height:1.06;letter-spacing:-.02em;margin-bottom:18px}
+h1.hero-title .accent{color:var(--accent2)}
 .hero-sub{font-size:16px;color:var(--muted);line-height:1.65;max-width:480px;margin-bottom:26px}
 .hero-ctas{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:16px}
-.hero-note{font-size:12px;color:var(--muted2)}
+.hero-note{font-size:12px;color:var(--muted2);font-family:var(--mono)}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:36px}h1.hero-title{font-size:33px}}
 
 .path-chips{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:24px}
-.path-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-strong);border-radius:11px;padding:8px 13px 8px 10px}
-.path-chip .n{width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10.5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.path-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 13px 8px 10px;box-shadow:var(--shadow)}
+.path-chip .n{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--mono);font-size:10.5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .path-chip .t{font-size:12.5px;font-weight:600}
 .path-arrow{color:var(--muted2);font-size:14px}
 
 .phone-wrap{display:flex;justify-content:center}
-.phone{width:270px;background:#12201D;border-radius:32px;padding:10px;box-shadow:var(--shadow-lg)}
+.phone{width:270px;background:var(--accent);border-radius:32px;padding:10px;box-shadow:var(--shadow-lg)}
 .phone-screen{background:#E7E3D5;border-radius:22px;overflow:hidden;height:440px;display:flex;flex-direction:column}
 .wa-head{background:var(--wa-dark);padding:13px 13px 10px;display:flex;align-items:center;gap:9px}
 .wa-head .ic{width:28px;height:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
-.wa-head .nm{font-size:12.5px;font-weight:700;color:#fff}
+.wa-head .nm{font-size:12.5px;font-weight:700;color:#fff;font-family:var(--display)}
 .wa-head .st{font-size:10px;color:#B2EFD4;display:flex;align-items:center;gap:5px}
 .wa-head .st .lv{width:5px;height:5px;background:#B2EFD4;border-radius:50%;animation:pulse 2s ease-in-out infinite}
 .wa-body{flex:1;padding:13px 11px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
@@ -116,126 +115,119 @@ h1.hero-title .accent{color:var(--teal)}
 .strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 0;background:var(--surface)}
 .strip-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px}
 .strip-item{display:flex;align-items:center;gap:10px}
-.strip-item .num{font-family:var(--display);font-size:21px;font-weight:700;color:var(--teal-deep)}
+.strip-item .num{font-family:var(--display);font-size:21px;font-weight:800;color:var(--green)}
 .strip-item .lbl{font-size:11.5px;color:var(--muted);max-width:150px;line-height:1.35}
 
 /* TRUST STRIP */
 .trust{padding:34px 0;border-bottom:1px solid var(--border)}
-.trust-label{font-size:11px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;text-align:center;margin-bottom:18px}
+.trust-label{font-size:10.5px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;text-align:center;margin-bottom:18px;font-family:var(--mono)}
 .trust-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
-.trust-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 14px 7px 10px;font-size:12.5px;font-weight:600;color:var(--ink-soft)}
+.trust-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 14px 7px 10px;font-size:12.5px;font-weight:600;color:var(--text);box-shadow:var(--shadow)}
 .trust-chip .ic{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
 
 section{padding:80px 0}
 @media(max-width:640px){section{padding:52px 0}}
 .sec-head{max-width:600px;margin-bottom:44px}
-.sec-tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--teal-deep);text-transform:uppercase;letter-spacing:.09em;margin-bottom:12px;background:var(--teal-bg);border-radius:20px;padding:5px 12px 5px 9px}
-.sec-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal)}
-h2.sec-title{font-family:var(--display);font-size:31px;font-weight:700;letter-spacing:-.005em;line-height:1.18;margin-bottom:13px}
+.sec-tag{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;color:var(--green-deep);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;background:var(--green-bg);border-radius:20px;padding:5px 12px 5px 9px;font-family:var(--mono)}
+.sec-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green)}
+h2.sec-title{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-.01em;line-height:1.16;margin-bottom:13px}
 .sec-sub{font-size:14.5px;color:var(--muted);line-height:1.65}
 .sec-head.center{margin:0 auto 44px;text-align:center}
 .sec-head.center .sec-tag{justify-content:center}
 
 /* PHOTO GALLERY STRIP */
 .gallery-strip{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:14px;margin-top:28px}
-.gallery-strip .g-img{border-radius:16px;overflow:hidden;position:relative;box-shadow:var(--shadow-md);background:var(--surface2)}
+.gallery-strip .g-img{border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:var(--shadow-md);background:var(--surface2);border:1px solid var(--border)}
 .gallery-strip .g-img img{width:100%;height:100%;object-fit:cover;display:block}
 .gallery-strip .g-tall{grid-row:span 2}
-.g-img .g-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;background:linear-gradient(0deg,rgba(11,26,22,.68),transparent);color:#fff;font-size:12px;font-weight:600}
+.g-img .g-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;background:linear-gradient(0deg,rgba(26,26,24,.7),transparent);color:#fff;font-size:12px;font-weight:600;font-family:var(--display)}
 @media(max-width:800px){.gallery-strip{grid-template-columns:1fr 1fr}.gallery-strip .g-tall{grid-row:span 1}}
 @media(max-width:560px){.gallery-strip{grid-template-columns:1fr}}
 
 /* RESERVATIONS SECTION */
 .resv-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
 .resv-photos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.resv-photos .p1{grid-column:1/3;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-md)}
-.resv-photos .p2,.resv-photos .p3{border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.resv-photos .p1{grid-column:1/3;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--border)}
+.resv-photos .p2,.resv-photos .p3{border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border)}
 .resv-photos img{width:100%;height:100%;object-fit:cover;display:block}
 .resv-photos .p1 img{height:220px}
 .resv-photos .p2 img,.resv-photos .p3 img{height:140px}
 .resv-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin:22px 0 26px}
-.resv-list li{display:flex;gap:12px;font-size:13.5px;color:var(--ink-soft);line-height:1.55}
-.resv-list .rn{font-family:var(--mono);font-size:11px;color:var(--teal-deep);background:var(--teal-bg);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
-.resv-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:16px;box-shadow:var(--shadow)}
+.resv-list li{display:flex;gap:12px;font-size:13.5px;color:var(--text);line-height:1.55}
+.resv-list .rn{font-family:var(--mono);font-size:11px;color:var(--green-deep);background:var(--green-bg);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
+.resv-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:16px;box-shadow:var(--shadow)}
 .resv-card .rc-l{font-size:12.5px;color:var(--muted)}
 .resv-card .rc-v{font-family:var(--display);font-size:15px;font-weight:700}
 @media(max-width:900px){.resv-grid{grid-template-columns:1fr;gap:30px}}
 
 /* FEATURES */
 .feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;display:flex;gap:18px;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
-.feat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--border-strong)}
-.feat-ic{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.feat-card h3{font-family:var(--display);font-size:16.5px;font-weight:700;margin-bottom:8px}
+.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:26px;display:flex;gap:18px;box-shadow:var(--shadow);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.feat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--border-strong)}
+.feat-ic{width:40px;height:40px;border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.feat-card h3{font-family:var(--display);font-size:16px;font-weight:700;margin-bottom:8px}
 .feat-card p{font-size:13px;color:var(--muted);line-height:1.6}
 .feat-more{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
-.feat-more span{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:6px 13px;font-size:12px;font-weight:600;color:var(--ink-soft)}
+.feat-more span{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:6px 13px;font-size:12px;font-weight:600;color:var(--text)}
 @media(max-width:700px){.feat-grid{grid-template-columns:1fr}}
 
-/* SETUP SEQUENCE — the one place numbering is real */
+/* SETUP SEQUENCE */
 .flow-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
 .flow-row::before{content:'';position:absolute;top:21px;left:11%;right:11%;height:1.5px;background:repeating-linear-gradient(90deg,var(--border-strong) 0 8px,transparent 8px 14px)}
 .flow-step{position:relative}
-.flow-num{width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.flow-num{width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--mono);font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 .flow-step h4{font-family:var(--display);font-size:14px;font-weight:700;margin-bottom:6px}
 .flow-step p{font-size:12.5px;color:var(--muted);line-height:1.6}
 @media(max-width:900px){.flow-row{grid-template-columns:1fr 1fr;gap:30px 20px}.flow-row::before{display:none}}
 @media(max-width:560px){.flow-row{grid-template-columns:1fr}}
 
-/* CHANNELS — real 2-step order, kept */
+/* CHANNELS */
 .chan-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.chan-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;position:relative;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
-.chan-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--border-strong)}
+.chan-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;position:relative;box-shadow:var(--shadow);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.chan-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--border-strong)}
 .chan-card .chan-step{position:absolute;top:22px;right:22px;font-family:var(--mono);font-size:11px;color:var(--muted2)}
-.chan-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:14px}
+.chan-ic{width:42px;height:42px;border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:14px}
 .chan-card h4{font-family:var(--display);font-size:15.5px;font-weight:700;margin-bottom:7px}
 .chan-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
 .chan-card ul{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
-.chan-card ul li{font-size:12.5px;color:var(--ink-soft);display:flex;gap:8px}
+.chan-card ul li{font-size:12.5px;color:var(--text);display:flex;gap:8px}
 .chan-card ul li::before{content:'—';color:var(--muted2)}
-.chan-link{font-size:12.5px;font-weight:700;color:var(--teal-deep)}
+.chan-link{font-size:12.5px;font-weight:700;color:var(--green-deep)}
 @media(max-width:700px){.chan-wrap{grid-template-columns:1fr}}
 
-/* SIGNATURE: order-ticket / receipt component, perforated top & bottom edge */
-.ticket{position:relative;background:var(--surface);border:1.5px solid var(--border-strong);border-radius:4px;padding:24px 22px}
-.ticket::before,.ticket::after{content:'';position:absolute;left:0;right:0;height:9px;background-image:radial-gradient(circle at 10px 0, transparent 9px, var(--tickbg,var(--paper)) 9px);background-size:20px 9px;background-repeat:repeat-x}
-.ticket::before{top:-1px;transform:rotate(180deg)}
-.ticket::after{bottom:-1px}
-
-/* DASHBOARD CALLOUT — restyled as a receipt printout on a dark counter */
-.crm-block{background:var(--ink);border-radius:20px;padding:50px 44px;display:grid;grid-template-columns:1fr .85fr;gap:36px;align-items:center}
-.crm-block h2{color:#fff;font-family:var(--display);font-size:26px;font-weight:700;margin-bottom:13px;letter-spacing:-.005em}
-.crm-block p{color:rgba(255,255,255,.62);font-size:14px;line-height:1.65;margin-bottom:22px;max-width:420px}
+/* DASHBOARD CALLOUT — styled like the CRM's own dark stat card */
+.crm-block{background:var(--accent);border-radius:20px;padding:50px 44px;display:grid;grid-template-columns:1fr .85fr;gap:36px;align-items:center}
+.crm-block h2{color:#fff;font-family:var(--display);font-size:26px;font-weight:800;margin-bottom:13px;letter-spacing:-.01em}
+.crm-block p{color:rgba(255,255,255,.6);font-size:14px;line-height:1.65;margin-bottom:22px;max-width:420px}
 .crm-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px}
 .crm-list li{color:rgba(255,255,255,.85);font-size:13px;display:flex;align-items:center;gap:9px}
 .crm-list li::before{content:'✓';width:17px;height:17px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
-.crm-mock{--tickbg:var(--ink);background:#0E1B18;padding:16px;font-family:var(--mono);color:#fff}
-.crm-mock-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;border-bottom:1px dashed rgba(255,255,255,.25);padding-bottom:10px}
-.crm-mock-top .lbl{font-size:10.5px;letter-spacing:.06em;color:rgba(255,255,255,.55);text-transform:uppercase}
+.crm-mock{background:#0E0E0C;padding:18px;font-family:var(--mono);color:#fff;border-radius:var(--radius);border:1px solid rgba(255,255,255,.08)}
+.crm-mock-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;border-bottom:1px dashed rgba(255,255,255,.2);padding-bottom:10px}
+.crm-mock-top .lbl{font-size:10px;letter-spacing:.06em;color:rgba(255,255,255,.5);text-transform:uppercase}
 .crm-mock-top .stamp{font-size:9.5px;font-weight:700;color:var(--wa);border:1px solid var(--wa);border-radius:20px;padding:2px 9px;font-family:var(--font)}
 .crm-mock-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .crm-mock-stats .s .l{font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
 .crm-mock-stats .s .v{font-family:var(--display);font-size:17px;font-weight:700;color:#fff}
-.crm-mock-row{display:flex;justify-content:space-between;padding:6px 0;font-size:10.5px;border-top:1px dotted rgba(255,255,255,.2)}
+.crm-mock-row{display:flex;justify-content:space-between;padding:6px 0;font-size:10.5px;border-top:1px dotted rgba(255,255,255,.15)}
 .crm-mock-row .pl{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(255,255,255,.12);color:#fff;font-family:var(--font)}
 @media(max-width:900px){.crm-block{grid-template-columns:1fr;padding:34px 22px}.crm-mock{display:none}}
 
 /* PRICING */
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
-.price-card{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:28px 24px;display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease}
-.price-card.pop{--tickbg:var(--paper);border-color:var(--teal);box-shadow:var(--shadow-lg);transform:scale(1.035);z-index:2;border-radius:4px}
-.price-card.pop::before,.price-card.pop::after{background-image:radial-gradient(circle at 10px 0, transparent 9px, var(--paper) 9px)}
-.price-card:not(.pop):hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--border-strong)}
-.price-badge{position:absolute;top:-12px;left:24px;background:var(--stamp);color:#fff;font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.03em;box-shadow:0 3px 8px rgba(185,67,43,.35);transform:rotate(-2deg);font-family:var(--mono)}
-.price-plan{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:var(--mono)}
-.price-name{font-family:var(--display);font-size:19px;font-weight:700;margin-bottom:9px}
+.price-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px 24px;display:flex;flex-direction:column;position:relative;box-shadow:var(--shadow);transition:transform .2s ease,box-shadow .2s ease}
+.price-card.pop{border-color:var(--accent2);box-shadow:var(--shadow-lg);transform:scale(1.035);z-index:2}
+.price-card:not(.pop):hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--border-strong)}
+.price-badge{position:absolute;top:-12px;left:24px;background:var(--accent2);color:#fff;font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.03em;box-shadow:0 3px 8px rgba(212,98,26,.35);font-family:var(--mono)}
+.price-plan{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:var(--mono)}
+.price-name{font-family:var(--display);font-size:19px;font-weight:800;margin-bottom:9px}
 .price-amt{display:flex;align-items:baseline;gap:5px;margin-bottom:6px}
-.price-amt .n{font-family:var(--display);font-size:32px;font-weight:800;letter-spacing:-.01em}
+.price-amt .n{font-family:var(--display);font-size:31px;font-weight:800;letter-spacing:-.01em}
 .price-amt .u{font-size:12px;color:var(--muted)}
 .price-desc{font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:20px;min-height:36px}
 .price-feats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px;flex:1}
 .price-feats li{font-size:13px;display:flex;align-items:flex-start;gap:9px}
-.price-feats li::before{content:'✓';width:16px;height:16px;background:var(--teal-bg);color:var(--teal-deep);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:2px;font-weight:700}
+.price-feats li::before{content:'✓';width:16px;height:16px;background:var(--green-bg);color:var(--green-deep);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:2px;font-weight:700}
 .price-card .btn{width:100%}
 @media(max-width:900px){.price-grid{grid-template-columns:1fr;max-width:380px;margin:0 auto}.price-card.pop{transform:none}}
 
@@ -248,17 +240,17 @@ h2.sec-title{font-family:var(--display);font-size:31px;font-weight:700;letter-sp
 .faq-q[open] summary::after{content:'–'}
 .faq-q .a{padding:0 19px 17px;font-size:13px;color:var(--muted);line-height:1.65}
 
-.final-cta{text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:56px 30px}
-.final-cta h2{font-family:var(--display);font-size:28px;font-weight:700;margin-bottom:13px}
+.final-cta{text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:56px 30px;box-shadow:var(--shadow)}
+.final-cta h2{font-family:var(--display);font-size:27px;font-weight:800;margin-bottom:13px}
 .final-cta p{font-size:14px;color:var(--muted);max-width:440px;margin:0 auto 24px}
 .final-ctas{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 
 footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--surface)}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;margin-bottom:32px}
 .foot-brand p{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:9px;max-width:230px}
-.foot-col h5{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:13px}
-.foot-col a{display:block;font-size:13px;color:var(--ink);margin-bottom:9px}
-.foot-col a:hover{color:var(--teal)}
+.foot-col h5{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:13px;font-family:var(--mono)}
+.foot-col a{display:block;font-size:13px;color:var(--text);margin-bottom:9px}
+.foot-col a:hover{color:var(--accent2)}
 .foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:20px;border-top:1px solid var(--border);font-size:11.5px;color:var(--muted2)}
 @media(max-width:800px){.foot-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.foot-grid{grid-template-columns:1fr}}
@@ -266,7 +258,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
 .reveal{opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease}
 .reveal.in{opacity:1;transform:translateY(0)}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.bubble,.chips,.order-card-mini,.typing-row{animation:none;opacity:1;transform:none}.eyebrow .dot,.wa-head .st .lv{animation:none}}
-:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -315,7 +307,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <div class="phone">
           <div class="phone-screen">
             <div class="wa-head">
-              <div class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#12201D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M17 3c-1.5 0-3 1.5-3 4.5S15.5 12 17 12v9"/></svg></div>
+              <div class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M17 3c-1.5 0-3 1.5-3 4.5S15.5 12 17 12v9"/></svg></div>
               <div><div class="nm">Your Restaurant</div><div class="st"><span class="lv"></span> Online</div></div>
             </div>
             <div class="wa-body" id="waBody"></div>
@@ -339,40 +331,40 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
     <div class="wrap">
       <div class="trust-label">Built for restaurants like</div>
       <div class="trust-row">
-        <div class="trust-chip"><span class="ic" style="background:var(--teal-bg);color:var(--teal-deep)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Karachi Grill House</div>
-        <div class="trust-chip"><span class="ic" style="background:var(--blue-bg);color:#2A4C7A"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Slice & Co. Pizzeria</div>
-        <div class="trust-chip"><span class="ic" style="background:var(--stamp-bg);color:var(--stamp)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Biryani Junction</div>
-        <div class="trust-chip"><span class="ic" style="background:var(--teal-bg);color:var(--teal-deep)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> The Karahi Room</div>
-        <div class="trust-chip"><span class="ic" style="background:var(--blue-bg);color:#2A4C7A"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Cloud Nine Café</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--green-bg);color:var(--green-deep)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Karachi Grill House</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--blue-bg);color:#1A4FD6"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Slice & Co. Pizzeria</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--pink-bg);color:var(--pink)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Biryani Junction</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--amber-bg);color:var(--amber)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> The Karahi Room</div>
+        <div class="trust-chip"><span class="ic" style="background:var(--purple-bg);color:var(--purple)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Cloud Nine Café</div>
       </div>
       <div class="gallery-strip">
         <div class="g-img g-tall">
           <svg viewBox="0 0 500 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dine-in floor with tables set for service">
-            <rect width="500" height="560" fill="#E7F1EC"/>
-            <rect x="0" y="400" width="500" height="160" fill="#DCEAE3"/>
-            <g opacity=".5" stroke="#B7CCC2" stroke-width="1.5">
+            <rect width="500" height="560" fill="#F0EFE9"/>
+            <rect x="0" y="400" width="500" height="160" fill="#E4E2D8"/>
+            <g opacity=".5" stroke="#D2CFC1" stroke-width="1.5">
               <line x1="0" y1="60" x2="500" y2="60"/><line x1="0" y1="120" x2="500" y2="120"/>
               <line x1="0" y1="180" x2="500" y2="180"/><line x1="0" y1="240" x2="500" y2="240"/>
               <line x1="0" y1="300" x2="500" y2="300"/><line x1="0" y1="360" x2="500" y2="360"/>
             </g>
-            <ellipse cx="150" cy="330" rx="95" ry="30" fill="#12201D" opacity=".07"/>
-            <ellipse cx="150" cy="300" rx="95" ry="60" fill="#FFFFFF" stroke="#C7C1A9" stroke-width="2"/>
-            <ellipse cx="150" cy="300" rx="62" ry="38" fill="#F3F0E6" stroke="#DFDACA" stroke-width="1.5"/>
-            <rect x="128" y="278" width="44" height="30" rx="4" fill="#FFFFFF" stroke="#0B6E58" stroke-width="1.5"/>
-            <text x="150" y="298" font-family="'Zilla Slab',serif" font-size="9" font-weight="700" fill="#075441" text-anchor="middle">RESERVED</text>
-            <circle cx="90" cy="290" r="6" fill="#0B6E58" opacity=".8"/>
-            <circle cx="210" cy="290" r="6" fill="#0B6E58" opacity=".8"/>
-            <g stroke="#37493F" stroke-width="5" stroke-linecap="round">
+            <ellipse cx="150" cy="330" rx="95" ry="30" fill="#1A1A18" opacity=".07"/>
+            <ellipse cx="150" cy="300" rx="95" ry="60" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
+            <ellipse cx="150" cy="300" rx="62" ry="38" fill="#F7F6F3" stroke="#E4E2D8" stroke-width="1.5"/>
+            <rect x="128" y="278" width="44" height="30" rx="4" fill="#FFFFFF" stroke="#1C7A4A" stroke-width="1.5"/>
+            <text x="150" y="298" font-family="'Syne',sans-serif" font-size="9" font-weight="700" fill="#155C38" text-anchor="middle">RESERVED</text>
+            <circle cx="90" cy="290" r="6" fill="#1C7A4A" opacity=".8"/>
+            <circle cx="210" cy="290" r="6" fill="#1C7A4A" opacity=".8"/>
+            <g stroke="#1A1A18" stroke-width="5" stroke-linecap="round">
               <line x1="72" y1="340" x2="70" y2="400"/><line x1="228" y1="340" x2="230" y2="400"/>
             </g>
-            <ellipse cx="360" cy="180" rx="80" ry="26" fill="#12201D" opacity=".07"/>
-            <ellipse cx="360" cy="155" rx="80" ry="50" fill="#FFFFFF" stroke="#C7C1A9" stroke-width="2"/>
-            <circle cx="330" cy="150" r="9" fill="#B9432B" opacity=".85"/>
-            <circle cx="390" cy="150" r="9" fill="#0B6E58" opacity=".85"/>
-            <g stroke="#37493F" stroke-width="5" stroke-linecap="round">
+            <ellipse cx="360" cy="180" rx="80" ry="26" fill="#1A1A18" opacity=".07"/>
+            <ellipse cx="360" cy="155" rx="80" ry="50" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
+            <circle cx="330" cy="150" r="9" fill="#B5136F" opacity=".85"/>
+            <circle cx="390" cy="150" r="9" fill="#1C7A4A" opacity=".85"/>
+            <g stroke="#1A1A18" stroke-width="5" stroke-linecap="round">
               <line x1="300" y1="195" x2="298" y2="240"/><line x1="420" y1="195" x2="422" y2="240"/>
             </g>
-            <g fill="none" stroke="#37493F" stroke-width="2.5">
+            <g fill="none" stroke="#1A1A18" stroke-width="2.5">
               <rect x="40" y="470" width="70" height="40" rx="5"/>
               <rect x="180" y="480" width="70" height="40" rx="5"/>
               <rect x="330" y="465" width="70" height="40" rx="5"/>
@@ -382,35 +374,35 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         </div>
         <div class="g-img">
           <svg viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kitchen plating a finished dish">
-            <rect width="460" height="300" fill="#12201D"/>
-            <ellipse cx="230" cy="185" rx="130" ry="72" fill="#F3F0E6"/>
+            <rect width="460" height="300" fill="#1A1A18"/>
+            <ellipse cx="230" cy="185" rx="130" ry="72" fill="#F7F6F3"/>
             <ellipse cx="230" cy="180" rx="92" ry="48" fill="#FFFFFF"/>
-            <ellipse cx="230" cy="176" rx="52" ry="26" fill="#B9432B" opacity=".88"/>
-            <ellipse cx="215" cy="170" rx="18" ry="9" fill="#0B6E58" opacity=".8"/>
-            <ellipse cx="252" cy="182" rx="12" ry="6" fill="#F3F0E6"/>
-            <g stroke="#F3F0E6" stroke-width="5" stroke-linecap="round" opacity=".55">
+            <ellipse cx="230" cy="176" rx="52" ry="26" fill="#D4621A" opacity=".88"/>
+            <ellipse cx="215" cy="170" rx="18" ry="9" fill="#1C7A4A" opacity=".8"/>
+            <ellipse cx="252" cy="182" rx="12" ry="6" fill="#F7F6F3"/>
+            <g stroke="#F7F6F3" stroke-width="5" stroke-linecap="round" opacity=".55">
               <path d="M205 95 q-8 -24 4 -36" fill="none"/>
               <path d="M228 90 q-4 -26 10 -36" fill="none"/>
               <path d="M251 96 q0 -24 12 -32" fill="none"/>
             </g>
-            <g fill="none" stroke="#F3F0E6" stroke-width="3" opacity=".9">
+            <g fill="none" stroke="#F7F6F3" stroke-width="3" opacity=".9">
               <line x1="90" y1="230" x2="90" y2="150"/>
               <path d="M84 150 v20 M90 150 v20 M96 150 v20"/>
             </g>
-            <path d="M356 150 q10 40 -6 70" fill="none" stroke="#F3F0E6" stroke-width="3" opacity=".9"/>
+            <path d="M356 150 q10 40 -6 70" fill="none" stroke="#F7F6F3" stroke-width="3" opacity=".9"/>
           </svg>
           <span class="g-cap">Kitchen plating</span>
         </div>
         <div class="g-img">
           <svg viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bowl of biryani menu item">
-            <rect width="460" height="300" fill="#F7E9E3"/>
-            <ellipse cx="230" cy="196" rx="132" ry="64" fill="#FFFFFF" stroke="#C7C1A9" stroke-width="2"/>
-            <ellipse cx="230" cy="182" rx="92" ry="42" fill="#F3F0E6" stroke="#DFDACA" stroke-width="1.5"/>
-            <ellipse cx="230" cy="178" rx="62" ry="27" fill="#B9432B"/>
-            <ellipse cx="205" cy="170" rx="10" ry="6" fill="#0B6E58" opacity=".85"/>
-            <ellipse cx="250" cy="176" rx="8" ry="5" fill="#F3F0E6"/>
-            <ellipse cx="225" cy="188" rx="9" ry="5" fill="#F3F0E6" opacity=".8"/>
-            <g stroke="#B9432B" stroke-width="5" stroke-linecap="round" opacity=".5">
+            <rect width="460" height="300" fill="#FDE8F3"/>
+            <ellipse cx="230" cy="196" rx="132" ry="64" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
+            <ellipse cx="230" cy="182" rx="92" ry="42" fill="#F7F6F3" stroke="#E4E2D8" stroke-width="1.5"/>
+            <ellipse cx="230" cy="178" rx="62" ry="27" fill="#D4621A"/>
+            <ellipse cx="205" cy="170" rx="10" ry="6" fill="#1C7A4A" opacity=".85"/>
+            <ellipse cx="250" cy="176" rx="8" ry="5" fill="#F7F6F3"/>
+            <ellipse cx="225" cy="188" rx="9" ry="5" fill="#F7F6F3" opacity=".8"/>
+            <g stroke="#D4621A" stroke-width="5" stroke-linecap="round" opacity=".5">
               <path d="M198 100 q-6 -18 4 -28" fill="none"/>
               <path d="M228 96 q0 -20 8 -28" fill="none"/>
               <path d="M258 102 q6 -18 -2 -28" fill="none"/>
@@ -420,24 +412,24 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         </div>
         <div class="g-img" style="grid-column:2/4">
           <svg viewBox="0 0 940 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Front of house table shared by guests">
-            <rect width="940" height="300" fill="#E3F1EC"/>
-            <rect x="60" y="150" width="820" height="26" rx="6" fill="#FFFFFF" stroke="#C7C1A9" stroke-width="2"/>
-            <rect x="60" y="130" width="820" height="20" fill="#0B6E58" opacity=".14"/>
-            <g fill="#37493F">
+            <rect width="940" height="300" fill="#E9F5EE"/>
+            <rect x="60" y="150" width="820" height="26" rx="6" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
+            <rect x="60" y="130" width="820" height="20" fill="#1C7A4A" opacity=".14"/>
+            <g fill="#1A1A18">
               <circle cx="180" cy="230" r="34" opacity=".9"/>
               <circle cx="760" cy="230" r="34" opacity=".9"/>
             </g>
-            <g fill="#F3F0E6">
+            <g fill="#F7F6F3">
               <circle cx="180" cy="220" r="16"/>
               <circle cx="760" cy="220" r="16"/>
             </g>
-            <g fill="#B9432B" opacity=".85">
+            <g fill="#D4621A" opacity=".85">
               <ellipse cx="420" cy="176" rx="46" ry="20"/>
               <ellipse cx="520" cy="176" rx="46" ry="20"/>
             </g>
             <g fill="#FFFFFF"><ellipse cx="420" cy="170" rx="30" ry="12"/><ellipse cx="520" cy="170" rx="30" ry="12"/></g>
-            <g stroke="#3B433F" stroke-width="4"><line x1="140" y1="176" x2="140" y2="230"/><line x1="800" y1="176" x2="800" y2="230"/></g>
-            <rect x="640" y="140" width="16" height="46" rx="4" fill="#0B6E58" opacity=".7"/>
+            <g stroke="#1A1A18" stroke-width="4"><line x1="140" y1="176" x2="140" y2="230"/><line x1="800" y1="176" x2="800" y2="230"/></g>
+            <rect x="640" y="140" width="16" height="46" rx="4" fill="#1C7A4A" opacity=".7"/>
           </svg>
           <span class="g-cap">Front of house</span>
         </div>
@@ -453,15 +445,15 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <p class="sec-sub">Each feature is wired to a real screen in your dashboard, so what the bot promises a customer is exactly what your kitchen sees.</p>
       </div>
       <div class="feat-grid">
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--teal-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16l-1.5 11a2 2 0 0 1-2 1.7H7.5a2 2 0 0 1-2-1.7L4 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></div><div><h3>Live order taking</h3><p>Customers pick sizes, spice levels and extras in chat, with replies in under 4 seconds. Orders land on your Live Orders board instantly.</p></div></div>
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--stamp-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--stamp)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 3.5 20 11l-8.5 8.5a2 2 0 0 1-2.8 0l-6.2-6.2a2 2 0 0 1 0-2.8L11 3.5h1.5Z"/><circle cx="15.5" cy="8.5" r="1.4" fill="var(--stamp)" stroke="none"/></svg></div><div><h3>Deals, combos & promo codes</h3><p>Run combo or happy-hour deals the bot surfaces automatically, and issue coupon codes with usage limits you track from the dashboard.</p></div></div>
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--blue-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A4C7A" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"/><path d="M12 4h6.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H12"/><path d="M7 8h3M7 11.5h3M14.5 8h3M14.5 11.5h3"/></svg></div><div><h3>Smart menu browsing</h3><p>The bot suggests dishes by category and stays in sync with the menu you edit in the dashboard — no re-training, no delay.</p></div></div>
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--teal-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal-deep)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round"/></svg></div><div><h3>Built-in analytics</h3><p>See what sells, size and spice preferences, and revenue by status — no spreadsheets, no manual counting.</p></div></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--green-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#155C38" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16l-1.5 11a2 2 0 0 1-2 1.7H7.5a2 2 0 0 1-2-1.7L4 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg></div><div><h3>Live order taking</h3><p>Customers pick sizes, spice levels and extras in chat, with replies in under 4 seconds. Orders land on your Live Orders board instantly.</p></div></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--pink-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--pink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 3.5 20 11l-8.5 8.5a2 2 0 0 1-2.8 0l-6.2-6.2a2 2 0 0 1 0-2.8L11 3.5h1.5Z"/><circle cx="15.5" cy="8.5" r="1.4" fill="var(--pink)" stroke="none"/></svg></div><div><h3>Deals, combos & promo codes</h3><p>Run combo or happy-hour deals the bot surfaces automatically, and issue coupon codes with usage limits you track from the dashboard.</p></div></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--blue-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A4FD6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"/><path d="M12 4h6.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H12"/><path d="M7 8h3M7 11.5h3M14.5 8h3M14.5 11.5h3"/></svg></div><div><h3>Smart menu browsing</h3><p>The bot suggests dishes by category and stays in sync with the menu you edit in the dashboard — no re-training, no delay.</p></div></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--amber-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-linecap="round"/></svg></div><div><h3>Built-in analytics</h3><p>See what sells, size and spice preferences, and revenue by status — no spreadsheets, no manual counting.</p></div></div>
       </div>
       <div class="feat-more">
-        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#37493F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 3.5 20 11l-8.5 8.5a2 2 0 0 1-2.8 0l-6.2-6.2a2 2 0 0 1 0-2.8L11 3.5h1.5Z"/><circle cx="15.5" cy="8.5" r="1.2" fill="#37493F" stroke="none"/></svg> Multilingual FAQs (EN / UR / DE)</span>
-        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#37493F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.2"/></svg> Live order tracking</span>
-        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#37493F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h8M13 8l4 4-4 4"/><circle cx="6" cy="12" r="2.5"/></svg> Hand off to a teammate anytime</span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 3.5 20 11l-8.5 8.5a2 2 0 0 1-2.8 0l-6.2-6.2a2 2 0 0 1 0-2.8L11 3.5h1.5Z"/><circle cx="15.5" cy="8.5" r="1.2" fill="#1A1A18" stroke="none"/></svg> Multilingual FAQs (EN / UR / DE)</span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.2"/></svg> Live order tracking</span>
+        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1A1A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h8M13 8l4 4-4 4"/><circle cx="6" cy="12" r="2.5"/></svg> Hand off to a teammate anytime</span>
       </div>
     </div>
   </section>
@@ -477,20 +469,20 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <div class="resv-photos reveal">
           <div class="p1">
             <svg viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Table set with a reserved card and wine glasses">
-              <rect width="900" height="440" fill="#E3F1EC"/>
-              <rect x="60" y="260" width="780" height="18" rx="6" fill="#FFFFFF" stroke="#C7C1A9" stroke-width="2"/>
-              <rect x="60" y="240" width="780" height="26" fill="#0B6E58" opacity=".14"/>
-              <g stroke="#37493F" stroke-width="4" stroke-linecap="round">
+              <rect width="900" height="440" fill="#E9F5EE"/>
+              <rect x="60" y="260" width="780" height="18" rx="6" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
+              <rect x="60" y="240" width="780" height="26" fill="#1C7A4A" opacity=".14"/>
+              <g stroke="#1A1A18" stroke-width="4" stroke-linecap="round">
                 <line x1="230" y1="120" x2="228" y2="240"/>
                 <line x1="242" y1="120" x2="240" y2="240"/>
                 <line x1="254" y1="120" x2="252" y2="240"/>
                 <line x1="620" y1="130" x2="614" y2="240"/>
               </g>
-              <circle cx="614" cy="118" r="18" fill="none" stroke="#37493F" stroke-width="4"/>
-              <rect x="330" y="150" width="150" height="86" rx="8" fill="#FFFFFF" stroke="#C7C1A9" stroke-width="2"/>
-              <path d="M330 150 l20 -26 l20 26 z" fill="#FFFFFF" stroke="#C7C1A9" stroke-width="2"/>
-              <text x="405" y="200" font-family="'Zilla Slab',serif" font-size="21" font-weight="700" fill="#075441" text-anchor="middle">Reserved</text>
-              <g fill="#B9432B" opacity=".85">
+              <circle cx="614" cy="118" r="18" fill="none" stroke="#1A1A18" stroke-width="4"/>
+              <rect x="330" y="150" width="150" height="86" rx="8" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
+              <path d="M330 150 l20 -26 l20 26 z" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
+              <text x="405" y="200" font-family="'Syne',sans-serif" font-size="21" font-weight="700" fill="#155C38" text-anchor="middle">Reserved</text>
+              <g fill="#B5136F" opacity=".85">
                 <ellipse cx="530" cy="150" rx="14" ry="22"/>
                 <ellipse cx="560" cy="150" rx="14" ry="22"/>
               </g>
@@ -499,25 +491,25 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
           </div>
           <div class="p2">
             <svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Table plaque marked with a number">
-              <rect width="440" height="300" fill="#F3F0E6"/>
-              <rect x="70" y="180" width="300" height="18" rx="6" fill="#FFFFFF" stroke="#C7C1A9" stroke-width="2"/>
-              <g stroke="#37493F" stroke-width="5" stroke-linecap="round">
+              <rect width="440" height="300" fill="#F0EFE9"/>
+              <rect x="70" y="180" width="300" height="18" rx="6" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
+              <g stroke="#1A1A18" stroke-width="5" stroke-linecap="round">
                 <line x1="110" y1="198" x2="106" y2="250"/>
                 <line x1="330" y1="198" x2="334" y2="250"/>
               </g>
-              <rect x="170" y="110" width="100" height="76" rx="8" fill="#FFFFFF" stroke="#0B6E58" stroke-width="2"/>
-              <text x="220" y="163" font-family="'DM Mono',monospace" font-size="34" font-weight="700" fill="#075441" text-anchor="middle">04</text>
+              <rect x="170" y="110" width="100" height="76" rx="8" fill="#FFFFFF" stroke="#1C7A4A" stroke-width="2"/>
+              <text x="220" y="163" font-family="'DM Mono',monospace" font-size="34" font-weight="700" fill="#155C38" text-anchor="middle">04</text>
             </svg>
           </div>
           <div class="p3">
             <svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Name card placed at a table setting">
-              <rect width="440" height="300" fill="#F7E9E3"/>
-              <ellipse cx="220" cy="170" rx="90" ry="58" fill="#FFFFFF" stroke="#C7C1A9" stroke-width="2"/>
-              <path d="M155 150 h130 l-6 40 h-118 z" fill="#FFFFFF" stroke="#B9432B" stroke-width="2"/>
-              <text x="220" y="176" font-family="'Zilla Slab',serif" font-size="15" font-weight="700" fill="#12201D" text-anchor="middle">Table for 4</text>
-              <line x1="120" y1="110" x2="122" y2="190" stroke="#37493F" stroke-width="4" stroke-linecap="round"/>
-              <line x1="320" y1="112" x2="316" y2="188" stroke="#37493F" stroke-width="4" stroke-linecap="round"/>
-              <circle cx="316" cy="108" r="10" fill="none" stroke="#37493F" stroke-width="3.5"/>
+              <rect width="440" height="300" fill="#FDE8F3"/>
+              <ellipse cx="220" cy="170" rx="90" ry="58" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
+              <path d="M155 150 h130 l-6 40 h-118 z" fill="#FFFFFF" stroke="#B5136F" stroke-width="2"/>
+              <text x="220" y="176" font-family="'Syne',sans-serif" font-size="15" font-weight="700" fill="#1A1A18" text-anchor="middle">Table for 4</text>
+              <line x1="120" y1="110" x2="122" y2="190" stroke="#1A1A18" stroke-width="4" stroke-linecap="round"/>
+              <line x1="320" y1="112" x2="316" y2="188" stroke="#1A1A18" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="316" cy="108" r="10" fill="none" stroke="#1A1A18" stroke-width="3.5"/>
             </svg>
           </div>
         </div>
@@ -530,7 +522,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
           </ul>
           <div class="resv-card">
             <div><div class="rc-l">Upcoming reservation</div><div class="rc-v">Table for 4 · Sat, 8:00 PM</div></div>
-            <span style="background:var(--teal-bg);color:var(--teal-deep);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px">Confirmed</span>
+            <span style="background:var(--green-bg);color:var(--green-deep);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px">Confirmed</span>
           </div>
           <div style="margin-top:24px">
             <a href="web.html" class="btn btn-dark">Turn on Reservations →</a>
@@ -581,7 +573,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         </div>
         <div class="chan-card reveal">
           <span class="chan-step">Step 2</span>
-          <div class="chan-ic" style="background:var(--blue-bg)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2A4C7A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+          <div class="chan-ic" style="background:var(--blue-bg)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1A4FD6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
           <h4>Website chat widget (Web App)</h4>
           <p>The same assistant as a chat bubble on your own restaurant website — one line of code, same brain, same menu.</p>
           <ul>
@@ -609,7 +601,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
           </ul>
           <a href="crm.html" class="btn btn-teal btn-lg">Open your dashboard →</a>
         </div>
-        <div class="crm-mock ticket">
+        <div class="crm-mock">
           <div class="crm-mock-top"><span class="lbl">Live Orders · Today</span><span class="stamp">● live</span></div>
           <div class="crm-mock-stats">
             <div class="s"><div class="l">Pending</div><div class="v">3</div></div>
@@ -645,7 +637,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
           </ul>
           <a href="web.html" class="btn btn-outline">Get started</a>
         </div>
-        <div class="price-card pop ticket reveal">
+        <div class="price-card pop reveal">
           <div class="price-badge">Most popular</div>
           <div class="price-plan">Plan 02</div>
           <div class="price-name">Growth</div>
