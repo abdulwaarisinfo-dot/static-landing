@@ -135,15 +135,6 @@ h2.sec-title{font-family:var(--display);font-size:30px;font-weight:800;letter-sp
 .sec-head.center{margin:0 auto 44px;text-align:center}
 .sec-head.center .sec-tag{justify-content:center}
 
-/* PHOTO GALLERY STRIP */
-.gallery-strip{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:14px;margin-top:28px}
-.gallery-strip .g-img{border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:var(--shadow-md);background:var(--surface2);border:1px solid var(--border)}
-.gallery-strip .g-img img{width:100%;height:100%;object-fit:cover;display:block}
-.gallery-strip .g-tall{grid-row:span 2}
-.g-img .g-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;background:linear-gradient(0deg,rgba(26,26,24,.7),transparent);color:#fff;font-size:12px;font-weight:600;font-family:var(--display)}
-@media(max-width:800px){.gallery-strip{grid-template-columns:1fr 1fr}.gallery-strip .g-tall{grid-row:span 1}}
-@media(max-width:560px){.gallery-strip{grid-template-columns:1fr}}
-
 /* RESERVATIONS SECTION */
 .resv-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
 .resv-photos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -275,8 +266,8 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
       <a href="#faq">FAQ</a>
     </nav>
     <div class="nav-cta">
-      <a href="crm.html" class="btn btn-outline">Log in</a>
-      <a href="web.html" class="btn btn-dark">Build your assistant →</a>
+      <a href="auth.html" class="btn btn-outline">Log in</a>
+      <a href="auth.html" class="btn btn-dark">Build your assistant →</a>
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -298,7 +289,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         </div>
 
         <div class="hero-ctas">
-          <a href="web.html" class="btn btn-teal btn-lg">Build your assistant →</a>
+          <a href="auth.html" class="btn btn-teal btn-lg">Build your assistant →</a>
           <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-ghost"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Try a live demo on WhatsApp</a>
         </div>
         <div class="hero-note">Free to set up · Keep your own number · Cancel any time</div>
@@ -336,103 +327,6 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <div class="trust-chip"><span class="ic" style="background:var(--pink-bg);color:var(--pink)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Biryani Junction</div>
         <div class="trust-chip"><span class="ic" style="background:var(--amber-bg);color:var(--amber)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> The Karahi Room</div>
         <div class="trust-chip"><span class="ic" style="background:var(--purple-bg);color:var(--purple)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 19v-5h4v5"/></svg></span> Cloud Nine Café</div>
-      </div>
-      <div class="gallery-strip">
-        <div class="g-img g-tall">
-          <svg viewBox="0 0 500 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dine-in floor with tables set for service">
-            <rect width="500" height="560" fill="#F0EFE9"/>
-            <rect x="0" y="400" width="500" height="160" fill="#E4E2D8"/>
-            <g opacity=".5" stroke="#D2CFC1" stroke-width="1.5">
-              <line x1="0" y1="60" x2="500" y2="60"/><line x1="0" y1="120" x2="500" y2="120"/>
-              <line x1="0" y1="180" x2="500" y2="180"/><line x1="0" y1="240" x2="500" y2="240"/>
-              <line x1="0" y1="300" x2="500" y2="300"/><line x1="0" y1="360" x2="500" y2="360"/>
-            </g>
-            <ellipse cx="150" cy="330" rx="95" ry="30" fill="#1A1A18" opacity=".07"/>
-            <ellipse cx="150" cy="300" rx="95" ry="60" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
-            <ellipse cx="150" cy="300" rx="62" ry="38" fill="#F7F6F3" stroke="#E4E2D8" stroke-width="1.5"/>
-            <rect x="128" y="278" width="44" height="30" rx="4" fill="#FFFFFF" stroke="#1C7A4A" stroke-width="1.5"/>
-            <text x="150" y="298" font-family="'Syne',sans-serif" font-size="9" font-weight="700" fill="#155C38" text-anchor="middle">RESERVED</text>
-            <circle cx="90" cy="290" r="6" fill="#1C7A4A" opacity=".8"/>
-            <circle cx="210" cy="290" r="6" fill="#1C7A4A" opacity=".8"/>
-            <g stroke="#1A1A18" stroke-width="5" stroke-linecap="round">
-              <line x1="72" y1="340" x2="70" y2="400"/><line x1="228" y1="340" x2="230" y2="400"/>
-            </g>
-            <ellipse cx="360" cy="180" rx="80" ry="26" fill="#1A1A18" opacity=".07"/>
-            <ellipse cx="360" cy="155" rx="80" ry="50" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
-            <circle cx="330" cy="150" r="9" fill="#B5136F" opacity=".85"/>
-            <circle cx="390" cy="150" r="9" fill="#1C7A4A" opacity=".85"/>
-            <g stroke="#1A1A18" stroke-width="5" stroke-linecap="round">
-              <line x1="300" y1="195" x2="298" y2="240"/><line x1="420" y1="195" x2="422" y2="240"/>
-            </g>
-            <g fill="none" stroke="#1A1A18" stroke-width="2.5">
-              <rect x="40" y="470" width="70" height="40" rx="5"/>
-              <rect x="180" y="480" width="70" height="40" rx="5"/>
-              <rect x="330" y="465" width="70" height="40" rx="5"/>
-            </g>
-          </svg>
-          <span class="g-cap">Dine-in floor</span>
-        </div>
-        <div class="g-img">
-          <svg viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kitchen plating a finished dish">
-            <rect width="460" height="300" fill="#1A1A18"/>
-            <ellipse cx="230" cy="185" rx="130" ry="72" fill="#F7F6F3"/>
-            <ellipse cx="230" cy="180" rx="92" ry="48" fill="#FFFFFF"/>
-            <ellipse cx="230" cy="176" rx="52" ry="26" fill="#D4621A" opacity=".88"/>
-            <ellipse cx="215" cy="170" rx="18" ry="9" fill="#1C7A4A" opacity=".8"/>
-            <ellipse cx="252" cy="182" rx="12" ry="6" fill="#F7F6F3"/>
-            <g stroke="#F7F6F3" stroke-width="5" stroke-linecap="round" opacity=".55">
-              <path d="M205 95 q-8 -24 4 -36" fill="none"/>
-              <path d="M228 90 q-4 -26 10 -36" fill="none"/>
-              <path d="M251 96 q0 -24 12 -32" fill="none"/>
-            </g>
-            <g fill="none" stroke="#F7F6F3" stroke-width="3" opacity=".9">
-              <line x1="90" y1="230" x2="90" y2="150"/>
-              <path d="M84 150 v20 M90 150 v20 M96 150 v20"/>
-            </g>
-            <path d="M356 150 q10 40 -6 70" fill="none" stroke="#F7F6F3" stroke-width="3" opacity=".9"/>
-          </svg>
-          <span class="g-cap">Kitchen plating</span>
-        </div>
-        <div class="g-img">
-          <svg viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bowl of biryani menu item">
-            <rect width="460" height="300" fill="#FDE8F3"/>
-            <ellipse cx="230" cy="196" rx="132" ry="64" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
-            <ellipse cx="230" cy="182" rx="92" ry="42" fill="#F7F6F3" stroke="#E4E2D8" stroke-width="1.5"/>
-            <ellipse cx="230" cy="178" rx="62" ry="27" fill="#D4621A"/>
-            <ellipse cx="205" cy="170" rx="10" ry="6" fill="#1C7A4A" opacity=".85"/>
-            <ellipse cx="250" cy="176" rx="8" ry="5" fill="#F7F6F3"/>
-            <ellipse cx="225" cy="188" rx="9" ry="5" fill="#F7F6F3" opacity=".8"/>
-            <g stroke="#D4621A" stroke-width="5" stroke-linecap="round" opacity=".5">
-              <path d="M198 100 q-6 -18 4 -28" fill="none"/>
-              <path d="M228 96 q0 -20 8 -28" fill="none"/>
-              <path d="M258 102 q6 -18 -2 -28" fill="none"/>
-            </g>
-          </svg>
-          <span class="g-cap">Menu items</span>
-        </div>
-        <div class="g-img" style="grid-column:2/4">
-          <svg viewBox="0 0 940 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Front of house table shared by guests">
-            <rect width="940" height="300" fill="#E9F5EE"/>
-            <rect x="60" y="150" width="820" height="26" rx="6" fill="#FFFFFF" stroke="#D2CFC1" stroke-width="2"/>
-            <rect x="60" y="130" width="820" height="20" fill="#1C7A4A" opacity=".14"/>
-            <g fill="#1A1A18">
-              <circle cx="180" cy="230" r="34" opacity=".9"/>
-              <circle cx="760" cy="230" r="34" opacity=".9"/>
-            </g>
-            <g fill="#F7F6F3">
-              <circle cx="180" cy="220" r="16"/>
-              <circle cx="760" cy="220" r="16"/>
-            </g>
-            <g fill="#D4621A" opacity=".85">
-              <ellipse cx="420" cy="176" rx="46" ry="20"/>
-              <ellipse cx="520" cy="176" rx="46" ry="20"/>
-            </g>
-            <g fill="#FFFFFF"><ellipse cx="420" cy="170" rx="30" ry="12"/><ellipse cx="520" cy="170" rx="30" ry="12"/></g>
-            <g stroke="#1A1A18" stroke-width="4"><line x1="140" y1="176" x2="140" y2="230"/><line x1="800" y1="176" x2="800" y2="230"/></g>
-            <rect x="640" y="140" width="16" height="46" rx="4" fill="#1C7A4A" opacity=".7"/>
-          </svg>
-          <span class="g-cap">Front of house</span>
-        </div>
       </div>
     </div>
   </div>
@@ -525,7 +419,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
             <span style="background:var(--green-bg);color:var(--green-deep);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px">Confirmed</span>
           </div>
           <div style="margin-top:24px">
-            <a href="web.html" class="btn btn-dark">Turn on Reservations →</a>
+            <a href="auth.html" class="btn btn-dark">Turn on Reservations →</a>
           </div>
         </div>
       </div>
@@ -546,7 +440,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <div class="flow-step"><div class="flow-num">04</div><h4>Go live</h4><p>The bot starts answering on your number immediately, and your website widget is ready to add.</p></div>
       </div>
       <div style="text-align:center;margin-top:36px">
-        <a href="web.html" class="btn btn-dark btn-lg">Start the setup wizard →</a>
+        <a href="auth.html" class="btn btn-dark btn-lg">Start the setup wizard →</a>
       </div>
     </div>
   </section>
@@ -569,7 +463,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
             <li>Verified by SMS code, right from your dashboard</li>
             <li>Hand off to a teammate any time, mid-conversation</li>
           </ul>
-          <a href="web.html" class="chan-link">Connect your number →</a>
+          <a href="auth.html" class="chan-link">Connect your number →</a>
         </div>
         <div class="chan-card reveal">
           <span class="chan-step">Step 2</span>
@@ -581,7 +475,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
             <li>Answers questions and takes orders on your own domain</li>
             <li>Orders land on the same Live Orders board as WhatsApp</li>
           </ul>
-          <a href="web.html" class="chan-link">Get your embed code →</a>
+          <a href="auth.html" class="chan-link">Get your embed code →</a>
         </div>
       </div>
     </div>
@@ -599,7 +493,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
             <li>Menu, deals & promo codes editable without a developer</li>
             <li>Analytics on searches, preferences & revenue</li>
           </ul>
-          <a href="crm.html" class="btn btn-teal btn-lg">Open your dashboard →</a>
+          <a href="auth.html" class="btn btn-teal btn-lg">Open your dashboard →</a>
         </div>
         <div class="crm-mock">
           <div class="crm-mock-top"><span class="lbl">Live Orders · Today</span><span class="stamp">● live</span></div>
@@ -635,7 +529,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
             <li>English + Urdu</li>
             <li>Email support</li>
           </ul>
-          <a href="web.html" class="btn btn-outline">Get started</a>
+          <a href="auth.html" class="btn btn-outline">Get started</a>
         </div>
         <div class="price-card pop reveal">
           <div class="price-badge">Most popular</div>
@@ -651,7 +545,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
             <li>English + Urdu + German</li>
             <li>Full analytics dashboard</li>
           </ul>
-          <a href="web.html" class="btn btn-dark">Get started</a>
+          <a href="auth.html" class="btn btn-dark">Get started</a>
         </div>
         <div class="price-card reveal">
           <div class="price-plan">Plan 03</div>
@@ -693,7 +587,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <h2>Build your assistant in the next ten minutes</h2>
         <p>Enter your restaurant details, connect your WhatsApp number, and add your menu — no code required.</p>
         <div class="final-ctas">
-          <a href="web.html" class="btn btn-teal btn-lg">Build your assistant →</a>
+          <a href="auth.html" class="btn btn-teal btn-lg">Build your assistant →</a>
           <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-outline btn-lg"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Try a live demo</a>
         </div>
       </div>
@@ -719,8 +613,8 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
       </div>
       <div class="foot-col">
         <h5>Access</h5>
-        <a href="web.html">Build your assistant</a>
-        <a href="crm.html">Log in to dashboard</a>
+        <a href="auth.html">Build your assistant</a>
+        <a href="auth.html">Log in to dashboard</a>
         <a href="https://wa.me/10000000000" target="_blank">Try the demo bot</a>
       </div>
       <div class="foot-col">
