@@ -128,10 +128,38 @@ section{padding:80px 0}
 .sec-head{max-width:600px;margin-bottom:44px}
 .sec-eyebrow{font-size:11px;font-weight:700;color:var(--brass);text-transform:uppercase;letter-spacing:.09em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .sec-eyebrow::before{content:'';width:16px;height:2px;background:var(--brass)}
+.sec-eyebrow .step-no{font-family:var(--mono);color:var(--muted2);letter-spacing:0;text-transform:none;font-weight:600}
 h2.sec-title{font-family:var(--display);font-size:31px;font-weight:700;letter-spacing:-.01em;line-height:1.18;margin-bottom:13px}
 .sec-sub{font-size:14.5px;color:var(--muted);line-height:1.65}
 .sec-head.center{margin:0 auto 44px;text-align:center}
 .sec-head.center .sec-eyebrow{justify-content:center}
+
+/* PHOTO GALLERY STRIP — grounds the page in an actual restaurant */
+.gallery-strip{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:14px;margin-top:28px}
+.gallery-strip .g-img{border-radius:16px;overflow:hidden;position:relative;box-shadow:var(--shadow-md)}
+.gallery-strip .g-img svg{width:100%;height:100%;display:block}
+.gallery-strip .g-img img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery-strip .g-tall{grid-row:span 2}
+.g-img .g-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;background:linear-gradient(0deg,rgba(0,0,0,.62),transparent);color:#fff;font-size:12px;font-weight:600}
+@media(max-width:800px){.gallery-strip{grid-template-columns:1fr 1fr}.gallery-strip .g-tall{grid-row:span 1}}
+@media(max-width:560px){.gallery-strip{grid-template-columns:1fr}}
+
+/* RESERVATIONS SECTION */
+.resv-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+.resv-photos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.resv-photos .p1{grid-column:1/3;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-md)}
+.resv-photos .p2,.resv-photos .p3{border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.resv-photos img{width:100%;height:100%;object-fit:cover;display:block}
+.resv-photos svg{width:100%;height:100%;display:block}
+.resv-photos .p1 img{height:220px}
+.resv-photos .p2 img,.resv-photos .p3 img{height:140px}
+.resv-list{list-style:none;display:flex;flex-direction:column;gap:14px;margin:22px 0 26px}
+.resv-list li{display:flex;gap:12px;font-size:13.5px;color:var(--ink-soft);line-height:1.55}
+.resv-list .rn{font-family:var(--mono);font-size:11px;color:var(--brass-deep);background:var(--brass-bg);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
+.resv-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:16px;box-shadow:var(--shadow)}
+.resv-card .rc-l{font-size:12.5px;color:var(--muted)}
+.resv-card .rc-v{font-family:var(--display);font-size:15px;font-weight:700}
+@media(max-width:900px){.resv-grid{grid-template-columns:1fr;gap:30px}}
 
 /* FEATURES */
 .feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
@@ -237,7 +265,8 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
   <div class="wrap nav-inner">
     <a href="#top" class="brand"><div class="brand-icon">🍽</div>Restaurant<span>Bot</span></a>
     <nav class="links" id="navLinks">
-      <a href="#features">Features</a>
+      <a href="#features">Ordering</a>
+      <a href="#reservations">Reservations</a>
       <a href="#setup">How it works</a>
       <a href="#channels">Channels</a>
       <a href="#pricing">Pricing</a>
@@ -292,7 +321,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
       <div class="strip-item"><span class="num">&lt;4s</span><span class="lbl">average reply time, day or night</span></div>
       <div class="strip-item"><span class="num">3</span><span class="lbl">languages — English, Urdu, German</span></div>
       <div class="strip-item"><span class="num">~80%</span><span class="lbl">less manual order-taking for your staff</span></div>
-      <div class="strip-item"><span class="num">1</span><span class="lbl">dashboard for orders, menu & bot</span></div>
+      <div class="strip-item"><span class="num">1</span><span class="lbl">dashboard for orders, reservations & menu</span></div>
     </div>
   </div>
 
@@ -306,13 +335,93 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <div class="trust-chip"><span class="ic" style="background:var(--brass-bg)">🥘</span> The Karahi Room</div>
         <div class="trust-chip"><span class="ic" style="background:var(--blue-bg)">☕</span> Cloud Nine Café</div>
       </div>
+      <div class="gallery-strip">
+        <div class="g-img g-tall">
+          <svg viewBox="0 0 500 560" xmlns="http://www.w3.org/2000/svg">
+            <rect width="500" height="560" fill="#EFE9D8"/>
+            <circle cx="250" cy="260" r="150" fill="#F8F4E8" stroke="#CFC9B3" stroke-width="2"/>
+            <circle cx="250" cy="260" r="92" fill="#FFFFFF" stroke="#E1DDCC" stroke-width="2"/>
+            <circle cx="250" cy="260" r="60" fill="#F5EBDA" stroke="#CFC9B3" stroke-width="1.5"/>
+            <g stroke="#8A5A24" stroke-width="4" stroke-linecap="round">
+              <line x1="140" y1="150" x2="150" y2="220"/>
+              <line x1="150" y1="150" x2="152" y2="200"/>
+              <line x1="150" y1="150" x2="154" y2="150"/>
+              <line x1="146" y1="150" x2="148" y2="200"/>
+              <line x1="360" y1="150" x2="352" y2="230"/>
+            </g>
+            <circle cx="120" cy="260" r="10" fill="#2E6B4F" opacity=".8"/>
+            <circle cx="380" cy="260" r="10" fill="#2E6B4F" opacity=".8"/>
+            <circle cx="250" cy="130" r="10" fill="#2E6B4F" opacity=".8"/>
+            <circle cx="250" cy="390" r="10" fill="#2E6B4F" opacity=".8"/>
+            <g fill="none" stroke="#3B433F" stroke-width="2">
+              <rect x="60" y="500" width="60" height="34" rx="4"/>
+              <rect x="380" y="500" width="60" height="34" rx="4"/>
+              <rect x="220" y="20" width="60" height="34" rx="4"/>
+            </g>
+          </svg>
+          <span class="g-cap">Dine-in floor</span>
+        </div>
+        <div class="g-img">
+          <svg viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="460" height="300" fill="#F5EBDA"/>
+            <ellipse cx="230" cy="180" rx="120" ry="70" fill="#FFFFFF" stroke="#CFC9B3" stroke-width="2"/>
+            <ellipse cx="230" cy="180" rx="80" ry="46" fill="none" stroke="#E1DDCC" stroke-width="1.5"/>
+            <ellipse cx="230" cy="176" rx="46" ry="24" fill="#A9702E" opacity=".85"/>
+            <g stroke="#8A5A24" stroke-width="6" stroke-linecap="round" opacity=".6">
+              <path d="M215 90 q-8 -22 4 -34" fill="none"/>
+              <path d="M232 86 q-4 -24 10 -34" fill="none"/>
+              <path d="M250 92 q0 -22 12 -30" fill="none"/>
+            </g>
+            <line x1="120" y1="140" x2="120" y2="220" stroke="#3B433F" stroke-width="4" stroke-linecap="round"/>
+            <line x1="336" y1="150" x2="336" y2="215" stroke="#3B433F" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <span class="g-cap">Kitchen plating</span>
+        </div>
+        <div class="g-img">
+          <svg viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="460" height="300" fill="#EAEFF6"/>
+            <ellipse cx="230" cy="190" rx="130" ry="66" fill="#FFFFFF" stroke="#CFC9B3" stroke-width="2"/>
+            <ellipse cx="230" cy="176" rx="88" ry="42" fill="#F5EBDA" stroke="#CFC9B3" stroke-width="1.5"/>
+            <ellipse cx="230" cy="172" rx="60" ry="26" fill="#8A5A24"/>
+            <ellipse cx="205" cy="164" rx="10" ry="6" fill="#2E6B4F" opacity=".85"/>
+            <ellipse cx="250" cy="170" rx="8" ry="5" fill="#F5EBDA"/>
+            <g stroke="#2A4C7A" stroke-width="5" stroke-linecap="round" opacity=".55">
+              <path d="M200 100 q-6 -18 4 -28" fill="none"/>
+              <path d="M230 96 q0 -20 8 -28" fill="none"/>
+              <path d="M260 102 q6 -18 -2 -28" fill="none"/>
+            </g>
+          </svg>
+          <span class="g-cap">Menu items</span>
+        </div>
+        <div class="g-img" style="grid-column:2/4">
+          <svg viewBox="0 0 940 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="940" height="300" fill="#E6F1EB"/>
+            <rect x="60" y="150" width="820" height="26" rx="6" fill="#FFFFFF" stroke="#CFC9B3" stroke-width="2"/>
+            <rect x="60" y="130" width="820" height="20" fill="#2E6B4F" opacity=".18"/>
+            <g fill="#3B433F">
+              <circle cx="140" cy="230" r="8"/><line x1="140" y1="176" x2="140" y2="222" stroke="#3B433F" stroke-width="4"/>
+              <circle cx="260" cy="230" r="8"/><line x1="260" y1="176" x2="260" y2="222" stroke="#3B433F" stroke-width="4"/>
+              <circle cx="380" cy="230" r="8"/><line x1="380" y1="176" x2="380" y2="222" stroke="#3B433F" stroke-width="4"/>
+              <circle cx="560" cy="230" r="8"/><line x1="560" y1="176" x2="560" y2="222" stroke="#3B433F" stroke-width="4"/>
+              <circle cx="680" cy="230" r="8"/><line x1="680" y1="176" x2="680" y2="222" stroke="#3B433F" stroke-width="4"/>
+              <circle cx="800" cy="230" r="8"/><line x1="800" y1="176" x2="800" y2="222" stroke="#3B433F" stroke-width="4"/>
+            </g>
+            <g fill="#A9702E" opacity=".8">
+              <rect x="120" y="90" width="18" height="46" rx="3"/>
+              <rect x="470" y="90" width="18" height="46" rx="3"/>
+              <rect x="800" y="90" width="18" height="46" rx="3"/>
+            </g>
+          </svg>
+          <span class="g-cap">Front of house</span>
+        </div>
+      </div>
     </div>
   </div>
 
   <section id="features">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="sec-eyebrow">What it does</div>
+        <div class="sec-eyebrow"><span class="step-no">01</span> Ordering</div>
         <h2 class="sec-title">Everything your counter staff does — automated</h2>
         <p class="sec-sub">Each feature is wired to a real screen in your dashboard, so what the bot promises a customer is exactly what your kitchen sees.</p>
       </div>
@@ -330,10 +439,83 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
     </div>
   </section>
 
-  <section id="setup" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <section id="reservations" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-eyebrow"><span class="step-no">02</span> Reservations</div>
+        <h2 class="sec-title">Table bookings, taken the same way as orders</h2>
+        <p class="sec-sub">A separate flow from ordering — customers ask for a table, the bot checks availability for the date and party size, and it lands on your Reservations board, not mixed in with food orders.</p>
+      </div>
+      <div class="resv-grid">
+        <div class="resv-photos reveal">
+          <div class="p1">
+            <svg viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg">
+              <rect width="900" height="440" fill="#F5EBDA"/>
+              <rect x="60" y="260" width="780" height="18" rx="6" fill="#8A5A24" opacity=".18"/>
+              <rect x="60" y="240" width="780" height="26" rx="6" fill="#FFFFFF" stroke="#CFC9B3" stroke-width="2"/>
+              <g stroke="#3B433F" stroke-width="4" stroke-linecap="round">
+                <line x1="230" y1="120" x2="228" y2="240"/>
+                <line x1="242" y1="120" x2="240" y2="240"/>
+                <line x1="254" y1="120" x2="252" y2="240"/>
+                <line x1="620" y1="130" x2="614" y2="240"/>
+              </g>
+              <circle cx="614" cy="118" r="18" fill="none" stroke="#3B433F" stroke-width="4"/>
+              <rect x="330" y="150" width="130" height="86" rx="10" fill="#FFFFFF" stroke="#CFC9B3" stroke-width="2"/>
+              <text x="395" y="200" font-family="Fraunces, serif" font-size="20" font-weight="700" fill="#A9702E" text-anchor="middle">Reserved</text>
+              <path d="M330 150 l16 -22 l16 22 z" fill="#FFFFFF" stroke="#CFC9B3" stroke-width="2"/>
+              <g fill="#2E6B4F" opacity=".85">
+                <circle cx="500" cy="150" r="9"/>
+                <circle cx="530" cy="150" r="9"/>
+              </g>
+            </svg>
+          </div>
+          <div class="p2">
+            <svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg">
+              <rect width="440" height="300" fill="#ECE9DC"/>
+              <rect x="70" y="170" width="300" height="20" rx="6" fill="#FFFFFF" stroke="#CFC9B3" stroke-width="2"/>
+              <g stroke="#3B433F" stroke-width="5" stroke-linecap="round">
+                <line x1="100" y1="190" x2="96" y2="250"/>
+                <line x1="340" y1="190" x2="344" y2="250"/>
+              </g>
+              <path d="M120 220 q30 -34 60 0" fill="none" stroke="#8A5A24" stroke-width="5" stroke-linecap="round"/>
+              <path d="M260 220 q30 -34 60 0" fill="none" stroke="#8A5A24" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="p3">
+            <svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg">
+              <rect width="440" height="300" fill="#EAEFF6"/>
+              <circle cx="220" cy="150" r="80" fill="#FFFFFF" stroke="#CFC9B3" stroke-width="2"/>
+              <circle cx="220" cy="150" r="50" fill="none" stroke="#E1DDCC" stroke-width="1.5"/>
+              <line x1="120" y1="110" x2="122" y2="190" stroke="#3B433F" stroke-width="4" stroke-linecap="round"/>
+              <line x1="130" y1="110" x2="130" y2="190" stroke="#3B433F" stroke-width="4" stroke-linecap="round"/>
+              <line x1="320" y1="112" x2="316" y2="188" stroke="#3B433F" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="316" cy="108" r="10" fill="none" stroke="#3B433F" stroke-width="3.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="reveal">
+          <ul class="resv-list">
+            <li><span class="rn">1</span> Customer messages "Book a table for 4, Saturday 8 PM" — on WhatsApp or your website widget.</li>
+            <li><span class="rn">2</span> The bot checks table availability for that date and time against your Reservations calendar.</li>
+            <li><span class="rn">3</span> A confirmation is sent instantly, with a reminder before the booking.</li>
+            <li><span class="rn">4</span> Your staff sees it on a dedicated Reservations board — separate from the Live Orders board.</li>
+          </ul>
+          <div class="resv-card">
+            <div><div class="rc-l">Upcoming reservation</div><div class="rc-v">Table for 4 · Sat, 8:00 PM</div></div>
+            <span style="background:var(--green-bg);color:var(--green);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px">Confirmed</span>
+          </div>
+          <div style="margin-top:24px">
+            <a href="web.html" class="btn btn-dark">Turn on Reservations →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="setup" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
     <div class="wrap">
       <div class="sec-head center reveal">
-        <div class="sec-eyebrow">Getting set up</div>
+        <div class="sec-eyebrow"><span class="step-no">03</span> Getting set up</div>
         <h2 class="sec-title">From sign-up to your first WhatsApp order</h2>
         <p class="sec-sub">No code, no waiting on a developer — this is the exact sequence every restaurant owner follows in the Build Your Assistant wizard.</p>
       </div>
@@ -352,7 +534,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
   <section id="channels">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="sec-eyebrow">Where customers reach you</div>
+        <div class="sec-eyebrow"><span class="step-no">04</span> Where customers reach you</div>
         <h2 class="sec-title">One assistant, wherever your customers already are</h2>
         <p class="sec-sub">Connect your WhatsApp number first, then add the same assistant to your website — every order lands in the same dashboard.</p>
       </div>
@@ -389,6 +571,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
     <div class="wrap">
       <div class="crm-block reveal">
         <div>
+          <div class="sec-eyebrow" style="color:var(--brass)"><span class="step-no" style="color:rgba(255,255,255,.5)">05</span> Your dashboard</div>
           <h2>Every order — WhatsApp or website — lands in one dashboard</h2>
           <p>A live orders board, menu editor, deals & offers, FAQ manager and analytics, all in one panel your staff can pick up in a day, cutting manual order-taking by roughly 80%.</p>
           <ul class="crm-list">
@@ -415,7 +598,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
   <section id="pricing">
     <div class="wrap">
       <div class="sec-head center reveal">
-        <div class="sec-eyebrow">Plans</div>
+        <div class="sec-eyebrow"><span class="step-no">06</span> Plans</div>
         <h2 class="sec-title">Pick the plan that matches your kitchen</h2>
         <p class="sec-sub">Every plan includes the WhatsApp bot, the website widget, and the dashboard.</p>
       </div>
@@ -443,6 +626,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
           <ul class="price-feats">
             <li>Everything in Starter</li>
             <li>Unlimited menu items & variants</li>
+            <li>Table reservations & booking calendar</li>
             <li>Deals, combos & promo codes</li>
             <li>English + Urdu + German</li>
             <li>Full analytics dashboard</li>
@@ -469,7 +653,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
   <section id="faq" style="background:var(--surface);border-top:1px solid var(--border)">
     <div class="wrap">
       <div class="sec-head center reveal">
-        <div class="sec-eyebrow">Questions</div>
+        <div class="sec-eyebrow"><span class="step-no">07</span> Questions</div>
         <h2 class="sec-title">Frequently asked</h2>
       </div>
       <div class="faq-wrap">
@@ -477,6 +661,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <details class="faq-q reveal"><summary>What does "Web App" mean here?</summary><div class="a">It's the same assistant embedded as a chat widget on your own restaurant website — not a separate app to download. You add one snippet, and it shares the same menu and orders as WhatsApp.</div></details>
         <details class="faq-q reveal"><summary>How long does setup take?</summary><div class="a">Most restaurants are verified and live within about ten minutes through the Build Your Assistant wizard.</div></details>
         <details class="faq-q reveal"><summary>Can I edit the menu myself?</summary><div class="a">Yes — the Menu page in the dashboard lets you add dishes, sizes and prices without touching any code.</div></details>
+        <details class="faq-q reveal"><summary>Are table reservations mixed in with food orders?</summary><div class="a">No — reservations have their own board and calendar in the dashboard, kept separate from the Live Orders board so your front-of-house and kitchen workflows don't overlap.</div></details>
         <details class="faq-q reveal"><summary>Is there a setup fee?</summary><div class="a">Menu import and WhatsApp connection are included free with every plan.</div></details>
       </div>
     </div>
@@ -506,7 +691,8 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
       </div>
       <div class="foot-col">
         <h5>Product</h5>
-        <a href="#features">Features</a>
+        <a href="#features">Ordering</a>
+        <a href="#reservations">Reservations</a>
         <a href="#setup">How it works</a>
         <a href="#channels">Channels</a>
         <a href="#pricing">Pricing</a>
