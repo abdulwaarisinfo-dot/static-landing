@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Build Your Assistant — RestaurantBot Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#1C2321;--ink-soft:#3B433F;
+  --paper:#F5F3EA;--surface:#FFFFFF;--surface2:#ECE9DC;
+  --border:#E1DDCC;--border-strong:#CFC9B3;
+  --brass:#A9702E;--brass-deep:#8A5A24;--brass-bg:#F5EBDA;
+  --green:#2E6B4F;--green-bg:#E6F1EB;
+  --blue:#2A4C7A;--blue-bg:#EAEFF6;
+  --wa:#25D366;--wa-deep:#1DA851;
+  --muted:#6E695C;--muted2:#A19B89;
+  --font:'Inter',sans-serif;--display:'Fraunces',serif;--mono:'DM Mono',monospace;
+  --radius:14px;--radius-sm:9px;
+  --shadow-md:0 8px 22px rgba(28,35,33,.08);
+  --shadow-lg:0 20px 48px rgba(28,35,33,.13);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;outline:none;font-family:var(--font)}
+input,select{font-family:var(--font)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:8px}
+
+/* NAV */
+header{background:var(--surface);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1080px;margin:0 auto;padding:15px 32px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:16px;font-weight:700}
+.brand-icon{width:30px;height:30px;background:var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--paper)}
+.brand span{color:var(--muted);font-weight:500}
+.nav-exit{font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px}
+.nav-exit:hover{color:var(--ink)}
+
+/* NOTICE */
+.notice{background:var(--brass-bg);border-bottom:1px solid var(--border)}
+.notice-inner{max-width:1080px;margin:0 auto;padding:9px 32px;font-size:12px;color:var(--brass-deep);display:flex;align-items:center;gap:8px}
+
+/* LAYOUT */
+.wizard{max-width:1080px;margin:0 auto;padding:40px 32px 90px;display:grid;grid-template-columns:250px 1fr;gap:44px;align-items:start}
+@media(max-width:860px){.wizard{grid-template-columns:1fr;padding:28px 20px 70px}}
+
+/* STEPPER */
+.stepper{display:flex;flex-direction:column;gap:4px;position:sticky;top:24px}
+.step-item{display:flex;align-items:flex-start;gap:12px;padding:12px 10px;border-radius:10px;position:relative}
+.step-item .num{width:26px;height:26px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border-strong);color:var(--muted);font-family:var(--mono);font-size:11.5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-item .tt{font-size:13px;font-weight:700;color:var(--muted)}
+.step-item .dd{font-size:11.5px;color:var(--muted2);margin-top:2px}
+.step-item.active{background:var(--surface);box-shadow:var(--shadow-md)}
+.step-item.active .num{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.step-item.active .tt{color:var(--ink)}
+.step-item.done .num{background:var(--green);border-color:var(--green);color:#fff}
+.step-item.done .tt{color:var(--ink-soft)}
+@media(max-width:860px){.stepper{flex-direction:row;overflow-x:auto;position:static;gap:8px;padding-bottom:6px}.step-item{flex-shrink:0;padding:9px 12px}.step-item .dd{display:none}}
+
+/* PANEL */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px 38px;box-shadow:var(--shadow-md)}
+@media(max-width:600px){.panel{padding:24px 20px}}
+.panel-eyebrow{font-size:11px;font-weight:700;color:var(--brass);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.panel h2{font-family:var(--display);font-size:24px;font-weight:700;margin-bottom:8px;letter-spacing:-.01em}
+.panel .sub{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:28px;max-width:520px}
+
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:6px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.field .hint{font-size:11px;color:var(--muted2)}
+.field input,.field select{border:1.5px solid var(--border-strong);background:var(--paper);border-radius:9px;padding:11px 13px;font-size:13.5px;color:var(--ink)}
+.field input:focus,.field select:focus{outline:2px solid var(--brass);outline-offset:1px;background:var(--surface)}
+.field-phone{display:flex;gap:8px}
+.field-phone select{flex:0 0 90px}
+.field-phone input{flex:1}
+@media(max-width:600px){.field-grid{grid-template-columns:1fr}}
+
+.otp-row{display:flex;gap:10px;margin:18px 0 6px}
+.otp-row input{width:46px;height:52px;text-align:center;font-size:18px;font-family:var(--mono);border:1.5px solid var(--border-strong);border-radius:9px;background:var(--paper)}
+.otp-row input:focus{outline:2px solid var(--brass);background:var(--surface)}
+.verify-note{font-size:12px;color:var(--muted);margin-top:10px}
+.verify-note b{color:var(--ink)}
+
+.menu-add-row{display:grid;grid-template-columns:1.4fr 1fr .8fr auto;gap:10px;margin-bottom:10px;align-items:center}
+.menu-add-row input,.menu-add-row select{border:1.5px solid var(--border-strong);background:var(--paper);border-radius:9px;padding:10px 12px;font-size:13px}
+.menu-add-row .add-btn{width:38px;height:38px;border-radius:9px;background:var(--ink);color:var(--paper);font-size:16px;display:flex;align-items:center;justify-content:center}
+.menu-list{margin-top:18px;border-top:1px solid var(--border)}
+.menu-list-row{display:flex;justify-content:space-between;align-items:center;padding:11px 4px;border-bottom:1px solid var(--border);font-size:13px}
+.menu-list-row .nm{font-weight:600}
+.menu-list-row .meta{font-size:11.5px;color:var(--muted);margin-left:8px}
+.menu-list-row .price{font-family:var(--mono);font-weight:600}
+.menu-list-row .rm{color:var(--muted2);font-size:16px;margin-left:14px;cursor:pointer}
+@media(max-width:700px){.menu-add-row{grid-template-columns:1fr 1fr;grid-template-areas:"a a" "b c" "d d"}.menu-add-row input:nth-child(1){grid-area:a}}
+
+.embed-box{background:var(--ink);border-radius:10px;padding:16px 18px;position:relative;margin:16px 0}
+.embed-box code{color:#D7F5E3;font-family:var(--mono);font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-all}
+.copy-btn{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.1);color:#fff;border-radius:7px;padding:6px 11px;font-size:11.5px;font-weight:700}
+.copy-btn:hover{background:rgba(255,255,255,.18)}
+.widget-preview{border:1.5px dashed var(--border-strong);border-radius:12px;padding:22px;text-align:center;position:relative;min-height:120px;display:flex;align-items:center;justify-content:center;background:var(--paper)}
+.widget-bubble{position:absolute;bottom:16px;right:16px;width:52px;height:52px;background:var(--wa);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:var(--shadow-md)}
+.widget-preview .lbl{font-size:12.5px;color:var(--muted2)}
+
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+.review-card{border:1px solid var(--border);border-radius:11px;padding:16px}
+.review-card .k{font-size:10.5px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.review-card .v{font-size:14px;font-weight:600}
+.review-card .v.mono{font-family:var(--mono);font-weight:500}
+.launch-stamp{display:flex;align-items:center;gap:12px;background:var(--green-bg);border:1px solid var(--green);border-radius:11px;padding:16px 18px;margin-bottom:24px}
+.launch-stamp .ic{width:34px;height:34px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.launch-stamp b{font-size:13.5px;display:block}
+.launch-stamp span{font-size:12px;color:var(--ink-soft)}
+
+.panel-actions{display:flex;justify-content:space-between;align-items:center;margin-top:30px;padding-top:22px;border-top:1px solid var(--border)}
+.btn{border-radius:9px;padding:11px 20px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;gap:7px;transition:all .15s}
+.btn-dark{background:var(--ink);color:var(--paper)}
+.btn-dark:hover{background:var(--ink-soft)}
+.btn-brass{background:var(--brass);color:#fff}
+.btn-brass:hover{background:var(--brass-deep)}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border-strong)}
+.btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
+.btn:disabled{opacity:.45;pointer-events:none}
+
+.step-panel{display:none}
+.step-panel.active{display:block}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="index.html" class="brand"><div class="brand-icon">🍽</div>Restaurant<span>Bot</span></a>
+    <a href="index.html" class="nav-exit">← Back to home</a>
+  </div>
+</header>
+<div class="notice">
+  <div class="notice-inner">🧪 This setup wizard is a design mock — it demonstrates the flow only and doesn't save data or send real messages.</div>
+</div>
+
+<div class="wizard">
+
+  <!-- STEPPER -->
+  <div class="stepper" id="stepper">
+    <div class="step-item active" data-step="1">
+      <div class="num">1</div>
+      <div><div class="tt">Restaurant details</div><div class="dd">Name & owner info</div></div>
+    </div>
+    <div class="step-item" data-step="2">
+      <div class="num">2</div>
+      <div><div class="tt">Connect WhatsApp</div><div class="dd">Number & verification</div></div>
+    </div>
+    <div class="step-item" data-step="3">
+      <div class="num">3</div>
+      <div><div class="tt">Build your menu</div><div class="dd">Dishes, sizes & prices</div></div>
+    </div>
+    <div class="step-item" data-step="4">
+      <div class="num">4</div>
+      <div><div class="tt">Add to your website</div><div class="dd">Web App embed code</div></div>
+    </div>
+    <div class="step-item" data-step="5">
+      <div class="num">5</div>
+      <div><div class="tt">Review & launch</div><div class="dd">Go live</div></div>
+    </div>
+  </div>
+
+  <!-- PANELS -->
+  <div>
+
+    <!-- STEP 1 -->
+    <div class="step-panel active" data-panel="1">
+      <div class="panel">
+        <div class="panel-eyebrow">Step 1 of 5</div>
+        <h2>Tell us about your restaurant</h2>
+        <p class="sub">This is what your customers and staff will see across WhatsApp, your website widget and the dashboard.</p>
+        <div class="field-grid">
+          <div class="field full">
+            <label for="resName">Restaurant name</label>
+            <input id="resName" type="text" placeholder="e.g. Karachi Kitchen"/>
+          </div>
+          <div class="field">
+            <label for="ownName">Owner / manager name</label>
+            <input id="ownName" type="text" placeholder="e.g. Ahmed Raza"/>
+          </div>
+          <div class="field">
+            <label for="ownEmail">Email address</label>
+            <input id="ownEmail" type="email" placeholder="you@restaurant.com"/>
+          </div>
+          <div class="field">
+            <label for="resCity">City</label>
+            <input id="resCity" type="text" placeholder="e.g. Karachi"/>
+          </div>
+          <div class="field">
+            <label for="resType">Restaurant type</label>
+            <select id="resType">
+              <option>Takeaway / Delivery</option>
+              <option>Dine-in</option>
+              <option>Cloud kitchen</option>
+              <option>Cafe / Bakery</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-actions">
+          <span></span>
+          <button class="btn btn-dark" onclick="goTo(2)">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-panel" data-panel="2">
+      <div class="panel">
+        <div class="panel-eyebrow">Step 2 of 5</div>
+        <h2>Connect your WhatsApp number</h2>
+        <p class="sub">Use the WhatsApp Business number your customers already message. We'll text a code to confirm it's yours.</p>
+        <div class="field-grid">
+          <div class="field full">
+            <label for="waNum">WhatsApp number</label>
+            <div class="field-phone">
+              <select><option>PK +92</option><option>DE +49</option><option>AE +971</option><option>US +1</option></select>
+              <input id="waNum" type="tel" placeholder="300 1234567"/>
+            </div>
+            <span class="hint">This can be a number you already use for calls and WhatsApp today.</span>
+          </div>
+        </div>
+        <button class="btn btn-brass" style="margin-top:6px" onclick="showOtp()">Send verification code</button>
+        <div id="otpSection" style="display:none">
+          <div class="verify-note" style="margin-top:22px">Enter the 4-digit code sent to <b id="otpNumberLabel">your number</b></div>
+          <div class="otp-row">
+            <input maxlength="1" type="text"/><input maxlength="1" type="text"/><input maxlength="1" type="text"/><input maxlength="1" type="text"/>
+          </div>
+          <div class="verify-note">Didn't get it? <a href="#" style="color:var(--brass-deep);font-weight:700">Resend code</a></div>
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
+          <button class="btn btn-dark" onclick="goTo(3)">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-panel" data-panel="3">
+      <div class="panel">
+        <div class="panel-eyebrow">Step 3 of 5</div>
+        <h2>Build your menu</h2>
+        <p class="sub">Add a few dishes to start — you can add sizes, spice levels and photos any time from the dashboard.</p>
+        <div class="menu-add-row">
+          <input id="mName" type="text" placeholder="Dish name, e.g. Chicken Biryani"/>
+          <select id="mCat"><option>Main course</option><option>Starter</option><option>Beverage</option><option>Dessert</option></select>
+          <input id="mPrice" type="number" placeholder="Price (PKR)"/>
+          <div class="add-btn" onclick="addMenuItem()">+</div>
+        </div>
+        <div class="menu-list" id="menuList"></div>
+        <div class="panel-actions">
+          <button class="btn btn-ghost" onclick="goTo(2)">← Back</button>
+          <button class="btn btn-dark" onclick="goTo(4)">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-panel" data-panel="4">
+      <div class="panel">
+        <div class="panel-eyebrow">Step 4 of 5</div>
+        <h2>Add the assistant to your website</h2>
+        <p class="sub">Paste this snippet before the closing <code class="mono">&lt;/body&gt;</code> tag on your site. It shares the same menu and orders as your WhatsApp number.</p>
+        <div class="embed-box">
+          <button class="copy-btn" onclick="copyEmbed()">Copy</button>
+          <code id="embedCode">&lt;script src="https://cdn.restaurantbot.app/widget.js" data-restaurant="your-restaurant-id"&gt;&lt;/script&gt;</code>
+        </div>
+        <div class="widget-preview">
+          <span class="lbl">Preview — this bubble appears on your site once installed</span>
+          <div class="widget-bubble">💬</div>
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-ghost" onclick="goTo(3)">← Back</button>
+          <button class="btn btn-dark" onclick="goTo(5)">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-panel" data-panel="5">
+      <div class="panel">
+        <div class="panel-eyebrow">Step 5 of 5</div>
+        <h2>Review & launch</h2>
+        <p class="sub">Check the details below. Once you launch, your WhatsApp number starts answering immediately.</p>
+        <div class="review-grid">
+          <div class="review-card"><div class="k">Restaurant</div><div class="v" id="rv-name">—</div></div>
+          <div class="review-card"><div class="k">Owner</div><div class="v" id="rv-owner">—</div></div>
+          <div class="review-card"><div class="k">WhatsApp number</div><div class="v mono" id="rv-phone">—</div></div>
+          <div class="review-card"><div class="k">Menu items added</div><div class="v" id="rv-menu">0 items</div></div>
+        </div>
+        <div class="launch-stamp">
+          <div class="ic">✓</div>
+          <div><b>Everything looks ready</b><span>Your assistant will go live on WhatsApp and your website the moment you launch.</span></div>
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-ghost" onclick="goTo(4)">← Back</button>
+          <button class="btn btn-brass" onclick="launch()">🚀 Launch my assistant</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let current=1;
+let menuItems=[];
+
+function goTo(n){
+  current=n;
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.toggle('active',+p.dataset.panel===n));
+  document.querySelectorAll('.step-item').forEach(s=>{
+    const sn=+s.dataset.step;
+    s.classList.toggle('active',sn===n);
+    s.classList.toggle('done',sn<n);
+  });
+  if(n===5) fillReview();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.querySelectorAll('.step-item').forEach(s=>{
+  s.style.cursor='pointer';
+  s.addEventListener('click',()=>goTo(+s.dataset.step));
+});
+
+function showOtp(){
+  const num=document.getElementById('waNum').value.trim();
+  document.getElementById('otpNumberLabel').textContent = num ? ('+92 '+num) : 'your number';
+  document.getElementById('otpSection').style.display='block';
+}
+
+function addMenuItem(){
+  const name=document.getElementById('mName').value.trim();
+  const cat=document.getElementById('mCat').value;
+  const price=document.getElementById('mPrice').value;
+  if(!name||!price) return;
+  menuItems.push({name,cat,price});
+  renderMenu();
+  document.getElementById('mName').value='';
+  document.getElementById('mPrice').value='';
+}
+
+function renderMenu(){
+  const list=document.getElementById('menuList');
+  list.innerHTML = menuItems.map((it,i)=>`
+    <div class="menu-list-row">
+      <span><span class="nm">${it.name}</span><span class="meta">${it.cat}</span></span>
+      <span><span class="price">PKR ${it.price}</span><span class="rm" onclick="removeMenuItem(${i})">×</span></span>
+    </div>`).join('');
+}
+function removeMenuItem(i){ menuItems.splice(i,1); renderMenu(); }
+
+function copyEmbed(){
+  const text=document.getElementById('embedCode').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    const old=btn.textContent; btn.textContent='Copied ✓';
+    setTimeout(()=>btn.textContent=old,1500);
+  });
+}
+
+function fillReview(){
+  document.getElementById('rv-name').textContent = document.getElementById('resName').value || '—';
+  document.getElementById('rv-owner').textContent = document.getElementById('ownName').value || '—';
+  const num=document.getElementById('waNum').value.trim();
+  document.getElementById('rv-phone').textContent = num ? ('+92 '+num) : '—';
+  document.getElementById('rv-menu').textContent = menuItems.length + ' items';
+}
+
+function launch(){
+  const panel=document.querySelector('.step-panel[data-panel="5"] .panel');
+  panel.innerHTML = `
+    <div class="panel-eyebrow">All set</div>
+    <h2>🎉 Your assistant is live</h2>
+    <p class="sub">This is a mock confirmation — in the real product, your WhatsApp number and website widget would start answering customers right now.</p>
+    <div class="launch-stamp">
+      <div class="ic">✓</div>
+      <div><b>${document.getElementById('resName').value || 'Your restaurant'} is connected</b><span>WhatsApp bot and website widget are both active.</span></div>
+    </div>
+    <div class="panel-actions">
+      <a href="index.html" class="btn btn-ghost">← Back to home</a>
+      <a href="crm.html" class="btn btn-dark">Open your dashboard →</a>
+    </div>`;
+}
+</script>
+</body>
+</html>
