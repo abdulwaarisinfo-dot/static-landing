@@ -64,6 +64,13 @@ h1.hero-title .accent{color:var(--brass)}
 .hero-note{font-size:12px;color:var(--muted2)}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:36px}h1.hero-title{font-size:34px}}
 
+/* two-step path chips under the hero copy */
+.path-chips{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.path-chip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-strong);border-radius:11px;padding:8px 13px 8px 10px}
+.path-chip .n{width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10.5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.path-chip .t{font-size:12.5px;font-weight:600}
+.path-arrow{color:var(--muted2);font-size:14px}
+
 .phone-wrap{display:flex;justify-content:center}
 .phone{width:270px;background:#161A18;border-radius:32px;padding:10px;box-shadow:var(--shadow-lg)}
 .phone-screen{background:#E7E0D3;border-radius:22px;overflow:hidden;height:440px;display:flex;flex-direction:column}
@@ -75,6 +82,7 @@ h1.hero-title .accent{color:var(--brass)}
 .bubble{max-width:82%;padding:9px 11px;border-radius:10px;font-size:12px;line-height:1.5;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .bubble.bot{background:#fff;color:#111;border-top-left-radius:2px;align-self:flex-start}
 .bubble.user{background:#DCF8C6;color:#111;border-top-right-radius:2px;align-self:flex-end}
+.bubble .ms{display:block;margin-top:3px;font-size:9px;color:#9AA39C;text-align:right}
 .chips{display:flex;flex-wrap:wrap;gap:5px;align-self:flex-start;max-width:88%}
 .chips span{background:#fff;border:1px solid var(--wa);color:#1DA851;border-radius:14px;padding:4px 10px;font-size:10px;font-weight:600}
 .order-card-mini{background:#fff;border-radius:10px;padding:9px 11px;font-size:11px;align-self:flex-start;max-width:85%;box-shadow:0 1px 2px rgba(0,0,0,.08)}
@@ -89,7 +97,7 @@ h1.hero-title .accent{color:var(--brass)}
 .strip-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px}
 .strip-item{display:flex;align-items:center;gap:10px}
 .strip-item .num{font-family:var(--display);font-size:21px;font-weight:700}
-.strip-item .lbl{font-size:11.5px;color:var(--muted);max-width:130px;line-height:1.35}
+.strip-item .lbl{font-size:11.5px;color:var(--muted);max-width:150px;line-height:1.35}
 
 section{padding:80px 0}
 @media(max-width:640px){section{padding:52px 0}}
@@ -122,7 +130,8 @@ h2.sec-title{font-family:var(--display);font-size:31px;font-weight:700;letter-sp
 
 /* CHANNELS */
 .chan-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.chan-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px}
+.chan-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;position:relative}
+.chan-card .chan-step{position:absolute;top:22px;right:22px;font-family:var(--mono);font-size:11px;color:var(--muted2)}
 .chan-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;margin-bottom:14px}
 .chan-card h4{font-family:var(--display);font-size:15.5px;font-weight:700;margin-bottom:7px}
 .chan-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
@@ -130,6 +139,7 @@ h2.sec-title{font-family:var(--display);font-size:31px;font-weight:700;letter-sp
 .chan-card ul li{font-size:12.5px;color:var(--ink-soft);display:flex;gap:8px}
 .chan-card ul li::before{content:'—';color:var(--muted2)}
 .chan-link{font-size:12.5px;font-weight:700;color:var(--brass-deep)}
+.chan-connector{display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:13px;font-weight:600;gap:8px;margin:14px 0 2px}
 @media(max-width:700px){.chan-wrap{grid-template-columns:1fr}}
 
 /* DASHBOARD CALLOUT */
@@ -224,7 +234,14 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
       <div>
         <div class="eyebrow"><span class="dot"></span> For restaurants already on WhatsApp</div>
         <h1 class="hero-title">A WhatsApp assistant that takes orders for your <span class="accent">restaurant</span></h1>
-        <p class="hero-sub">Connect your WhatsApp number, add your menu, and RestaurantBot answers questions, takes orders and applies deals — around the clock. Add the same assistant to your website too, and manage every order from one dashboard.</p>
+        <p class="hero-sub">Connect your WhatsApp number, add your menu, and RestaurantBot answers questions, takes orders and applies deals — around the clock, in under 4 seconds per reply. Add the same assistant to your website too, and manage every order from one dashboard.</p>
+
+        <div class="path-chips">
+          <div class="path-chip"><span class="n">1</span><span class="t">Connect your WhatsApp number</span></div>
+          <span class="path-arrow">→</span>
+          <div class="path-chip"><span class="n">2</span><span class="t">Add the widget to your website</span></div>
+        </div>
+
         <div class="hero-ctas">
           <a href="web.html" class="btn btn-brass btn-lg">Build your assistant →</a>
           <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-outline btn-lg">💬 Try a live demo</a>
@@ -247,7 +264,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
                 <div class="row"><span>Size</span><span>Full Plate</span></div>
                 <div class="row"><span>Spice</span><span>Spicy 🌶️</span></div>
               </div>
-              <div class="bubble bot">Order confirmed — sending it to the kitchen now 🧑‍🍳</div>
+              <div class="bubble bot">Order confirmed — sending it to the kitchen now 🧑‍🍳<span class="ms">Replied in 2s</span></div>
             </div>
             <div class="wa-input"><div class="fld">Type a message…</div><div class="snd">➤</div></div>
           </div>
@@ -258,9 +275,9 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
 
   <div class="strip">
     <div class="wrap strip-inner">
-      <div class="strip-item"><span class="num">1</span><span class="lbl">WhatsApp number, no new one to buy</span></div>
+      <div class="strip-item"><span class="num">&lt;4s</span><span class="lbl">average reply time, day or night</span></div>
       <div class="strip-item"><span class="num">3</span><span class="lbl">languages — English, Urdu, German</span></div>
-      <div class="strip-item"><span class="num">~10 min</span><span class="lbl">from sign-up to first order</span></div>
+      <div class="strip-item"><span class="num">~80%</span><span class="lbl">less manual order-taking for your staff</span></div>
       <div class="strip-item"><span class="num">1</span><span class="lbl">dashboard for orders, menu & bot</span></div>
     </div>
   </div>
@@ -273,12 +290,12 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
         <p class="sec-sub">Each feature is wired to a real screen in your dashboard, so what the bot promises a customer is exactly what your kitchen sees.</p>
       </div>
       <div class="feat-grid">
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--brass-bg)">📦</div><h3>Live order taking</h3><p>Customers pick sizes, spice levels and extras in chat. Orders land on your Live Orders board instantly.</p></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--brass-bg)">📦</div><h3>Live order taking</h3><p>Customers pick sizes, spice levels and extras in chat, with replies in under 4 seconds. Orders land on your Live Orders board instantly.</p></div>
         <div class="feat-card reveal"><div class="feat-ic" style="background:var(--blue-bg)">🍽</div><h3>Smart menu browsing</h3><p>The bot suggests dishes by category and stays in sync with the menu you edit in the dashboard.</p></div>
         <div class="feat-card reveal"><div class="feat-ic" style="background:var(--green-bg)">🏷</div><h3>Deals & combos</h3><p>Run combo or happy-hour deals that the bot surfaces automatically to the right customer.</p></div>
         <div class="feat-card reveal"><div class="feat-ic" style="background:var(--brass-bg)">🎁</div><h3>Promo codes</h3><p>Issue coupon codes with minimum-order rules and usage limits, and track redemptions.</p></div>
         <div class="feat-card reveal"><div class="feat-ic" style="background:var(--blue-bg)">💬</div><h3>Multilingual FAQs</h3><p>Delivery policy, hours and allergens — answered instantly in English, Urdu or German.</p></div>
-        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--green-bg)">📊</div><h3>Built-in analytics</h3><p>See what sells, size and spice preferences, and revenue by status — no spreadsheets.</p></div>
+        <div class="feat-card reveal"><div class="feat-ic" style="background:var(--green-bg)">📊</div><h3>Built-in analytics</h3><p>See what sells, size and spice preferences, and revenue by status — no spreadsheets, no manual counting.</p></div>
       </div>
     </div>
   </section>
@@ -288,7 +305,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
       <div class="sec-head center reveal">
         <div class="sec-eyebrow">Getting set up</div>
         <h2 class="sec-title">From sign-up to your first WhatsApp order</h2>
-        <p class="sec-sub">No code, no waiting on a developer — this is the exact sequence every restaurant owner follows.</p>
+        <p class="sec-sub">No code, no waiting on a developer — this is the exact sequence every restaurant owner follows in the Build Your Assistant wizard.</p>
       </div>
       <div class="flow-row reveal">
         <div class="flow-step"><div class="flow-num">01</div><h4>Create your account</h4><p>Tell us your restaurant name and your details — takes about a minute.</p></div>
@@ -307,10 +324,11 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
       <div class="sec-head reveal">
         <div class="sec-eyebrow">Where customers reach you</div>
         <h2 class="sec-title">One assistant, wherever your customers already are</h2>
-        <p class="sec-sub">Turn either of these on — every order lands in the same dashboard.</p>
+        <p class="sec-sub">Connect your WhatsApp number first, then add the same assistant to your website — every order lands in the same dashboard.</p>
       </div>
       <div class="chan-wrap">
         <div class="chan-card reveal">
+          <span class="chan-step">Step 1</span>
           <div class="chan-ic" style="background:#DCF8C6;color:#1DA851">💬</div>
           <h4>WhatsApp Business number</h4>
           <p>Your customers message the number they already have saved. Nothing changes for them except how fast it's answered.</p>
@@ -322,6 +340,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
           <a href="web.html" class="chan-link">Connect a number →</a>
         </div>
         <div class="chan-card reveal">
+          <span class="chan-step">Step 2</span>
           <div class="chan-ic" style="background:var(--blue-bg)">🌐</div>
           <h4>Website chat widget (Web App)</h4>
           <p>The same assistant as a chat bubble on your own restaurant website — one line of code, same brain, same menu.</p>
@@ -341,7 +360,7 @@ footer{border-top:1px solid var(--border);padding:40px 0 26px;background:var(--s
       <div class="crm-block reveal">
         <div>
           <h2>Every order — WhatsApp or website — lands in one dashboard</h2>
-          <p>A live orders board, menu editor, deals & offers, FAQ manager and analytics, all in one panel your staff can pick up in a day.</p>
+          <p>A live orders board, menu editor, deals & offers, FAQ manager and analytics, all in one panel your staff can pick up in a day, cutting manual order-taking by roughly 80%.</p>
           <ul class="crm-list">
             <li>Live order board that auto-refreshes and flags new orders</li>
             <li>Menu, deals & promo codes editable without a developer</li>
