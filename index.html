@@ -3,119 +3,120 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>RestaurantBot — WhatsApp Ordering Assistant for Restaurants</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<title>RestaurantBot — Turn your WhatsApp number into an ordering system</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#F7F6F3;--surface:#FFFFFF;--surface2:#F0EFE9;--border:#E4E2D8;--border-light:#EDEBE4;
-  --accent:#1A1A18;--accent2:#D4621A;--green:#1C7A4A;--green-bg:#E9F5EE;
-  --red:#C42B2B;--red-bg:#FDEEEE;--blue:#1A4FD6;--blue-bg:#EAF0FD;
-  --amber:#A05A0D;--amber-bg:#FEF5E7;--purple:#5B21B6;--purple-bg:#F1EDFD;
-  --teal:#0D7373;--pink:#B5136F;--pink-bg:#FDE8F3;--wa:#25D366;
-  --text:#1A1A18;--muted:#72706A;--muted2:#A8A59E;
-  --font:'DM Sans',sans-serif;--display:'Syne',sans-serif;--mono:'DM Mono',monospace;
-  --radius:12px;--radius-sm:8px;--radius-xs:5px;
-  --shadow:0 1px 3px rgba(0,0,0,.05),0 1px 2px rgba(0,0,0,.03);
-  --shadow-md:0 4px 16px rgba(0,0,0,.07),0 2px 6px rgba(0,0,0,.04);
-  --shadow-lg:0 16px 40px rgba(0,0,0,.10),0 4px 12px rgba(0,0,0,.05);
+  --ink:#1C2321;--ink-soft:#333B38;
+  --paper:#F3F1E8;--surface:#FFFFFF;--surface2:#EDEADD;
+  --border:#DEDACB;--border-strong:#C9C4AE;
+  --brass:#A9702E;--brass-deep:#8A5A24;--brass-bg:#F6EBDA;
+  --green:#2E6B4F;--green-bg:#E5F0E9;
+  --red:#B23A2E;--red-bg:#FBEAE7;
+  --blue:#2A4C7A;--blue-bg:#E9EEF5;
+  --wa:#25D366;--wa-deep:#1DA851;
+  --muted:#6B6659;--muted2:#9A9482;
+  --font:'Inter',sans-serif;--display:'Fraunces',serif;--mono:'DM Mono',monospace;
+  --radius:14px;--radius-sm:9px;--radius-xs:6px;
+  --shadow:0 1px 2px rgba(28,35,33,.06),0 1px 1px rgba(28,35,33,.04);
+  --shadow-md:0 10px 28px rgba(28,35,33,.09),0 2px 8px rgba(28,35,33,.05);
+  --shadow-lg:0 24px 60px rgba(28,35,33,.16),0 6px 16px rgba(28,35,33,.07);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--paper);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;border:none;outline:none;font-family:var(--font)}
 img{max-width:100%;display:block}
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:8px}
 .wrap{max-width:1180px;margin:0 auto;padding:0 32px}
 @media(max-width:640px){.wrap{padding:0 18px}}
+.mono{font-family:var(--mono)}
 
 /* ---------- NAV ---------- */
-header{position:sticky;top:0;z-index:400;background:rgba(247,246,243,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--border-light)}
+header{position:sticky;top:0;z-index:400;background:rgba(243,241,232,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:15px 0}
-.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:16px;font-weight:700}
-.brand-icon{width:34px;height:34px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.brand span{color:var(--muted);font-weight:400}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:17px;font-weight:700}
+.brand-icon{width:34px;height:34px;background:var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;color:var(--paper)}
+.brand span{color:var(--muted);font-weight:500}
 nav.links{display:flex;align-items:center;gap:28px}
 nav.links a{font-size:13.5px;font-weight:600;color:var(--muted);transition:color .15s}
-nav.links a:hover{color:var(--text)}
+nav.links a:hover{color:var(--ink)}
 .nav-cta{display:flex;align-items:center;gap:9px}
 .btn{border-radius:var(--radius-sm);padding:10px 18px;font-size:13.5px;font-weight:700;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;letter-spacing:.01em;white-space:nowrap}
-.btn-dark{background:var(--accent);color:#fff;box-shadow:var(--shadow)}
-.btn-dark:hover{background:#2d2d2a;transform:translateY(-1px)}
-.btn-outline{background:var(--surface);border:1.5px solid var(--border);color:var(--text)}
-.btn-outline:hover{border-color:var(--accent);background:var(--bg)}
-.btn-wa{background:var(--wa);color:#fff;box-shadow:0 4px 14px rgba(37,211,102,.35)}
-.btn-wa:hover{background:#20bd5a;transform:translateY(-1px)}
+.btn-dark{background:var(--ink);color:var(--paper);box-shadow:var(--shadow)}
+.btn-dark:hover{background:var(--ink-soft);transform:translateY(-1px)}
+.btn-outline{background:var(--surface);border:1.5px solid var(--border-strong);color:var(--ink)}
+.btn-outline:hover{border-color:var(--ink);background:var(--surface2)}
+.btn-brass{background:var(--brass);color:#fff;box-shadow:0 4px 14px rgba(169,112,46,.30)}
+.btn-brass:hover{background:var(--brass-deep);transform:translateY(-1px)}
+.btn-wa{background:var(--wa);color:#0a2b16;box-shadow:0 4px 14px rgba(37,211,102,.30)}
+.btn-wa:hover{background:var(--wa-deep);color:#fff;transform:translateY(-1px)}
 .btn-lg{padding:14px 26px;font-size:14.5px;border-radius:11px}
-.menu-toggle{display:none;width:38px;height:38px;border-radius:8px;background:var(--surface);border:1px solid var(--border);align-items:center;justify-content:center;flex-direction:column;gap:4px}
-.menu-toggle span{width:16px;height:2px;background:var(--text);border-radius:2px}
+.menu-toggle{display:none;width:38px;height:38px;border-radius:8px;background:var(--surface);border:1px solid var(--border-strong);align-items:center;justify-content:center;flex-direction:column;gap:4px}
+.menu-toggle span{width:16px;height:2px;background:var(--ink);border-radius:2px}
 @media(max-width:900px){nav.links{display:none}.menu-toggle{display:flex}.nav-cta .btn-outline{display:none}}
 @media(max-width:520px){.nav-cta .btn span.full{display:none}}
 
 /* ---------- HERO ---------- */
-.hero{padding:76px 0 40px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-140px;right:-160px;width:520px;height:520px;background:radial-gradient(circle,rgba(212,98,26,.10),transparent 70%);pointer-events:none}
+.hero{padding:72px 0 36px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-160px;right:-180px;width:560px;height:560px;background:radial-gradient(circle,rgba(169,112,46,.10),transparent 70%);pointer-events:none}
 .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;position:relative}
-.eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:6px 13px;font-size:11.5px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-bottom:22px;box-shadow:var(--shadow)}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1.5px solid var(--border-strong);border-radius:20px;padding:6px 13px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:22px;box-shadow:var(--shadow)}
 .eyebrow .dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse-dot 2s ease-in-out infinite}
-@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.35}}
-h1.hero-title{font-family:var(--display);font-size:52px;font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:20px}
-h1.hero-title .accent{color:var(--accent2)}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+h1.hero-title{font-family:var(--display);font-size:53px;font-weight:700;line-height:1.06;letter-spacing:-.01em;margin-bottom:20px}
+h1.hero-title .accent{color:var(--brass);font-style:italic;font-weight:600}
 .hero-sub{font-size:16.5px;color:var(--muted);line-height:1.65;max-width:490px;margin-bottom:30px}
-.hero-ctas{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.hero-ctas{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
 .hero-microcopy{font-size:12px;color:var(--muted2);display:flex;align-items:center;gap:8px}
-.avatars{display:flex}
-.avatars span{width:22px;height:22px;border-radius:50%;border:2px solid var(--bg);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:10px;margin-left:-7px}
-.avatars span:first-child{margin-left:0}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:40px}h1.hero-title{font-size:36px}}
+@media(max-width:520px){h1.hero-title{font-size:29px}.hero-sub{font-size:14.5px}}
 
-/* Phone mock */
-.phone-wrap{display:flex;justify-content:center;position:relative}
-.phone{width:300px;background:#111;border-radius:38px;padding:12px;box-shadow:var(--shadow-lg);position:relative}
-.phone-notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:110px;height:20px;background:#111;border-radius:0 0 14px 14px;z-index:5}
-.phone-screen{background:#E5DDD5;border-radius:28px;overflow:hidden;height:560px;display:flex;flex-direction:column}
-.wa-head{background:#075E54;padding:16px 14px 12px;display:flex;align-items:center;gap:9px;flex-shrink:0}
-.wa-head .ic{width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px}
-.wa-head .nm{font-size:13px;font-weight:700;color:#fff}
-.wa-head .st{font-size:10.5px;color:#B2EFD4}
-.wa-body{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:9px;overflow:hidden}
-.bubble{max-width:80%;padding:9px 11px;border-radius:10px;font-size:12px;line-height:1.5;box-shadow:0 1px 2px rgba(0,0,0,.08);animation:bubbleIn .4s ease both}
-@keyframes bubbleIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.bubble.bot{background:#fff;color:#111;border-top-left-radius:2px;align-self:flex-start}
-.bubble.user{background:#DCF8C6;color:#111;border-top-right-radius:2px;align-self:flex-end}
-.bubble .tm{font-size:9px;color:#999;margin-top:4px;text-align:right}
-.chips{display:flex;flex-wrap:wrap;gap:5px;align-self:flex-start;max-width:88%}
-.chips span{background:#fff;border:1px solid var(--wa);color:var(--wa);border-radius:14px;padding:4px 10px;font-size:10.5px;font-weight:600}
-.order-card-mini{background:#fff;border-radius:10px;padding:9px 11px;font-size:11px;align-self:flex-start;max-width:85%;box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.order-card-mini .t{font-weight:700;margin-bottom:4px;display:flex;justify-content:space-between}
-.order-card-mini .row{display:flex;justify-content:space-between;color:#555;font-size:10.5px;padding:1px 0}
-.wa-input{background:#F0F0F0;padding:9px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0}
-.wa-input .fld{flex:1;background:#fff;border-radius:20px;padding:8px 12px;font-size:11px;color:#999}
-.wa-input .snd{width:30px;height:30px;background:var(--wa);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
-.float-card{position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow-lg);font-size:12px}
-.float-card.f1{top:44px;left:-38px;display:flex;align-items:center;gap:9px}
-.float-card.f1 .ic{width:30px;height:30px;background:var(--green-bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
-.float-card.f1 b{font-family:var(--display);font-size:15px;display:block}
-.float-card.f2{bottom:60px;right:-30px}
+/* ---------- SIGNATURE: CONNECT TICKET ---------- */
+.ticket-wrap{display:flex;justify-content:center;position:relative}
+.ticket{width:320px;background:var(--surface);border-radius:4px;box-shadow:var(--shadow-lg);position:relative;padding:0}
+.ticket::before,.ticket::after{content:'';position:absolute;left:50%;transform:translateX(-50%);width:26px;height:13px;background:var(--paper);border-radius:0 0 26px 26px}
+.ticket::before{top:-1px}
+.ticket::after{bottom:-1px;border-radius:26px 26px 0 0}
+.ticket-head{padding:20px 22px 14px;border-bottom:1.5px dashed var(--border-strong)}
+.ticket-head .lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:6px}
+.ticket-head .biz{font-family:var(--display);font-size:19px;font-weight:700}
+.ticket-body{padding:18px 22px;display:flex;flex-direction:column;gap:14px}
+.ticket-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px}
+.ticket-row .k{color:var(--muted)}
+.ticket-row .v{font-family:var(--mono);font-weight:500}
+.ticket-step{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--paper);border-radius:8px;border:1px solid var(--border)}
+.ticket-step .n{width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ticket-step.done .n{background:var(--green)}
+.ticket-step .t{font-size:12.5px;font-weight:600;margin-bottom:2px}
+.ticket-step .d{font-size:11px;color:var(--muted)}
+.ticket-stamp{align-self:center;border:2px solid var(--green);color:var(--green);font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;padding:6px 16px;border-radius:6px;transform:rotate(-4deg);text-transform:uppercase;margin-top:2px}
+.ticket-foot{border-top:1.5px dashed var(--border-strong);padding:14px 22px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted2);font-family:var(--mono)}
+.float-card{position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 14px;box-shadow:var(--shadow-lg);font-size:12px}
+.float-card.f1{top:30px;left:-30px;display:flex;align-items:center;gap:9px}
+.float-card.f1 .ic{width:28px;height:28px;background:var(--wa);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.float-card.f1 b{font-family:var(--display);font-size:14px;display:block}
+.float-card.f2{bottom:36px;right:-26px}
 @media(max-width:1024px){.float-card{display:none}}
-@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:40px}.phone-wrap{order:-1}h1.hero-title{font-size:38px}.phone{width:250px}.phone-screen{height:460px}}
-@media(max-width:520px){h1.hero-title{font-size:30px}.hero-sub{font-size:14.5px}}
+@media(max-width:900px){.ticket{width:280px}}
 
 /* ---------- LOGO STRIP ---------- */
-.strip{border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);padding:22px 0;background:var(--surface)}
+.strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:22px 0;background:var(--surface)}
 .strip-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;align-items:center}
 .strip-item{display:flex;align-items:center;gap:10px}
 .strip-item .num{font-family:var(--display);font-size:22px;font-weight:700}
-.strip-item .lbl{font-size:11.5px;color:var(--muted);max-width:120px;line-height:1.35}
+.strip-item .lbl{font-size:11.5px;color:var(--muted);max-width:130px;line-height:1.35}
 
 /* ---------- SECTION SHARED ---------- */
 section{padding:88px 0}
-@media(max-width:640px){section{padding:56px 0}}
+@media(max-width:640px){section{padding:54px 0}}
 .sec-head{max-width:620px;margin-bottom:48px}
-.sec-eyebrow{font-size:11.5px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.sec-eyebrow::before{content:'';width:16px;height:2px;background:var(--accent2);display:inline-block}
-h2.sec-title{font-family:var(--display);font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.15;margin-bottom:14px}
+.sec-eyebrow{font-size:11px;font-weight:700;color:var(--brass);text-transform:uppercase;letter-spacing:.09em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-eyebrow::before{content:'';width:16px;height:2px;background:var(--brass);display:inline-block}
+h2.sec-title{font-family:var(--display);font-size:33px;font-weight:700;letter-spacing:-.01em;line-height:1.15;margin-bottom:14px}
 .sec-sub{font-size:15px;color:var(--muted);line-height:1.65}
 .sec-head.center{margin-left:auto;margin-right:auto;text-align:center}
 .sec-head.center .sec-eyebrow{justify-content:center}
@@ -125,62 +126,93 @@ h2.sec-title{font-family:var(--display);font-size:34px;font-weight:700;letter-sp
 .feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);transition:box-shadow .18s,transform .18s}
 .feat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
 .feat-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:16px}
-.feat-card h3{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:8px}
+.feat-card h3{font-family:var(--display);font-size:15.5px;font-weight:700;margin-bottom:8px}
 .feat-card p{font-size:13px;color:var(--muted);line-height:1.6}
 .feat-tag{display:inline-flex;margin-top:12px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px}
 @media(max-width:900px){.feat-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.feat-grid{grid-template-columns:1fr}}
 
-/* ---------- HOW IT WORKS (sequence) ---------- */
-.flow{position:relative}
+/* ---------- SETUP FLOW ---------- */
 .flow-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
-.flow-row::before{content:'';position:absolute;top:23px;left:11%;right:11%;height:1.5px;background:repeating-linear-gradient(90deg,var(--border) 0 8px,transparent 8px 14px);z-index:0}
+.flow-row::before{content:'';position:absolute;top:23px;left:11%;right:11%;height:1.5px;background:repeating-linear-gradient(90deg,var(--border-strong) 0 8px,transparent 8px 14px);z-index:0}
 .flow-step{position:relative;z-index:1}
-.flow-num{width:46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--display);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:18px;box-shadow:var(--shadow-md)}
+.flow-num{width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:15px;font-weight:500;display:flex;align-items:center;justify-content:center;margin-bottom:18px;box-shadow:var(--shadow-md)}
 .flow-step h4{font-family:var(--display);font-size:14.5px;font-weight:700;margin-bottom:7px}
 .flow-step p{font-size:12.5px;color:var(--muted);line-height:1.6}
 @media(max-width:900px){.flow-row{grid-template-columns:1fr 1fr;gap:32px 20px}.flow-row::before{display:none}}
 @media(max-width:560px){.flow-row{grid-template-columns:1fr}}
 
-/* ---------- CHANNELS ---------- */
-.chan-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.chan-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;align-items:flex-start;gap:15px;transition:all .15s}
-.chan-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
-.chan-ic{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.chan-card h4{font-family:var(--display);font-size:14.5px;font-weight:700;margin-bottom:5px}
-.chan-card p{font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:10px}
-.chan-link{font-size:12px;font-weight:700;color:var(--accent2);display:inline-flex;align-items:center;gap:4px}
-@media(max-width:700px){.chan-wrap{grid-template-columns:1fr}}
+/* ---------- WHATSAPP CONNECT SECTION ---------- */
+.connect-block{background:var(--ink);border-radius:22px;padding:56px 48px;display:grid;grid-template-columns:.95fr 1.05fr;gap:44px;align-items:center;position:relative;overflow:hidden}
+.connect-block::before{content:'';position:absolute;top:-120px;right:-100px;width:360px;height:360px;background:radial-gradient(circle,rgba(37,211,102,.16),transparent 70%)}
+.connect-block .tag{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:#B2EFD4;letter-spacing:.05em;text-transform:uppercase;margin-bottom:18px}
+.connect-block h2{color:#fff;font-family:var(--display);font-size:27px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
+.connect-block p{color:rgba(255,255,255,.62);font-size:14.5px;line-height:1.65;margin-bottom:24px;max-width:460px}
+.connect-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:8px}
+.connect-list li{color:rgba(255,255,255,.85);font-size:13px;display:flex;align-items:flex-start;gap:9px;line-height:1.5}
+.connect-list li::before{content:'✓';width:18px;height:18px;background:rgba(37,211,102,.18);color:#5FE39A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px}
+.phone-mock{width:100%;max-width:320px;justify-self:center;background:#111;border-radius:34px;padding:11px;box-shadow:var(--shadow-lg)}
+.phone-screen{background:#E5DDD1;border-radius:24px;overflow:hidden;height:420px;display:flex;flex-direction:column}
+.wa-head{background:#075E54;padding:14px 14px 11px;display:flex;align-items:center;gap:9px;flex-shrink:0}
+.wa-head .ic{width:30px;height:30px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+.wa-head .nm{font-size:12.5px;font-weight:700;color:#fff}
+.wa-head .st{font-size:10px;color:#B2EFD4}
+.wa-body{flex:1;padding:13px 12px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.bubble{max-width:82%;padding:9px 11px;border-radius:10px;font-size:11.5px;line-height:1.5;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.bubble.bot{background:#fff;color:#111;border-top-left-radius:2px;align-self:flex-start}
+.bubble.user{background:#DCF8C6;color:#111;border-top-right-radius:2px;align-self:flex-end}
+.chips{display:flex;flex-wrap:wrap;gap:5px;align-self:flex-start;max-width:88%}
+.chips span{background:#fff;border:1px solid var(--wa);color:#1DA851;border-radius:14px;padding:4px 10px;font-size:10px;font-weight:600}
+@media(max-width:900px){.connect-block{grid-template-columns:1fr;padding:36px 24px}}
+
+/* ---------- WEB APP SECTION ---------- */
+.webapp-wrap{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+.browser-mock{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-md);overflow:hidden}
+.browser-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.browser-bar span.dot{width:8px;height:8px;border-radius:50%;background:var(--border-strong)}
+.browser-bar .url{margin-left:8px;font-family:var(--mono);font-size:10.5px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:4px 10px;border-radius:20px;flex:1}
+.browser-body{padding:20px}
+.wa-menu-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.wa-menu-head b{font-family:var(--display);font-size:16px}
+.wa-menu-head span{font-size:10.5px;color:var(--muted);background:var(--paper);border:1px solid var(--border);border-radius:20px;padding:3px 9px}
+.menu-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid var(--border);border-radius:9px;margin-bottom:8px;font-size:12.5px}
+.menu-row .price{font-family:var(--mono);font-weight:600}
+.menu-row .btn-add{width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:13px;display:flex;align-items:center;justify-content:center}
+.webapp-feats{display:flex;flex-direction:column;gap:18px}
+.wf-item{display:flex;gap:14px}
+.wf-item .ic{width:36px;height:36px;border-radius:9px;background:var(--brass-bg);color:var(--brass-deep);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.wf-item h4{font-family:var(--display);font-size:14.5px;font-weight:700;margin-bottom:4px}
+.wf-item p{font-size:12.5px;color:var(--muted);line-height:1.6}
+@media(max-width:900px){.webapp-wrap{grid-template-columns:1fr}}
 
 /* ---------- CRM CALLOUT ---------- */
-.crm-block{background:var(--accent);border-radius:20px;padding:52px 48px;display:grid;grid-template-columns:1fr .9fr;gap:40px;align-items:center;position:relative;overflow:hidden}
-.crm-block::before{content:'';position:absolute;bottom:-100px;left:-80px;width:340px;height:340px;background:radial-gradient(circle,rgba(212,98,26,.25),transparent 70%)}
-.crm-block h2{color:#fff;font-family:var(--display);font-size:28px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
-.crm-block p{color:rgba(255,255,255,.65);font-size:14.5px;line-height:1.65;margin-bottom:24px;max-width:440px}
+.crm-block{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:52px 48px;display:grid;grid-template-columns:1fr .9fr;gap:40px;align-items:center;position:relative;overflow:hidden}
+.crm-block h2{font-family:var(--display);font-size:27px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
+.crm-block p{color:var(--muted);font-size:14.5px;line-height:1.65;margin-bottom:24px;max-width:440px}
 .crm-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
-.crm-list li{color:rgba(255,255,255,.85);font-size:13px;display:flex;align-items:center;gap:9px}
-.crm-list li::before{content:'✓';width:18px;height:18px;background:rgba(255,255,255,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
-.crm-mock{background:var(--bg);border-radius:14px;padding:14px;box-shadow:var(--shadow-lg)}
+.crm-list li{color:var(--ink-soft);font-size:13px;display:flex;align-items:center;gap:9px}
+.crm-list li::before{content:'✓';width:18px;height:18px;background:var(--green-bg);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.crm-mock{background:var(--paper);border-radius:14px;padding:14px;box-shadow:var(--shadow-lg)}
 .crm-mock-top{display:flex;gap:6px;margin-bottom:12px}
-.crm-mock-top span{width:9px;height:9px;border-radius:50%;background:var(--border)}
+.crm-mock-top span{width:9px;height:9px;border-radius:50%;background:var(--border-strong)}
 .crm-mock-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .crm-mock-stats .s{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px}
 .crm-mock-stats .s .l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:5px}
 .crm-mock-stats .s .v{font-family:var(--display);font-size:17px;font-weight:700}
-.crm-mock-row{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:11px}
-.crm-mock-row .pl{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--amber-bg);color:var(--amber)}
+.crm-mock-row{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 11px;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:11px;font-family:var(--mono)}
+.crm-mock-row .pl{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--brass-bg);color:var(--brass-deep);font-family:var(--font)}
 @media(max-width:900px){.crm-block{grid-template-columns:1fr;padding:36px 26px}.crm-mock{display:none}}
 
 /* ---------- PRICING ---------- */
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
 .price-card{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:30px 26px;display:flex;flex-direction:column;position:relative;transition:transform .18s,box-shadow .18s}
 .price-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
-.price-card.pop{border-color:var(--accent2);box-shadow:0 8px 30px rgba(212,98,26,.14)}
-.price-badge{position:absolute;top:-13px;left:26px;background:var(--accent2);color:#fff;font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.03em}
-.price-plan{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.price-card.pop{border-color:var(--brass);box-shadow:0 8px 30px rgba(169,112,46,.14)}
+.price-badge{position:absolute;top:-13px;left:26px;background:var(--brass);color:#fff;font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.03em}
+.price-plan{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:var(--mono)}
 .price-name{font-family:var(--display);font-size:20px;font-weight:700;margin-bottom:10px}
 .price-amt{display:flex;align-items:baseline;gap:5px;margin-bottom:6px}
-.price-amt .n{font-family:var(--display);font-size:36px;font-weight:800;letter-spacing:-.02em}
+.price-amt .n{font-family:var(--display);font-size:34px;font-weight:800;letter-spacing:-.01em}
 .price-amt .u{font-size:12.5px;color:var(--muted)}
 .price-desc{font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:22px;min-height:36px}
 .price-feats{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:26px;flex:1}
@@ -200,42 +232,44 @@ h2.sec-title{font-family:var(--display);font-size:34px;font-weight:700;letter-sp
 
 /* ---------- FINAL CTA ---------- */
 .final-cta{text-align:center;background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:20px;padding:64px 32px}
-.final-cta h2{font-family:var(--display);font-size:32px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
+.final-cta h2{font-family:var(--display);font-size:31px;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
 .final-cta p{font-size:14.5px;color:var(--muted);max-width:460px;margin:0 auto 28px}
 .final-ctas{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 
 /* ---------- FOOTER ---------- */
-footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:var(--surface)}
+footer{border-top:1px solid var(--border);padding:44px 0 28px;background:var(--surface)}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;margin-bottom:36px}
 .foot-brand p{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:10px;max-width:240px}
 .foot-col h5{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:14px}
-.foot-col a{display:block;font-size:13px;color:var(--text);margin-bottom:10px}
-.foot-col a:hover{color:var(--accent2)}
-.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding-top:22px;border-top:1px solid var(--border-light);font-size:11.5px;color:var(--muted2)}
+.foot-col a{display:block;font-size:13px;color:var(--ink);margin-bottom:10px}
+.foot-col a:hover{color:var(--brass)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding-top:22px;border-top:1px solid var(--border);font-size:11.5px;color:var(--muted2)}
 @media(max-width:800px){.foot-grid{grid-template-columns:1fr 1fr;gap:28px}}
 @media(max-width:480px){.foot-grid{grid-template-columns:1fr}}
 
 /* reveal animation */
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:translateY(0)}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.bubble{animation:none}}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap nav-inner">
-    <a href="#top" class="brand"><div class="brand-icon">🍽️</div>Restaurant<span>Bot</span></a>
+    <a href="#top" class="brand"><div class="brand-icon">🍽</div>Restaurant<span>Bot</span></a>
     <nav class="links">
       <a href="#features">Features</a>
-      <a href="#how">How it works</a>
-      <a href="#channels">Channels</a>
+      <a href="#setup">Get set up</a>
+      <a href="#whatsapp">WhatsApp</a>
+      <a href="#webapp">Web App</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
     <div class="nav-cta">
-      <a href="https://wa.me/10000000000" target="_blank" class="btn btn-outline" style="display:none" id="nav-wa-desktop">💬 <span class="full">WhatsApp</span></a>
-      <a href="crm.html" class="btn btn-dark">Open CRM <span class="full">Admin</span> →</a>
+      <a href="crm.html" class="btn btn-outline">Log in</a>
+      <a href="#setup" class="btn btn-dark">Get started <span class="full">free</span> →</a>
       <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -244,45 +278,44 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
 <main id="top">
 
   <!-- ================= HERO ================= -->
-  <section class="hero" style="padding-top:64px">
+  <section class="hero" style="padding-top:60px">
     <div class="wrap hero-grid">
       <div>
-        <div class="eyebrow"><span class="dot"></span> Live on WhatsApp right now</div>
-        <h1 class="hero-title">The WhatsApp assistant that runs your <span class="accent">restaurant's</span> front counter</h1>
-        <p class="hero-sub">RestaurantBot answers questions, walks customers through your menu, takes orders with sizes and spice levels, applies deals — then drops every order straight into a CRM your staff already know how to use.</p>
+        <div class="eyebrow"><span class="dot"></span> Connects to your existing WhatsApp number</div>
+        <h1 class="hero-title">Turn your WhatsApp number into a full <span class="accent">ordering system</span></h1>
+        <p class="hero-sub">Keep the number your customers already message. RestaurantBot connects to it, takes orders, answers questions in three languages, and hands you a web app and CRM to run the whole counter — set up in one sitting, no developer needed.</p>
         <div class="hero-ctas">
-          <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-wa btn-lg">💬 Chat with the bot on WhatsApp</a>
-          <a href="crm.html" class="btn btn-outline btn-lg">Open Admin CRM →</a>
+          <a href="#setup" class="btn btn-brass btn-lg">Connect your number →</a>
+          <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-outline btn-lg">💬 Try the live bot</a>
         </div>
-        <div class="hero-microcopy">
-          <div class="avatars"><span>🍛</span><span>🍕</span><span>🍔</span><span>🥘</span></div>
-          Built for takeaway kitchens, cloud kitchens & dine-in — in English, Urdu & German
-        </div>
+        <div class="hero-microcopy">Free to set up · Own your number and your data · Cancel any time</div>
       </div>
-      <div class="phone-wrap">
-        <div class="float-card f1"><div class="ic">📦</div><div><b>128</b><span style="color:var(--muted);font-size:11px">orders today</span></div></div>
-        <div class="float-card f2">⚡ Avg reply <b>&lt; 4s</b></div>
-        <div class="phone">
-          <div class="phone-notch"></div>
-          <div class="phone-screen">
-            <div class="wa-head">
-              <div class="ic">🍽️</div>
-              <div><div class="nm">RestaurantBot</div><div class="st">● Online</div></div>
-            </div>
-            <div class="wa-body">
-              <div class="bubble bot">Hello! 👋 Welcome back. What are you craving today?<div class="tm">11:29 AM</div></div>
-              <div class="chips"><span>Show Menu 🍽️</span><span>Today's Deals 🎁</span><span>Track Order 📍</span></div>
-              <div class="bubble user">Chicken Biryani please, full plate, spicy 🌶️<div class="tm">11:30 AM ✓✓</div></div>
-              <div class="order-card-mini">
-                <div class="t"><span>Chicken Biryani</span><span>PKR 320</span></div>
-                <div class="row"><span>Size</span><span>Full Plate</span></div>
-                <div class="row"><span>Spice</span><span>Spicy 🌶️</span></div>
-                <div class="row"><span>ETA</span><span>35–45 mins</span></div>
-              </div>
-              <div class="bubble bot">Got it! Confirming your order now — it's on its way to the kitchen 🧑‍🍳<div class="tm">11:30 AM</div></div>
-            </div>
-            <div class="wa-input"><div class="fld">Type a message…</div><div class="snd">➤</div></div>
+      <div class="ticket-wrap">
+        <div class="float-card f1"><div class="ic">💬</div><div><b>+92 3•• •••••</b><span style="color:var(--muted);font-size:11px">connected</span></div></div>
+        <div class="float-card f2">⚡ Live in <b>~10 min</b></div>
+        <div class="ticket">
+          <div class="ticket-head">
+            <div class="lbl">Number connection</div>
+            <div class="biz">Karachi Kitchen</div>
           </div>
+          <div class="ticket-body">
+            <div class="ticket-row"><span class="k">WhatsApp number</span><span class="v">+92 300 1234567</span></div>
+            <div class="ticket-row"><span class="k">Provider</span><span class="v">WhatsApp Business API</span></div>
+            <div class="ticket-step done">
+              <div class="n">✓</div>
+              <div><div class="t">Number verified</div><div class="d">Code confirmed by SMS</div></div>
+            </div>
+            <div class="ticket-step done">
+              <div class="n">✓</div>
+              <div><div class="t">Menu imported</div><div class="d">32 items, 3 categories</div></div>
+            </div>
+            <div class="ticket-step">
+              <div class="n">3</div>
+              <div><div class="t">Bot going live</div><div class="d">Publishing to your number now</div></div>
+            </div>
+            <div class="ticket-stamp">Connected</div>
+          </div>
+          <div class="ticket-foot"><span>REF #KK-0417</span><span>TODAY 11:24</span></div>
         </div>
       </div>
     </div>
@@ -291,10 +324,10 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
   <!-- ================= STRIP ================= -->
   <div class="strip">
     <div class="wrap strip-inner">
-      <div class="strip-item"><span class="num">3</span><span class="lbl">languages spoken — EN, UR, DE</span></div>
-      <div class="strip-item"><span class="num">&lt;4s</span><span class="lbl">average bot response time</span></div>
-      <div class="strip-item"><span class="num">24/7</span><span class="lbl">order-taking, no shift required</span></div>
-      <div class="strip-item"><span class="num">1</span><span class="lbl">CRM to manage every order, deal & FAQ</span></div>
+      <div class="strip-item"><span class="num">1</span><span class="lbl">WhatsApp number, no new one to buy</span></div>
+      <div class="strip-item"><span class="num">3</span><span class="lbl">languages — English, Urdu, German</span></div>
+      <div class="strip-item"><span class="num">~10 min</span><span class="lbl">from sign-up to first order</span></div>
+      <div class="strip-item"><span class="num">1</span><span class="lbl">dashboard for orders, menu & web app</span></div>
     </div>
   </div>
 
@@ -302,125 +335,158 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
   <section id="features">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="sec-eyebrow">What it does</div>
+        <div class="sec-eyebrow">What you get</div>
         <h2 class="sec-title">Everything your counter staff does — automated</h2>
-        <p class="sec-sub">Every feature below is wired to a real screen in your CRM, so what the bot promises a customer is exactly what your kitchen sees.</p>
+        <p class="sec-sub">Each feature below is wired to a real screen in your dashboard, so what the bot promises a customer is exactly what your kitchen sees.</p>
       </div>
       <div class="feat-grid">
         <div class="feat-card reveal">
-          <div class="feat-ic" style="background:var(--amber-bg)">📦</div>
+          <div class="feat-ic" style="background:var(--brass-bg)">📦</div>
           <h3>Live order taking</h3>
-          <p>Customers pick sizes, spice levels and extras right in chat. Orders land in your Live Orders board instantly, pending → delivered.</p>
-          <span class="feat-tag" style="background:var(--amber-bg);color:var(--amber)">Real-time</span>
+          <p>Customers pick sizes, spice levels and extras right in chat. Orders land on your Live Orders board instantly, pending → delivered.</p>
+          <span class="feat-tag" style="background:var(--brass-bg);color:var(--brass-deep)">Real-time</span>
         </div>
         <div class="feat-card reveal">
-          <div class="feat-ic" style="background:var(--blue-bg)">🍽️</div>
+          <div class="feat-ic" style="background:var(--blue-bg)">🍽</div>
           <h3>Smart menu browsing</h3>
-          <p>The bot recommends dishes by category, shows variants and prices, and keeps availability in sync with your Menu page.</p>
+          <p>The bot recommends dishes by category, shows variants and prices, and stays in sync with the menu you edit in the dashboard.</p>
           <span class="feat-tag" style="background:var(--blue-bg);color:var(--blue)">Menu-aware</span>
         </div>
         <div class="feat-card reveal">
-          <div class="feat-ic" style="background:var(--green-bg)">🏷️</div>
+          <div class="feat-ic" style="background:var(--green-bg)">🏷</div>
           <h3>Deals & combos</h3>
           <p>Run combo, family or happy-hour deals that the bot surfaces automatically to the right customer at the right time.</p>
           <span class="feat-tag" style="background:var(--green-bg);color:var(--green)">Auto-applied</span>
         </div>
         <div class="feat-card reveal">
-          <div class="feat-ic" style="background:var(--pink-bg)">🎁</div>
+          <div class="feat-ic" style="background:var(--red-bg)">🎁</div>
           <h3>Promo codes & offers</h3>
-          <p>Issue coupon codes with min-order rules and usage limits — track redemptions and savings given, all in one place.</p>
-          <span class="feat-tag" style="background:var(--pink-bg);color:var(--pink)">Trackable</span>
+          <p>Issue coupon codes with minimum-order rules and usage limits — track redemptions and savings given, all in one place.</p>
+          <span class="feat-tag" style="background:var(--red-bg);color:var(--red)">Trackable</span>
         </div>
         <div class="feat-card reveal">
-          <div class="feat-ic" style="background:var(--purple-bg)">💬</div>
+          <div class="feat-ic" style="background:var(--surface2);color:var(--ink)">💬</div>
           <h3>Multilingual FAQs</h3>
-          <p>Delivery policy, hours, halal status, allergens and more — answered instantly in English, Urdu or German.</p>
-          <span class="feat-tag" style="background:var(--purple-bg);color:var(--purple)">3 languages</span>
+          <p>Delivery policy, hours, halal status and allergens — answered instantly in English, Urdu or German.</p>
+          <span class="feat-tag" style="background:var(--surface2);color:var(--ink-soft)">3 languages</span>
         </div>
         <div class="feat-card reveal">
-          <div class="feat-ic" style="background:var(--red-bg)">📊</div>
+          <div class="feat-ic" style="background:var(--blue-bg)">📊</div>
           <h3>Built-in analytics</h3>
           <p>See what's searched, what sells, size and spice preferences, and revenue by status — no spreadsheets needed.</p>
-          <span class="feat-tag" style="background:var(--red-bg);color:var(--red)">Always on</span>
+          <span class="feat-tag" style="background:var(--blue-bg);color:var(--blue)">Always on</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ================= HOW IT WORKS ================= -->
-  <section id="how" style="background:var(--surface);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light)">
+  <!-- ================= SETUP FLOW ================= -->
+  <section id="setup" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
     <div class="wrap">
       <div class="sec-head center reveal" style="margin-left:auto;margin-right:auto">
-        <div class="sec-eyebrow">The order flow</div>
-        <h2 class="sec-title">From "hi" to hot food, in four steps</h2>
-        <p class="sec-sub">This is the exact sequence every order takes — the same order the rest of this page follows.</p>
+        <div class="sec-eyebrow">Getting set up</div>
+        <h2 class="sec-title">From sign-up to your first WhatsApp order</h2>
+        <p class="sec-sub">This is the exact order every restaurant owner goes through — no code, no waiting on a developer.</p>
       </div>
-      <div class="flow reveal">
-        <div class="flow-row">
-          <div class="flow-step">
-            <div class="flow-num">01</div>
-            <h4>Customer messages you</h4>
-            <p>On WhatsApp or your website chat — no app to download, no account to create.</p>
-          </div>
-          <div class="flow-step">
-            <div class="flow-num">02</div>
-            <h4>Bot guides the order</h4>
-            <p>Menu, sizes, spice, extras and active deals are suggested conversationally.</p>
-          </div>
-          <div class="flow-step">
-            <div class="flow-num">03</div>
-            <h4>Order syncs to your CRM</h4>
-            <p>It appears on the Live Orders board in seconds, with a blinking "new" badge.</p>
-          </div>
-          <div class="flow-step">
-            <div class="flow-num">04</div>
-            <h4>Your kitchen takes over</h4>
-            <p>Accept, prepare, and mark delivered — the bot keeps the customer updated automatically.</p>
+      <div class="flow-row reveal">
+        <div class="flow-step">
+          <div class="flow-num">01</div>
+          <h4>Create your account</h4>
+          <p>Sign up with your restaurant's name and details — takes about a minute.</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">02</div>
+          <h4>Connect your WhatsApp number</h4>
+          <p>Enter your existing WhatsApp Business number and confirm it with the code we text you.</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">03</div>
+          <h4>Build your menu</h4>
+          <p>Add dishes, sizes, spice levels and prices — or import a menu you already have as a spreadsheet.</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">04</div>
+          <h4>Go live</h4>
+          <p>The bot starts answering on your number immediately, and your web app is live at your own link.</p>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:40px">
+        <a href="crm.html" class="btn btn-dark btn-lg">Start connecting your number →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHATSAPP CONNECT ================= -->
+  <section id="whatsapp">
+    <div class="wrap">
+      <div class="connect-block reveal">
+        <div>
+          <div class="tag">💬 WhatsApp integration</div>
+          <h2>Your number stays yours. We just make it smarter.</h2>
+          <p>RestaurantBot connects through the official WhatsApp Business API. Customers keep messaging the number they already have saved — nothing changes for them except how fast and how well it's answered.</p>
+          <ul class="connect-list">
+            <li>Bring your existing number, or let us help you register a new WhatsApp Business number</li>
+            <li>Verification happens by SMS code, right from your dashboard — no technical setup</li>
+            <li>Hand off to a human teammate any time a customer needs one, mid-conversation</li>
+            <li>Every message and order is logged, so nothing gets lost between shifts</li>
+          </ul>
+        </div>
+        <div class="phone-mock">
+          <div class="phone-screen">
+            <div class="wa-head">
+              <div class="ic">🍽</div>
+              <div><div class="nm">RestaurantBot</div><div class="st">● Online</div></div>
+            </div>
+            <div class="wa-body">
+              <div class="bubble bot">Hello! 👋 Welcome back. What are you craving today?</div>
+              <div class="chips"><span>Show Menu 🍽</span><span>Today's Deals 🎁</span><span>Track Order 📍</span></div>
+              <div class="bubble user">Chicken Biryani please, full plate, spicy 🌶️</div>
+              <div class="bubble bot">Got it — full plate, spicy. Confirming your order now, it's on its way to the kitchen 🧑‍🍳</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ================= CHANNELS ================= -->
-  <section id="channels">
+  <!-- ================= WEB APP ================= -->
+  <section id="webapp" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="sec-eyebrow">Where customers reach you</div>
-        <h2 class="sec-title">One bot, every channel your customers already use</h2>
-        <p class="sec-sub">Turn any of these on independently — orders from all of them land in the same CRM.</p>
+        <div class="sec-eyebrow">Your web app</div>
+        <h2 class="sec-title">A branded ordering site, generated the moment you build your menu</h2>
+        <p class="sec-sub">Every restaurant gets its own web app — for customers who'd rather tap through a menu than type on WhatsApp — built automatically from the same menu and deals you manage in one place.</p>
       </div>
-      <div class="chan-wrap">
-        <div class="chan-card reveal">
-          <div class="chan-ic" style="background:#DCF8C6;color:var(--wa)">💬</div>
-          <div>
-            <h4>WhatsApp Business</h4>
-            <p>The primary channel — customers message your business number directly, no setup required on their end.</p>
-            <a href="https://wa.me/10000000000" target="_blank" class="chan-link">Chat now →</a>
+      <div class="webapp-wrap">
+        <div class="browser-mock reveal">
+          <div class="browser-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="url">order.restaurantbot.app/karachi-kitchen</span>
+          </div>
+          <div class="browser-body">
+            <div class="wa-menu-head"><b>Karachi Kitchen</b><span>Open now</span></div>
+            <div class="menu-row"><span>Chicken Biryani — Full Plate</span><span class="price">PKR 320</span><span class="btn-add">+</span></div>
+            <div class="menu-row"><span>Chicken Karahi — Half</span><span class="price">PKR 950</span><span class="btn-add">+</span></div>
+            <div class="menu-row"><span>Seekh Kebab Roll</span><span class="price">PKR 220</span><span class="btn-add">+</span></div>
+            <div class="menu-row"><span>Cold Drink 500ml</span><span class="price">PKR 80</span><span class="btn-add">+</span></div>
           </div>
         </div>
-        <div class="chan-card reveal">
-          <div class="chan-ic" style="background:var(--blue-bg)">🌐</div>
-          <div>
-            <h4>Web Chat Widget</h4>
-            <p>Embed the same assistant as a chat bubble on your restaurant's website — same brain, same menu.</p>
-            <a href="#" class="chan-link">See embed snippet →</a>
+        <div class="webapp-feats reveal">
+          <div class="wf-item">
+            <div class="ic">🔗</div>
+            <div><h4>Your own link</h4><p>A shareable web app address for your restaurant — put it in your Instagram bio, on flyers, or on a table QR code.</p></div>
           </div>
-        </div>
-        <div class="chan-card reveal">
-          <div class="chan-ic" style="background:var(--accent);color:#fff">🖥️</div>
-          <div>
-            <h4>Web App (Order Online)</h4>
-            <p>A hosted ordering page for customers who'd rather browse and tap than type — same menu, same deals.</p>
-            <a href="crm.html" class="chan-link">Preview in CRM →</a>
+          <div class="wf-item">
+            <div class="ic">🔄</div>
+            <div><h4>Always in sync</h4><p>Edit a price or mark a dish sold out in the dashboard, and both the WhatsApp bot and the web app update instantly.</p></div>
           </div>
-        </div>
-        <div class="chan-card reveal">
-          <div class="chan-ic" style="background:var(--amber-bg)">🛠️</div>
-          <div>
-            <h4>Admin CRM Panel</h4>
-            <p>Where your team manages orders, menu, deals, offers, FAQs and analytics — from any device.</p>
-            <a href="crm.html" class="chan-link">Open CRM →</a>
+          <div class="wf-item">
+            <div class="ic">🧾</div>
+            <div><h4>Orders in the same place</h4><p>Web app orders land on the same Live Orders board as WhatsApp orders — one queue for your kitchen, not two.</p></div>
+          </div>
+          <div class="wf-item">
+            <div class="ic">🎨</div>
+            <div><h4>Looks like your restaurant</h4><p>Add your logo and cover photo from the dashboard — no design work or code required.</p></div>
           </div>
         </div>
       </div>
@@ -428,18 +494,18 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
   </section>
 
   <!-- ================= CRM CALLOUT ================= -->
-  <section style="padding-top:0">
+  <section>
     <div class="wrap">
       <div class="crm-block reveal">
         <div>
-          <h2>Every order the bot takes lands in a CRM your team can run in a day</h2>
-          <p>No new software to learn — a live orders board, menu editor, deals & offers, FAQ manager and analytics dashboard, all in one clean admin panel.</p>
+          <h2>Every order — WhatsApp or web app — lands in one dashboard</h2>
+          <p>No new software to learn: a live orders board, menu editor, deals & offers, FAQ manager and analytics, all in one clean panel your staff can pick up in a day.</p>
           <ul class="crm-list">
             <li>Live order board that auto-refreshes and flags new orders</li>
             <li>Menu, deals & promo codes editable without a developer</li>
             <li>Analytics on searches, spice/size preferences & revenue</li>
           </ul>
-          <a href="crm.html" class="btn btn-dark btn-lg">Open Admin CRM →</a>
+          <a href="crm.html" class="btn btn-dark btn-lg">Open your dashboard →</a>
         </div>
         <div class="crm-mock">
           <div class="crm-mock-top"><span></span><span></span><span></span></div>
@@ -447,9 +513,9 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
             <div class="s"><div class="l">Pending</div><div class="v">3</div></div>
             <div class="s"><div class="l">Revenue</div><div class="v">PKR 8.4K</div></div>
           </div>
-          <div class="crm-mock-row"><span>#ef12ab — Biryani</span><span class="pl">Pending</span></div>
-          <div class="crm-mock-row"><span>#ef12cd — Karahi</span><span class="pl" style="background:var(--blue-bg);color:var(--blue)">Accepted</span></div>
-          <div class="crm-mock-row"><span>#ef12ef — Pizza</span><span class="pl" style="background:var(--green-bg);color:var(--green)">Delivered</span></div>
+          <div class="crm-mock-row"><span>#ef12ab · Biryani</span><span class="pl">Pending</span></div>
+          <div class="crm-mock-row"><span>#ef12cd · Karahi</span><span class="pl" style="background:var(--blue-bg);color:var(--blue)">Accepted</span></div>
+          <div class="crm-mock-row"><span>#ef12ef · Pizza</span><span class="pl" style="background:var(--green-bg);color:var(--green)">Delivered</span></div>
         </div>
       </div>
     </div>
@@ -461,7 +527,7 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
       <div class="sec-head center reveal" style="margin-left:auto;margin-right:auto">
         <div class="sec-eyebrow">Plans</div>
         <h2 class="sec-title">Pick the plan that matches your kitchen</h2>
-        <p class="sec-sub">Every plan includes the WhatsApp bot and the CRM. Upgrade any time as order volume grows.</p>
+        <p class="sec-sub">Every plan includes your WhatsApp bot, your web app, and the dashboard. Upgrade any time as order volume grows.</p>
       </div>
       <div class="price-grid">
         <div class="price-card reveal">
@@ -470,13 +536,13 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
           <div class="price-amt"><span class="n">PKR 9,900</span><span class="u">/ month</span></div>
           <p class="price-desc">For a single-branch takeaway just getting on WhatsApp.</p>
           <ul class="price-feats">
-            <li>WhatsApp ordering bot (1 number)</li>
+            <li>1 connected WhatsApp number</li>
             <li>Up to 40 menu items</li>
-            <li>Live Orders board</li>
+            <li>Web app + Live Orders board</li>
             <li>English + Urdu</li>
             <li>Email support</li>
           </ul>
-          <a href="https://wa.me/10000000000?text=Hi%2C%20I%27m%20interested%20in%20the%20Starter%20plan" target="_blank" class="btn btn-outline">Talk to sales</a>
+          <a href="crm.html" class="btn btn-outline">Get started</a>
         </div>
         <div class="price-card pop reveal">
           <div class="price-badge">Most popular</div>
@@ -492,7 +558,7 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
             <li>Full analytics dashboard</li>
             <li>Priority WhatsApp support</li>
           </ul>
-          <a href="https://wa.me/10000000000?text=Hi%2C%20I%27m%20interested%20in%20the%20Growth%20plan" target="_blank" class="btn btn-dark">Talk to sales</a>
+          <a href="crm.html" class="btn btn-dark">Get started</a>
         </div>
         <div class="price-card reveal">
           <div class="price-plan">Plan 03</div>
@@ -502,7 +568,6 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
           <ul class="price-feats">
             <li>Everything in Growth</li>
             <li>Multiple branches & numbers</li>
-            <li>Web ordering app + chat widget</li>
             <li>Custom languages & integrations</li>
             <li>Dedicated account manager</li>
           </ul>
@@ -513,7 +578,7 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
   </section>
 
   <!-- ================= FAQ ================= -->
-  <section id="faq" style="background:var(--surface);border-top:1px solid var(--border-light)">
+  <section id="faq" style="background:var(--surface);border-top:1px solid var(--border)">
     <div class="wrap">
       <div class="sec-head center reveal" style="margin-left:auto;margin-right:auto">
         <div class="sec-eyebrow">Questions</div>
@@ -521,24 +586,28 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
       </div>
       <div class="faq-wrap">
         <details class="faq-q reveal" open>
-          <summary>Do my customers need to install anything?</summary>
-          <div class="a">No. They message your existing WhatsApp Business number like they would a friend. The web chat widget and web app options also need no install.</div>
+          <summary>Do I need a new WhatsApp number?</summary>
+          <div class="a">No. In most cases you can connect the WhatsApp Business number your customers already message. If you don't have a WhatsApp Business number yet, we'll help you register one during setup.</div>
         </details>
         <details class="faq-q reveal">
-          <summary>How do orders reach my kitchen?</summary>
-          <div class="a">Every order placed through the bot appears immediately on the Live Orders board inside the CRM, with a blinking highlight so nothing gets missed.</div>
+          <summary>How long does connecting my number take?</summary>
+          <div class="a">Most restaurants are verified and live within about ten minutes — you enter your number, confirm the SMS code, and the bot starts answering.</div>
+        </details>
+        <details class="faq-q reveal">
+          <summary>Do my customers need to install anything?</summary>
+          <div class="a">No. They message your existing number like they would a friend, or open your web app link — no app to download and no account to create.</div>
         </details>
         <details class="faq-q reveal">
           <summary>Can I edit the menu myself?</summary>
-          <div class="a">Yes — the Menu page in the CRM lets you add dishes, sizes, spice levels and extras without touching any code.</div>
+          <div class="a">Yes — the Menu page in the dashboard lets you add dishes, sizes, spice levels and extras without touching any code. Both the bot and the web app update instantly.</div>
         </details>
         <details class="faq-q reveal">
-          <summary>Which languages does the bot speak?</summary>
-          <div class="a">English, Urdu and German out of the box, with FAQs and greeting suggestions editable per language from the CRM.</div>
+          <summary>What happens if the bot can't answer something?</summary>
+          <div class="a">The conversation can be handed to a human teammate at any point, right inside the same WhatsApp thread the customer is already in.</div>
         </details>
         <details class="faq-q reveal">
           <summary>Is there a setup fee?</summary>
-          <div class="a">Menu import and WhatsApp Business connection are included free with every plan — reach out and our team gets you live within a few days.</div>
+          <div class="a">Menu import and WhatsApp number connection are included free with every plan — reach out and our team gets you live within a few days if you'd like a hand.</div>
         </details>
       </div>
     </div>
@@ -548,11 +617,11 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
   <section>
     <div class="wrap">
       <div class="final-cta reveal">
-        <h2>Put your front counter on autopilot</h2>
-        <p>See the bot take a live order on WhatsApp, then watch it land in the CRM in real time.</p>
+        <h2>Connect your number and go live today</h2>
+        <p>Set up takes about ten minutes. Watch your first order land on WhatsApp, then in your dashboard, in real time.</p>
         <div class="final-ctas">
-          <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-wa btn-lg">💬 Chat on WhatsApp</a>
-          <a href="crm.html" class="btn btn-dark btn-lg">Open Admin CRM →</a>
+          <a href="crm.html" class="btn btn-brass btn-lg">Connect your WhatsApp number →</a>
+          <a href="https://wa.me/10000000000?text=Hi!%20I%27d%20like%20to%20see%20a%20demo" target="_blank" class="btn btn-outline btn-lg">💬 Try the live bot</a>
         </div>
       </div>
     </div>
@@ -564,47 +633,44 @@ footer{border-top:1px solid var(--border-light);padding:44px 0 28px;background:v
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <a href="#top" class="brand"><div class="brand-icon">🍽️</div>Restaurant<span>Bot</span></a>
-        <p>A WhatsApp ordering assistant and CRM built for restaurants, cloud kitchens and takeaways.</p>
+        <a href="#top" class="brand"><div class="brand-icon">🍽</div>Restaurant<span>Bot</span></a>
+        <p>Connect your WhatsApp number, build your menu, and manage every order from one dashboard.</p>
       </div>
       <div class="foot-col">
         <h5>Product</h5>
         <a href="#features">Features</a>
-        <a href="#how">How it works</a>
-        <a href="#channels">Channels</a>
+        <a href="#setup">Get set up</a>
+        <a href="#whatsapp">WhatsApp integration</a>
+        <a href="#webapp">Web App</a>
         <a href="#pricing">Pricing</a>
       </div>
       <div class="foot-col">
         <h5>Access</h5>
-        <a href="https://wa.me/10000000000" target="_blank">WhatsApp bot</a>
-        <a href="crm.html">Admin CRM</a>
-        <a href="#channels">Web ordering app</a>
+        <a href="crm.html">Sign up</a>
+        <a href="crm.html">Log in to dashboard</a>
+        <a href="https://wa.me/10000000000" target="_blank">Try the demo bot</a>
       </div>
       <div class="foot-col">
         <h5>Company</h5>
         <a href="#faq">FAQ</a>
         <a href="https://wa.me/10000000000" target="_blank">Contact sales</a>
-        <a href="crm.html">Sign in</a>
       </div>
     </div>
     <div class="foot-bottom">
       <span>© 2026 RestaurantBot. Demo product for illustration purposes.</span>
-      <span>Made for restaurants that live on WhatsApp 🍽️</span>
+      <span>Made for restaurants that live on WhatsApp 🍽</span>
     </div>
   </div>
 </footer>
 
 <script>
-// mobile nav toggle -> jump to CRM/whatsapp quick actions (simple show/hide of links list)
 const toggle=document.querySelector('.menu-toggle');
 const links=document.querySelector('nav.links');
 if(toggle){toggle.addEventListener('click',()=>{
   const open=links.style.display==='flex';
   links.style.display=open?'none':'flex';
-  links.style.cssText+=open?'':';position:absolute;top:60px;left:0;right:0;background:var(--surface);flex-direction:column;padding:18px 24px;border-bottom:1px solid var(--border-light);gap:16px;box-shadow:var(--shadow-md)';
+  links.style.cssText+=open?'':';position:absolute;top:60px;left:0;right:0;background:var(--surface);flex-direction:column;padding:18px 24px;border-bottom:1px solid var(--border);gap:16px;box-shadow:var(--shadow-md)';
 });}
-
-// scroll reveal
 const io=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
