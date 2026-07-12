@@ -469,6 +469,10 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.55}
         Reservations
         <span class="nav-badge-blue" id="resv-badge" style="display:none">0</span>
       </div>
+      <div class="nav-item" data-page="tables" onclick="showPage('tables',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="2" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="22" y2="12"/></svg>
+        Tables & Slots
+      </div>
       <div class="nav-item" data-page="products" onclick="showPage('products',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
         Menu
@@ -491,6 +495,10 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.55}
       <div class="nav-item" data-page="suggestions" onclick="showPage('suggestions',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Suggestions
+      </div>
+      <div class="nav-item" data-page="settings" onclick="showPage('settings',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
       </div>
       <div class="nav-label">Insights</div>
       <div class="nav-item" data-page="analytics" onclick="showPage('analytics',this)">
@@ -612,6 +620,42 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.55}
         <div class="filter-tab" onclick="setResvFilter('Cancelled',this)">✗ Cancelled</div>
       </div>
       <div class="resv-grid-cards" id="resv-grid"></div>
+    </div>
+
+    <!-- ===== TABLES & SLOTS ===== -->
+    <div class="page" id="page-tables">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Tables <span>& Time Slots</span></div>
+          <div class="page-sub">Set up your floor plan — table numbers, seat capacity, and which time slots are open for booking</div>
+        </div>
+        <div class="topbar-right">
+          <button class="refresh-btn" onclick="renderTables()">↻ Refresh</button>
+          <button class="btn btn-primary" onclick="openTableModal()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Table
+          </button>
+        </div>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card"><div class="stat-icon" style="background:var(--blue-bg)">🍽️</div><div class="stat-label">Total Tables</div><div class="stat-val" id="tb-total">—</div><div class="stat-sub">On the floor</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">🪑</div><div class="stat-label">Total Seats</div><div class="stat-val" id="tb-seats">—</div><div class="stat-sub">Combined capacity</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">🕐</div><div class="stat-label">Open Slots Today</div><div class="stat-val" id="tb-openslots">—</div><div class="stat-sub">Across all tables</div></div>
+        <div class="stat-card blue-card"><div class="stat-icon" style="background:rgba(255,255,255,.2)">⚙️</div><div class="stat-label">Avg Table Size</div><div class="stat-val" id="tb-avgsize">—</div><div class="stat-sub">Seats per table</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">🕐 Time Slot Availability (applies to every table)</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5">Toggle which service slots the WhatsApp bot may offer customers. Turn a slot off to stop new bookings for it (e.g. during a private event).</div>
+        <div id="global-slots" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+      </div>
+      <div class="tbl-wrap">
+        <table id="tables-tbl">
+          <thead><tr><th>Table</th><th>Seats</th><th>Zone</th><th>Available Slots Today</th><th>Status</th><th></th></tr></thead>
+          <tbody id="tables-tbody"></tbody>
+        </table>
+      </div>
     </div>
 
     <!-- MENU -->
@@ -893,6 +937,55 @@ Lieferinformationen 🚚</textarea>
       </div>
     </div>
 
+    <!-- ===== SETTINGS ===== -->
+    <div class="page" id="page-settings">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Settings <span>Restaurant Profile</span></div>
+          <div class="page-sub">Your account, restaurant details and the ID used by the WhatsApp bot integration</div>
+        </div>
+        <div class="topbar-right">
+          <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">🏪 Restaurant Profile</div></div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Restaurant ID</label>
+            <div style="display:flex;gap:6px">
+              <input class="form-input mono" id="st-id" value="rb_7f3a9c2e1d" readonly style="flex:1;color:var(--muted)"/>
+              <button class="btn btn-outline btn-sm" onclick="copyId()" style="white-space:nowrap;flex-shrink:0">📋 Copy</button>
+            </div>
+            <div style="font-size:11px;color:var(--muted2);margin-top:4px">Used to identify your restaurant in the WhatsApp bot and API integrations.</div>
+          </div>
+          <div class="form-group"><label class="form-label">Restaurant Name</label><input class="form-input" id="st-name" value="Karachi Grill House"/></div>
+          <div class="form-group"><label class="form-label">Owner Name</label><input class="form-input" id="st-owner" value="Ahmed Raza"/></div>
+          <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" type="email" id="st-email" value="owner@karachigrillhouse.pk"/></div>
+          <div class="form-group"><label class="form-label">Contact Phone</label><input class="form-input" id="st-phone" value="+92 300 1234567"/></div>
+          <div class="form-group full"><label class="form-label">Address</label><input class="form-input" id="st-address" value="Block 5, Gulshan-e-Iqbal, Karachi"/></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">🟢 WhatsApp Connection</div></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Connected Number</label><input class="form-input mono" id="st-wa" value="+92 300 0000000" readonly style="color:var(--muted)"/></div>
+          <div class="form-group"><label class="form-label">Connection Status</label><div style="display:flex;align-items:center;gap:7px;min-height:40px"><span class="online-dot"></span><span style="font-size:13px;font-weight:600;color:var(--green)">Connected & Verified</span></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">🔑 Account</div></div>
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Change Password</label><input class="form-input" type="password" id="st-pass" placeholder="New password"/></div>
+          <div class="form-group"><label class="form-label">Confirm Password</label><input class="form-input" type="password" id="st-pass2" placeholder="Confirm new password"/></div>
+        </div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;color:var(--muted)">Deleting your account removes your dashboard access and disconnects the WhatsApp bot.</div>
+          <button class="btn btn-danger btn-sm" onclick="if(confirm('This is a demo — no account will actually be deleted. Continue?'))toast('Demo only — account not deleted')">🗑 Delete Account</button>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -1035,6 +1128,31 @@ Lieferinformationen 🚚</textarea>
   </div>
 </div>
 
+<!-- TABLE MODAL -->
+<div class="modal-overlay" id="table-modal" onclick="if(event.target===this)closeTableModal()">
+  <div class="modal" style="width:520px">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="tm-title">Add Table</div><div class="modal-sub">Define a table and its available time slots</div></div>
+      <button class="modal-close" onclick="closeTableModal()">×</button>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="tm-id"/>
+      <div class="form-group"><label class="form-label">Table Number</label><input class="form-input" id="tm-number" placeholder="e.g. Table 7"/></div>
+      <div class="form-group"><label class="form-label">Seats</label><input class="form-input" type="number" id="tm-seats" placeholder="4"/></div>
+      <div class="form-group"><label class="form-label">Zone</label><select class="form-input" id="tm-zone"><option value="Indoor">Indoor</option><option value="Outdoor">Outdoor</option><option value="Rooftop">Rooftop</option><option value="Private Room">Private Room</option><option value="Bar">Bar</option></select></div>
+      <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="tm-status"><option value="Available">✅ Available</option><option value="Unavailable">❌ Unavailable</option><option value="Maintenance">🛠️ Maintenance</option></select></div>
+      <div class="form-group full">
+        <label class="form-label">Time Slots Available for This Table</label>
+        <div id="tm-slots" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeTableModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitTable()">Save Table ✓</button>
+    </div>
+  </div>
+</div>
+
 <!-- ORDER DETAIL MODAL -->
 <div class="modal-overlay" id="order-modal" onclick="if(event.target===this)closeOrderModal()">
   <div class="modal" style="width:580px">
@@ -1085,12 +1203,15 @@ let deliveryExceptions=[{cat:'karahi',time:'45-60 mins'},{cat:'biryani',time:'30
 let allDeals=[], dealFilter='', dealSearch='';
 let allOffers=[], offerFilter='';
 let allReservations=[], resvFilter='';
+let allTables=[], globalSlots=[];
 
 // ======================== APP INIT (no login) ========================
 function initApp(){
   allDeals=getDemoDeals();
   allOffers=getDemoOffers();
   allReservations=getDemoReservations();
+  allTables=getDemoTables();
+  globalSlots=getDemoGlobalSlots();
   loadAll();
   refreshTimer=setInterval(loadAll,30000);
 }
@@ -1104,12 +1225,14 @@ function showPage(id,navEl){
   closeSidebar();
   if(id==='orders') renderOrders();
   if(id==='reservations') renderReservations();
+  if(id==='tables') renderTables();
   if(id==='products') renderProducts();
   if(id==='faqs') loadFaqs();
   if(id==='suggestions') updateSugPreview();
   if(id==='analytics') loadAnalytics();
   if(id==='deals') renderDeals();
   if(id==='offers') renderOffers();
+  if(id==='settings') loadSettings();
 }
 function showPageMobile(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1121,12 +1244,14 @@ function showPageMobile(id,el){
   closeSidebar();
   if(id==='orders') renderOrders();
   if(id==='reservations') renderReservations();
+  if(id==='tables') renderTables();
   if(id==='products') renderProducts();
   if(id==='faqs') loadFaqs();
   if(id==='suggestions') updateSugPreview();
   if(id==='analytics') loadAnalytics();
   if(id==='deals') renderDeals();
   if(id==='offers') renderOffers();
+  if(id==='settings') loadSettings();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1221,6 +1346,19 @@ function getDemoReservations(){
     {_id:'r8',name:'Zainab Farooq',phone:'+92 333 2211445',guests:4,date:t0,time:'21:30',table:'Table 3',status:'Confirmed',notes:''},
   ];
 }
+
+const ALL_SLOTS=['12:00 PM','1:00 PM','2:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM','10:00 PM'];
+function getDemoGlobalSlots(){return[...ALL_SLOTS];}
+function getDemoTables(){return[
+  {_id:'tb1',number:'Table 1',seats:2,zone:'Indoor',status:'Available',slots:['12:00 PM','1:00 PM','6:00 PM','7:00 PM','8:00 PM']},
+  {_id:'tb2',number:'Table 2',seats:2,zone:'Indoor',status:'Available',slots:['12:00 PM','1:00 PM','2:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM']},
+  {_id:'tb3',number:'Table 3',seats:4,zone:'Indoor',status:'Available',slots:['12:00 PM','1:00 PM','2:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM','10:00 PM']},
+  {_id:'tb4',number:'Table 4',seats:4,zone:'Outdoor',status:'Available',slots:['6:00 PM','7:00 PM','8:00 PM','9:00 PM']},
+  {_id:'tb5',number:'Table 5',seats:6,zone:'Indoor',status:'Available',slots:['1:00 PM','2:00 PM','7:00 PM','8:00 PM','9:00 PM']},
+  {_id:'tb6',number:'Table 6',seats:8,zone:'Private Room',status:'Available',slots:['7:00 PM','8:00 PM','9:00 PM','10:00 PM']},
+  {_id:'tb7',number:'Table 7',seats:2,zone:'Rooftop',status:'Maintenance',slots:[]},
+  {_id:'tb8',number:'Table 8',seats:4,zone:'Rooftop',status:'Available',slots:['6:00 PM','7:00 PM','8:00 PM']},
+];}
 
 // ======================== LOAD ALL ========================
 async function loadAll(){
@@ -1404,6 +1542,94 @@ function submitResv(){
 }
 function editReservation(id){const src=allReservations.length?allReservations:getDemoReservations();const r=src.find(x=>x._id===id);if(r){if(!allReservations.length)allReservations=getDemoReservations();openResvModal(r);}}
 function deleteReservation(id){if(!confirm('Delete this reservation?'))return;if(!allReservations.length)allReservations=getDemoReservations();allReservations=allReservations.filter(r=>r._id!==id);renderReservations();populateDashboard();toast('Reservation deleted');}
+
+// ======================== TABLES & SLOTS ========================
+function renderTables(){
+  const src=allTables.length?allTables:getDemoTables();
+  const slots=globalSlots.length?globalSlots:getDemoGlobalSlots();
+  const totalTables=src.length;
+  const totalSeats=src.reduce((s,t)=>s+(parseInt(t.seats)||0),0);
+  const openSlotsToday=src.reduce((s,t)=>s+(t.status==='Available'?(t.slots||[]).length:0),0);
+  const avgSize=totalTables?Math.round(totalSeats/totalTables*10)/10:0;
+  const tt=document.getElementById('tb-total');if(tt)tt.textContent=totalTables;
+  const ts=document.getElementById('tb-seats');if(ts)ts.textContent=totalSeats;
+  const to=document.getElementById('tb-openslots');if(to)to.textContent=openSlotsToday;
+  const ta=document.getElementById('tb-avgsize');if(ta)ta.textContent=avgSize;
+
+  const gsEl=document.getElementById('global-slots');
+  if(gsEl){
+    gsEl.innerHTML=ALL_SLOTS.map(s=>`<span class="sug-chip${slots.includes(s)?' active':''}" onclick="toggleGlobalSlot('${s}',this)">🕐 ${s}</span>`).join('');
+  }
+
+  const tbody=document.getElementById('tables-tbody');
+  if(!tbody)return;
+  if(!src.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">No tables set up yet</td></tr>';return;}
+  tbody.innerHTML=src.map(t=>{
+    const slotChips=(t.slots||[]).length?(t.slots||[]).map(s=>`<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:var(--blue-bg);color:var(--blue);margin:1px">${s}</span>`).join(''):'<span style="font-size:11px;color:var(--muted2)">No slots open</span>';
+    return`<tr>
+      <td style="font-weight:700">${esc(t.number)}</td>
+      <td>🪑 ${t.seats}</td>
+      <td>${esc(t.zone)}</td>
+      <td style="max-width:320px">${slotChips}</td>
+      <td><span class="pill ${t.status==='Available'?'Active':(t.status==='Maintenance'?'Paused':'Rejected')}">${t.status}</span></td>
+      <td style="white-space:nowrap"><button class="btn btn-outline btn-sm" onclick="editTable('${t._id}')">✏ Edit</button> <button class="btn btn-danger btn-sm" onclick="deleteTable('${t._id}')">🗑</button></td>
+    </tr>`;
+  }).join('');
+}
+function toggleGlobalSlot(slot,el){
+  if(!globalSlots.length)globalSlots=getDemoGlobalSlots();
+  if(globalSlots.includes(slot)){globalSlots=globalSlots.filter(s=>s!==slot);el.classList.remove('active');}
+  else{globalSlots.push(slot);el.classList.add('active');}
+  toast('Slot '+slot+' '+(globalSlots.includes(slot)?'enabled':'disabled')+' bot-wide');
+}
+let tmSelectedSlots=[];
+function openTableModal(prefill){
+  document.getElementById('tm-title').textContent=prefill?'Edit Table':'Add Table';
+  document.getElementById('tm-id').value=prefill?prefill._id:'';
+  document.getElementById('tm-number').value=prefill?prefill.number:'';
+  document.getElementById('tm-seats').value=prefill?prefill.seats:'2';
+  document.getElementById('tm-zone').value=prefill?prefill.zone:'Indoor';
+  document.getElementById('tm-status').value=prefill?prefill.status:'Available';
+  tmSelectedSlots=prefill?[...(prefill.slots||[])]:[...ALL_SLOTS];
+  renderTmSlots();
+  document.getElementById('table-modal').classList.add('open');
+}
+function renderTmSlots(){
+  const el=document.getElementById('tm-slots');if(!el)return;
+  el.innerHTML=ALL_SLOTS.map(s=>`<span class="sug-chip${tmSelectedSlots.includes(s)?' active':''}" onclick="toggleTmSlot('${s}',this)">🕐 ${s}</span>`).join('');
+}
+function toggleTmSlot(slot,el){
+  if(tmSelectedSlots.includes(slot)){tmSelectedSlots=tmSelectedSlots.filter(s=>s!==slot);el.classList.remove('active');}
+  else{tmSelectedSlots.push(slot);el.classList.add('active');}
+}
+function closeTableModal(){document.getElementById('table-modal').classList.remove('open');}
+function submitTable(){
+  const number=document.getElementById('tm-number').value.trim();if(!number){toast('Table number is required','error');return;}
+  const id=document.getElementById('tm-id').value;
+  const table={_id:id||'tb'+Date.now(),number,seats:parseInt(document.getElementById('tm-seats').value)||2,zone:document.getElementById('tm-zone').value,status:document.getElementById('tm-status').value,slots:[...tmSelectedSlots]};
+  if(!allTables.length)allTables=getDemoTables();
+  if(id){const idx=allTables.findIndex(t=>t._id===id);if(idx>=0)allTables[idx]=table;else allTables.push(table);}else{allTables.push(table);}
+  closeTableModal();renderTables();toast(id?'Table updated ✓':'Table added ✓');
+}
+function editTable(id){const src=allTables.length?allTables:getDemoTables();const t=src.find(x=>x._id===id);if(t){if(!allTables.length)allTables=getDemoTables();openTableModal(t);}}
+function deleteTable(id){if(!confirm('Delete this table?'))return;if(!allTables.length)allTables=getDemoTables();allTables=allTables.filter(t=>t._id!==id);renderTables();toast('Table deleted');}
+
+// ======================== SETTINGS ========================
+function loadSettings(){
+  const id=document.getElementById('st-id');
+  if(id && !id.value)id.value='rb_7f3a9c2e1d';
+}
+function copyId(){const v=document.getElementById('st-id').value;navigator.clipboard.writeText(v).then(()=>toast('Restaurant ID copied')).catch(()=>toast('ID: '+v));}
+function saveSettings(){
+  const pass=document.getElementById('st-pass').value;
+  const pass2=document.getElementById('st-pass2').value;
+  if(pass || pass2){
+    if(pass!==pass2){toast('Passwords do not match','error');return;}
+  }
+  toast('Settings saved ✓');
+  document.getElementById('st-pass').value='';
+  document.getElementById('st-pass2').value='';
+}
 
 // ======================== PRODUCTS ========================
 const EMOJI_MAP={biryani:'🍛',burger:'🍔',pizza:'🍕',karahi:'🥘',rice:'🍚',rolls:'🌯',drinks:'🥤',dessert:'🍰',other:'🍽️'};
