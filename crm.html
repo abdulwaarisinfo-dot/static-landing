@@ -371,6 +371,10 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.55}
 .assign-drv-row:hover{border-color:var(--accent);background:var(--surface)}
 .assign-drv-row.selected{border-color:var(--green);background:var(--green-bg)}
 .assign-drv-row .drv-avatar{width:34px;height:34px;font-size:14px}
+.access-row{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border-light)}
+.access-row:last-child{border-bottom:none}
+.access-row .ic{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.access-row .lbl{flex:1;font-size:13px;font-weight:600;color:var(--text)}
 
 /* EMPTY STATE */
 .empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
@@ -529,6 +533,11 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.55}
       <div class="nav-item" data-page="settings" onclick="showPage('settings',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Settings
+      </div>
+      <div class="nav-item" data-page="team" onclick="showPage('team',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Team
+        <span class="nav-badge-blue" id="team-badge" style="display:none">0</span>
       </div>
       <div class="nav-label">Insights</div>
       <div class="nav-item" data-page="analytics" onclick="showPage('analytics',this)">
@@ -1046,6 +1055,38 @@ Lieferinformationen 🚚</textarea>
       </div>
     </div>
 
+    <!-- ===== TEAM MEMBERS ===== -->
+    <div class="page" id="page-team">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Team <span>Members</span></div>
+          <div class="page-sub">Invite staff by email and control exactly which dashboard pages each person can see</div>
+        </div>
+        <div class="topbar-right">
+          <button class="refresh-btn" onclick="renderTeam()">↻ Refresh</button>
+          <button class="btn btn-primary" onclick="openInviteModal()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Invite Member
+          </button>
+        </div>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card"><div class="stat-icon" style="background:var(--blue-bg)">👥</div><div class="stat-label">Total Members</div><div class="stat-val" id="tm-total">—</div><div class="stat-sub">Including you</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">✅</div><div class="stat-label">Active</div><div class="stat-val" id="tm-active">—</div><div class="stat-sub">Accepted invite</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">✉️</div><div class="stat-label">Pending Invites</div><div class="stat-val" id="tm-pending">—</div><div class="stat-sub">Awaiting response</div></div>
+        <div class="stat-card blue-card"><div class="stat-icon" style="background:rgba(255,255,255,.2)">🔐</div><div class="stat-label">Custom Access Set</div><div class="stat-val" id="tm-custom">—</div><div class="stat-sub">Restricted members</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">👑 Owner</div></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+          <div class="drv-avatar" style="background:var(--accent);color:#fff">AR</div>
+          <div style="flex:1"><div style="font-family:var(--display);font-weight:700;font-size:13.5px">Ahmed Raza (You)</div><div style="font-size:11.5px;color:var(--muted)">owner@karachigrillhouse.pk</div></div>
+          <span class="badge badge-blue">Full Access · Owner</span>
+        </div>
+      </div>
+      <div class="drv-grid" id="team-grid"></div>
+    </div>
+
   </main>
 </div>
 
@@ -1266,6 +1307,49 @@ Lieferinformationen 🚚</textarea>
   </div>
 </div>
 
+<!-- INVITE MEMBER MODAL -->
+<div class="modal-overlay" id="invite-modal" onclick="if(event.target===this)closeInviteModal()">
+  <div class="modal" style="width:480px">
+    <div class="modal-hdr">
+      <div><div class="modal-title">Invite a team member</div><div class="modal-sub">We'll email them a link to join your dashboard</div></div>
+      <button class="modal-close" onclick="closeInviteModal()">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group full"><label class="form-label">Email Address</label><input class="form-input" type="email" id="inv-email" placeholder="staff@example.com"/></div>
+      <div class="form-group full"><label class="form-label">Name (optional)</label><input class="form-input" id="inv-name" placeholder="e.g. Sana Tariq"/></div>
+      <div class="form-group full"><label class="form-label">Role</label><select class="form-input" id="inv-role" onchange="onInviteRoleChange()">
+          <option value="Manager">🧑‍💼 Manager — access to everything except Team & Settings</option>
+          <option value="Staff">🧑‍🍳 Staff — Orders & Reservations only</option>
+          <option value="Custom">🔐 Custom — choose exact pages below</option>
+        </select></div>
+      <div class="form-group full" id="inv-access-wrap" style="display:none">
+        <label class="form-label">Page Access</label>
+        <div id="inv-access-list" style="display:flex;flex-direction:column;gap:2px;margin-top:4px"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeInviteModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="sendInvite()">✉️ Send Invite</button>
+    </div>
+  </div>
+</div>
+
+<!-- MANAGE ACCESS MODAL -->
+<div class="modal-overlay" id="access-modal" onclick="if(event.target===this)closeAccessModal()">
+  <div class="modal" style="width:480px">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="acc-title">Manage access</div><div class="modal-sub">Toggle which pages this person can open</div></div>
+      <button class="modal-close" onclick="closeAccessModal()">×</button>
+    </div>
+    <input type="hidden" id="acc-member-id"/>
+    <div id="acc-access-list" style="display:flex;flex-direction:column;gap:2px"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeAccessModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAccess()">Save Access ✓</button>
+    </div>
+  </div>
+</div>
+
 <!-- ORDER DETAIL MODAL -->
 <div class="modal-overlay" id="order-modal" onclick="if(event.target===this)closeOrderModal()">
   <div class="modal" style="width:580px">
@@ -1318,6 +1402,7 @@ let allOffers=[], offerFilter='';
 let allReservations=[], resvFilter='';
 let allTables=[], globalSlots=[];
 let allDrivers=[], driverFilter='', pendingAssignOrderId=null, pendingAssignDriverId=null;
+let allTeam=[], inviteCustomAccess=[], accessEditId=null, accessEditList=[];
 
 // ======================== APP INIT (no login) ========================
 function initApp(){
@@ -1327,6 +1412,7 @@ function initApp(){
   allTables=getDemoTables();
   globalSlots=getDemoGlobalSlots();
   allDrivers=getDemoDrivers();
+  allTeam=getDemoTeam();
   loadAll();
   refreshTimer=setInterval(loadAll,30000);
 }
@@ -1349,6 +1435,7 @@ function showPage(id,navEl){
   if(id==='deals') renderDeals();
   if(id==='offers') renderOffers();
   if(id==='settings') loadSettings();
+  if(id==='team') renderTeam();
 }
 function showPageMobile(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1369,6 +1456,7 @@ function showPageMobile(id,el){
   if(id==='deals') renderDeals();
   if(id==='offers') renderOffers();
   if(id==='settings') loadSettings();
+  if(id==='team') renderTeam();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1483,6 +1571,31 @@ function getDemoDrivers(){return[
   {_id:'dv3',name:'Waseem Iqbal',phone:'+92 333 7788990',vehicle:'Car',status:'Available',deliveredToday:3,deliveredTotal:96,recentOrders:[]},
   {_id:'dv4',name:'Fahad Rasheed',phone:'+92 345 2233445',vehicle:'Bicycle',status:'Offline',deliveredToday:0,deliveredTotal:52,recentOrders:[]},
   {_id:'dv5',name:'Imran Latif',phone:'+92 321 9988776',vehicle:'Motorbike',status:'OnDelivery',deliveredToday:5,deliveredTotal:301,recentOrders:[]},
+];}
+
+const ACCESS_PAGES=[
+  {id:'dashboard',label:'Dashboard',icon:'📊'},
+  {id:'orders',label:'Live Orders',icon:'📦'},
+  {id:'reservations',label:'Reservations',icon:'🪑'},
+  {id:'tables',label:'Tables & Slots',icon:'🍽️'},
+  {id:'drivers',label:'Drivers',icon:'🛵'},
+  {id:'products',label:'Menu',icon:'🍛'},
+  {id:'deals',label:'Deals',icon:'🏷️'},
+  {id:'offers',label:'Offers',icon:'🎁'},
+  {id:'faqs',label:'FAQs',icon:'❓'},
+  {id:'suggestions',label:'Suggestions',icon:'💬'},
+  {id:'analytics',label:'Analytics',icon:'📈'},
+];
+const ROLE_PRESETS={
+  Manager:ACCESS_PAGES.map(p=>p.id),
+  Staff:['dashboard','orders','reservations'],
+  Custom:[]
+};
+function getDemoTeam(){return[
+  {_id:'tm1',name:'Sana Tariq',email:'sana@karachigrillhouse.pk',role:'Manager',status:'Active',access:[...ROLE_PRESETS.Manager]},
+  {_id:'tm2',name:'Bilal Hussain',email:'bilal@karachigrillhouse.pk',role:'Staff',status:'Active',access:['dashboard','orders','reservations']},
+  {_id:'tm3',name:'Areeba Khan',email:'areeba@karachigrillhouse.pk',role:'Custom',status:'Active',access:['dashboard','orders','analytics']},
+  {_id:'tm4',name:'',email:'newhire@karachigrillhouse.pk',role:'Staff',status:'Pending',access:['dashboard','orders','reservations']},
 ];}
 
 // ======================== LOAD ALL ========================
@@ -1905,6 +2018,135 @@ function saveSettings(){
   toast('Settings saved ✓');
   document.getElementById('st-pass').value='';
   document.getElementById('st-pass2').value='';
+}
+
+// ======================== TEAM MEMBERS & PAGE ACCESS ========================
+function memberInitials(name,email){
+  const n=(name||'').trim();
+  if(n)return n.split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  return (email||'?').slice(0,2).toUpperCase();
+}
+function renderTeam(){
+  const src=allTeam.length?allTeam:getDemoTeam();
+  const active=src.filter(m=>m.status==='Active').length;
+  const pending=src.filter(m=>m.status==='Pending').length;
+  const custom=src.filter(m=>m.role==='Custom').length;
+  const tt=document.getElementById('tm-total');if(tt)tt.textContent=src.length+1; // +1 for owner
+  const ta=document.getElementById('tm-active');if(ta)ta.textContent=active+1;
+  const tp=document.getElementById('tm-pending');if(tp)tp.textContent=pending;
+  const tc=document.getElementById('tm-custom');if(tc)tc.textContent=custom;
+  const badge=document.getElementById('team-badge');if(badge){badge.textContent=pending;badge.style.display=pending>0?'':'none';}
+
+  const grid=document.getElementById('team-grid');if(!grid)return;
+  if(!src.length){grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">👥</div><div class="empty-state-title">No team members yet</div><div class="empty-state-sub">Invite your first staff member to get started</div></div>`;return;}
+  const roleBadge={Manager:'badge-blue',Staff:'badge-green',Custom:'badge-pink'};
+  grid.innerHTML=src.map(m=>{
+    const pageCount=(m.access||[]).length;
+    return`<div class="drv-card">
+      <div class="drv-top">
+        <div class="drv-avatar">${memberInitials(m.name,m.email)}</div>
+        <div style="flex:1"><div class="drv-name">${esc(m.name||'Invited member')}</div><div class="drv-vehicle mono">${esc(m.email)}</div></div>
+        <span class="pill ${m.status==='Active'?'Active':'Pending'}">${m.status}</span>
+      </div>
+      <div class="drv-stats">
+        <div class="drv-stat-box"><div class="v" style="font-size:13px">${esc(m.role)}</div><div class="l">Role</div></div>
+        <div class="drv-stat-box"><div class="v">${pageCount}/${ACCESS_PAGES.length}</div><div class="l">Pages Enabled</div></div>
+      </div>
+      <div class="drv-detail-row"><span class="ric">🔐</span><span class="rlbl">Access</span><span class="badge ${roleBadge[m.role]||'badge-blue'}">${esc(m.role)}</span></div>
+      <div class="drv-actions">
+        <button class="btn btn-outline btn-sm" onclick="openAccessModal('${m._id}')" style="flex:1">🔐 Manage Access</button>
+        ${m.status==='Pending'?`<button class="btn btn-sm" style="background:var(--amber-bg);color:var(--amber);border:1.5px solid #FAD590" onclick="resendInvite('${m._id}')">✉️ Resend</button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="removeMember('${m._id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function onInviteRoleChange(){
+  const role=document.getElementById('inv-role').value;
+  const wrap=document.getElementById('inv-access-wrap');
+  if(role==='Custom'){
+    inviteCustomAccess=[];
+    wrap.style.display='block';
+    renderAccessList('inv-access-list',inviteCustomAccess,(id)=>{
+      inviteCustomAccess=inviteCustomAccess.includes(id)?inviteCustomAccess.filter(x=>x!==id):[...inviteCustomAccess,id];
+    });
+  }else{
+    wrap.style.display='none';
+  }
+}
+function renderAccessList(containerId,selectedList,onToggle){
+  const el=document.getElementById(containerId);if(!el)return;
+  el.innerHTML=ACCESS_PAGES.map(p=>`<div class="access-row">
+      <span class="ic">${p.icon}</span>
+      <span class="lbl">${p.label}</span>
+      <label class="avail-toggle">
+        <input type="checkbox" ${selectedList.includes(p.id)?'checked':''} onchange="handleAccessToggle('${containerId}','${p.id}',this.checked)"/>
+        <span class="avail-slider"></span>
+      </label>
+    </div>`).join('');
+}
+function handleAccessToggle(containerId,pageId,checked){
+  if(containerId==='inv-access-list'){
+    inviteCustomAccess=checked?[...new Set([...inviteCustomAccess,pageId])]:inviteCustomAccess.filter(x=>x!==pageId);
+  }else if(containerId==='acc-access-list'){
+    accessEditList=checked?[...new Set([...accessEditList,pageId])]:accessEditList.filter(x=>x!==pageId);
+  }
+}
+function openInviteModal(){
+  document.getElementById('inv-email').value='';
+  document.getElementById('inv-name').value='';
+  document.getElementById('inv-role').value='Manager';
+  inviteCustomAccess=[];
+  document.getElementById('inv-access-wrap').style.display='none';
+  document.getElementById('invite-modal').classList.add('open');
+}
+function closeInviteModal(){document.getElementById('invite-modal').classList.remove('open');}
+function sendInvite(){
+  const email=document.getElementById('inv-email').value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Please enter a valid email','error');return;}
+  const role=document.getElementById('inv-role').value;
+  const name=document.getElementById('inv-name').value.trim();
+  const access=role==='Custom'?[...inviteCustomAccess]:[...ROLE_PRESETS[role]];
+  if(!allTeam.length)allTeam=getDemoTeam();
+  allTeam.push({_id:'tm'+Date.now(),name,email,role,status:'Pending',access});
+  closeInviteModal();
+  renderTeam();
+  toast(`Invite sent to ${email} ✉️`);
+}
+function resendInvite(id){toast('Invite re-sent ✉️');}
+function removeMember(id){
+  if(!confirm('Remove this team member? They will lose access immediately.'))return;
+  if(!allTeam.length)allTeam=getDemoTeam();
+  allTeam=allTeam.filter(m=>m._id!==id);
+  renderTeam();
+  toast('Team member removed');
+}
+function openAccessModal(id){
+  if(!allTeam.length)allTeam=getDemoTeam();
+  const m=allTeam.find(x=>x._id===id);
+  if(!m)return;
+  accessEditId=id;
+  accessEditList=[...(m.access||[])];
+  document.getElementById('acc-title').textContent='Manage access — '+(m.name||m.email);
+  document.getElementById('acc-member-id').value=id;
+  renderAccessList('acc-access-list',accessEditList,null);
+  document.getElementById('access-modal').classList.add('open');
+}
+function closeAccessModal(){document.getElementById('access-modal').classList.remove('open');accessEditId=null;}
+function saveAccess(){
+  if(!accessEditId)return;
+  if(!allTeam.length)allTeam=getDemoTeam();
+  const m=allTeam.find(x=>x._id===accessEditId);
+  if(m){
+    m.access=[...accessEditList];
+    if(m.role!=='Custom' && JSON.stringify([...m.access].sort())!==JSON.stringify([...ROLE_PRESETS[m.role]].sort())){
+      m.role='Custom';
+    }
+  }
+  closeAccessModal();
+  renderTeam();
+  toast('Access updated ✓');
 }
 
 // ======================== PRODUCTS ========================
