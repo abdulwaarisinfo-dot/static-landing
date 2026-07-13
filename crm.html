@@ -143,6 +143,9 @@ tr:hover td{background:var(--bg)}
 .pill.Completed{background:var(--surface2);color:var(--muted)}
 .pill.Cancelled{background:var(--red-bg);color:var(--red)}
 .pill.Upcoming{background:var(--blue-bg);color:var(--blue)}
+.pill.Available{background:var(--green-bg);color:var(--green)}
+.pill.OnDelivery{background:var(--amber-bg);color:var(--amber)}
+.pill.Offline{background:var(--surface2);color:var(--muted)}
 
 /* FORMS */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
@@ -347,6 +350,28 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.55}
 .resv-detail-row .rlbl{color:var(--muted);min-width:64px;flex-shrink:0}
 .resv-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 
+/* DRIVERS */
+.drv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.drv-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);transition:box-shadow .15s,transform .15s}
+.drv-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.drv-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.drv-avatar{width:44px;height:44px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;font-family:var(--display);font-weight:700;color:var(--muted)}
+.drv-name{font-family:var(--display);font-size:14.5px;font-weight:700;color:var(--text)}
+.drv-vehicle{font-size:11.5px;color:var(--muted);margin-top:2px}
+.drv-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.drv-stat-box{background:var(--bg);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:9px 10px;text-align:center}
+.drv-stat-box .v{font-family:var(--display);font-size:17px;font-weight:700;color:var(--text)}
+.drv-stat-box .l{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.drv-detail-row{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12px;color:var(--text);border-top:1px dotted var(--border-light)}
+.drv-detail-row:first-of-type{border-top:none}
+.drv-detail-row .ric{width:16px;flex-shrink:0;opacity:.55;display:flex;align-items:center;justify-content:center}
+.drv-detail-row .rlbl{color:var(--muted);min-width:56px;flex-shrink:0}
+.drv-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.assign-drv-row{display:flex;align-items:center;gap:10px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;cursor:pointer;transition:all .12s;margin-bottom:8px}
+.assign-drv-row:hover{border-color:var(--accent);background:var(--surface)}
+.assign-drv-row.selected{border-color:var(--green);background:var(--green-bg)}
+.assign-drv-row .drv-avatar{width:34px;height:34px;font-size:14px}
+
 /* EMPTY STATE */
 .empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
 .empty-state-icon{font-size:36px;margin-bottom:12px;opacity:.35}
@@ -472,6 +497,11 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.55}
       <div class="nav-item" data-page="tables" onclick="showPage('tables',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="2" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="22" y2="12"/></svg>
         Tables & Slots
+      </div>
+      <div class="nav-item" data-page="drivers" onclick="showPage('drivers',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l1.5-5.5A2 2 0 0 1 6.4 6h11.2a2 2 0 0 1 1.9 1.5L21 13"/><path d="M3 13h18v5a1 1 0 0 1-1 1h-1a2 2 0 1 1-4 0H8a2 2 0 1 1-4 0H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Z"/><circle cx="7.5" cy="18.5" r="1.8"/><circle cx="16.5" cy="18.5" r="1.8"/></svg>
+        Drivers
+        <span class="nav-badge-blue" id="drivers-badge" style="display:none">0</span>
       </div>
       <div class="nav-item" data-page="products" onclick="showPage('products',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
@@ -656,6 +686,36 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.55}
           <tbody id="tables-tbody"></tbody>
         </table>
       </div>
+    </div>
+
+    <!-- ===== DELIVERY DRIVERS ===== -->
+    <div class="page" id="page-drivers">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title">Delivery <span>Drivers</span></div>
+          <div class="page-sub">When an order is marked Delivered, it's assigned to a driver here automatically</div>
+        </div>
+        <div class="topbar-right">
+          <button class="refresh-btn" onclick="renderDrivers()">↻ Refresh</button>
+          <button class="btn btn-primary" onclick="openDriverModal()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Driver
+          </button>
+        </div>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card"><div class="stat-icon" style="background:var(--blue-bg)">🛵</div><div class="stat-label">Total Drivers</div><div class="stat-val" id="dv-total">—</div><div class="stat-sub">On the roster</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">🚗</div><div class="stat-label">On Delivery Now</div><div class="stat-val" id="dv-ondelivery">—</div><div class="stat-sub">Currently out</div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">✅</div><div class="stat-label">Delivered Today</div><div class="stat-val" id="dv-today">—</div><div class="stat-sub">Across all drivers</div></div>
+        <div class="stat-card blue-card"><div class="stat-icon" style="background:rgba(255,255,255,.2)">📦</div><div class="stat-label">Delivered All-Time</div><div class="stat-val" id="dv-alltime">—</div><div class="stat-sub">Total orders completed</div></div>
+      </div>
+      <div class="filter-tabs">
+        <div class="filter-tab active" onclick="setDriverFilter('',this)">All</div>
+        <div class="filter-tab" onclick="setDriverFilter('Available',this)">✅ Available</div>
+        <div class="filter-tab" onclick="setDriverFilter('OnDelivery',this)">🚗 On Delivery</div>
+        <div class="filter-tab" onclick="setDriverFilter('Offline',this)">⚪ Offline</div>
+      </div>
+      <div class="drv-grid" id="drivers-grid"></div>
     </div>
 
     <!-- MENU -->
@@ -1153,6 +1213,43 @@ Lieferinformationen 🚚</textarea>
   </div>
 </div>
 
+<!-- DRIVER MODAL -->
+<div class="modal-overlay" id="driver-modal" onclick="if(event.target===this)closeDriverModal()">
+  <div class="modal" style="width:520px">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="dvm-title">Add Driver</div><div class="modal-sub">Add a rider to your delivery roster</div></div>
+      <button class="modal-close" onclick="closeDriverModal()">×</button>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="dvm-id"/>
+      <div class="form-group full"><label class="form-label">Driver Name</label><input class="form-input" id="dvm-name" placeholder="e.g. Kamran Aslam"/></div>
+      <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="dvm-phone" placeholder="+92 300 1234567"/></div>
+      <div class="form-group"><label class="form-label">Vehicle</label><select class="form-input" id="dvm-vehicle"><option value="Motorbike">🏍️ Motorbike</option><option value="Bicycle">🚲 Bicycle</option><option value="Car">🚗 Car</option></select></div>
+      <div class="form-group full"><label class="form-label">Status</label><select class="form-input" id="dvm-status"><option value="Available">✅ Available</option><option value="OnDelivery">🚗 On Delivery</option><option value="Offline">⚪ Offline</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeDriverModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitDriver()">Save Driver ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ASSIGN DRIVER MODAL -->
+<div class="modal-overlay" id="assign-modal" onclick="if(event.target===this)closeAssignModal()">
+  <div class="modal" style="width:480px">
+    <div class="modal-hdr">
+      <div><div class="modal-title">Assign a driver</div><div class="modal-sub" id="assign-sub">Pick who's delivering this order</div></div>
+      <button class="modal-close" onclick="closeAssignModal()">×</button>
+    </div>
+    <input type="hidden" id="assign-order-id"/>
+    <div id="assign-driver-list"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline btn-sm" onclick="closeAssignModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmAssignDriver()">✓ Confirm & Mark Delivered</button>
+    </div>
+  </div>
+</div>
+
 <!-- ORDER DETAIL MODAL -->
 <div class="modal-overlay" id="order-modal" onclick="if(event.target===this)closeOrderModal()">
   <div class="modal" style="width:580px">
@@ -1204,6 +1301,7 @@ let allDeals=[], dealFilter='', dealSearch='';
 let allOffers=[], offerFilter='';
 let allReservations=[], resvFilter='';
 let allTables=[], globalSlots=[];
+let allDrivers=[], driverFilter='', pendingAssignOrderId=null, pendingAssignDriverId=null;
 
 // ======================== APP INIT (no login) ========================
 function initApp(){
@@ -1212,6 +1310,7 @@ function initApp(){
   allReservations=getDemoReservations();
   allTables=getDemoTables();
   globalSlots=getDemoGlobalSlots();
+  allDrivers=getDemoDrivers();
   loadAll();
   refreshTimer=setInterval(loadAll,30000);
 }
@@ -1226,6 +1325,7 @@ function showPage(id,navEl){
   if(id==='orders') renderOrders();
   if(id==='reservations') renderReservations();
   if(id==='tables') renderTables();
+  if(id==='drivers') renderDrivers();
   if(id==='products') renderProducts();
   if(id==='faqs') loadFaqs();
   if(id==='suggestions') updateSugPreview();
@@ -1245,6 +1345,7 @@ function showPageMobile(id,el){
   if(id==='orders') renderOrders();
   if(id==='reservations') renderReservations();
   if(id==='tables') renderTables();
+  if(id==='drivers') renderDrivers();
   if(id==='products') renderProducts();
   if(id==='faqs') loadFaqs();
   if(id==='suggestions') updateSugPreview();
@@ -1360,6 +1461,14 @@ function getDemoTables(){return[
   {_id:'tb8',number:'Table 8',seats:4,zone:'Rooftop',status:'Available',slots:['6:00 PM','7:00 PM','8:00 PM']},
 ];}
 
+function getDemoDrivers(){return[
+  {_id:'dv1',name:'Kamran Aslam',phone:'+92 300 1112233',vehicle:'Motorbike',status:'Available',deliveredToday:6,deliveredTotal:214,recentOrders:['64abc001ef12','64abc005ef12']},
+  {_id:'dv2',name:'Junaid Baig',phone:'+92 301 4455667',vehicle:'Motorbike',status:'OnDelivery',deliveredToday:4,deliveredTotal:178,recentOrders:['64abc006ef12']},
+  {_id:'dv3',name:'Waseem Iqbal',phone:'+92 333 7788990',vehicle:'Car',status:'Available',deliveredToday:3,deliveredTotal:96,recentOrders:[]},
+  {_id:'dv4',name:'Fahad Rasheed',phone:'+92 345 2233445',vehicle:'Bicycle',status:'Offline',deliveredToday:0,deliveredTotal:52,recentOrders:[]},
+  {_id:'dv5',name:'Imran Latif',phone:'+92 321 9988776',vehicle:'Motorbike',status:'OnDelivery',deliveredToday:5,deliveredTotal:301,recentOrders:[]},
+];}
+
 // ======================== LOAD ALL ========================
 async function loadAll(){
   try{
@@ -1442,10 +1551,14 @@ function buildOrderActions(id,status){
   let h='';
   if(status==='Pending')h+=b('✓ Accept','Accepted','accept');
   if(status==='Accepted')h+=b('👨‍🍳 Prepare','Processing','prepare');
-  if(status==='Processing')h+=b('🚗 Deliver','Delivered','deliver');
+  if(status==='Processing')h+=`<button class="oact deliver" onclick="openAssignModal('${id}')">🚗 Deliver</button>`;
   if(status!=='Delivered'&&status!=='Rejected')h+=b('✗ Reject','Rejected','reject');
   h+=`<button class="oact info" onclick="openOrderModal('${id}')">🔍 Details</button>`;
-  if(status==='Delivered')h+=`<span style="font-size:11px;color:var(--green);font-weight:700;display:flex;align-items:center;gap:3px">✅ Complete</span>`;
+  if(status==='Delivered'){
+    const ord=allOrders.find(o=>o._id===id);
+    const drvTag=ord&&ord.driver_name?' · '+esc(ord.driver_name):'';
+    h+=`<span style="font-size:11px;color:var(--green);font-weight:700;display:flex;align-items:center;gap:3px">✅ Complete${drvTag}</span>`;
+  }
   if(status==='Rejected')h+=`<span style="font-size:11px;color:var(--red);font-weight:700;display:flex;align-items:center;gap:3px">✗ Rejected</span>`;
   return h;
 }
@@ -1464,8 +1577,9 @@ function openOrderModal(id){
   let statusBtns='';const sb=(lbl,ns,cls)=>`<button class="oact ${cls}" onclick="updateOrderStatus('${o._id}','${ns}');closeOrderModal()">${lbl}</button>`;
   if(o.status==='Pending')statusBtns=sb('✓ Accept','Accepted','accept')+sb('✗ Reject','Rejected','reject');
   if(o.status==='Accepted')statusBtns=sb('👨‍🍳 Mark Preparing','Processing','prepare')+sb('✗ Reject','Rejected','reject');
-  if(o.status==='Processing')statusBtns=sb('🚗 Mark Delivered','Delivered','deliver')+sb('✗ Reject','Rejected','reject');
-  document.getElementById('od-body').innerHTML=`<div class="od-section"><div class="od-section-title">Order Info</div><div class="od-row"><div class="od-label">Order ID</div><div class="od-val" style="font-family:var(--mono);font-size:12px">${o._id}</div></div><div class="od-row"><div class="od-label">Placed</div><div class="od-val">${o.timestamp?new Date(o.timestamp).toLocaleString():'—'}</div></div><div class="od-row"><div class="od-label">Customer</div><div class="od-val" style="font-family:var(--mono);font-size:12px">${o.user_id||'—'}</div></div></div><div class="od-section"><div class="od-section-title">Delivery</div><div class="od-row"><div class="od-label">Address</div><div class="od-val">${esc(o.address||'Not provided')}</div></div><div class="od-row"><div class="od-label">Est. Time</div><div class="od-val" style="font-weight:700;color:var(--amber)">${o.delivery_time||'35-45 mins'}</div></div></div><div class="od-section"><div class="od-section-title">Items (${items.length})</div>${itemsHtml}<div class="od-total-box"><span>Order Total</span><span>PKR ${o.total_price}</span></div></div>${statusBtns?`<div class="od-section"><div class="od-section-title">Update Status</div><div style="display:flex;flex-wrap:wrap;gap:7px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border-light)">${statusBtns}</div></div>`:''}`;
+  if(o.status==='Processing')statusBtns=`<button class="oact deliver" onclick="openAssignModal('${o._id}')">🚗 Mark Delivered</button>`+sb('✗ Reject','Rejected','reject');
+  const driverRow=o.driver_name?`<div class="od-row"><div class="od-label">Driver</div><div class="od-val">🛵 ${esc(o.driver_name)}</div></div>`:'';
+  document.getElementById('od-body').innerHTML=`<div class="od-section"><div class="od-section-title">Order Info</div><div class="od-row"><div class="od-label">Order ID</div><div class="od-val" style="font-family:var(--mono);font-size:12px">${o._id}</div></div><div class="od-row"><div class="od-label">Placed</div><div class="od-val">${o.timestamp?new Date(o.timestamp).toLocaleString():'—'}</div></div><div class="od-row"><div class="od-label">Customer</div><div class="od-val" style="font-family:var(--mono);font-size:12px">${o.user_id||'—'}</div></div></div><div class="od-section"><div class="od-section-title">Delivery</div><div class="od-row"><div class="od-label">Address</div><div class="od-val">${esc(o.address||'Not provided')}</div></div><div class="od-row"><div class="od-label">Est. Time</div><div class="od-val" style="font-weight:700;color:var(--amber)">${o.delivery_time||'35-45 mins'}</div></div>${driverRow}</div><div class="od-section"><div class="od-section-title">Items (${items.length})</div>${itemsHtml}<div class="od-total-box"><span>Order Total</span><span>PKR ${o.total_price}</span></div></div>${statusBtns?`<div class="od-section"><div class="od-section-title">Update Status</div><div style="display:flex;flex-wrap:wrap;gap:7px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border-light)">${statusBtns}</div></div>`:''}`;
   document.getElementById('order-modal').classList.add('open');
 }
 function closeOrderModal(){document.getElementById('order-modal').classList.remove('open');}
@@ -1613,6 +1727,113 @@ function submitTable(){
 }
 function editTable(id){const src=allTables.length?allTables:getDemoTables();const t=src.find(x=>x._id===id);if(t){if(!allTables.length)allTables=getDemoTables();openTableModal(t);}}
 function deleteTable(id){if(!confirm('Delete this table?'))return;if(!allTables.length)allTables=getDemoTables();allTables=allTables.filter(t=>t._id!==id);renderTables();toast('Table deleted');}
+
+// ======================== DELIVERY DRIVERS ========================
+function setDriverFilter(status,el){driverFilter=status;document.querySelectorAll('#page-drivers .filter-tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');renderDrivers();}
+function driverInitials(name){return (name||'?').split(' ').filter(Boolean).slice(0,2).map(n=>n[0]).join('').toUpperCase();}
+function vehicleIcon(v){return v==='Car'?'🚗':v==='Bicycle'?'🚲':'🏍️';}
+function driverStatusLabel(s){return s==='OnDelivery'?'On Delivery':s;}
+function renderDrivers(){
+  const src=allDrivers.length?allDrivers:getDemoDrivers();
+  const total=src.length;
+  const onDelivery=src.filter(d=>d.status==='OnDelivery').length;
+  const deliveredToday=src.reduce((s,d)=>s+(d.deliveredToday||0),0);
+  const deliveredAll=src.reduce((s,d)=>s+(d.deliveredTotal||0),0);
+  const dt=document.getElementById('dv-total');if(dt)dt.textContent=total;
+  const dod=document.getElementById('dv-ondelivery');if(dod)dod.textContent=onDelivery;
+  const dtoday=document.getElementById('dv-today');if(dtoday)dtoday.textContent=deliveredToday;
+  const dall=document.getElementById('dv-alltime');if(dall)dall.textContent=deliveredAll.toLocaleString();
+  const badge=document.getElementById('drivers-badge');if(badge){badge.textContent=onDelivery;badge.style.display=onDelivery>0?'':'none';}
+
+  let list=src;
+  if(driverFilter)list=list.filter(d=>d.status===driverFilter);
+  const grid=document.getElementById('drivers-grid');if(!grid)return;
+  if(!list.length){grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🛵</div><div class="empty-state-title">No drivers found</div><div class="empty-state-sub">Add a driver or try a different filter</div></div>`;return;}
+  grid.innerHTML=list.map(d=>`<div class="drv-card">
+      <div class="drv-top">
+        <div class="drv-avatar">${driverInitials(d.name)}</div>
+        <div style="flex:1"><div class="drv-name">${esc(d.name)}</div><div class="drv-vehicle">${vehicleIcon(d.vehicle)} ${esc(d.vehicle)}</div></div>
+        <span class="pill ${d.status}">${driverStatusLabel(d.status)}</span>
+      </div>
+      <div class="drv-stats">
+        <div class="drv-stat-box"><div class="v">${d.deliveredToday||0}</div><div class="l">Delivered Today</div></div>
+        <div class="drv-stat-box"><div class="v">${(d.deliveredTotal||0).toLocaleString()}</div><div class="l">Delivered Total</div></div>
+      </div>
+      <div class="drv-detail-row"><span class="ric">📞</span><span class="rlbl">Phone</span><span class="mono" style="font-size:11.5px">${esc(d.phone||'—')}</span></div>
+      <div class="drv-actions">
+        <button class="btn btn-outline btn-sm" onclick="editDriver('${d._id}')" style="flex:1">✏ Edit</button>
+        <button class="btn btn-sm" style="background:${d.status==='Offline'?'var(--green-bg)':'var(--amber-bg)'};color:${d.status==='Offline'?'var(--green)':'var(--amber)'};border:1.5px solid ${d.status==='Offline'?'#B7E3CA':'#FAD590'}" onclick="cycleDriverStatus('${d._id}')">${d.status==='Offline'?'▶ Set Available':'⏸ Set Offline'}</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteDriver('${d._id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function cycleDriverStatus(id){if(!allDrivers.length)allDrivers=getDemoDrivers();const d=allDrivers.find(x=>x._id===id);if(d){d.status=d.status==='Offline'?'Available':'Offline';renderDrivers();toast('Driver marked '+driverStatusLabel(d.status));}}
+function openDriverModal(prefill){
+  document.getElementById('dvm-title').textContent=prefill?'Edit Driver':'Add Driver';
+  document.getElementById('dvm-id').value=prefill?prefill._id:'';
+  document.getElementById('dvm-name').value=prefill?prefill.name:'';
+  document.getElementById('dvm-phone').value=prefill?prefill.phone:'';
+  document.getElementById('dvm-vehicle').value=prefill?prefill.vehicle:'Motorbike';
+  document.getElementById('dvm-status').value=prefill?prefill.status:'Available';
+  document.getElementById('driver-modal').classList.add('open');
+}
+function closeDriverModal(){document.getElementById('driver-modal').classList.remove('open');}
+function submitDriver(){
+  const name=document.getElementById('dvm-name').value.trim();if(!name){toast('Driver name is required','error');return;}
+  const id=document.getElementById('dvm-id').value;
+  if(!allDrivers.length)allDrivers=getDemoDrivers();
+  const existing=id?allDrivers.find(d=>d._id===id):null;
+  const driver={_id:id||'dv'+Date.now(),name,phone:document.getElementById('dvm-phone').value,vehicle:document.getElementById('dvm-vehicle').value,status:document.getElementById('dvm-status').value,deliveredToday:existing?existing.deliveredToday||0:0,deliveredTotal:existing?existing.deliveredTotal||0:0,recentOrders:existing?existing.recentOrders||[]:[]};
+  if(id){const idx=allDrivers.findIndex(d=>d._id===id);if(idx>=0)allDrivers[idx]=driver;else allDrivers.push(driver);}else{allDrivers.push(driver);}
+  closeDriverModal();renderDrivers();toast(id?'Driver updated ✓':'Driver added ✓');
+}
+function editDriver(id){const src=allDrivers.length?allDrivers:getDemoDrivers();const d=src.find(x=>x._id===id);if(d){if(!allDrivers.length)allDrivers=getDemoDrivers();openDriverModal(d);}}
+function deleteDriver(id){if(!confirm('Remove this driver?'))return;if(!allDrivers.length)allDrivers=getDemoDrivers();allDrivers=allDrivers.filter(d=>d._id!==id);renderDrivers();toast('Driver removed');}
+
+// ======================== ASSIGN DRIVER (order → delivered) ========================
+function openAssignModal(orderId){
+  if(!allDrivers.length)allDrivers=getDemoDrivers();
+  pendingAssignOrderId=orderId;
+  pendingAssignDriverId=null;
+  document.getElementById('assign-order-id').value=orderId;
+  const o=allOrders.find(x=>x._id===orderId);
+  document.getElementById('assign-sub').textContent=o?`Order #${o._id.slice(-10)} · PKR ${o.total_price}`:'Pick who\'s delivering this order';
+  const list=document.getElementById('assign-driver-list');
+  const available=allDrivers.filter(d=>d.status!=='Offline');
+  const pool=available.length?available:allDrivers;
+  list.innerHTML=pool.map(d=>`<div class="assign-drv-row" id="assignrow-${d._id}" onclick="selectAssignDriver('${d._id}')">
+      <div class="drv-avatar">${driverInitials(d.name)}</div>
+      <div style="flex:1"><div style="font-weight:700;font-size:13px">${esc(d.name)}</div><div style="font-size:11px;color:var(--muted)">${vehicleIcon(d.vehicle)} ${esc(d.vehicle)} · ${d.deliveredToday||0} delivered today</div></div>
+      <span class="pill ${d.status}">${driverStatusLabel(d.status)}</span>
+    </div>`).join('') || '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No drivers on the roster yet — add one first.</div>';
+  document.getElementById('assign-modal').classList.add('open');
+}
+function selectAssignDriver(id){
+  pendingAssignDriverId=id;
+  document.querySelectorAll('.assign-drv-row').forEach(el=>el.classList.remove('selected'));
+  const row=document.getElementById('assignrow-'+id);if(row)row.classList.add('selected');
+}
+function closeAssignModal(){document.getElementById('assign-modal').classList.remove('open');pendingAssignOrderId=null;pendingAssignDriverId=null;}
+function confirmAssignDriver(){
+  if(!pendingAssignOrderId){toast('No order selected','error');return;}
+  if(!pendingAssignDriverId){toast('Please select a driver','error');return;}
+  if(!allDrivers.length)allDrivers=getDemoDrivers();
+  const driver=allDrivers.find(d=>d._id===pendingAssignDriverId);
+  const orderId=pendingAssignOrderId;
+  if(driver){
+    driver.deliveredToday=(driver.deliveredToday||0)+1;
+    driver.deliveredTotal=(driver.deliveredTotal||0)+1;
+    driver.recentOrders=[orderId,...(driver.recentOrders||[])].slice(0,10);
+    if(driver.status==='Available')driver.status='OnDelivery';
+  }
+  const o=allOrders.find(x=>x._id===orderId);
+  if(o){o.driver_id=driver?driver._id:null;o.driver_name=driver?driver.name:null;}
+  closeAssignModal();
+  closeOrderModal();
+  updateOrderStatus(orderId,'Delivered');
+  renderDrivers();
+  toast(driver?`Order sent to ${driver.name} for delivery ✓`:'Order marked delivered');
+}
 
 // ======================== SETTINGS ========================
 function loadSettings(){
