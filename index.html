@@ -5,87 +5,102 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FORME – Everyday menswear (demo store)</title>
 <style>
-:root{--ivory:#f5f0e6;--stone:#e6dfd0;--line:#d6cdbb;--ink:#151311;--brown:#6b5642;--mute:#6f685c;--card:#fbf8f1;
---serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--sans:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif}
+:root{--wall:#e3d8c6;--floor:#f4efe5;--paper:#faf7f0;--line:#cfc3ae;--ink:#14110e;--brass:#9a7b52;--mute:#6c6558;
+--serif:"Bodoni 72","Didot","Playfair Display","Iowan Old Style",Georgia,serif;--sans:"Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif}
 *{box-sizing:border-box;margin:0}html{scroll-behavior:smooth}
-body{font:16px/1.55 var(--sans);background:var(--ivory);color:var(--ink);overflow-x:hidden}
+body{font:16px/1.6 var(--sans);background:var(--floor);color:var(--ink);overflow-x:hidden}
 img{display:block;max-width:100%}a{color:inherit}button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
-h1,h2,h3.d{font-family:var(--serif);font-weight:400;letter-spacing:-.02em}
-h2{font-size:clamp(30px,4vw,46px);line-height:1.08}
-.btn{display:inline-block;background:var(--ink);color:var(--ivory);padding:15px 32px;text-decoration:none;transition:background .2s}
-.btn:hover{background:var(--brown)}.btn.line{background:none;color:var(--ink);border:1px solid var(--ink)}.btn.line:hover{background:var(--stone)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em}
+h1{font-size:clamp(44px,6vw,84px);line-height:1}h2{font-size:clamp(30px,3.6vw,44px);line-height:1.1}
 .note{font-size:13px;color:var(--mute)}
-.bar{background:var(--brown);color:var(--ivory);text-align:center;font-size:13px;padding:8px 16px}
-header{position:sticky;top:0;z-index:20;background:var(--ivory);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px}
-.logo{font-family:var(--serif);font-size:28px;letter-spacing:.2em;text-decoration:none}
-nav ul{display:flex;gap:32px;list-style:none;padding:0}nav a{text-decoration:none;font-size:15px}nav a:hover{text-decoration:underline;text-underline-offset:6px}
-.tools{display:flex;align-items:center}.icon{padding:10px;display:flex;gap:6px;align-items:center;font-size:14px}
+.btn{display:inline-block;background:var(--ink);color:var(--paper);padding:15px 34px;text-decoration:none;border:1px solid var(--ink);transition:background .2s,color .2s}
+.btn:hover{background:transparent;color:var(--ink)}
+/* LED strips along the room edges */
+body::before,body::after{content:"";position:fixed;top:0;bottom:0;width:3px;background:#fffdf6;box-shadow:0 0 14px 6px rgba(255,246,224,.9),0 0 50px 18px rgba(255,240,205,.55);z-index:1;pointer-events:none}
+body::before{left:14px}body::after{right:14px}
+.bar{background:var(--ink);color:#cfc7b8;text-align:center;font-size:12.5px;padding:7px 16px}
+header{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--ink);box-shadow:0 18px 30px -14px rgba(255,247,226,.95)}
+.nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:72px}
+.logo{font-family:var(--serif);font-size:28px;letter-spacing:.32em;text-decoration:none;padding-left:.32em}
+nav ul{display:flex;gap:28px;list-style:none;padding:0}nav a{text-decoration:none;font-size:14.5px;padding:6px 0;border-bottom:1px solid transparent}
+nav a:hover,nav a[aria-current=page]{border-bottom-color:var(--ink)}
+.tools{display:flex;justify-content:flex-end}.icon{padding:10px;display:flex;gap:6px;align-items:center;font-size:14px}
 .icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5}
-#menuBtn{display:none}#cartCount{background:var(--ink);color:var(--ivory);min-width:20px;height:20px;font-size:12px;display:grid;place-items:center;border-radius:99px}
+#menuBtn{display:none}#cartCount{background:var(--ink);color:var(--paper);min-width:20px;height:20px;font-size:12px;display:grid;place-items:center;border-radius:99px}
 #searchRow{display:none;padding:0 0 14px}#searchRow.open{display:block}
-input[type=search],input[type=email],input[type=text]{width:100%;padding:13px 14px;border:1px solid var(--ink);background:var(--card);font:inherit;border-radius:0}
-.ph{position:relative;background:var(--stone);overflow:hidden;display:grid;place-items:center;color:var(--mute);font-size:13px;text-align:center;padding:12px}
+input[type=search],input[type=email],input[type=text]{width:100%;padding:13px 14px;border:1px solid var(--ink);background:var(--paper);font:inherit;border-radius:0}
+.ph{position:relative;background:var(--wall);overflow:hidden;display:grid;place-items:center;color:var(--mute);font-size:13px;text-align:center;padding:12px}
 .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.hero{display:grid;grid-template-columns:5fr 6fr;min-height:640px;border-bottom:1px solid var(--line)}
-.hero-copy{display:flex;flex-direction:column;justify-content:center;gap:22px;padding:56px 24px 56px max(24px,calc((100vw - 1240px)/2 + 24px))}
-.hero h1{font-size:clamp(46px,6.2vw,88px);line-height:.98;max-width:10ch}.hero p{color:var(--mute);max-width:38ch;font-size:18px}
-.hero .ph{min-height:420px}
-section{padding:88px 0}.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:36px}.head p{color:var(--mute);max-width:44ch}
-.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.col{display:block;text-decoration:none}.col .ph{aspect-ratio:4/5}.col span{display:block;margin-top:12px;font-family:var(--serif);font-size:20px}.col:hover span{text-decoration:underline;text-underline-offset:5px}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}.chip{border:1px solid var(--ink);padding:8px 18px;font-size:14px}.chip[aria-pressed=true]{background:var(--ink);color:var(--ivory)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:36px 20px}
-.card{text-align:left;display:block;width:100%}.card .ph{aspect-ratio:3/4}.card:hover .ph img{opacity:.92}
-.badge{position:absolute;top:10px;left:10px;z-index:1;background:var(--ivory);font-size:12px;padding:3px 10px}
-.card h3{font-size:16px;font-weight:500;margin-top:12px}.card .meta{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;align-items:center}
+/* pages */
+.page{display:none}.page.on{display:block}
+.room{background:var(--wall);padding:72px 0 56px;border-bottom:1px solid var(--ink);position:relative}
+.room p{color:#4a443a;max-width:46ch;margin-top:14px}
+.room::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--brass)}
+.body{padding:64px 0 96px}
+/* hero */
+.hero{display:grid;grid-template-columns:5fr 6fr;min-height:620px;background:var(--wall)}
+.hero-copy{display:flex;flex-direction:column;justify-content:center;gap:24px;padding:56px 24px 56px max(44px,calc((100vw - 1180px)/2 + 28px))}
+.hero h1{max-width:9ch}.hero p{color:#4a443a;max-width:36ch;font-size:18px}
+.hero .ph{margin:40px 44px 40px 0;border:1px solid var(--ink);outline:1px solid var(--ink);outline-offset:8px;min-height:420px}
+.doors{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--ink)}
+.door{padding:28px 22px 32px;border-right:1px solid var(--line);text-decoration:none;display:block;background:var(--paper)}
+.door:last-child{border-right:0}.door h3{font-size:22px}.door p{font-size:14px;color:var(--mute);margin-top:6px}.door:hover{background:var(--wall)}
+/* rail & products */
+.rail{position:relative;border-top:2px solid var(--brass);padding-top:30px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:34px}.chip{border:1px solid var(--ink);padding:8px 18px;font-size:14px}.chip[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:44px 22px}
+.card{text-align:left;display:block;width:100%;position:relative}.card::before{content:"";position:absolute;top:-30px;left:50%;width:1px;height:22px;background:var(--brass)}
+.card .ph{aspect-ratio:3/4}.card:hover .ph img{opacity:.9}
+.badge{position:absolute;top:10px;left:10px;z-index:1;background:var(--paper);font-size:12px;padding:3px 10px}
+.card h3{font-family:var(--sans);font-size:16px;font-weight:500;margin-top:12px;letter-spacing:0}.card .meta{display:flex;justify-content:space-between;color:var(--mute);font-size:14px}
 .dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:1px solid var(--line);vertical-align:-1px;margin-right:6px}
-.empty{grid-column:1/-1;padding:48px 0;color:var(--mute)}
-.tint{background:var(--stone)}
-.fit{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
-.fit dl{display:grid;gap:0}.fit dt{font-family:var(--serif);font-size:22px;padding-top:20px;border-top:1px solid var(--ink)}.fit dd{color:#3d3932;padding:6px 0 20px;max-width:52ch}
-.looks{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.look{display:block;text-align:left}.look .pair{display:grid;grid-template-columns:1fr 1fr;gap:4px}.look .ph{aspect-ratio:3/4}
-.look h3{font-family:var(--serif);font-weight:400;font-size:22px;margin-top:12px}.look p{color:var(--mute);font-size:14px}
-.story{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}.story .ph{aspect-ratio:4/5}.story p{color:#3d3932;max-width:50ch;margin-top:18px}
-.news{text-align:center}.news form{display:flex;gap:8px;max-width:480px;margin:28px auto 0}#newsMsg{margin-top:14px;min-height:24px;color:var(--mute)}
-footer{background:var(--ink);color:#d8d2c5;padding:64px 0 32px;font-size:14px}
-footer .fc{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}footer h4{color:var(--ivory);margin-bottom:12px;font-weight:500}
+.empty{grid-column:1/-1;color:var(--mute);padding:40px 0}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.col{display:block;text-decoration:none}.col .ph{aspect-ratio:4/5}.col span{display:block;margin-top:12px;font-family:var(--serif);font-size:21px}.col:hover span{text-decoration:underline;text-underline-offset:5px}
+.fit{display:grid;gap:0;max-width:760px}.fit dt{font-family:var(--serif);font-size:24px;padding-top:22px;border-top:1px solid var(--ink)}.fit dd{color:#3d382f;padding:6px 0 26px;max-width:54ch}
+.linkbtn{text-decoration:underline;text-underline-offset:4px;font-size:14px}
+.looks{display:grid;grid-template-columns:1fr 1fr;gap:28px}.look{display:block;text-align:left}.pair{display:grid;grid-template-columns:1fr 1fr;gap:4px}.look .ph{aspect-ratio:3/4}
+.look h3{font-size:24px;margin-top:14px}.look p{color:var(--mute);font-size:14px}
+.story{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}.story .ph{aspect-ratio:4/5}.story p{color:#3d382f;max-width:50ch;margin-top:18px}
+.join{max-width:520px}.join form{display:flex;gap:8px;margin-top:26px}#newsMsg{margin-top:14px;min-height:24px;color:var(--mute)}
+footer{background:var(--ink);color:#d3ccbe;padding:60px 0 30px;font-size:14px;position:relative;z-index:2}
+footer .fc{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}footer h4{color:var(--paper);margin-bottom:12px;font-weight:500}
 footer ul{list-style:none;padding:0;display:grid;gap:8px}footer a{text-decoration:none}footer a:hover{text-decoration:underline}
-.disc{border-top:1px solid #3a3733;margin-top:40px;padding-top:20px;color:#a39d90}
-dialog{border:0;padding:0;background:var(--ivory);color:var(--ink);max-width:940px;width:calc(100% - 32px);margin:auto;max-height:92vh;overflow:auto}
-dialog::backdrop{background:rgba(21,19,17,.5)}
-.x{position:absolute;top:10px;right:10px;z-index:3;width:40px;height:40px;border-radius:50%;background:var(--ivory);font-size:22px}
-.pd{display:grid;grid-template-columns:1fr 1fr}.pd .ph{min-height:440px}.pd-body{padding:36px;display:flex;flex-direction:column;gap:14px}
-.sizes{display:flex;gap:8px}.size{width:52px;height:46px;border:1px solid var(--ink)}.size[aria-pressed=true]{background:var(--ink);color:var(--ivory)}
+.disc{border-top:1px solid #3a3631;margin-top:40px;padding-top:20px;color:#a39d90}
+/* modals, cart */
+dialog{border:0;padding:0;background:var(--floor);color:var(--ink);max-width:940px;width:calc(100% - 32px);margin:auto;max-height:92vh;overflow:auto}
+dialog::backdrop{background:rgba(20,17,14,.5)}
+.x{position:absolute;top:10px;right:10px;z-index:3;width:40px;height:40px;border-radius:50%;background:var(--paper);font-size:22px}
+.pd{display:grid;grid-template-columns:1fr 1fr}.pd-body{padding:36px;display:flex;flex-direction:column;gap:14px}
+.sizes{display:flex;gap:8px}.size{width:52px;height:46px;border:1px solid var(--ink)}.size[aria-pressed=true]{background:var(--ink);color:var(--paper)}
 .size:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
-.err{color:#9b2c1d;font-size:14px;min-height:20px}
-.linkbtn{text-decoration:underline;text-underline-offset:4px;font-size:14px;align-self:flex-start}
-table{border-collapse:collapse;width:100%;margin:16px 0}th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left}
-#sg{padding:36px;max-width:620px}
-.veil{position:fixed;inset:0;background:rgba(21,19,17,.45);z-index:40;display:none}.veil.open{display:block}
-aside.panel{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--ivory);z-index:50;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;visibility:hidden}
+.err{color:#9b2c1d;font-size:14px;min-height:20px}.linkbtn.s{align-self:flex-start}
+table{border-collapse:collapse;width:100%;margin:16px 0}th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left}#sg{padding:36px;max-width:620px}
+.veil{position:fixed;inset:0;background:rgba(20,17,14,.45);z-index:40;display:none}.veil.open{display:block}
+aside.panel{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--floor);z-index:50;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;visibility:hidden}
 aside.panel.open{transform:none;visibility:visible}
 .ph-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line);font-family:var(--serif);font-size:20px}
-.items{flex:1;overflow:auto;padding:8px 20px}.line{display:grid;grid-template-columns:72px 1fr auto;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}.line .ph{aspect-ratio:3/4;padding:0}
-.qty{display:inline-flex;align-items:center;border:1px solid var(--line);margin:6px 12px 0 0}.qty button{width:30px;height:30px}.qty span{min-width:26px;text-align:center}
-.rm{font-size:13px;text-decoration:underline}
+.items{flex:1;overflow:auto;padding:8px 20px}.cl{display:grid;grid-template-columns:72px 1fr auto;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}.cl .ph{aspect-ratio:3/4;padding:0}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);margin:6px 12px 0 0}.qty button{width:30px;height:30px}.qty span{min-width:26px;text-align:center}.rm{font-size:13px;text-decoration:underline}
 .foot{padding:20px;border-top:1px solid var(--line);display:grid;gap:12px}.tot{display:flex;justify-content:space-between;font-weight:600}.foot .btn{text-align:center}
-#aiLaunch{position:fixed;right:20px;bottom:20px;z-index:30;background:var(--ink);color:var(--ivory);padding:12px 18px;font-size:14px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
-#chat{position:fixed;right:20px;bottom:20px;z-index:60;width:min(390px,calc(100% - 24px));height:min(580px,calc(100vh - 40px));background:var(--card);border:1px solid var(--ink);display:none;flex-direction:column}
-#chat.open{display:flex}.chat-head{background:var(--ink);color:var(--ivory);padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+#aiLaunch{position:fixed;right:28px;bottom:20px;z-index:30;background:var(--ink);color:var(--paper);padding:12px 18px;font-size:14px}
+#chat{position:fixed;right:28px;bottom:20px;z-index:60;width:min(390px,calc(100% - 24px));height:min(580px,calc(100vh - 40px));background:var(--paper);border:1px solid var(--ink);display:none;flex-direction:column}
+#chat.open{display:flex}.chat-head{background:var(--ink);color:var(--paper);padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
 .chat-head small{display:block;color:#b9b2a3;font-size:12px}
 #log{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:88%;padding:10px 14px;font-size:14.5px;line-height:1.45;white-space:pre-wrap}.msg.bot{background:var(--stone);align-self:flex-start}.msg.me{background:var(--ink);color:var(--ivory);align-self:flex-end}
-.msg .tag{display:block;font-size:11px;opacity:.65;margin-bottom:3px}.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.links button{border:1px solid var(--ink);padding:4px 10px;font-size:12.5px;background:var(--card)}
-.sugg{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px}.sugg button{border:1px solid var(--ink);padding:6px 12px;font-size:13px;text-align:left}.sugg button:hover{background:var(--stone)}
+.msg{max-width:88%;padding:10px 14px;font-size:14.5px;line-height:1.45;white-space:pre-wrap}.msg.bot{background:var(--wall);align-self:flex-start}.msg.me{background:var(--ink);color:var(--paper);align-self:flex-end}
+.msg .tag{display:block;font-size:11px;opacity:.65;margin-bottom:3px}.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.links button{border:1px solid var(--ink);padding:4px 10px;font-size:12.5px;background:var(--paper)}
+.sugg{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px}.sugg button{border:1px solid var(--ink);padding:6px 12px;font-size:13px;text-align:left}.sugg button:hover{background:var(--wall)}
 .chat-in{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.chat-in .btn{padding:0 18px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-@media (max-width:960px){.grid,.cols4{grid-template-columns:repeat(2,1fr)}.hero,.fit,.story,.pd,.looks{grid-template-columns:1fr}.fit,.story{gap:32px}.hero-copy{padding:48px 24px}.hero .ph{min-height:420px}footer .fc{grid-template-columns:1fr 1fr}
-#menuBtn{display:flex}nav{display:none;position:absolute;top:70px;left:0;right:0;background:var(--ivory);border-bottom:1px solid var(--line);padding:8px 24px 18px}nav.open{display:block}nav ul{flex-direction:column;gap:6px}nav a{display:block;padding:10px 0;font-size:17px}header{position:sticky}}
-@media (max-width:560px){section{padding:56px 0}.news form{flex-direction:column}.pd-body{padding:22px}#chat{right:12px;bottom:12px;height:calc(100vh - 24px)}.look .pair{grid-template-columns:1fr 1fr}}
+@media (max-width:960px){body::before,body::after{display:none}
+.grid,.cols4{grid-template-columns:repeat(2,1fr)}.hero,.story,.pd,.looks{grid-template-columns:1fr}.story{gap:32px}.doors{grid-template-columns:1fr 1fr}.door{border-bottom:1px solid var(--line)}
+.hero-copy{padding:48px 24px}.hero .ph{margin:0 24px 48px}footer .fc{grid-template-columns:1fr 1fr}
+.nav{grid-template-columns:auto 1fr auto}#menuBtn{display:flex}.logo{justify-self:center}
+nav{display:none;position:absolute;top:72px;left:0;right:0;background:var(--paper);border-bottom:1px solid var(--ink);padding:8px 24px 18px}nav.open{display:block}nav ul{flex-direction:column;gap:4px}nav a{display:block;padding:10px 0;font-size:17px}}
+@media (max-width:560px){.body{padding:44px 0 72px}.join form{flex-direction:column}.pd-body{padding:22px}#chat{right:12px;bottom:12px;height:calc(100vh - 24px)}#aiLaunch{right:14px}.cols4{gap:14px}.doors{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -93,11 +108,11 @@ aside.panel.open{transform:none;visibility:visible}
 <div class="bar">Demo store: sample products and prices, nothing here is for sale.</div>
 <header><div class="wrap">
   <div class="nav">
-    <button class="icon" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-    <a class="logo" href="#top">FORME</a>
+    <div><button class="icon" id="menuBtn" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <nav id="mainNav" aria-label="Main"><ul>
-      <li><a href="#shop" data-cat="All">Shop</a></li><li><a href="#collections">Collections</a></li><li><a href="#story">Our story</a></li>
-    </ul></nav>
+      <li><a href="#/shop">Shop</a></li><li><a href="#/collections">Collections</a></li><li><a href="#/fit">Fit</a></li><li><a href="#/lookbook">Lookbook</a></li><li><a href="#/story">Story</a></li>
+    </ul></nav></div>
+    <a class="logo" href="#/">FORME</a>
     <div class="tools">
       <button class="icon" id="searchBtn" aria-label="Search products" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
       <button class="icon" id="cartBtn" aria-label="Open demo cart, 0 items"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 0 1 6 0"/></svg><span id="cartCount">0</span></button>
@@ -106,63 +121,85 @@ aside.panel.open{transform:none;visibility:visible}
   <div id="searchRow"><label class="sr" for="q">Search products</label><input type="search" id="q" placeholder="Search tees, hoodies, trousers"></div>
 </div></header>
 
-<main id="top">
-<div class="hero">
-  <div class="hero-copy">
-    <h1>Clothes for ordinary days.</h1>
-    <p>Considered basics in a quiet palette of ivory, stone and black.</p>
-    <div><a class="btn" href="#shop">Shop the collection</a></div>
+<main>
+<!-- HOME -->
+<div class="page" data-p="home">
+  <div class="hero">
+    <div class="hero-copy"><h1>Clothes for ordinary days.</h1><p>Considered basics in a quiet palette of ivory, stone and black.</p><div><a class="btn" href="#/shop">Shop the collection</a></div></div>
+    <div class="ph" data-img="heroImage" data-label="Store photo placeholder"></div>
   </div>
-  <div class="ph" data-img="heroImage" data-label="Hero photo placeholder"></div>
+  <div class="doors">
+    <a class="door" href="#/shop"><h3>Shop</h3><p>All eight pieces</p></a>
+    <a class="door" href="#/collections"><h3>Collections</h3><p>Four places to start</p></a>
+    <a class="door" href="#/fit"><h3>Fit</h3><p>Fabric and sizing</p></a>
+    <a class="door" href="#/lookbook"><h3>Lookbook</h3><p>Two ways to wear it</p></a>
+    <a class="door" href="#/story"><h3>Story</h3><p>About FORME</p></a>
+  </div>
 </div>
 
-<section id="collections"><div class="wrap">
-  <div class="head"><h2>Shop by collection</h2><p>Four places to start.</p></div>
-  <div class="cols4" id="cols"></div>
-</div></section>
+<!-- SHOP -->
+<div class="page" data-p="shop">
+  <div class="room"><div class="wrap"><h1>Shop</h1><p id="resultNote" aria-live="polite"></p></div></div>
+  <div class="body"><div class="wrap">
+    <div class="filters" role="group" aria-label="Filter by collection" id="filters"></div>
+    <div class="rail"><div class="grid" id="grid"></div></div>
+    <p class="note" style="margin-top:36px">Sample products with illustrative prices. Photos are placeholders from a public image source.</p>
+  </div></div>
+</div>
 
-<section id="shop" class="tint"><div class="wrap">
-  <div class="head"><h2>Featured products</h2><p id="resultNote" class="note" aria-live="polite"></p></div>
-  <div class="filters" role="group" aria-label="Filter by collection" id="filters"></div>
-  <div class="grid" id="grid"></div>
-  <p class="note" style="margin-top:32px">Sample products with illustrative prices. Photos are placeholders from a public image source.</p>
-</div></section>
+<!-- COLLECTIONS -->
+<div class="page" data-p="collections">
+  <div class="room"><div class="wrap"><h1>Collections</h1><p>Four places to start.</p></div></div>
+  <div class="body"><div class="wrap"><div class="cols4" id="cols"></div></div></div>
+</div>
 
-<section><div class="wrap fit">
-  <div><h2>Fit, fabric and detail</h2><p style="color:var(--mute);margin-top:16px;max-width:40ch">How a store can say what a garment is like before anyone tries it on. All details below are sample copy for the demo.</p>
-  <button class="linkbtn" style="margin-top:20px" data-sg>Open the size guide</button></div>
-  <dl>
-    <dt>Fit names that mean something</dt><dd>Regular, Relaxed, Oversized and Tapered each appear on the product page, with a plain-language note on how to size.</dd>
-    <dt>Fabric in plain words</dt><dd>Each product lists a sample material and weight, so a customer or an assistant can compare pieces without guessing.</dd>
-    <dt>Garment details up front</dt><dd>Collars, trims, pockets and waistbands are described in the product text instead of hidden in an image.</dd>
-  </dl>
-</div></section>
+<!-- FIT -->
+<div class="page" data-p="fit">
+  <div class="room"><div class="wrap"><h1>Fit, fabric and detail</h1><p>What each garment is like before anyone tries it on. All details are sample copy.</p></div></div>
+  <div class="body"><div class="wrap">
+    <dl class="fit">
+      <dt>Fit names that mean something</dt><dd>Regular, Relaxed, Oversized and Tapered each appear on the product page, with a plain-language note on how to size.</dd>
+      <dt>Fabric in plain words</dt><dd>Each product lists a sample material and weight, so a customer or an assistant can compare pieces without guessing.</dd>
+      <dt>Garment details up front</dt><dd>Collars, trims, pockets and waistbands are described in the product text instead of hidden in an image.</dd>
+    </dl>
+    <button class="linkbtn" data-sg>Open the size guide</button>
+  </div></div>
+</div>
 
-<section class="tint"><div class="wrap">
-  <div class="head"><h2>Lookbook</h2><p>Two ways to wear the same pieces. Select a look to open its main item.</p></div>
-  <div class="looks" id="looks"></div>
-</div></section>
+<!-- LOOKBOOK -->
+<div class="page" data-p="lookbook">
+  <div class="room"><div class="wrap"><h1>Lookbook</h1><p>Two ways to wear the same pieces. Select a look to open its main item.</p></div></div>
+  <div class="body"><div class="wrap"><div class="looks" id="looks"></div></div></div>
+</div>
 
-<section><div class="wrap story">
-  <div class="ph" data-img="storyImage" data-label="Brand photo placeholder"></div>
-  <div><h2>Fewer pieces, worn often.</h2>
-    <p>FORME is a fictional brand created to test an online shopping experience. Its idea is simple: a small set of everyday pieces that work together.</p>
-    <p>There is no company history, factory or certification behind it. The product details are sample data for prototyping.</p></div>
-</div></section>
+<!-- STORY -->
+<div class="page" data-p="story">
+  <div class="room"><div class="wrap"><h1>Fewer pieces, worn often.</h1></div></div>
+  <div class="body"><div class="wrap story">
+    <div class="ph" data-img="storyImage" data-label="Brand photo placeholder"></div>
+    <div><h2>About FORME</h2>
+      <p>FORME is a fictional brand created to test an online shopping experience. Its idea is simple: a small set of everyday pieces that work together.</p>
+      <p>There is no company history, factory or certification behind it. The product details are sample data for prototyping.</p>
+      <p style="margin-top:28px"><a class="btn" href="#/join">Hear about new pieces</a></p></div>
+  </div></div>
+</div>
 
-<section class="tint news"><div class="wrap">
-  <h2>Hear about new pieces</h2><p class="note" style="margin-top:12px">Demo form: nothing is sent or stored.</p>
-  <form id="newsForm" novalidate><label class="sr" for="em">Email address</label><input type="email" id="em" placeholder="you@example.com" required><button class="btn" type="submit">Subscribe</button></form>
-  <p id="newsMsg" aria-live="polite"></p>
-</div></section>
+<!-- JOIN -->
+<div class="page" data-p="join">
+  <div class="room"><div class="wrap"><h1>Hear about new pieces</h1><p>Demo form: nothing is sent or stored.</p></div></div>
+  <div class="body"><div class="wrap join">
+    <form id="newsForm" novalidate><label class="sr" for="em">Email address</label><input type="email" id="em" placeholder="you@example.com" required><button class="btn" type="submit">Subscribe</button></form>
+    <p id="newsMsg" aria-live="polite"></p>
+  </div></div>
+</div>
 </main>
 
 <footer><div class="wrap">
   <div class="fc">
-    <div><a class="logo" href="#top" style="color:var(--ivory);font-size:22px">FORME</a><p style="margin-top:12px;max-width:34ch">Everyday menswear. A fictional brand for prototyping.</p></div>
-    <div><h4>Shop</h4><ul><li><a href="#shop">All products</a></li><li><a href="#collections">Collections</a></li></ul></div>
+    <div><a class="logo" href="#/" style="font-size:22px;padding:0">FORME</a><p style="margin-top:12px;max-width:34ch">Everyday menswear. A fictional brand for prototyping.</p></div>
+    <div><h4>Shop</h4><ul><li><a href="#/shop">All products</a></li><li><a href="#/collections">Collections</a></li><li><a href="#/lookbook">Lookbook</a></li></ul></div>
     <div><h4>Help (demo)</h4><ul><li><a href="#" data-sg>Size guide</a></li><li><a href="#" data-ai="What is your shipping policy?">Shipping</a></li><li><a href="#" data-ai="What is your returns policy?">Returns</a></li></ul></div>
-    <div><h4>Company</h4><ul><li><a href="#story">Our story</a></li><li><a href="#top">Back to top</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="#/story">Our story</a></li><li><a href="#/join">Newsletter</a></li></ul></div>
   </div>
   <p class="disc"><strong>Demo disclaimer:</strong> This prototype tests an AI shopping assistant. Products are samples and cannot be purchased. There is no shipping, returns, contact or order support, and the cart and checkout collect no payment or personal data.</p>
 </div></footer>
@@ -185,22 +222,21 @@ aside.panel.open{transform:none;visibility:visible}
 </aside>
 
 <button id="aiLaunch" aria-haspopup="dialog" aria-controls="chat">Ask the shopping assistant</button>
-<section id="chat" role="dialog" aria-label="Shopping assistant (demo)" style="padding:0">
-  <div class="chat-head"><div>Shopping assistant<small>Demo preview. Scripted replies, no AI model connected.</small></div><button class="icon" id="chatClose" aria-label="Close assistant" style="color:var(--ivory)">✕</button></div>
+<section id="chat" role="dialog" aria-label="Shopping assistant (demo)">
+  <div class="chat-head"><div>Shopping assistant<small>Demo preview. Scripted replies, no AI model connected.</small></div><button class="icon" id="chatClose" aria-label="Close assistant" style="color:var(--paper)">✕</button></div>
   <div id="log" aria-live="polite"></div><div class="sugg" id="sugg"></div>
   <form class="chat-in" id="chatForm"><label class="sr" for="chatText">Message</label><input type="text" id="chatText" placeholder="Ask about fit, size or style" autocomplete="off"><button class="btn" type="submit">Send</button></form>
 </section>
 
 <script>
 "use strict";
-/* ===== 1. CONFIG & CATALOG (image references live here; replace freely) ===== */
+/* ===== 1. CONFIG & CATALOG (sample data; replace freely) ===== */
 const U = id => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=75`;
-const CONFIG = {currency:"$", heroImage:U("photo-1490578474895-699cd4e2cf59"), storyImage:U("photo-1489987707025-afc232f7ea0f")};
+const CONFIG = {currency:"$", heroImage:U("photo-1441986300917-64674bd600d8"), storyImage:U("photo-1489987707025-afc232f7ea0f")};
 const COLLECTIONS = [
   {key:"T-shirts",ids:["p1","p2","p3"],img:"p1"},{key:"Hoodies and sweatshirts",ids:["p4","p5"],img:"p4"},
   {key:"Bottoms",ids:["p6","p7"],img:"p6"},{key:"Everyday essentials",ids:["p1","p4","p6","p8"],img:"p8"}];
 const SWATCH = {"Off-white":"#efe9dc",Black:"#151311",Stone:"#c9bfa9",Charcoal:"#3b3a38",Oatmeal:"#d8c9ad",Sand:"#cdb892",Khaki:"#a89c74",White:"#fbfaf6"};
-/* All fields are sample data. material is sample copy, not a verified spec. */
 const CATALOG = [
  {id:"p1",name:"Heavyweight Tee",cat:"Tops",color:"Off-white",fit:"Regular",material:"Heavyweight cotton, 240 gsm (sample)",price:38,badge:"Bestseller",img:U("photo-1521572163474-6864f9cf17ab"),sizes:{S:1,M:1,L:1,XL:1},desc:"A structured, boxy-leaning drape in dense cotton. Built to hold its shape."},
  {id:"p2",name:"Relaxed Tee",cat:"Tops",color:"Black",fit:"Relaxed",material:"Soft cotton jersey (sample)",price:32,badge:"",img:U("photo-1583743814966-8936f5b7be1a"),sizes:{S:1,M:1,L:1,XL:0},desc:"A softer, looser cut with extra room through the chest and sleeve."},
@@ -222,10 +258,22 @@ const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const byId = id => CATALOG.find(p=>p.id===id);
 function imgTag(src,alt){const i=new Image();i.alt=alt;i.loading="lazy";i.onerror=()=>i.remove();i.src=src;return i;}
 function ph(label,src){const d=document.createElement("div");d.className="ph";d.append(document.createTextNode(label),imgTag(src,label));return d;}
-function phP(p){return ph(p.name,p.img);}
-document.querySelectorAll("[data-img]").forEach(el=>{el.append(document.createTextNode(el.dataset.label),imgTag(CONFIG[el.dataset.img],el.dataset.label));});
+const phP = p => ph(p.name,p.img);
+document.querySelectorAll("[data-img]").forEach(el=>el.append(document.createTextNode(el.dataset.label),imgTag(CONFIG[el.dataset.img],el.dataset.label)));
 
-/* ===== 3. CATALOG VIEW ===== */
+/* ===== 3. ROUTER (each section is its own page: #/shop, #/fit ...) ===== */
+const PAGES=["home","shop","collections","fit","lookbook","story","join"];
+function route(){
+  let p=(location.hash.replace(/^#\/?/,"")||"home").split("?")[0];if(!PAGES.includes(p))p="home";
+  document.querySelectorAll(".page").forEach(s=>s.classList.toggle("on",s.dataset.p===p));
+  document.querySelectorAll("nav a").forEach(a=>a.getAttribute("href")==="#/"+p?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  document.title=(p==="home"?"FORME":p[0].toUpperCase()+p.slice(1)+" – FORME")+" (demo store)";
+  $("#mainNav").classList.remove("open");$("#menuBtn").setAttribute("aria-expanded","false");window.scrollTo(0,0);
+}
+addEventListener("hashchange",route);
+function go(p){location.hash="#/"+p;}
+
+/* ===== 4. CATALOG VIEW ===== */
 const state={col:"All",q:""};
 function visible(){
   const q=state.q.trim().toLowerCase(), c=COLLECTIONS.find(x=>x.key===state.col);
@@ -237,7 +285,7 @@ function render(){
   const g=$("#grid");g.innerHTML="";const list=visible();
   list.forEach(p=>{
     const b=document.createElement("button");b.className="card";b.setAttribute("aria-label",`${p.name}, ${p.color}, ${money(p.price)}. View details`);
-    const box=phP(p);box.style.aspectRatio="3/4";if(p.badge){const s=document.createElement("span");s.className="badge";s.textContent=p.badge;box.prepend(s);}
+    const box=phP(p);if(p.badge){const s=document.createElement("span");s.className="badge";s.textContent=p.badge;box.prepend(s);}
     b.append(box);
     b.insertAdjacentHTML("beforeend",`<h3>${esc(p.name)}</h3><div class="meta"><span><i class="dot" style="background:${SWATCH[p.color]||"#ccc"}"></i>${esc(p.color)}</span><span>${money(p.price)}</span></div>`);
     b.onclick=()=>openProduct(p.id);g.append(b);
@@ -246,7 +294,7 @@ function render(){
   $("#resultNote").textContent=`${list.length} of ${CATALOG.length} sample products`;
 }
 COLLECTIONS.forEach(c=>{
-  const a=document.createElement("a");a.href="#shop";a.className="col";a.append(ph(c.key,byId(c.img).img));a.insertAdjacentHTML("beforeend",`<span>${esc(c.key)}</span>`);
+  const a=document.createElement("a");a.href="#/shop";a.className="col";a.append(ph(c.key,byId(c.img).img));a.insertAdjacentHTML("beforeend",`<span>${esc(c.key)}</span>`);
   a.onclick=()=>{state.col=c.key;state.q="";$("#q").value="";render();};$("#cols").append(a);
 });
 LOOKS.forEach(l=>{
@@ -255,7 +303,7 @@ LOOKS.forEach(l=>{
   b.append(pair);b.insertAdjacentHTML("beforeend",`<h3>${esc(l.title)}</h3><p>${esc(l.text)}</p>`);b.onclick=()=>openProduct(l.open);$("#looks").append(b);
 });
 
-/* ===== 4. PRODUCT MODAL & SIZE GUIDE ===== */
+/* ===== 5. PRODUCT MODAL & SIZE GUIDE ===== */
 let chosen=null,current=null,lastFocus=null;
 function openProduct(id){
   current=byId(id);chosen=null;lastFocus=document.activeElement;
@@ -265,7 +313,7 @@ function openProduct(id){
    <p>${esc(current.desc)}</p>
    <p class="note"><i class="dot" style="background:${SWATCH[current.color]||"#ccc"}"></i>Colour: ${esc(current.color)} · Fit: ${esc(current.fit)}<br>Material: ${esc(current.material)}</p>
    <div><div style="font-weight:500;margin-bottom:8px">Size</div><div class="sizes" role="group" aria-label="Select size" id="sizes"></div></div>
-   <button class="linkbtn" data-sg>Size guide</button>
+   <button class="linkbtn s" data-sg>Size guide</button>
    <p class="err" id="pdErr" role="alert"></p><button class="btn" id="addBtn">Add to cart (demo)</button>
    <p class="note">Sample product and price. Not in stock and not for sale. Sizes shown are sample availability.</p>`;
   body.append(info);
@@ -279,10 +327,10 @@ function openProduct(id){
 $("#pdClose").onclick=()=>$("#pdModal").close();
 $("#pdModal").addEventListener("close",()=>lastFocus&&lastFocus.focus());
 $("#sgClose").onclick=()=>$("#sgModal").close();
-[ "#pdModal","#sgModal" ].forEach(s=>$(s).addEventListener("click",e=>{if(e.target.id===s.slice(1))e.target.close();}));
+["pdModal","sgModal"].forEach(id=>$("#"+id).addEventListener("click",e=>{if(e.target.id===id)e.target.close();}));
 document.querySelectorAll("[data-sg]").forEach(a=>a.onclick=e=>{e.preventDefault();$("#sgModal").showModal();});
 
-/* ===== 5. CART (in-memory, demo only) ===== */
+/* ===== 6. CART (in-memory, demo only) ===== */
 const Cart={items:[],
   add(id,size){const l=this.items.find(i=>i.id===id&&i.size===size);l?l.qty++:this.items.push({id,size,qty:1});this.draw();},
   change(i,d){this.items[i].qty+=d;if(this.items[i].qty<1)this.items.splice(i,1);this.draw();},
@@ -293,7 +341,7 @@ const Cart={items:[],
     $("#subtotal").textContent=money(this.items.reduce((a,i)=>a+byId(i.id).price*i.qty,0));
     const box=$("#cartItems");box.innerHTML="";
     if(!this.items.length){box.innerHTML='<p class="empty" style="padding:32px 0">Your demo cart is empty. Add a product to see it here.</p>';return;}
-    this.items.forEach((it,idx)=>{const p=byId(it.id),row=document.createElement("div");row.className="line";row.append(phP(p));
+    this.items.forEach((it,idx)=>{const p=byId(it.id),row=document.createElement("div");row.className="cl";row.append(phP(p));
       row.insertAdjacentHTML("beforeend",`<div><div style="font-weight:500">${esc(p.name)}</div><div class="note">${esc(p.color)}, size ${esc(it.size)}</div>
        <div class="qty"><button aria-label="Decrease quantity of ${esc(p.name)}">−</button><span>${it.qty}</span><button aria-label="Increase quantity of ${esc(p.name)}">+</button></div><button class="rm" aria-label="Remove ${esc(p.name)}">Remove</button></div><div>${money(p.price*it.qty)}</div>`);
       const [m,pl]=row.querySelectorAll(".qty button");m.onclick=()=>this.change(idx,-1);pl.onclick=()=>this.change(idx,1);
@@ -302,20 +350,17 @@ const Cart={items:[],
 $("#cartBtn").onclick=()=>Cart.open();$("#cartClose").onclick=$("#veil").onclick=()=>Cart.close();
 $("#checkoutBtn").onclick=()=>{$("#checkoutMsg").textContent="Checkout is disabled in this demo. No order was placed.";};
 
-/* ===== 6. SEARCH, NAV, NEWSLETTER ===== */
+/* ===== 7. SEARCH, NAV, NEWSLETTER ===== */
 $("#searchBtn").onclick=()=>{const r=$("#searchRow"),o=r.classList.toggle("open");$("#searchBtn").setAttribute("aria-expanded",o);if(o)$("#q").focus();};
-$("#q").addEventListener("input",e=>{state.q=e.target.value;render();if(state.q)location.hash="#shop";});
+$("#q").addEventListener("input",e=>{state.q=e.target.value;state.col="All";render();if(state.q)go("shop");});
 $("#menuBtn").onclick=()=>{const o=$("#mainNav").classList.toggle("open");$("#menuBtn").setAttribute("aria-expanded",o);};
-document.querySelectorAll("nav a").forEach(a=>a.addEventListener("click",()=>{$("#mainNav").classList.remove("open");$("#menuBtn").setAttribute("aria-expanded","false");if(a.dataset.cat){state.col="All";render();}}));
+document.querySelectorAll('nav a[href="#/shop"]').forEach(a=>a.addEventListener("click",()=>{state.col="All";state.q="";$("#q").value="";render();}));
 $("#newsForm").onsubmit=e=>{e.preventDefault();const v=$("#em").value.trim(),m=$("#newsMsg");
   if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent="Enter a valid email address, like you@example.com.";return;}
   m.textContent="Thanks. This is a demo, so nothing was sent or saved.";e.target.reset();};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){Cart.close();Chat.close();}});
 
-/* ===== 7. AI ASSISTANT =====
-   Service layer: not connected to any model. To connect a real backend, set mode = "live" and
-   implement reply() as a call to YOUR server (never place API keys in this file). It receives the
-   user text plus context() and must resolve to { text: string, products?: [productId] }. */
+/* ===== 8. AI ASSISTANT (scripted; connect your own backend in AssistantService.reply) ===== */
 const AssistantService={
   mode:"scripted",
   context(){return {catalog:CATALOG,cart:Cart.items};},
@@ -333,7 +378,6 @@ const AssistantService={
   },
   async reply(text){if(this.mode==="live")throw new Error("Live AI backend not connected");await new Promise(r=>setTimeout(r,400));return this.scripted(text);}
 };
-/* UI layer: only talks to AssistantService.reply(). */
 const Chat={started:false,
   prompts:["Help me find an everyday T-shirt.","Compare relaxed and oversized fits.","Help me choose a size.","Recommend products under $50.","Help me build an outfit."],
   add(role,text,products=[]){
@@ -354,7 +398,7 @@ $("#aiLaunch").onclick=()=>Chat.open();$("#chatClose").onclick=()=>{Chat.close()
 $("#chatForm").onsubmit=e=>{e.preventDefault();Chat.send($("#chatText").value);};
 document.querySelectorAll("[data-ai]").forEach(a=>a.onclick=e=>{e.preventDefault();Chat.open(a.dataset.ai);});
 
-render();Cart.draw();
+render();Cart.draw();route();
 </script>
 </body>
 </html>
