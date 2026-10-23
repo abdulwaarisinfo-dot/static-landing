@@ -296,7 +296,12 @@ nav{display:none;position:absolute;top:72px;left:0;right:0;background:var(--pape
 "use strict";
 /* ===== 1. CONFIG & CATALOG (sample data; replace freely) ===== */
 const U = id => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=75`;
-const CONFIG = {currency:"$", heroImage:U("photo-1441986300917-64674bd600d8"), storyImage:U("photo-1489987707025-afc232f7ea0f")};
+/* IMAGES: each picture tries your local file first (images/<name>.<ext>), then the unverified remote
+   placeholder below, then a plain text placeholder. See images/README.md for the full list. */
+const CONFIG = {currency:"$", imageDir:"images/", ext:"jpg",
+  heroRemote:U("photo-1441986300917-64674bd600d8"), storyRemote:U("photo-1489987707025-afc232f7ea0f")};
+const localImg = name => CONFIG.imageDir+name+"."+CONFIG.ext;
+CONFIG.heroImage=[localImg("hero"),CONFIG.heroRemote];CONFIG.storyImage=[localImg("story"),CONFIG.storyRemote];
 const COLLECTIONS = [
   {key:"T-shirts",ids:["p1","p2","p3"],img:"p1"},{key:"Hoodies and sweatshirts",ids:["p4","p5"],img:"p4"},
   {key:"Bottoms",ids:["p6","p7"],img:"p6"},{key:"Everyday essentials",ids:["p1","p4","p6","p8"],img:"p8"}];
@@ -311,7 +316,7 @@ const CATALOG = [
  {id:"p7",name:"Everyday Shorts",cat:"Bottoms",color:"Khaki",fit:"Regular",material:"Cotton blend (sample)",price:48,badge:"",img:U("photo-1591195853828-11db59a44f6b"),sizes:{S:1,M:1,L:0,XL:0},desc:"Knee-length shorts with an elastic-back waist and deep pockets."},
  {id:"p8",name:"Minimal Everyday Shirt",cat:"Tops",color:"White",fit:"Regular",material:"Washed cotton poplin (sample)",price:72,badge:"Low stock",img:U("photo-1596755094514-f87e34085b2c"),sizes:{S:1,M:0,L:1,XL:0},desc:"A camp collar and no chest pocket. Wear it open or buttoned."}
 ];
-CATALOG.forEach(p=>{p.slug=p.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");p.colors=[p.color];p.imgs=p.imgs||[p.img];});
+CATALOG.forEach(p=>{p.slug=p.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");p.colors=[p.color];p.srcs=[localImg(p.slug),p.img];p.imgs=p.imgs||[p.srcs];});
 const LOOKS = [
  {title:"Easy weekend",text:"Hoodie, trousers and a tee underneath.",ids:["p4","p6"],open:"p4"},
  {title:"Smart casual",text:"Shirt worn open over a tee, with trousers.",ids:["p8","p6"],open:"p8"}];
@@ -321,9 +326,9 @@ const $ = (s,r=document)=>r.querySelector(s);
 const money = n => CONFIG.currency+n;
 const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const byId = id => CATALOG.find(p=>p.id===id);
-function imgTag(src,alt){const i=new Image();i.alt=alt;i.loading="lazy";i.onerror=()=>i.remove();i.src=src;return i;}
+function imgTag(src,alt){const list=[].concat(src);let n=0;const i=new Image();i.alt=alt;i.loading="lazy";i.onerror=()=>{if(++n<list.length)i.src=list[n];else i.remove();};i.src=list[0];return i;}
 function ph(label,src){const d=document.createElement("div");d.className="ph";d.append(document.createTextNode(label),imgTag(src,label));return d;}
-const phP = p => ph(p.name,p.img);
+const phP = p => ph(p.name,p.srcs);
 document.querySelectorAll("[data-img]").forEach(el=>el.append(document.createTextNode(el.dataset.label),imgTag(CONFIG[el.dataset.img],el.dataset.label)));
 
 /* ===== 3. ROUTER (#/shop, #/product/<slug>, #/checkout ...) ===== */
@@ -372,7 +377,7 @@ function render(){
 }
 $("#sort").onchange=e=>{state.sort=e.target.value;render();};
 COLLECTIONS.forEach(c=>{
-  const a=document.createElement("a");a.href="#/shop";a.className="col";a.append(ph(c.key,byId(c.img).img));a.insertAdjacentHTML("beforeend",`<span>${esc(c.key)}</span>`);
+  const a=document.createElement("a");a.href="#/shop";a.className="col";a.append(ph(c.key,byId(c.img).srcs));a.insertAdjacentHTML("beforeend",`<span>${esc(c.key)}</span>`);
   a.onclick=()=>{state.col=c.key;state.q="";$("#q").value="";render();};$("#cols").append(a);
 });
 LOOKS.forEach(l=>{
