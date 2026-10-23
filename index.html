@@ -7,7 +7,6 @@
 <style>
 :root{--bg:#f6f2ea;--bg2:#ebe4d6;--ink:#111;--mute:#6b655b;--line:#d9d1c1;--card:#fffdf8;--r:2px;
 --font:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif}
-@media (prefers-color-scheme:dark){:root{--bg:#f6f2ea;--ink:#111}} /* store stays light by design */
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
 body{font:16px/1.5 var(--font);background:var(--bg);color:var(--ink);overflow-x:hidden}
@@ -115,6 +114,7 @@ aside.panel.open{transform:none}
 .msg{max-width:86%;padding:10px 14px;font-size:14.5px;line-height:1.45;white-space:pre-wrap}
 .msg.bot{background:var(--bg2);align-self:flex-start;border-radius:2px 14px 14px 14px}
 .msg.me{background:var(--ink);color:var(--bg);align-self:flex-end;border-radius:14px 2px 14px 14px}
+.msg .tag{display:block;font-size:11px;opacity:.65;margin-bottom:3px}.msg .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.msg .links button{border:1px solid var(--ink);border-radius:99px;padding:4px 10px;font-size:12.5px;background:var(--card)}
 .sugg{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px}
 .sugg button{border:1px solid var(--ink);border-radius:99px;padding:6px 12px;font-size:13px;text-align:left}
 .sugg button:hover{background:var(--bg2)}
@@ -122,7 +122,7 @@ aside.panel.open{transform:none}
 .chat-in .btn{padding:0 18px}
 .demo-tag{font-size:11px;color:var(--mute);text-align:center;padding:0 12px 8px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-@media (max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}.hero,.story .wrap,.pd{grid-template-columns:1fr}.hero-copy{padding:48px 24px}.hero-img{min-height:420px}.story .wrap{gap:32px}footer .cols{grid-template-columns:1fr 1fr}nav{display:none}}
+@media (max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}.hero,.story .wrap,.pd{grid-template-columns:1fr}.hero-copy{padding:48px 24px}.hero-img{min-height:420px}.story .wrap{gap:32px}footer .cols{grid-template-columns:1fr 1fr}.nav{flex-wrap:wrap;height:auto;padding-top:10px}nav{order:3;width:100%;overflow-x:auto}nav ul{gap:22px;padding-bottom:10px;white-space:nowrap}}
 @media (max-width:560px){section{padding:56px 0}.feat{grid-template-columns:1fr}.grid{gap:24px 12px}.news form{flex-direction:column}.pd-body{padding:22px}#chat{right:12px;bottom:12px;height:calc(100vh - 24px)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -202,8 +202,8 @@ aside.panel.open{transform:none}
     <div class="cols">
       <div><a class="logo" href="#top" style="color:var(--bg);font-size:22px">FORME</a><p style="margin-top:12px;max-width:34ch">Everyday menswear. Fictional brand for prototyping.</p></div>
       <div><h4>Shop</h4><ul><li><a href="#shop">All products</a></li><li><a href="#shop">Tops</a></li><li><a href="#shop">Bottoms</a></li></ul></div>
-      <div><h4>Help</h4><ul><li><a href="#" data-ai="Which size should I choose?">Size guide</a></li><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li></ul></div>
-      <div><h4>Company</h4><ul><li><a href="#story">Our story</a></li><li><a href="#">Contact</a></li><li><a href="#">Journal</a></li></ul></div>
+      <div><h4>Help</h4><ul><li><a href="#" data-ai="Which size should I choose?">Size guide</a></li><li><a href="#" data-ai="What is your shipping policy?">Shipping</a></li><li><a href="#" data-ai="What is your returns policy?">Returns</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#story">Our story</a></li><li><a href="#top">Back to top</a></li></ul></div>
     </div>
     <p class="disc"><strong>Demo disclaimer:</strong> This is a prototype storefront used to test an AI shopping assistant. The products are samples, are not in stock, and cannot be purchased. The cart and checkout are non-functional and collect no payment or personal data.</p>
   </div>
@@ -228,10 +228,10 @@ aside.panel.open{transform:none}
 <!-- AI assistant placeholder -->
 <button id="aiLaunch" aria-haspopup="dialog" aria-controls="chat"><i></i>Ask the shopping assistant</button>
 <section id="chat" role="dialog" aria-label="AI shopping assistant (demo)" style="padding:0">
-  <div class="chat-head"><div>Shopping assistant<small>Demo preview · scripted replies, no AI connected</small></div><button class="icon" id="chatClose" aria-label="Close assistant" style="color:var(--bg)">✕</button></div>
+  <div class="chat-head"><div>Shopping assistant<small>Demo preview · scripted replies · no AI model connected</small></div><button class="icon" id="chatClose" aria-label="Close assistant" style="color:var(--bg)">✕</button></div>
   <div id="log" aria-live="polite"></div>
   <div class="sugg" id="sugg"></div>
-  <p class="demo-tag">Live AI answers are coming soon.</p>
+  <p class="demo-tag">Status: demo mode. Live AI answers are not built yet.</p>
   <form class="chat-in" id="chatForm"><label class="sr" for="chatText">Message</label><input type="text" id="chatText" placeholder="Ask about fit, size or style…" autocomplete="off"><button class="btn" type="submit">Send</button></form>
 </section>
 
@@ -246,14 +246,14 @@ const CONFIG = {
   currency: "$"
 };
 const CATALOG = [
-  {id:"p1",name:"Heavyweight Tee",cat:"Tops",fit:"Regular",price:38,badge:"Bestseller",img:U("photo-1521572163474-6864f9cf17ab"),sizes:{S:1,M:1,L:1,XL:1},desc:"240 gsm cotton with a structured, boxy-leaning drape. Holds its shape wash after wash."},
-  {id:"p2",name:"Relaxed Tee",cat:"Tops",fit:"Relaxed",price:32,badge:"",img:U("photo-1583743814966-8936f5b7be1a"),sizes:{S:1,M:1,L:1,XL:0},desc:"A softer, looser cut with a little extra room through the chest and sleeve."},
-  {id:"p3",name:"Oversized Tee",cat:"Tops",fit:"Oversized",price:36,badge:"New",img:U("photo-1503341504253-dff4815485f1"),sizes:{S:1,M:1,L:1,XL:1},desc:"Dropped shoulders and a longer body. Size down for a standard relaxed look."},
-  {id:"p4",name:"Everyday Hoodie",cat:"Tops",fit:"Regular",price:78,badge:"",img:U("photo-1556821840-3a63f95609a7"),sizes:{S:1,M:1,L:1,XL:1},desc:"Brushed-back fleece, lined hood and a kangaroo pocket. Mid-weight for year-round wear."},
-  {id:"p5",name:"Crewneck Sweatshirt",cat:"Tops",fit:"Regular",price:68,badge:"",img:U("photo-1620799140408-edc6dcb6d633"),sizes:{S:0,M:1,L:1,XL:1},desc:"Clean ribbed trims and a flat-lock finish. Layers over a tee or under a coat."},
-  {id:"p6",name:"Casual Trousers",cat:"Bottoms",fit:"Tapered",price:84,badge:"New",img:U("photo-1473966968600-fa801b869a1a"),sizes:{S:1,M:1,L:1,XL:1},desc:"Soft cotton twill, a mid rise and a gentle taper. Smart enough for work, easy enough for weekends."},
-  {id:"p7",name:"Everyday Shorts",cat:"Bottoms",fit:"Regular",price:48,badge:"",img:U("photo-1591195853828-11db59a44f6b"),sizes:{S:1,M:1,L:0,XL:0},desc:"Knee-length shorts with an elastic-back waist and deep pockets."},
-  {id:"p8",name:"Minimal Everyday Shirt",cat:"Tops",fit:"Regular",price:72,badge:"Low stock",img:U("photo-1596755094514-f87e34085b2c"),sizes:{S:1,M:0,L:1,XL:0},desc:"Washed cotton poplin with a camp collar and no chest pocket. Wear it open or buttoned."}
+  {id:"p1",color:"Off-white",name:"Heavyweight Tee",cat:"Tops",fit:"Regular",price:38,badge:"Bestseller",img:U("photo-1521572163474-6864f9cf17ab"),sizes:{S:1,M:1,L:1,XL:1},desc:"240 gsm cotton with a structured, boxy-leaning drape. Holds its shape wash after wash."},
+  {id:"p2",color:"Black",name:"Relaxed Tee",cat:"Tops",fit:"Relaxed",price:32,badge:"",img:U("photo-1583743814966-8936f5b7be1a"),sizes:{S:1,M:1,L:1,XL:0},desc:"A softer, looser cut with a little extra room through the chest and sleeve."},
+  {id:"p3",color:"Stone",name:"Oversized Tee",cat:"Tops",fit:"Oversized",price:36,badge:"New",img:U("photo-1503341504253-dff4815485f1"),sizes:{S:1,M:1,L:1,XL:1},desc:"Dropped shoulders and a longer body. Size down for a standard relaxed look."},
+  {id:"p4",color:"Charcoal",name:"Everyday Hoodie",cat:"Tops",fit:"Regular",price:78,badge:"",img:U("photo-1556821840-3a63f95609a7"),sizes:{S:1,M:1,L:1,XL:1},desc:"Brushed-back fleece, lined hood and a kangaroo pocket. Mid-weight for year-round wear."},
+  {id:"p5",color:"Oatmeal",name:"Crewneck Sweatshirt",cat:"Tops",fit:"Regular",price:68,badge:"",img:U("photo-1620799140408-edc6dcb6d633"),sizes:{S:0,M:1,L:1,XL:1},desc:"Clean ribbed trims and a flat-lock finish. Layers over a tee or under a coat."},
+  {id:"p6",color:"Sand",name:"Casual Trousers",cat:"Bottoms",fit:"Tapered",price:84,badge:"New",img:U("photo-1473966968600-fa801b869a1a"),sizes:{S:1,M:1,L:1,XL:1},desc:"Soft cotton twill, a mid rise and a gentle taper. Smart enough for work, easy enough for weekends."},
+  {id:"p7",color:"Khaki",name:"Everyday Shorts",cat:"Bottoms",fit:"Regular",price:48,badge:"",img:U("photo-1591195853828-11db59a44f6b"),sizes:{S:1,M:1,L:0,XL:0},desc:"Knee-length shorts with an elastic-back waist and deep pockets."},
+  {id:"p8",color:"White",name:"Minimal Everyday Shirt",cat:"Tops",fit:"Regular",price:72,badge:"Low stock",img:U("photo-1596755094514-f87e34085b2c"),sizes:{S:1,M:0,L:1,XL:0},desc:"Washed cotton poplin with a camp collar and no chest pocket. Wear it open or buttoned."}
 ];
 
 /* ============ 2. HELPERS ============ */
@@ -278,7 +278,7 @@ const state = {cat:"All", q:""};
 function visible(){
   const q = state.q.trim().toLowerCase();
   return CATALOG.filter(p => (state.cat==="All"||p.cat===state.cat) &&
-    (!q || [p.name,p.cat,p.fit,p.desc].join(" ").toLowerCase().includes(q)));
+    (!q || [p.name,p.cat,p.fit,p.color,p.desc].join(" ").toLowerCase().includes(q)));
 }
 function renderFilters(){
   const wrap = $("#filters"); wrap.innerHTML = "";
@@ -319,11 +319,11 @@ function openProduct(id){
   info.innerHTML = `<h2 id="pdName" style="font-size:32px">${esc(current.name)}</h2>
     <div style="font-size:20px">${money(current.price)}</div>
     <p>${esc(current.desc)}</p>
-    <p class="note">Fit: ${esc(current.fit)}</p>
+    <p class="note">Fit: ${esc(current.fit)} · Colour: ${esc(current.color)} (sample data)</p>
     <div><div style="font-weight:500;margin-bottom:8px">Size</div><div class="sizes" role="group" aria-label="Select size" id="sizes"></div></div>
     <p class="err" id="pdErr" role="alert"></p>
     <button class="btn" id="addBtn">Add to cart (demo)</button>
-    <p class="note">Sample product. Not in stock and not for sale.</p>`;
+    <p class="note">Illustrative demo product and price. Not in stock and not for sale.</p>`;
   body.append(info);
   const sz = $("#sizes");
   Object.entries(current.sizes).forEach(([s,ok])=>{
@@ -383,30 +383,54 @@ $("#newsForm").onsubmit = e => {
 };
 document.addEventListener("keydown", e => { if(e.key==="Escape"){ Cart.close(); Chat.close(); } });
 
-/* ============ 7. AI ASSISTANT PLACEHOLDER ============ */
-/* To integrate a real agent later: replace Chat.reply() with a fetch() to your backend.
-   It receives the user text plus CATALOG and Cart.items, and should resolve to a string. */
+/* ============ 7. AI ASSISTANT ============ */
+/* 7a. SERVICE LAYER. Not connected to any AI model. To integrate a real agent, set
+   AssistantService.mode = "live" and implement reply() as a call to YOUR backend
+   (never put API keys in this file). It receives the user text, the CATALOG and the
+   cart, and must resolve to { text: string, products?: [productId] }. */
+const AssistantService = {
+  mode: "scripted",   // "scripted" = canned demo answers | "live" = real AI (not built yet)
+  context(){ return { catalog: CATALOG, cart: Cart.items }; },
+  scripted(text){
+    const t = text.toLowerCase();
+    if(/t-?shirt|tee/.test(t)) return {text:"Three tees: Heavyweight (regular, structured), Relaxed (softer, looser) and Oversized (dropped shoulders, longer body). The Heavyweight Tee is the sturdiest pick.",products:["p1","p2","p3"]};
+    if(/fit|difference/.test(t)) return {text:"Regular is true to size. Relaxed adds a little room. Oversized is cut wide and long, so size down for a standard look. The trousers are tapered."};
+    if(/size/.test(t)) return {text:"Most people pick their usual size in Regular and Relaxed fits. A live assistant would ask for your height, weight and preferred fit, then recommend a size."};
+    if(/everyday|recommend|wear/.test(t)) return {text:"A good starter set: the Heavyweight Tee, Everyday Hoodie and Casual Trousers. All three share a neutral palette.",products:["p1","p4","p6"]};
+    if(/shipping|return/.test(t)) return {text:"This is a demo store, so there is no real shipping or returns policy and nothing can be ordered."};
+    return {text:"I can only answer a few scripted questions in this demo. Try one of the suggestions above."};
+  },
+  async reply(text){
+    if(this.mode === "live") throw new Error("Live AI backend not connected");
+    await new Promise(r=>setTimeout(r,450));
+    return this.scripted(text);
+  }
+};
+/* 7b. UI LAYER. Only talks to AssistantService.reply(). */
 const Chat = {
   started: false,
   prompts: ["Help me find the right T-shirt.","What's the difference between these fits?","Which size should I choose?","Recommend something for everyday wear."],
-  scripted(text){
-    const t = text.toLowerCase();
-    if(/t-?shirt|tee/.test(t)) return "Demo reply: we have three tees. Heavyweight (regular, structured), Relaxed (softer and looser) and Oversized (dropped shoulders, longer body). Want the sturdiest one? Start with the Heavyweight Tee.";
-    if(/fit|difference/.test(t)) return "Demo reply: Regular is true to size. Relaxed adds a little room. Oversized is cut wide and long, so size down if you want a standard look. Trousers are tapered.";
-    if(/size/.test(t)) return "Demo reply: most customers pick their usual size in Regular and Relaxed fits. A real assistant would ask your height, weight and preferred fit, then recommend a size.";
-    if(/everyday|recommend|wear/.test(t)) return "Demo reply: a solid starter set is the Heavyweight Tee, Everyday Hoodie and Casual Trousers. All three sit in the same neutral palette.";
-    return "This assistant is a demo preview and can only answer a few scripted questions. Live AI answers are coming soon. Try one of the suggestions above.";
+  add(role,text,products=[]){
+    const m=document.createElement("div"); m.className="msg "+role;
+    if(role==="bot"){ const t=document.createElement("small"); t.className="tag"; t.textContent = AssistantService.mode==="live"?"AI answer":"Scripted demo reply"; m.append(t); }
+    m.append(document.createTextNode(text));
+    if(products.length){ const r=document.createElement("div"); r.className="links";
+      products.forEach(id=>{ const b=document.createElement("button"); b.type="button"; b.textContent="View "+byId(id).name; b.onclick=()=>openProduct(id); r.append(b); }); m.append(r); }
+    $("#log").append(m); $("#log").scrollTop=1e6; return m;
   },
-  async reply(text){ await new Promise(r=>setTimeout(r,500)); return this.scripted(text); }, // swap for real API
-  add(role,text){ const m=document.createElement("div"); m.className="msg "+role; m.textContent=text; $("#log").append(m); $("#log").scrollTop=1e6; },
-  async send(text){ text=text.trim(); if(!text) return; this.add("me",text); $("#chatText").value=""; this.add("bot","…"); const dots=$("#log").lastChild; dots.textContent = await this.reply(text); $("#log").scrollTop=1e6; },
+  async send(text){
+    text=text.trim(); if(!text) return; this.add("me",text); $("#chatText").value="";
+    const wait=this.add("bot","…");
+    try{ const r=await AssistantService.reply(text); wait.remove(); this.add("bot",r.text,r.products||[]); }
+    catch(e){ wait.remove(); this.add("bot","The AI assistant isn't connected yet. Please try again later."); }
+  },
   open(prefill){
     $("#chat").classList.add("open"); $("#aiLaunch").style.display="none";
-    if(!this.started){ this.started=true; this.add("bot","Hi, I'm the FORME shopping assistant. This is a demo preview with scripted answers only. What can I help you find?");
+    if(!this.started){ this.started=true; this.add("bot","Hi, I'm the FORME shopping assistant. This is a demo preview: replies are scripted and no AI model is connected. What can I help you find?");
       this.prompts.forEach(p=>{ const b=document.createElement("button"); b.type="button"; b.textContent=p; b.onclick=()=>this.send(p); $("#sugg").append(b); }); }
     $("#chatText").focus(); if(typeof prefill==="string") this.send(prefill);
   },
-  close(){ $("#chat").classList.remove("open"); $("#aiLaunch").style.display="flex"; }
+  close(){ $("#chat").classList.remove("open"); $("#aiLaunch").style.display="flex"; $("#aiLaunch").focus(); }
 };
 $("#aiLaunch").onclick = () => Chat.open();
 $("#chatClose").onclick = () => Chat.close();
