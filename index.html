@@ -5,442 +5,356 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FORME – Everyday menswear (demo store)</title>
 <style>
-:root{--bg:#f6f2ea;--bg2:#ebe4d6;--ink:#111;--mute:#6b655b;--line:#d9d1c1;--card:#fffdf8;--r:2px;
---font:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif}
-*{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth}
-body{font:16px/1.5 var(--font);background:var(--bg);color:var(--ink);overflow-x:hidden}
-img{display:block;max-width:100%}
-a{color:inherit}
-button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+:root{--ivory:#f5f0e6;--stone:#e6dfd0;--line:#d6cdbb;--ink:#151311;--brown:#6b5642;--mute:#6f685c;--card:#fbf8f1;
+--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--sans:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}html{scroll-behavior:smooth}
+body{font:16px/1.55 var(--sans);background:var(--ivory);color:var(--ink);overflow-x:hidden}
+img{display:block;max-width:100%}a{color:inherit}button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-.wrap{max-width:1280px;margin:0 auto;padding:0 24px}
-.btn{display:inline-block;background:var(--ink);color:var(--bg);padding:14px 28px;border-radius:var(--r);font-weight:500;letter-spacing:.01em;text-decoration:none;transition:opacity .15s}
-.btn:hover{opacity:.82}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
-.bar{background:var(--ink);color:var(--bg);text-align:center;font-size:13px;padding:9px 16px}
-header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
-.logo{font-size:26px;font-weight:700;letter-spacing:.22em;text-decoration:none}
-nav ul{display:flex;gap:28px;list-style:none;padding:0}
-nav a{text-decoration:none;font-size:15px}
-nav a:hover{text-decoration:underline;text-underline-offset:6px}
-.tools{display:flex;gap:6px;align-items:center}
-.icon{padding:10px;border-radius:50%;display:flex;align-items:center;gap:6px;font-size:14px}
-.icon:hover{background:var(--bg2)}
-.icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6}
-#cartCount{background:var(--ink);color:var(--bg);border-radius:99px;min-width:20px;height:20px;font-size:12px;display:grid;place-items:center;padding:0 5px}
-#searchRow{display:none;border-top:1px solid var(--line);padding:12px 0}
-#searchRow.open{display:block}
-input[type=search],input[type=email],input[type=text]{width:100%;padding:13px 14px;border:1px solid var(--ink);border-radius:var(--r);background:var(--card);font:inherit}
-.hero{display:grid;grid-template-columns:1fr 1.1fr;min-height:620px;border-bottom:1px solid var(--line)}
-.hero-copy{display:flex;flex-direction:column;justify-content:center;padding:56px 24px 56px max(24px,calc((100vw - 1280px)/2 + 24px));gap:24px}
-.hero h1{font-size:clamp(44px,6.4vw,92px);line-height:.96;letter-spacing:-.035em;font-weight:600;max-width:9ch}
-.hero p{color:var(--mute);max-width:42ch;font-size:18px}
-.hero-img{background:var(--bg2);position:relative;min-height:380px}
-.hero-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-section{padding:88px 0}
-h2{font-size:clamp(30px,4vw,48px);letter-spacing:-.025em;line-height:1.05;font-weight:600}
-.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:36px}
-.head p{color:var(--mute);max-width:46ch}
-.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.feat a{position:relative;aspect-ratio:4/5;background:var(--bg2);overflow:hidden;display:block;text-decoration:none}
-.feat img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.feat a:hover img{transform:scale(1.03)}
-.feat span{position:absolute;left:16px;bottom:16px;background:var(--bg);padding:8px 16px;font-weight:500}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
-.chip{border:1px solid var(--ink);padding:8px 18px;border-radius:99px;font-size:14px}
-.chip[aria-pressed=true]{background:var(--ink);color:var(--bg)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px 20px}
-.card{text-align:left;display:block;width:100%}
-.ph{position:relative;aspect-ratio:3/4;background:var(--bg2);overflow:hidden;display:grid;place-items:center;color:var(--mute);font-size:13px;text-align:center;padding:12px}
-.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.card:hover .ph img{transform:scale(1.03)}
-.badge{position:absolute;top:10px;left:10px;z-index:1;background:var(--bg);font-size:12px;padding:4px 10px;border-radius:99px}
-.card h3{font-size:16px;font-weight:500;margin-top:12px}
-.card .price{color:var(--mute)}
-.empty{grid-column:1/-1;padding:48px 0;color:var(--mute)}
-.story{background:var(--bg2)}
-.story .wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
-.story .ph{aspect-ratio:4/5}
-.story p{color:#3d3932;max-width:50ch;margin-top:20px}
-.facts{display:flex;gap:32px;margin-top:32px;flex-wrap:wrap}
-.facts div{border-top:1px solid var(--ink);padding-top:10px;font-size:14px;max-width:160px}
-.news{text-align:center}
-.news form{display:flex;gap:8px;max-width:480px;margin:28px auto 0}
-.news form input{flex:1}
-#newsMsg{margin-top:14px;min-height:24px;color:var(--mute)}
-footer{background:var(--ink);color:#d8d2c5;padding:64px 0 32px;font-size:14px}
-footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}
-footer h4{color:var(--bg);margin-bottom:12px;font-weight:500}
-footer ul{list-style:none;padding:0;display:grid;gap:8px}
-footer a{text-decoration:none}footer a:hover{text-decoration:underline}
-.disc{border-top:1px solid #3a3a3a;margin-top:40px;padding-top:20px;color:#a39d90}
-/* overlays */
-.veil{position:fixed;inset:0;background:rgba(17,17,17,.45);z-index:40;display:none}
-.veil.open{display:block}
-dialog{border:0;padding:0;background:var(--bg);color:var(--ink);max-width:960px;width:calc(100% - 32px);margin:auto;max-height:92vh;overflow:auto}
-dialog::backdrop{background:rgba(17,17,17,.5)}
-.pd{display:grid;grid-template-columns:1fr 1fr}
-.pd .ph{aspect-ratio:auto;min-height:420px;height:100%}
-.pd-body{padding:36px;display:flex;flex-direction:column;gap:16px}
-.x{position:absolute;top:10px;right:10px;z-index:3;width:40px;height:40px;border-radius:50%;background:var(--bg);font-size:22px}
-.sizes{display:flex;gap:8px}
-.size{width:52px;height:46px;border:1px solid var(--ink);border-radius:var(--r)}
-.size[aria-pressed=true]{background:var(--ink);color:var(--bg)}
-.size:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+h1,h2,h3.d{font-family:var(--serif);font-weight:400;letter-spacing:-.02em}
+h2{font-size:clamp(30px,4vw,46px);line-height:1.08}
+.btn{display:inline-block;background:var(--ink);color:var(--ivory);padding:15px 32px;text-decoration:none;transition:background .2s}
+.btn:hover{background:var(--brown)}.btn.line{background:none;color:var(--ink);border:1px solid var(--ink)}.btn.line:hover{background:var(--stone)}
 .note{font-size:13px;color:var(--mute)}
+.bar{background:var(--brown);color:var(--ivory);text-align:center;font-size:13px;padding:8px 16px}
+header{position:sticky;top:0;z-index:20;background:var(--ivory);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px}
+.logo{font-family:var(--serif);font-size:28px;letter-spacing:.2em;text-decoration:none}
+nav ul{display:flex;gap:32px;list-style:none;padding:0}nav a{text-decoration:none;font-size:15px}nav a:hover{text-decoration:underline;text-underline-offset:6px}
+.tools{display:flex;align-items:center}.icon{padding:10px;display:flex;gap:6px;align-items:center;font-size:14px}
+.icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5}
+#menuBtn{display:none}#cartCount{background:var(--ink);color:var(--ivory);min-width:20px;height:20px;font-size:12px;display:grid;place-items:center;border-radius:99px}
+#searchRow{display:none;padding:0 0 14px}#searchRow.open{display:block}
+input[type=search],input[type=email],input[type=text]{width:100%;padding:13px 14px;border:1px solid var(--ink);background:var(--card);font:inherit;border-radius:0}
+.ph{position:relative;background:var(--stone);overflow:hidden;display:grid;place-items:center;color:var(--mute);font-size:13px;text-align:center;padding:12px}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero{display:grid;grid-template-columns:5fr 6fr;min-height:640px;border-bottom:1px solid var(--line)}
+.hero-copy{display:flex;flex-direction:column;justify-content:center;gap:22px;padding:56px 24px 56px max(24px,calc((100vw - 1240px)/2 + 24px))}
+.hero h1{font-size:clamp(46px,6.2vw,88px);line-height:.98;max-width:10ch}.hero p{color:var(--mute);max-width:38ch;font-size:18px}
+.hero .ph{min-height:420px}
+section{padding:88px 0}.head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:36px}.head p{color:var(--mute);max-width:44ch}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.col{display:block;text-decoration:none}.col .ph{aspect-ratio:4/5}.col span{display:block;margin-top:12px;font-family:var(--serif);font-size:20px}.col:hover span{text-decoration:underline;text-underline-offset:5px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}.chip{border:1px solid var(--ink);padding:8px 18px;font-size:14px}.chip[aria-pressed=true]{background:var(--ink);color:var(--ivory)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:36px 20px}
+.card{text-align:left;display:block;width:100%}.card .ph{aspect-ratio:3/4}.card:hover .ph img{opacity:.92}
+.badge{position:absolute;top:10px;left:10px;z-index:1;background:var(--ivory);font-size:12px;padding:3px 10px}
+.card h3{font-size:16px;font-weight:500;margin-top:12px}.card .meta{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;align-items:center}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:1px solid var(--line);vertical-align:-1px;margin-right:6px}
+.empty{grid-column:1/-1;padding:48px 0;color:var(--mute)}
+.tint{background:var(--stone)}
+.fit{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.fit dl{display:grid;gap:0}.fit dt{font-family:var(--serif);font-size:22px;padding-top:20px;border-top:1px solid var(--ink)}.fit dd{color:#3d3932;padding:6px 0 20px;max-width:52ch}
+.looks{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.look{display:block;text-align:left}.look .pair{display:grid;grid-template-columns:1fr 1fr;gap:4px}.look .ph{aspect-ratio:3/4}
+.look h3{font-family:var(--serif);font-weight:400;font-size:22px;margin-top:12px}.look p{color:var(--mute);font-size:14px}
+.story{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}.story .ph{aspect-ratio:4/5}.story p{color:#3d3932;max-width:50ch;margin-top:18px}
+.news{text-align:center}.news form{display:flex;gap:8px;max-width:480px;margin:28px auto 0}#newsMsg{margin-top:14px;min-height:24px;color:var(--mute)}
+footer{background:var(--ink);color:#d8d2c5;padding:64px 0 32px;font-size:14px}
+footer .fc{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}footer h4{color:var(--ivory);margin-bottom:12px;font-weight:500}
+footer ul{list-style:none;padding:0;display:grid;gap:8px}footer a{text-decoration:none}footer a:hover{text-decoration:underline}
+.disc{border-top:1px solid #3a3733;margin-top:40px;padding-top:20px;color:#a39d90}
+dialog{border:0;padding:0;background:var(--ivory);color:var(--ink);max-width:940px;width:calc(100% - 32px);margin:auto;max-height:92vh;overflow:auto}
+dialog::backdrop{background:rgba(21,19,17,.5)}
+.x{position:absolute;top:10px;right:10px;z-index:3;width:40px;height:40px;border-radius:50%;background:var(--ivory);font-size:22px}
+.pd{display:grid;grid-template-columns:1fr 1fr}.pd .ph{min-height:440px}.pd-body{padding:36px;display:flex;flex-direction:column;gap:14px}
+.sizes{display:flex;gap:8px}.size{width:52px;height:46px;border:1px solid var(--ink)}.size[aria-pressed=true]{background:var(--ink);color:var(--ivory)}
+.size:disabled{opacity:.35;text-decoration:line-through;cursor:not-allowed}
 .err{color:#9b2c1d;font-size:14px;min-height:20px}
-aside.panel{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--bg);z-index:50;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
-aside.panel.open{transform:none}
-.ph-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line);font-weight:600}
-.items{flex:1;overflow:auto;padding:8px 20px}
-.line{display:grid;grid-template-columns:72px 1fr auto;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}
-.line .ph{aspect-ratio:3/4;padding:0}
-.qty{display:inline-flex;align-items:center;border:1px solid var(--line);margin-top:6px}
-.qty button{width:30px;height:30px}
-.qty span{min-width:26px;text-align:center}
-.foot{padding:20px;border-top:1px solid var(--line);display:grid;gap:12px}
-.foot .tot{display:flex;justify-content:space-between;font-weight:600}
-.foot .btn{text-align:center}
-/* AI assistant */
-#aiLaunch{position:fixed;right:20px;bottom:20px;z-index:30;background:var(--ink);color:var(--bg);border-radius:99px;padding:13px 20px;display:flex;gap:8px;align-items:center;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.2)}
-#aiLaunch i{width:8px;height:8px;border-radius:50%;background:#d6c7a1}
-#chat{position:fixed;right:20px;bottom:20px;z-index:60;width:min(390px,calc(100% - 24px));height:min(600px,calc(100vh - 40px));background:var(--card);border:1px solid var(--ink);display:none;flex-direction:column;box-shadow:0 12px 48px rgba(0,0,0,.25)}
-#chat.open{display:flex}
-.chat-head{background:var(--ink);color:var(--bg);padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.linkbtn{text-decoration:underline;text-underline-offset:4px;font-size:14px;align-self:flex-start}
+table{border-collapse:collapse;width:100%;margin:16px 0}th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left}
+#sg{padding:36px;max-width:620px}
+.veil{position:fixed;inset:0;background:rgba(21,19,17,.45);z-index:40;display:none}.veil.open{display:block}
+aside.panel{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--ivory);z-index:50;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;visibility:hidden}
+aside.panel.open{transform:none;visibility:visible}
+.ph-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line);font-family:var(--serif);font-size:20px}
+.items{flex:1;overflow:auto;padding:8px 20px}.line{display:grid;grid-template-columns:72px 1fr auto;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}.line .ph{aspect-ratio:3/4;padding:0}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);margin:6px 12px 0 0}.qty button{width:30px;height:30px}.qty span{min-width:26px;text-align:center}
+.rm{font-size:13px;text-decoration:underline}
+.foot{padding:20px;border-top:1px solid var(--line);display:grid;gap:12px}.tot{display:flex;justify-content:space-between;font-weight:600}.foot .btn{text-align:center}
+#aiLaunch{position:fixed;right:20px;bottom:20px;z-index:30;background:var(--ink);color:var(--ivory);padding:12px 18px;font-size:14px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+#chat{position:fixed;right:20px;bottom:20px;z-index:60;width:min(390px,calc(100% - 24px));height:min(580px,calc(100vh - 40px));background:var(--card);border:1px solid var(--ink);display:none;flex-direction:column}
+#chat.open{display:flex}.chat-head{background:var(--ink);color:var(--ivory);padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
 .chat-head small{display:block;color:#b9b2a3;font-size:12px}
 #log{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:86%;padding:10px 14px;font-size:14.5px;line-height:1.45;white-space:pre-wrap}
-.msg.bot{background:var(--bg2);align-self:flex-start;border-radius:2px 14px 14px 14px}
-.msg.me{background:var(--ink);color:var(--bg);align-self:flex-end;border-radius:14px 2px 14px 14px}
-.msg .tag{display:block;font-size:11px;opacity:.65;margin-bottom:3px}.msg .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.msg .links button{border:1px solid var(--ink);border-radius:99px;padding:4px 10px;font-size:12.5px;background:var(--card)}
-.sugg{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px}
-.sugg button{border:1px solid var(--ink);border-radius:99px;padding:6px 12px;font-size:13px;text-align:left}
-.sugg button:hover{background:var(--bg2)}
-.chat-in{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
-.chat-in .btn{padding:0 18px}
-.demo-tag{font-size:11px;color:var(--mute);text-align:center;padding:0 12px 8px}
+.msg{max-width:88%;padding:10px 14px;font-size:14.5px;line-height:1.45;white-space:pre-wrap}.msg.bot{background:var(--stone);align-self:flex-start}.msg.me{background:var(--ink);color:var(--ivory);align-self:flex-end}
+.msg .tag{display:block;font-size:11px;opacity:.65;margin-bottom:3px}.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.links button{border:1px solid var(--ink);padding:4px 10px;font-size:12.5px;background:var(--card)}
+.sugg{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px}.sugg button{border:1px solid var(--ink);padding:6px 12px;font-size:13px;text-align:left}.sugg button:hover{background:var(--stone)}
+.chat-in{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.chat-in .btn{padding:0 18px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-@media (max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}.hero,.story .wrap,.pd{grid-template-columns:1fr}.hero-copy{padding:48px 24px}.hero-img{min-height:420px}.story .wrap{gap:32px}footer .cols{grid-template-columns:1fr 1fr}.nav{flex-wrap:wrap;height:auto;padding-top:10px}nav{order:3;width:100%;overflow-x:auto}nav ul{gap:22px;padding-bottom:10px;white-space:nowrap}}
-@media (max-width:560px){section{padding:56px 0}.feat{grid-template-columns:1fr}.grid{gap:24px 12px}.news form{flex-direction:column}.pd-body{padding:22px}#chat{right:12px;bottom:12px;height:calc(100vh - 24px)}}
+@media (max-width:960px){.grid,.cols4{grid-template-columns:repeat(2,1fr)}.hero,.fit,.story,.pd,.looks{grid-template-columns:1fr}.fit,.story{gap:32px}.hero-copy{padding:48px 24px}.hero .ph{min-height:420px}footer .fc{grid-template-columns:1fr 1fr}
+#menuBtn{display:flex}nav{display:none;position:absolute;top:70px;left:0;right:0;background:var(--ivory);border-bottom:1px solid var(--line);padding:8px 24px 18px}nav.open{display:block}nav ul{flex-direction:column;gap:6px}nav a{display:block;padding:10px 0;font-size:17px}header{position:sticky}}
+@media (max-width:560px){section{padding:56px 0}.news form{flex-direction:column}.pd-body{padding:22px}#chat{right:12px;bottom:12px;height:calc(100vh - 24px)}.look .pair{grid-template-columns:1fr 1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<div class="bar">Demo store · Sample free-shipping banner on orders over $75 · Nothing here is for sale</div>
-
-<header>
-  <div class="wrap">
-    <div class="nav">
-      <a class="logo" href="#top" id="brandName">FORME</a>
-      <nav aria-label="Main"><ul>
-        <li><a href="#shop" data-cat="All">Shop all</a></li>
-        <li><a href="#shop" data-cat="Tops">Tops</a></li>
-        <li><a href="#shop" data-cat="Bottoms">Bottoms</a></li>
-        <li><a href="#story">Our story</a></li>
-      </ul></nav>
-      <div class="tools">
-        <button class="icon" id="searchBtn" aria-label="Search products" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
-        <button class="icon" id="cartBtn" aria-label="Open demo cart"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 0 1 6 0"/></svg><span id="cartCount">0</span></button>
-      </div>
+<div class="bar">Demo store: sample products and prices, nothing here is for sale.</div>
+<header><div class="wrap">
+  <div class="nav">
+    <button class="icon" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="logo" href="#top">FORME</a>
+    <nav id="mainNav" aria-label="Main"><ul>
+      <li><a href="#shop" data-cat="All">Shop</a></li><li><a href="#collections">Collections</a></li><li><a href="#story">Our story</a></li>
+    </ul></nav>
+    <div class="tools">
+      <button class="icon" id="searchBtn" aria-label="Search products" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+      <button class="icon" id="cartBtn" aria-label="Open demo cart, 0 items"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 0 1 6 0"/></svg><span id="cartCount">0</span></button>
     </div>
-    <div id="searchRow"><label class="sr" for="q">Search products</label><input type="search" id="q" placeholder="Search tees, hoodies, trousers…"></div>
   </div>
-</header>
+  <div id="searchRow"><label class="sr" for="q">Search products</label><input type="search" id="q" placeholder="Search tees, hoodies, trousers"></div>
+</div></header>
 
 <main id="top">
 <div class="hero">
   <div class="hero-copy">
-    <h1>Clothes made for ordinary days.</h1>
-    <p>Heavyweight cotton, honest fits and a palette that works with everything you already own.</p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="#shop">Shop the collection</a><a class="btn ghost" href="#story">Our approach</a></div>
+    <h1>Clothes for ordinary days.</h1>
+    <p>Considered basics in a quiet palette of ivory, stone and black.</p>
+    <div><a class="btn" href="#shop">Shop the collection</a></div>
   </div>
-  <div class="hero-img ph" data-fallback="Hero photo placeholder"><img id="heroImg" alt="Model wearing a neutral everyday outfit" loading="eager"></div>
+  <div class="ph" data-img="heroImage" data-label="Hero photo placeholder"></div>
 </div>
 
-<section>
-  <div class="wrap">
-    <div class="head"><h2>The Essentials collection</h2><p>Six pieces, one palette. Start with a tee and build out from there.</p></div>
-    <div class="feat" id="featured"></div>
-  </div>
-</section>
+<section id="collections"><div class="wrap">
+  <div class="head"><h2>Shop by collection</h2><p>Four places to start.</p></div>
+  <div class="cols4" id="cols"></div>
+</div></section>
 
-<section id="shop" style="padding-top:24px">
-  <div class="wrap">
-    <div class="head"><h2>Shop all</h2><p id="resultNote" class="note" aria-live="polite"></p></div>
-    <div class="filters" role="group" aria-label="Filter by category" id="filters"></div>
-    <div class="grid" id="grid"></div>
-    <p class="note" style="margin-top:32px">Sample products, illustrative prices and stock. Photos are placeholders from a public image source.</p>
-  </div>
-</section>
+<section id="shop" class="tint"><div class="wrap">
+  <div class="head"><h2>Featured products</h2><p id="resultNote" class="note" aria-live="polite"></p></div>
+  <div class="filters" role="group" aria-label="Filter by collection" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <p class="note" style="margin-top:32px">Sample products with illustrative prices. Photos are placeholders from a public image source.</p>
+</div></section>
 
-<section class="story" id="story">
-  <div class="wrap">
-    <div class="ph" data-fallback="Brand photo placeholder"><img id="storyImg" alt="Folded neutral-toned clothing" loading="lazy"></div>
-    <div>
-      <h2>Fewer pieces. Better made.</h2>
-      <p>FORME is a fictional brand built around everyday essentials: the tee you reach for first, the hoodie that goes everywhere, the trousers that don't need thinking about.</p>
-      <p>Every piece is cut for a clean drape, sewn from dense cotton, and designed to be worn on repeat. No seasonal noise, no logos shouting.</p>
-      <div class="facts"><div>Heavyweight 240 gsm cotton (sample spec)</div><div>Five fits across tees and shirts</div><div>Neutral palette that mixes freely</div></div>
-    </div>
-  </div>
-</section>
+<section><div class="wrap fit">
+  <div><h2>Fit, fabric and detail</h2><p style="color:var(--mute);margin-top:16px;max-width:40ch">How a store can say what a garment is like before anyone tries it on. All details below are sample copy for the demo.</p>
+  <button class="linkbtn" style="margin-top:20px" data-sg>Open the size guide</button></div>
+  <dl>
+    <dt>Fit names that mean something</dt><dd>Regular, Relaxed, Oversized and Tapered each appear on the product page, with a plain-language note on how to size.</dd>
+    <dt>Fabric in plain words</dt><dd>Each product lists a sample material and weight, so a customer or an assistant can compare pieces without guessing.</dd>
+    <dt>Garment details up front</dt><dd>Collars, trims, pockets and waistbands are described in the product text instead of hidden in an image.</dd>
+  </dl>
+</div></section>
 
-<section class="news">
-  <div class="wrap">
-    <h2>Get first look at new drops</h2>
-    <p style="color:var(--mute);margin-top:12px">Demo form: nothing is sent or stored.</p>
-    <form id="newsForm" novalidate><label class="sr" for="em">Email address</label><input type="email" id="em" placeholder="you@example.com" required><button class="btn" type="submit">Subscribe</button></form>
-    <p id="newsMsg" aria-live="polite"></p>
-  </div>
-</section>
+<section class="tint"><div class="wrap">
+  <div class="head"><h2>Lookbook</h2><p>Two ways to wear the same pieces. Select a look to open its main item.</p></div>
+  <div class="looks" id="looks"></div>
+</div></section>
+
+<section><div class="wrap story">
+  <div class="ph" data-img="storyImage" data-label="Brand photo placeholder"></div>
+  <div><h2>Fewer pieces, worn often.</h2>
+    <p>FORME is a fictional brand created to test an online shopping experience. Its idea is simple: a small set of everyday pieces that work together.</p>
+    <p>There is no company history, factory or certification behind it. The product details are sample data for prototyping.</p></div>
+</div></section>
+
+<section class="tint news"><div class="wrap">
+  <h2>Hear about new pieces</h2><p class="note" style="margin-top:12px">Demo form: nothing is sent or stored.</p>
+  <form id="newsForm" novalidate><label class="sr" for="em">Email address</label><input type="email" id="em" placeholder="you@example.com" required><button class="btn" type="submit">Subscribe</button></form>
+  <p id="newsMsg" aria-live="polite"></p>
+</div></section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <div class="cols">
-      <div><a class="logo" href="#top" style="color:var(--bg);font-size:22px">FORME</a><p style="margin-top:12px;max-width:34ch">Everyday menswear. Fictional brand for prototyping.</p></div>
-      <div><h4>Shop</h4><ul><li><a href="#shop">All products</a></li><li><a href="#shop">Tops</a></li><li><a href="#shop">Bottoms</a></li></ul></div>
-      <div><h4>Help</h4><ul><li><a href="#" data-ai="Which size should I choose?">Size guide</a></li><li><a href="#" data-ai="What is your shipping policy?">Shipping</a></li><li><a href="#" data-ai="What is your returns policy?">Returns</a></li></ul></div>
-      <div><h4>Company</h4><ul><li><a href="#story">Our story</a></li><li><a href="#top">Back to top</a></li></ul></div>
-    </div>
-    <p class="disc"><strong>Demo disclaimer:</strong> This is a prototype storefront used to test an AI shopping assistant. The products are samples, are not in stock, and cannot be purchased. The cart and checkout are non-functional and collect no payment or personal data.</p>
+<footer><div class="wrap">
+  <div class="fc">
+    <div><a class="logo" href="#top" style="color:var(--ivory);font-size:22px">FORME</a><p style="margin-top:12px;max-width:34ch">Everyday menswear. A fictional brand for prototyping.</p></div>
+    <div><h4>Shop</h4><ul><li><a href="#shop">All products</a></li><li><a href="#collections">Collections</a></li></ul></div>
+    <div><h4>Help (demo)</h4><ul><li><a href="#" data-sg>Size guide</a></li><li><a href="#" data-ai="What is your shipping policy?">Shipping</a></li><li><a href="#" data-ai="What is your returns policy?">Returns</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="#story">Our story</a></li><li><a href="#top">Back to top</a></li></ul></div>
   </div>
-</footer>
+  <p class="disc"><strong>Demo disclaimer:</strong> This prototype tests an AI shopping assistant. Products are samples and cannot be purchased. There is no shipping, returns, contact or order support, and the cart and checkout collect no payment or personal data.</p>
+</div></footer>
 
-<!-- Product detail -->
 <dialog id="pdModal" aria-labelledby="pdName"><button class="x" id="pdClose" aria-label="Close product details">×</button><div class="pd" id="pdBody"></div></dialog>
+<dialog id="sgModal" aria-labelledby="sgTitle"><button class="x" id="sgClose" aria-label="Close size guide">×</button>
+  <div id="sg"><h2 id="sgTitle">Size guide</h2>
+    <p class="note" style="margin-top:8px">Illustrative demo measurements for a regular-fit tee. They do not guarantee fit.</p>
+    <table><thead><tr><th>Size</th><th>Chest (cm)</th><th>Length (cm)</th></tr></thead>
+    <tbody><tr><td>S</td><td>96</td><td>69</td></tr><tr><td>M</td><td>102</td><td>71</td></tr><tr><td>L</td><td>108</td><td>73</td></tr><tr><td>XL</td><td>114</td><td>75</td></tr></tbody></table>
+    <p class="note">Relaxed and Oversized pieces are cut wider and longer. Oversized note: size down for a standard relaxed look.</p></div></dialog>
 
-<!-- Cart -->
 <div class="veil" id="veil"></div>
 <aside class="panel" id="cart" aria-label="Demo cart" aria-hidden="true">
   <div class="ph-head"><span>Your cart (demo)</span><button class="icon" id="cartClose" aria-label="Close cart">✕</button></div>
   <div class="items" id="cartItems"></div>
-  <div class="foot">
-    <div class="tot"><span>Subtotal</span><span id="subtotal">$0</span></div>
+  <div class="foot"><div class="tot"><span>Subtotal</span><span id="subtotal">$0</span></div>
     <p class="note">Demo only. Checkout is disabled and no payment is collected.</p>
-    <button class="btn" id="checkoutBtn">Checkout (demo)</button>
-    <p class="err" id="checkoutMsg" role="status"></p>
-  </div>
+    <button class="btn" id="checkoutBtn">Checkout (demo)</button><p class="err" id="checkoutMsg" role="status"></p></div>
 </aside>
 
-<!-- AI assistant placeholder -->
-<button id="aiLaunch" aria-haspopup="dialog" aria-controls="chat"><i></i>Ask the shopping assistant</button>
-<section id="chat" role="dialog" aria-label="AI shopping assistant (demo)" style="padding:0">
-  <div class="chat-head"><div>Shopping assistant<small>Demo preview · scripted replies · no AI model connected</small></div><button class="icon" id="chatClose" aria-label="Close assistant" style="color:var(--bg)">✕</button></div>
-  <div id="log" aria-live="polite"></div>
-  <div class="sugg" id="sugg"></div>
-  <p class="demo-tag">Status: demo mode. Live AI answers are not built yet.</p>
-  <form class="chat-in" id="chatForm"><label class="sr" for="chatText">Message</label><input type="text" id="chatText" placeholder="Ask about fit, size or style…" autocomplete="off"><button class="btn" type="submit">Send</button></form>
+<button id="aiLaunch" aria-haspopup="dialog" aria-controls="chat">Ask the shopping assistant</button>
+<section id="chat" role="dialog" aria-label="Shopping assistant (demo)" style="padding:0">
+  <div class="chat-head"><div>Shopping assistant<small>Demo preview. Scripted replies, no AI model connected.</small></div><button class="icon" id="chatClose" aria-label="Close assistant" style="color:var(--ivory)">✕</button></div>
+  <div id="log" aria-live="polite"></div><div class="sugg" id="sugg"></div>
+  <form class="chat-in" id="chatForm"><label class="sr" for="chatText">Message</label><input type="text" id="chatText" placeholder="Ask about fit, size or style" autocomplete="off"><button class="btn" type="submit">Send</button></form>
 </section>
 
 <script>
 "use strict";
-/* ============ 1. CONFIG & DATA (replace freely) ============ */
+/* ===== 1. CONFIG & CATALOG (image references live here; replace freely) ===== */
 const U = id => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=75`;
-const CONFIG = {
-  brand: "FORME",
-  heroImage: U("photo-1490578474895-699cd4e2cf59"),
-  storyImage: U("photo-1489987707025-afc232f7ea0f"),
-  currency: "$"
-};
+const CONFIG = {currency:"$", heroImage:U("photo-1490578474895-699cd4e2cf59"), storyImage:U("photo-1489987707025-afc232f7ea0f")};
+const COLLECTIONS = [
+  {key:"T-shirts",ids:["p1","p2","p3"],img:"p1"},{key:"Hoodies and sweatshirts",ids:["p4","p5"],img:"p4"},
+  {key:"Bottoms",ids:["p6","p7"],img:"p6"},{key:"Everyday essentials",ids:["p1","p4","p6","p8"],img:"p8"}];
+const SWATCH = {"Off-white":"#efe9dc",Black:"#151311",Stone:"#c9bfa9",Charcoal:"#3b3a38",Oatmeal:"#d8c9ad",Sand:"#cdb892",Khaki:"#a89c74",White:"#fbfaf6"};
+/* All fields are sample data. material is sample copy, not a verified spec. */
 const CATALOG = [
-  {id:"p1",color:"Off-white",name:"Heavyweight Tee",cat:"Tops",fit:"Regular",price:38,badge:"Bestseller",img:U("photo-1521572163474-6864f9cf17ab"),sizes:{S:1,M:1,L:1,XL:1},desc:"240 gsm cotton with a structured, boxy-leaning drape. Holds its shape wash after wash."},
-  {id:"p2",color:"Black",name:"Relaxed Tee",cat:"Tops",fit:"Relaxed",price:32,badge:"",img:U("photo-1583743814966-8936f5b7be1a"),sizes:{S:1,M:1,L:1,XL:0},desc:"A softer, looser cut with a little extra room through the chest and sleeve."},
-  {id:"p3",color:"Stone",name:"Oversized Tee",cat:"Tops",fit:"Oversized",price:36,badge:"New",img:U("photo-1503341504253-dff4815485f1"),sizes:{S:1,M:1,L:1,XL:1},desc:"Dropped shoulders and a longer body. Size down for a standard relaxed look."},
-  {id:"p4",color:"Charcoal",name:"Everyday Hoodie",cat:"Tops",fit:"Regular",price:78,badge:"",img:U("photo-1556821840-3a63f95609a7"),sizes:{S:1,M:1,L:1,XL:1},desc:"Brushed-back fleece, lined hood and a kangaroo pocket. Mid-weight for year-round wear."},
-  {id:"p5",color:"Oatmeal",name:"Crewneck Sweatshirt",cat:"Tops",fit:"Regular",price:68,badge:"",img:U("photo-1620799140408-edc6dcb6d633"),sizes:{S:0,M:1,L:1,XL:1},desc:"Clean ribbed trims and a flat-lock finish. Layers over a tee or under a coat."},
-  {id:"p6",color:"Sand",name:"Casual Trousers",cat:"Bottoms",fit:"Tapered",price:84,badge:"New",img:U("photo-1473966968600-fa801b869a1a"),sizes:{S:1,M:1,L:1,XL:1},desc:"Soft cotton twill, a mid rise and a gentle taper. Smart enough for work, easy enough for weekends."},
-  {id:"p7",color:"Khaki",name:"Everyday Shorts",cat:"Bottoms",fit:"Regular",price:48,badge:"",img:U("photo-1591195853828-11db59a44f6b"),sizes:{S:1,M:1,L:0,XL:0},desc:"Knee-length shorts with an elastic-back waist and deep pockets."},
-  {id:"p8",color:"White",name:"Minimal Everyday Shirt",cat:"Tops",fit:"Regular",price:72,badge:"Low stock",img:U("photo-1596755094514-f87e34085b2c"),sizes:{S:1,M:0,L:1,XL:0},desc:"Washed cotton poplin with a camp collar and no chest pocket. Wear it open or buttoned."}
+ {id:"p1",name:"Heavyweight Tee",cat:"Tops",color:"Off-white",fit:"Regular",material:"Heavyweight cotton, 240 gsm (sample)",price:38,badge:"Bestseller",img:U("photo-1521572163474-6864f9cf17ab"),sizes:{S:1,M:1,L:1,XL:1},desc:"A structured, boxy-leaning drape in dense cotton. Built to hold its shape."},
+ {id:"p2",name:"Relaxed Tee",cat:"Tops",color:"Black",fit:"Relaxed",material:"Soft cotton jersey (sample)",price:32,badge:"",img:U("photo-1583743814966-8936f5b7be1a"),sizes:{S:1,M:1,L:1,XL:0},desc:"A softer, looser cut with extra room through the chest and sleeve."},
+ {id:"p3",name:"Oversized Tee",cat:"Tops",color:"Stone",fit:"Oversized",material:"Heavyweight cotton (sample)",price:36,badge:"New",img:U("photo-1503341504253-dff4815485f1"),sizes:{S:1,M:1,L:1,XL:1},desc:"Dropped shoulders and a longer body. Size down for a standard relaxed look."},
+ {id:"p4",name:"Everyday Hoodie",cat:"Tops",color:"Charcoal",fit:"Regular",material:"Brushed-back cotton fleece (sample)",price:78,badge:"",img:U("photo-1556821840-3a63f95609a7"),sizes:{S:1,M:1,L:1,XL:1},desc:"Lined hood and a kangaroo pocket in a mid-weight fleece."},
+ {id:"p5",name:"Crewneck Sweatshirt",cat:"Tops",color:"Oatmeal",fit:"Regular",material:"Cotton fleece (sample)",price:68,badge:"",img:U("photo-1620799140408-edc6dcb6d633"),sizes:{S:0,M:1,L:1,XL:1},desc:"Clean ribbed trims and a flat-lock finish. Layers over a tee or under a coat."},
+ {id:"p6",name:"Casual Trousers",cat:"Bottoms",color:"Sand",fit:"Tapered",material:"Cotton twill (sample)",price:84,badge:"New",img:U("photo-1473966968600-fa801b869a1a"),sizes:{S:1,M:1,L:1,XL:1},desc:"A mid rise and a gentle taper in soft twill."},
+ {id:"p7",name:"Everyday Shorts",cat:"Bottoms",color:"Khaki",fit:"Regular",material:"Cotton blend (sample)",price:48,badge:"",img:U("photo-1591195853828-11db59a44f6b"),sizes:{S:1,M:1,L:0,XL:0},desc:"Knee-length shorts with an elastic-back waist and deep pockets."},
+ {id:"p8",name:"Minimal Everyday Shirt",cat:"Tops",color:"White",fit:"Regular",material:"Washed cotton poplin (sample)",price:72,badge:"Low stock",img:U("photo-1596755094514-f87e34085b2c"),sizes:{S:1,M:0,L:1,XL:0},desc:"A camp collar and no chest pocket. Wear it open or buttoned."}
 ];
+const LOOKS = [
+ {title:"Easy weekend",text:"Hoodie, trousers and a tee underneath.",ids:["p4","p6"],open:"p4"},
+ {title:"Smart casual",text:"Shirt worn open over a tee, with trousers.",ids:["p8","p6"],open:"p8"}];
 
-/* ============ 2. HELPERS ============ */
-const $ = (s, r=document) => r.querySelector(s);
-const money = n => CONFIG.currency + n;
-const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const byId = id => CATALOG.find(p => p.id === id);
-function imgTag(src, alt, lazy=true){
-  const i = new Image(); i.alt = alt; if(lazy) i.loading = "lazy";
-  i.onerror = () => { i.remove(); };           // parent .ph shows placeholder text
-  i.src = src; return i;
-}
-function phBox(p){ // image container with fallback label
-  const d = document.createElement("div"); d.className = "ph";
-  d.append(document.createTextNode(p.name)); d.append(imgTag(p.img, p.name));
-  return d;
-}
-function hydrate(el, src){ const i = el.querySelector("img"); i.onerror = () => { i.remove(); el.prepend(el.dataset.fallback); }; i.src = src; }
+/* ===== 2. HELPERS ===== */
+const $ = (s,r=document)=>r.querySelector(s);
+const money = n => CONFIG.currency+n;
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const byId = id => CATALOG.find(p=>p.id===id);
+function imgTag(src,alt){const i=new Image();i.alt=alt;i.loading="lazy";i.onerror=()=>i.remove();i.src=src;return i;}
+function ph(label,src){const d=document.createElement("div");d.className="ph";d.append(document.createTextNode(label),imgTag(src,label));return d;}
+function phP(p){return ph(p.name,p.img);}
+document.querySelectorAll("[data-img]").forEach(el=>{el.append(document.createTextNode(el.dataset.label),imgTag(CONFIG[el.dataset.img],el.dataset.label));});
 
-/* ============ 3. CATALOG VIEW ============ */
-const state = {cat:"All", q:""};
+/* ===== 3. CATALOG VIEW ===== */
+const state={col:"All",q:""};
 function visible(){
-  const q = state.q.trim().toLowerCase();
-  return CATALOG.filter(p => (state.cat==="All"||p.cat===state.cat) &&
-    (!q || [p.name,p.cat,p.fit,p.color,p.desc].join(" ").toLowerCase().includes(q)));
-}
-function renderFilters(){
-  const wrap = $("#filters"); wrap.innerHTML = "";
-  ["All",...new Set(CATALOG.map(p=>p.cat))].forEach(c=>{
-    const b = document.createElement("button"); b.className="chip"; b.textContent=c;
-    b.setAttribute("aria-pressed", c===state.cat); b.onclick=()=>{state.cat=c; render();}; wrap.append(b);
-  });
+  const q=state.q.trim().toLowerCase(), c=COLLECTIONS.find(x=>x.key===state.col);
+  return CATALOG.filter(p=>(!c||c.ids.includes(p.id))&&(!q||[p.name,p.cat,p.fit,p.color,p.desc].join(" ").toLowerCase().includes(q)));
 }
 function render(){
-  renderFilters();
-  const grid = $("#grid"); grid.innerHTML = ""; const list = visible();
+  const f=$("#filters");f.innerHTML="";
+  ["All",...COLLECTIONS.map(c=>c.key)].forEach(k=>{const b=document.createElement("button");b.className="chip";b.textContent=k;b.setAttribute("aria-pressed",k===state.col);b.onclick=()=>{state.col=k;render();};f.append(b);});
+  const g=$("#grid");g.innerHTML="";const list=visible();
   list.forEach(p=>{
-    const b = document.createElement("button"); b.className="card"; b.setAttribute("aria-label",`${p.name}, ${money(p.price)}. View details`);
-    const ph = phBox(p); if(p.badge){const s=document.createElement("span"); s.className="badge"; s.textContent=p.badge; ph.prepend(s);}
-    b.append(ph);
-    b.insertAdjacentHTML("beforeend",`<h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div>`);
-    b.onclick=()=>openProduct(p.id); grid.append(b);
+    const b=document.createElement("button");b.className="card";b.setAttribute("aria-label",`${p.name}, ${p.color}, ${money(p.price)}. View details`);
+    const box=phP(p);box.style.aspectRatio="3/4";if(p.badge){const s=document.createElement("span");s.className="badge";s.textContent=p.badge;box.prepend(s);}
+    b.append(box);
+    b.insertAdjacentHTML("beforeend",`<h3>${esc(p.name)}</h3><div class="meta"><span><i class="dot" style="background:${SWATCH[p.color]||"#ccc"}"></i>${esc(p.color)}</span><span>${money(p.price)}</span></div>`);
+    b.onclick=()=>openProduct(p.id);g.append(b);
   });
-  if(!list.length) grid.innerHTML = `<p class="empty">No products match “${esc(state.q)}”. Try “tee” or “hoodie”.</p>`;
-  $("#resultNote").textContent = `${list.length} of ${CATALOG.length} sample products`;
+  if(!list.length)g.innerHTML=`<p class="empty">No products match${state.q?` “${esc(state.q)}”`:""}. Try “tee” or “hoodie”, or clear the filter.</p>`;
+  $("#resultNote").textContent=`${list.length} of ${CATALOG.length} sample products`;
 }
-function renderFeatured(){
-  const f = $("#featured");
-  [["p1","Tees"],["p4","Hoodies and sweats"],["p6","Trousers"]].forEach(([id,label])=>{
-    const p = byId(id), a = document.createElement("a"); a.href="#shop"; a.className="ph";
-    a.append(imgTag(p.img,p.name)); a.insertAdjacentHTML("beforeend",`<span>${label}</span>`);
-    a.onclick=()=>{state.cat = id==="p6"?"Bottoms":"Tops"; render();}; f.append(a);
-  });
-}
+COLLECTIONS.forEach(c=>{
+  const a=document.createElement("a");a.href="#shop";a.className="col";a.append(ph(c.key,byId(c.img).img));a.insertAdjacentHTML("beforeend",`<span>${esc(c.key)}</span>`);
+  a.onclick=()=>{state.col=c.key;state.q="";$("#q").value="";render();};$("#cols").append(a);
+});
+LOOKS.forEach(l=>{
+  const b=document.createElement("button");b.className="look";b.setAttribute("aria-label",`${l.title}. Open ${byId(l.open).name}`);
+  const pair=document.createElement("div");pair.className="pair";l.ids.forEach(id=>pair.append(phP(byId(id))));
+  b.append(pair);b.insertAdjacentHTML("beforeend",`<h3>${esc(l.title)}</h3><p>${esc(l.text)}</p>`);b.onclick=()=>openProduct(l.open);$("#looks").append(b);
+});
 
-/* ============ 4. PRODUCT MODAL ============ */
-let chosen = null, current = null, lastFocus = null;
+/* ===== 4. PRODUCT MODAL & SIZE GUIDE ===== */
+let chosen=null,current=null,lastFocus=null;
 function openProduct(id){
-  current = byId(id); chosen = null; lastFocus = document.activeElement;
-  const body = $("#pdBody"); body.innerHTML = "";
-  body.append(phBox(current));
-  const info = document.createElement("div"); info.className="pd-body";
-  info.innerHTML = `<h2 id="pdName" style="font-size:32px">${esc(current.name)}</h2>
-    <div style="font-size:20px">${money(current.price)}</div>
-    <p>${esc(current.desc)}</p>
-    <p class="note">Fit: ${esc(current.fit)} · Colour: ${esc(current.color)} (sample data)</p>
-    <div><div style="font-weight:500;margin-bottom:8px">Size</div><div class="sizes" role="group" aria-label="Select size" id="sizes"></div></div>
-    <p class="err" id="pdErr" role="alert"></p>
-    <button class="btn" id="addBtn">Add to cart (demo)</button>
-    <p class="note">Illustrative demo product and price. Not in stock and not for sale.</p>`;
+  current=byId(id);chosen=null;lastFocus=document.activeElement;
+  const body=$("#pdBody");body.innerHTML="";const box=phP(current);box.style.minHeight="440px";body.append(box);
+  const info=document.createElement("div");info.className="pd-body";
+  info.innerHTML=`<h2 id="pdName" style="font-size:34px">${esc(current.name)}</h2><div style="font-size:20px">${money(current.price)} <span class="note">illustrative</span></div>
+   <p>${esc(current.desc)}</p>
+   <p class="note"><i class="dot" style="background:${SWATCH[current.color]||"#ccc"}"></i>Colour: ${esc(current.color)} · Fit: ${esc(current.fit)}<br>Material: ${esc(current.material)}</p>
+   <div><div style="font-weight:500;margin-bottom:8px">Size</div><div class="sizes" role="group" aria-label="Select size" id="sizes"></div></div>
+   <button class="linkbtn" data-sg>Size guide</button>
+   <p class="err" id="pdErr" role="alert"></p><button class="btn" id="addBtn">Add to cart (demo)</button>
+   <p class="note">Sample product and price. Not in stock and not for sale. Sizes shown are sample availability.</p>`;
   body.append(info);
-  const sz = $("#sizes");
-  Object.entries(current.sizes).forEach(([s,ok])=>{
-    const b = document.createElement("button"); b.className="size"; b.textContent=s; b.disabled=!ok;
-    b.setAttribute("aria-pressed","false"); if(!ok) b.title="Sold out (sample)";
-    b.onclick=()=>{chosen=s; sz.querySelectorAll(".size").forEach(x=>x.setAttribute("aria-pressed",x===b)); $("#pdErr").textContent="";};
-    sz.append(b);
-  });
-  $("#addBtn").onclick=()=>{
-    if(!chosen){ $("#pdErr").textContent="Choose a size first."; return; }
-    Cart.add(current.id, chosen); $("#pdModal").close(); Cart.open();
-  };
+  const sz=$("#sizes");
+  Object.entries(current.sizes).forEach(([s,ok])=>{const b=document.createElement("button");b.className="size";b.textContent=s;b.disabled=!ok;b.setAttribute("aria-pressed","false");if(!ok)b.title="Sold out (sample)";
+    b.onclick=()=>{chosen=s;sz.querySelectorAll(".size").forEach(x=>x.setAttribute("aria-pressed",x===b));$("#pdErr").textContent="";};sz.append(b);});
+  $("#addBtn").onclick=()=>{if(!chosen){$("#pdErr").textContent="Choose a size to add this to the cart.";return;}Cart.add(current.id,chosen);$("#pdModal").close();Cart.open();};
+  info.querySelector("[data-sg]").onclick=()=>$("#sgModal").showModal();
   $("#pdModal").showModal();
 }
-$("#pdClose").onclick = () => $("#pdModal").close();
-$("#pdModal").addEventListener("close", () => lastFocus && lastFocus.focus());
-$("#pdModal").addEventListener("click", e => { if(e.target.id==="pdModal") e.target.close(); });
+$("#pdClose").onclick=()=>$("#pdModal").close();
+$("#pdModal").addEventListener("close",()=>lastFocus&&lastFocus.focus());
+$("#sgClose").onclick=()=>$("#sgModal").close();
+[ "#pdModal","#sgModal" ].forEach(s=>$(s).addEventListener("click",e=>{if(e.target.id===s.slice(1))e.target.close();}));
+document.querySelectorAll("[data-sg]").forEach(a=>a.onclick=e=>{e.preventDefault();$("#sgModal").showModal();});
 
-/* ============ 5. CART (in-memory, demo only) ============ */
-const Cart = {
-  items: [],
-  add(id,size){ const l=this.items.find(i=>i.id===id&&i.size===size); l?l.qty++:this.items.push({id,size,qty:1}); this.draw(); },
-  change(i,d){ this.items[i].qty+=d; if(this.items[i].qty<1) this.items.splice(i,1); this.draw(); },
-  open(){ $("#cart").classList.add("open"); $("#cart").setAttribute("aria-hidden","false"); $("#veil").classList.add("open"); $("#cartClose").focus(); },
-  close(){ $("#cart").classList.remove("open"); $("#cart").setAttribute("aria-hidden","true"); $("#veil").classList.remove("open"); },
+/* ===== 5. CART (in-memory, demo only) ===== */
+const Cart={items:[],
+  add(id,size){const l=this.items.find(i=>i.id===id&&i.size===size);l?l.qty++:this.items.push({id,size,qty:1});this.draw();},
+  change(i,d){this.items[i].qty+=d;if(this.items[i].qty<1)this.items.splice(i,1);this.draw();},
+  open(){$("#cart").classList.add("open");$("#cart").setAttribute("aria-hidden","false");$("#veil").classList.add("open");$("#cartClose").focus();},
+  close(){$("#cart").classList.remove("open");$("#cart").setAttribute("aria-hidden","true");$("#veil").classList.remove("open");},
   draw(){
-    const n = this.items.reduce((a,i)=>a+i.qty,0);
-    $("#cartCount").textContent = n; $("#cartBtn").setAttribute("aria-label",`Open demo cart, ${n} items`);
-    $("#subtotal").textContent = money(this.items.reduce((a,i)=>a+byId(i.id).price*i.qty,0));
-    const box = $("#cartItems"); box.innerHTML = "";
-    if(!this.items.length){ box.innerHTML='<p class="empty" style="padding:32px 0">Your demo cart is empty.</p>'; return; }
-    this.items.forEach((it,idx)=>{
-      const p = byId(it.id), row = document.createElement("div"); row.className="line";
-      row.append(phBox(p));
-      row.insertAdjacentHTML("beforeend",`<div><div style="font-weight:500">${esc(p.name)}</div><div class="note">Size ${it.size}</div>
-        <div class="qty"><button aria-label="Decrease quantity of ${esc(p.name)}">−</button><span>${it.qty}</span><button aria-label="Increase quantity of ${esc(p.name)}">+</button></div></div><div>${money(p.price*it.qty)}</div>`);
-      const [m,pl] = row.querySelectorAll(".qty button"); m.onclick=()=>this.change(idx,-1); pl.onclick=()=>this.change(idx,1);
-      box.append(row);
-    });
-  }
-};
-$("#cartBtn").onclick = () => Cart.open();
-$("#cartClose").onclick = $("#veil").onclick = () => Cart.close();
-$("#checkoutBtn").onclick = () => { $("#checkoutMsg").textContent = "Checkout is disabled in this demo. No order was placed."; };
+    const n=this.items.reduce((a,i)=>a+i.qty,0);$("#cartCount").textContent=n;$("#cartBtn").setAttribute("aria-label",`Open demo cart, ${n} items`);
+    $("#subtotal").textContent=money(this.items.reduce((a,i)=>a+byId(i.id).price*i.qty,0));
+    const box=$("#cartItems");box.innerHTML="";
+    if(!this.items.length){box.innerHTML='<p class="empty" style="padding:32px 0">Your demo cart is empty. Add a product to see it here.</p>';return;}
+    this.items.forEach((it,idx)=>{const p=byId(it.id),row=document.createElement("div");row.className="line";row.append(phP(p));
+      row.insertAdjacentHTML("beforeend",`<div><div style="font-weight:500">${esc(p.name)}</div><div class="note">${esc(p.color)}, size ${esc(it.size)}</div>
+       <div class="qty"><button aria-label="Decrease quantity of ${esc(p.name)}">−</button><span>${it.qty}</span><button aria-label="Increase quantity of ${esc(p.name)}">+</button></div><button class="rm" aria-label="Remove ${esc(p.name)}">Remove</button></div><div>${money(p.price*it.qty)}</div>`);
+      const [m,pl]=row.querySelectorAll(".qty button");m.onclick=()=>this.change(idx,-1);pl.onclick=()=>this.change(idx,1);
+      row.querySelector(".rm").onclick=()=>{this.items.splice(idx,1);this.draw();};box.append(row);});
+  }};
+$("#cartBtn").onclick=()=>Cart.open();$("#cartClose").onclick=$("#veil").onclick=()=>Cart.close();
+$("#checkoutBtn").onclick=()=>{$("#checkoutMsg").textContent="Checkout is disabled in this demo. No order was placed.";};
 
-/* ============ 6. SEARCH, NAV, NEWSLETTER ============ */
-$("#searchBtn").onclick = () => {
-  const row = $("#searchRow"), open = row.classList.toggle("open");
-  $("#searchBtn").setAttribute("aria-expanded", open); if(open) $("#q").focus();
-};
-$("#q").addEventListener("input", e => { state.q = e.target.value; render(); if(state.q) location.hash = "#shop"; });
-document.querySelectorAll("nav a[data-cat]").forEach(a => a.onclick = () => { state.cat = a.dataset.cat; render(); });
-$("#newsForm").onsubmit = e => {
-  e.preventDefault(); const v = $("#em").value.trim(), msg = $("#newsMsg");
-  if(!/^\S+@\S+\.\S+$/.test(v)){ msg.textContent = "Enter a valid email address."; return; }
-  msg.textContent = "Thanks! This is a demo, so nothing was sent or saved."; e.target.reset();
-};
-document.addEventListener("keydown", e => { if(e.key==="Escape"){ Cart.close(); Chat.close(); } });
+/* ===== 6. SEARCH, NAV, NEWSLETTER ===== */
+$("#searchBtn").onclick=()=>{const r=$("#searchRow"),o=r.classList.toggle("open");$("#searchBtn").setAttribute("aria-expanded",o);if(o)$("#q").focus();};
+$("#q").addEventListener("input",e=>{state.q=e.target.value;render();if(state.q)location.hash="#shop";});
+$("#menuBtn").onclick=()=>{const o=$("#mainNav").classList.toggle("open");$("#menuBtn").setAttribute("aria-expanded",o);};
+document.querySelectorAll("nav a").forEach(a=>a.addEventListener("click",()=>{$("#mainNav").classList.remove("open");$("#menuBtn").setAttribute("aria-expanded","false");if(a.dataset.cat){state.col="All";render();}}));
+$("#newsForm").onsubmit=e=>{e.preventDefault();const v=$("#em").value.trim(),m=$("#newsMsg");
+  if(!/^\S+@\S+\.\S+$/.test(v)){m.textContent="Enter a valid email address, like you@example.com.";return;}
+  m.textContent="Thanks. This is a demo, so nothing was sent or saved.";e.target.reset();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){Cart.close();Chat.close();}});
 
-/* ============ 7. AI ASSISTANT ============ */
-/* 7a. SERVICE LAYER. Not connected to any AI model. To integrate a real agent, set
-   AssistantService.mode = "live" and implement reply() as a call to YOUR backend
-   (never put API keys in this file). It receives the user text, the CATALOG and the
-   cart, and must resolve to { text: string, products?: [productId] }. */
-const AssistantService = {
-  mode: "scripted",   // "scripted" = canned demo answers | "live" = real AI (not built yet)
-  context(){ return { catalog: CATALOG, cart: Cart.items }; },
+/* ===== 7. AI ASSISTANT =====
+   Service layer: not connected to any model. To connect a real backend, set mode = "live" and
+   implement reply() as a call to YOUR server (never place API keys in this file). It receives the
+   user text plus context() and must resolve to { text: string, products?: [productId] }. */
+const AssistantService={
+  mode:"scripted",
+  context(){return {catalog:CATALOG,cart:Cart.items};},
   scripted(text){
-    const t = text.toLowerCase();
-    if(/t-?shirt|tee/.test(t)) return {text:"Three tees: Heavyweight (regular, structured), Relaxed (softer, looser) and Oversized (dropped shoulders, longer body). The Heavyweight Tee is the sturdiest pick.",products:["p1","p2","p3"]};
-    if(/fit|difference/.test(t)) return {text:"Regular is true to size. Relaxed adds a little room. Oversized is cut wide and long, so size down for a standard look. The trousers are tapered."};
-    if(/size/.test(t)) return {text:"Most people pick their usual size in Regular and Relaxed fits. A live assistant would ask for your height, weight and preferred fit, then recommend a size."};
-    if(/everyday|recommend|wear/.test(t)) return {text:"A good starter set: the Heavyweight Tee, Everyday Hoodie and Casual Trousers. All three share a neutral palette.",products:["p1","p4","p6"]};
-    if(/shipping|return/.test(t)) return {text:"This is a demo store, so there is no real shipping or returns policy and nothing can be ordered."};
+    const t=text.toLowerCase(), pn=t.match(/\$?\s?(\d{2,3})/);
+    if(/compare|relaxed.*oversized|oversized.*relaxed/.test(t))return {text:"Relaxed adds a little room through the chest and sleeve. Oversized has dropped shoulders and a longer body. If you want a standard relaxed look in the Oversized Tee, size down.",products:["p2","p3"]};
+    if(/budget|under|cheap|less than/.test(t)||(pn&&/\$/.test(text))){const lim=pn?+pn[1]:50,hits=CATALOG.filter(p=>p.price<=lim);
+      return hits.length?{text:`Sample products at or under ${money(lim)}: ${hits.map(p=>p.name+" ("+money(p.price)+")").join(", ")}. Prices are illustrative.`,products:hits.map(p=>p.id)}:{text:`No sample products are priced at or under ${money(lim)}.`};}
+    if(/outfit|build|style|combine/.test(t))return {text:"A simple set: Everyday Hoodie, Casual Trousers and a Heavyweight Tee underneath. They share a neutral palette.",products:["p4","p6","p1"]};
+    if(/t-?shirt|tee/.test(t))return {text:"Three tees: Heavyweight (regular, structured), Relaxed (softer, looser) and Oversized (dropped shoulders, longer body). The Heavyweight Tee is the most structured pick.",products:["p1","p2","p3"]};
+    if(/size|measure/.test(t))return {text:"Most people choose their usual size in Regular and Relaxed fits. The size guide has sample measurements, which are illustrative and do not guarantee fit. A live assistant would ask about your height and preferred fit."};
+    if(/shipping|return|deliver|refund/.test(t))return {text:"This is a demo store, so there is no real shipping or returns policy, and nothing can be ordered."};
+    if(/fit|difference/.test(t))return {text:"Regular is true to size. Relaxed adds room. Oversized is cut wide and long. The trousers are tapered.",products:[]};
     return {text:"I can only answer a few scripted questions in this demo. Try one of the suggestions above."};
   },
-  async reply(text){
-    if(this.mode === "live") throw new Error("Live AI backend not connected");
-    await new Promise(r=>setTimeout(r,450));
-    return this.scripted(text);
-  }
+  async reply(text){if(this.mode==="live")throw new Error("Live AI backend not connected");await new Promise(r=>setTimeout(r,400));return this.scripted(text);}
 };
-/* 7b. UI LAYER. Only talks to AssistantService.reply(). */
-const Chat = {
-  started: false,
-  prompts: ["Help me find the right T-shirt.","What's the difference between these fits?","Which size should I choose?","Recommend something for everyday wear."],
+/* UI layer: only talks to AssistantService.reply(). */
+const Chat={started:false,
+  prompts:["Help me find an everyday T-shirt.","Compare relaxed and oversized fits.","Help me choose a size.","Recommend products under $50.","Help me build an outfit."],
   add(role,text,products=[]){
-    const m=document.createElement("div"); m.className="msg "+role;
-    if(role==="bot"){ const t=document.createElement("small"); t.className="tag"; t.textContent = AssistantService.mode==="live"?"AI answer":"Scripted demo reply"; m.append(t); }
+    const m=document.createElement("div");m.className="msg "+role;
+    if(role==="bot"){const t=document.createElement("small");t.className="tag";t.textContent=AssistantService.mode==="live"?"AI answer":"Scripted demo reply";m.append(t);}
     m.append(document.createTextNode(text));
-    if(products.length){ const r=document.createElement("div"); r.className="links";
-      products.forEach(id=>{ const b=document.createElement("button"); b.type="button"; b.textContent="View "+byId(id).name; b.onclick=()=>openProduct(id); r.append(b); }); m.append(r); }
-    $("#log").append(m); $("#log").scrollTop=1e6; return m;
-  },
-  async send(text){
-    text=text.trim(); if(!text) return; this.add("me",text); $("#chatText").value="";
-    const wait=this.add("bot","…");
-    try{ const r=await AssistantService.reply(text); wait.remove(); this.add("bot",r.text,r.products||[]); }
-    catch(e){ wait.remove(); this.add("bot","The AI assistant isn't connected yet. Please try again later."); }
-  },
-  open(prefill){
-    $("#chat").classList.add("open"); $("#aiLaunch").style.display="none";
-    if(!this.started){ this.started=true; this.add("bot","Hi, I'm the FORME shopping assistant. This is a demo preview: replies are scripted and no AI model is connected. What can I help you find?");
-      this.prompts.forEach(p=>{ const b=document.createElement("button"); b.type="button"; b.textContent=p; b.onclick=()=>this.send(p); $("#sugg").append(b); }); }
-    $("#chatText").focus(); if(typeof prefill==="string") this.send(prefill);
-  },
-  close(){ $("#chat").classList.remove("open"); $("#aiLaunch").style.display="flex"; $("#aiLaunch").focus(); }
-};
-$("#aiLaunch").onclick = () => Chat.open();
-$("#chatClose").onclick = () => Chat.close();
-$("#chatForm").onsubmit = e => { e.preventDefault(); Chat.send($("#chatText").value); };
-document.querySelectorAll("[data-ai]").forEach(a => a.onclick = e => { e.preventDefault(); Chat.open(a.dataset.ai); });
+    if(products.length){const r=document.createElement("div");r.className="links";products.forEach(id=>{const p=byId(id);if(!p)return;const b=document.createElement("button");b.type="button";b.textContent="View "+p.name;b.onclick=()=>openProduct(id);r.append(b);});m.append(r);}
+    $("#log").append(m);$("#log").scrollTop=1e6;return m;},
+  async send(text){text=text.trim();if(!text)return;this.add("me",text);$("#chatText").value="";const w=this.add("bot","…");
+    try{const r=await AssistantService.reply(text);w.remove();this.add("bot",r.text,r.products||[]);}
+    catch(e){w.remove();this.add("bot","The AI assistant isn't connected yet. Try one of the scripted suggestions.");}},
+  open(pre){$("#chat").classList.add("open");$("#aiLaunch").style.display="none";
+    if(!this.started){this.started=true;this.add("bot","Hi, I'm the FORME shopping assistant. This is a demo preview: replies are scripted and no AI model is connected. What can I help you find?");
+      this.prompts.forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p;b.onclick=()=>this.send(p);$("#sugg").append(b);});}
+    $("#chatText").focus();if(typeof pre==="string")this.send(pre);},
+  close(){$("#chat").classList.remove("open");$("#aiLaunch").style.display="block";}};
+$("#aiLaunch").onclick=()=>Chat.open();$("#chatClose").onclick=()=>{Chat.close();$("#aiLaunch").focus();};
+$("#chatForm").onsubmit=e=>{e.preventDefault();Chat.send($("#chatText").value);};
+document.querySelectorAll("[data-ai]").forEach(a=>a.onclick=e=>{e.preventDefault();Chat.open(a.dataset.ai);});
 
-/* ============ 8. INIT ============ */
-document.title = `${CONFIG.brand} – Everyday menswear (demo store)`;
-hydrate($(".hero-img"), CONFIG.heroImage); hydrate($(".story .ph"), CONFIG.storyImage);
-renderFeatured(); render(); Cart.draw();
+render();Cart.draw();
 </script>
 </body>
 </html>
