@@ -101,6 +101,73 @@ html{scroll-behavior:smooth}.sh{display:block;padding:0}.shi{max-width:1120px;ma
 details{border-bottom:1px solid var(--bd);padding:14px 0}summary{cursor:pointer;font-weight:500}details p{color:var(--mu);margin-top:6px;max-width:640px}
 .cta{text-align:center}.cta .sub{margin:0 auto 20px}footer{border-top:1px solid var(--bd);padding:24px;text-align:center;color:var(--mu);font-size:12.5px}
 @media(max-width:900px){.hero{padding:44px 0 32px}.sec{padding:48px 0}.cols3,.flow{grid-template-columns:1fr;gap:20px}.pvg,.dwg{grid-template-columns:1fr}.pvg>div+div,.dwg>div+div{border-left:0;border-top:1px solid var(--bd)}.shl,.shc{display:none}.mm.open{display:flex;flex-direction:column;gap:2px;padding:4px 24px 14px}.mm .shl{display:block;padding:10px}.shi .sp{flex:1}}
+/* ===== Button system v5 ===== */
+:root{--r-btn:10px;--ease:cubic-bezier(.2,.8,.2,1);--t:160ms;--tap:36px;--ib:36px;--hl:rgba(255,255,255,.18);
+--sh-1:0 1px 2px color-mix(in srgb,var(--tx) 8%,transparent);--sh-2:0 8px 20px -6px color-mix(in srgb,var(--tx) 20%,transparent);
+--sh-ac:0 4px 12px -3px color-mix(in srgb,var(--ac) 45%,transparent);--ring:color-mix(in srgb,var(--ac) 75%,transparent);--press:color-mix(in srgb,var(--gy) 60%,var(--bd))}
+@media(pointer:coarse){:root{--tap:44px;--ib:40px}}
+button{transition:background-color var(--t) var(--ease),border-color var(--t) var(--ease),color var(--t) var(--ease),box-shadow var(--t) var(--ease),transform var(--t) var(--ease),opacity var(--t) var(--ease);-webkit-tap-highlight-color:transparent}
+button:focus-visible,.shl:focus-visible,summary:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+/* Secondary */
+.bt{min-height:var(--tap);padding:8px 14px;gap:8px;border-radius:var(--r-btn);border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-size:13.5px;font-weight:500;letter-spacing:-.005em;line-height:1.2;box-shadow:var(--sh-1);justify-content:center;position:relative}
+.bt:hover:not(:disabled){background:var(--gy);border-color:color-mix(in srgb,var(--bd) 60%,var(--mu))}
+.bt:active:not(:disabled){transform:scale(.98);box-shadow:none;background:var(--press)}
+/* Primary */
+.bt.pr{border-color:var(--ac);color:var(--on);font-weight:600;background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 90%,var(--on)),var(--ac));box-shadow:inset 0 1px 0 var(--hl),var(--sh-ac)}
+.bt.pr:hover:not(:disabled){background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 82%,var(--on)),color-mix(in srgb,var(--ac) 94%,var(--on)));border-color:var(--ac);opacity:1;transform:translateY(-1px);box-shadow:inset 0 1px 0 var(--hl),0 6px 14px -4px color-mix(in srgb,var(--ac) 55%,transparent)}
+.bt.pr:active:not(:disabled){background:linear-gradient(180deg,var(--ac),color-mix(in srgb,var(--ac) 92%,var(--tx)));transform:scale(.98);box-shadow:inset 0 1px 0 var(--hl),0 1px 2px color-mix(in srgb,var(--ac) 40%,transparent)}
+/* Danger */
+.bt.dg{color:var(--rd)}
+.bt.dg:hover:not(:disabled){background:var(--rds);border-color:color-mix(in srgb,var(--rd) 45%,transparent)}
+.bt.dg:active:not(:disabled){background:color-mix(in srgb,var(--rds) 80%,var(--rd))}
+.md .row>.bt.dg{background:var(--rd);border-color:var(--rd);color:var(--on);font-weight:600}
+.md .row>.bt.dg:hover:not(:disabled){background:color-mix(in srgb,var(--rd) 88%,var(--tx));border-color:var(--rd)}
+/* Icon + avatar */
+.bt.ib{width:var(--ib);min-width:var(--ib);height:var(--ib);min-height:var(--ib);padding:0}
+button.av{width:var(--ib);height:var(--ib);border:1px solid transparent;cursor:pointer;font-size:12.5px}
+button.av:hover:not(:disabled){box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent);border-color:color-mix(in srgb,var(--ac) 35%,transparent)}
+button.av:active:not(:disabled){transform:scale(.95)}
+/* Ghost: nav, menus, links */
+.nv{min-height:var(--tap);gap:10px;border-radius:var(--r-btn);font-weight:500;font-size:14px;color:var(--mu);background:transparent}
+.nv:hover:not(.on):not(:disabled){background:var(--gy);color:var(--tx)}.nv:active:not(:disabled){transform:scale(.99);background:var(--press)}
+.nv.on{background:var(--sf);border-color:var(--bd);color:var(--tx);box-shadow:var(--sh-1)}.nv.on svg{color:var(--ac)}
+.pop{box-shadow:var(--sh-2)}.pop button{min-height:var(--tap);padding:8px 10px;border-radius:8px;background:transparent;font-size:13.5px}
+.pop button:hover:not(:disabled){background:var(--gy)}.pop button:active:not(:disabled){background:var(--press)}
+.shl{display:inline-flex;align-items:center;min-height:var(--tap);padding:6px 12px;border-radius:var(--r-btn);font-size:13.5px;font-weight:500}.shl:active{background:var(--press)}
+/* Segmented tabs */
+.tabs{padding:3px;gap:2px;border-radius:12px}
+.tabs button{min-height:calc(var(--tap) - 6px);padding:6px 14px;border:0;border-radius:9px;background:transparent;color:var(--mu);font-size:13.5px;font-weight:500}
+.tabs button:hover:not(.on):not(:disabled){color:var(--tx);background:color-mix(in srgb,var(--bd) 45%,transparent)}
+.tabs button.on{background:var(--sf);color:var(--tx);box-shadow:0 0 0 1px var(--bd),var(--sh-1)}.tabs button:active:not(:disabled){transform:scale(.97)}
+/* Toggle */
+.sw{width:40px;height:24px;flex:none;border-radius:99px;border:0;padding:0;background:color-mix(in srgb,var(--mu) 35%,var(--bd));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mu) 30%,transparent)}
+.sw:after{left:3px;top:3px;width:18px;height:18px;background:var(--sf);box-shadow:var(--sh-1);transition:transform 180ms cubic-bezier(.34,1.4,.64,1),width 180ms var(--ease)}
+.sw.on{background:var(--gn);box-shadow:none}.sw.on:after{left:3px;transform:translateX(16px)}
+.sw:active:not(:disabled):after{width:22px}.sw.on:active:not(:disabled):after{transform:translateX(12px)}
+/* Stepper */
+.stp{display:inline-flex;border-radius:var(--r-btn);overflow:hidden;border:1px solid var(--bd);background:var(--sf);box-shadow:var(--sh-1)}
+.stp button{width:var(--ib);height:var(--ib);border:0;background:transparent;font-size:16px;color:var(--tx)}
+.stp b{min-width:28px;display:grid;place-items:center;border-inline:1px solid var(--bd)}
+.stp button:hover:not(:disabled){background:var(--gy)}.stp button:active:not(:disabled){background:var(--press);transform:scale(.94)}
+/* List rows */
+.ci{border:0;border-radius:10px;margin-bottom:2px;padding:10px 12px;min-height:var(--tap);background:transparent;position:relative}
+.ci:hover{background:var(--gy)}.ci:active{background:var(--press)}.ci.on{background:var(--acs)}
+.ci.on:before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;background:var(--ac)}
+.li.bt{box-shadow:none;border-color:transparent;background:transparent;border-radius:10px;padding:10px 12px;font-weight:400;text-align:left}
+.li.bt:hover:not(:disabled){background:var(--gy);border-color:transparent}.li.bt:active:not(:disabled){transform:none;background:var(--press)}
+/* Kitchen */
+.kcard .bt.pr{width:100%;min-height:44px;font-size:14.5px}
+/* FAQ summary */
+summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:var(--tap);padding:6px 10px;margin:0 -10px;border-radius:var(--r-btn);transition:background-color var(--t) var(--ease)}
+summary::-webkit-details-marker{display:none}summary:hover{background:var(--gy)}
+summary:after{content:"";flex:none;width:7px;height:7px;border:solid var(--mu);border-width:0 1.5px 1.5px 0;transform:rotate(45deg);transition:transform var(--t) var(--ease)}details[open] summary:after{transform:rotate(225deg)}
+/* Loading */
+.bt[aria-busy=true]{color:transparent!important;pointer-events:none}
+.bt[aria-busy=true]:after{content:"";position:absolute;inset:0;margin:auto;width:16px;height:16px;border-radius:50%;border:2px solid var(--bd);border-top-color:var(--ac);animation:spin .7s linear infinite}
+.bt.pr[aria-busy=true]:after{border-color:color-mix(in srgb,var(--on) 35%,transparent);border-top-color:var(--on)}@keyframes spin{to{transform:rotate(360deg)}}
+/* Disabled (keep last) */
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}.bt:disabled,.bt.pr:disabled{box-shadow:none}
+input:disabled,select:disabled,textarea:disabled{background:var(--gy);color:var(--mu);cursor:not-allowed}
 </style></head><body><div id="app"></div>
 <script>
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),fmt=n=>'Rs '+n.toLocaleString('en-US');
